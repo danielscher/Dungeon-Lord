@@ -332,5 +332,9 @@ public class Dungeon {
     public List<Monster> getHiredMonsters() {
         return hiredMonsters;
     }
+
+    public void setBattleGround(int[] bg) {
+        currBattleGround = bg;
+    }
 }
 
