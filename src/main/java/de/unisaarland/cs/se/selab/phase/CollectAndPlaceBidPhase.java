@@ -12,7 +12,7 @@ public class CollectAndPlaceBidPhase extends Phase{
 
     public Phase run(){
     //TODO
-        return new EvalUpToTunnelPhase();
+        return null;
     }
     private void eval(){
         //to_do

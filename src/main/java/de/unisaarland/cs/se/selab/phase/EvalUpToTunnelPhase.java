@@ -13,7 +13,7 @@ public class EvalUpToTunnelPhase extends Phase{
 
     public Phase run(){
         //TODO
-        return new EvalUpToMonsterPhase();
+        return null;
     }
 
     private void eval(){

@@ -9,7 +9,7 @@ public class RegPhase extends Phase{
     }
 
     public CollectAndPlaceBidPhase run(){
-        return new CollectAndPlaceBidPhase();
+        return null;
         //TODO
     }
 

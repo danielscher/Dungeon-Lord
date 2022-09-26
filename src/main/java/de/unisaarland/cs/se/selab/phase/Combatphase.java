@@ -16,7 +16,7 @@ public class Combatphase extends Phase{
 
     public Phase run(){
         //TODO
-        return new GameEndPhase();
+        return null;
     }
 
     private void exec(TrapAction ta){
