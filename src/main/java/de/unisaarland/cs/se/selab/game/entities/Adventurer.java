@@ -10,6 +10,7 @@ public class Adventurer {
     private int defuseValue;
     private boolean charge;
 
+
     public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue,
             int defuseValue, boolean charge) {
         this.adventurerID = adventurerID;
@@ -45,4 +46,5 @@ public class Adventurer {
     public boolean getCharge() {
         return charge;
     }
+
 }

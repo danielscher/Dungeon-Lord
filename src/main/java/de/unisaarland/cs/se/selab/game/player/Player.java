@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.player;
 
-import de.unisaarland.cs.se.selab.game.util.BidType;
+//import de.unisaarland.cs.se.selab.game.util.BidType;
+import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.util.Title;
 
 import java.util.ArrayList;
