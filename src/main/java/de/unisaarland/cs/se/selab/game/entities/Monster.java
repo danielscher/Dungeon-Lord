@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.entities;
 
 public class Monster {
+
     private int monsterID;
     private int hunger;
     private int evilness;

@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.game.player.Player;
+
 public class CollectAndPlaceBidPhase {
     public Phase run(){
     //    return NULL;

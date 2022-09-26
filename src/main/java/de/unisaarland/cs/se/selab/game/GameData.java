@@ -8,9 +8,10 @@ import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.*;
 
 public class GameData {
-    private Map<Integer,Integer> commIDToPlayerIDMap =new HashMap<Integer,Integer>();
-    private Map<Integer,Integer> playerIDToCommIDMap =new HashMap<Integer,Integer>();
-    private Map<Integer,Player> idToPlayerMap =new HashMap<Integer,Player>();
+
+    private Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
     private TimeStamp time = new TimeStamp();
     //bidding square
     private List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
@@ -21,54 +22,53 @@ public class GameData {
     //config
     private int lastPlayerToStartBidding, idCounter;
 
-    private void addPlayer(Player player, int id){
+    private void addPlayer(Player player, int id) {
         // TODO: 25.09.22
     }
 
-    public boolean registerPlayer(String name, int CommID){
+    public boolean registerPlayer(String name, int CommID) {
         // TODO: 25.09.22
         return true;
     }
 
-    public Player getPlayerByCommID(int CommID){
+    public Player getPlayerByCommID(int CommID) {
         // TODO: 25.09.22
         Player hari = new Player();
         return hari;
     }
 
-    public Player getPlayerByPlayerID(int PlayerID){
+    public Player getPlayerByPlayerID(int PlayerID) {
         // TODO: 25.09.22
         Player hari = new Player();
         return hari;
     }
 
-    public int getPlayerIDByCommID(int CommID){
+    public int getPlayerIDByCommID(int CommID) {
         // TODO: 25.09.22
         return 1;
     }
 
-    public int getCommIDByPlayerID(int PlayerID){
+    public int getCommIDByPlayerID(int PlayerID) {
         // TODO: 25.09.22
         return 1;
     }
 
     //get server connection
 
-    public boolean checkIfRegistered(int CommID){
+    public boolean checkIfRegistered(int CommID) {
         // TODO: 25.09.22
         return true;
     }
 
-    public int getNextStartPlayer(){
+    public int getNextStartPlayer() {
         // TODO: 25.09.22
         return 1;
     }
 
-    public void drawEntities(){
+    public void drawEntities() {
         // TODO: 25.09.22  
     }
 
-    
 
 }
 
