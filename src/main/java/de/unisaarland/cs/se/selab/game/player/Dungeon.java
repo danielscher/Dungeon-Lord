@@ -12,7 +12,7 @@ public class Dungeon {
     private Tile[][] grid = new Tile[15][15];
     private List<Monster> hiredMonsters = new ArrayList<Monster>();
     private List<Trap> traps = new ArrayList<Trap>();
-    private Deque<Adventurer> adventurerQueue = new ArrayDeque<Adventurer>();
+    private LinkedList<Adventurer> adventurerQueue = new LinkedList<Adventurer>();
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
     private int[] currAdvPos = new int[2];
     private int[] currBattleGround = new int[2];
@@ -294,6 +294,9 @@ public class Dungeon {
         return true;
     }
 
+    /*
+    inserts an adventurer to the queue (with respect to the game rules)
+     */
     public void insertAdventurer(Adventurer adv) {
         if(adv.getCharge()) {
             // if warrior, insert in front
@@ -304,7 +307,30 @@ public class Dungeon {
         }
     }
 
+    /*
+    gets the adventurer of the corresponding queue position
+    NOTE: returns null if position empty
+     */
+    public Adventurer getAdventurer(int index) {
+        if(index >= 0 && index < adventurerQueue.size()) {
+            return adventurerQueue.get(index);
+        } else {
+            return null;
+        }
+    }
 
+    /*
+    adds a monster to the dungeon
+     */
+    public void addMonster(Monster monster) {
+        hiredMonsters.add(monster);
+    }
 
+    /*
+    returns a list of all hire monsters
+     */
+    public List<Monster> getHiredMonsters() {
+        return hiredMonsters;
+    }
 }
 
