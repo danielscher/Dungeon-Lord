@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import java.util.*;
 
 public class Dungeon {
+
     private Tile[][] grid = new Tile[15][15];
     private List<Monster> hiredMonsters = new ArrayList<Monster>();
     private List<Trap> traps = new ArrayList<Trap>();
@@ -71,7 +72,8 @@ public class Dungeon {
     private void calcDistToEntrance(int x, int y, int n) {
         if (grid[x][y] != null) {
             // only try to calculate if tile exists
-            if (grid[x][y].getDistanceToEntrance() > n || grid[x][y].getDistanceToEntrance() == -1) {
+            if (grid[x][y].getDistanceToEntrance() > n
+                    || grid[x][y].getDistanceToEntrance() == -1) {
                 // if this tile hasn't been calculated yet or was reached using more steps than now...
                 grid[x][y].setDistanceToEntrance(n);  // change distance to needed steps
 

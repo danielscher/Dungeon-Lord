@@ -17,11 +17,11 @@ public class TimeStamp {
         return year;
     }
 
-    public void nextSeason(){
+    public void nextSeason() {
         this.season = season + 1;
     }
 
-    public void nextyear(){
+    public void nextyear() {
         this.year = year + 1;
     }
 

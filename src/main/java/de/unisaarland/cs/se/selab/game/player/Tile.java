@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.player;
 
 public class Tile {
+
     private boolean conquered, hasRoom;
     private int distanceToEntrance, numTraps, numMonsters;
 
