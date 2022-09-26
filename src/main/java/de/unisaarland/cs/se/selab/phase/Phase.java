@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.game.TimeStamp.GameData;
+import de.unisaarland.cs.se.selab.game.TimeStamp;
+import de.unisaarland.cs.se.selab.game.GameData;
 
 public abstract class Phase {
     private GameData gd;
