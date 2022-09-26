@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 
+import de.unisaarland.cs.se.selab.game.util.BidType;
 import java.util.*;
 
 public class Dungeon {
