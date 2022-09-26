@@ -1,44 +1,44 @@
 package de.unisaarland.cs.se.selab.phase;
+import de.unisaarland.cs.se.selab.game.Action.*;
+import de.unisaarland.cs.se.selab.game.GameData;
 
-import de.unisaarland.cs.se.selab.game.TimeStamp.GameData;
 
 public abstract class Phase {
     private GameData gd;
 
     public Phase run(){
-
         //return NULL;
     }
 
-    private void exec(regAction x){
+    private void exec(RegAction x){
 
     }
 
-    private void exec(startGameAction x){
+    private void exec(StartGameAction x){
 
     }
 
-    private void exec(leaveAction x){
+    private void exec(LeaveAction x){
 
     }
 
-    private void exec(endTurnAction x){
+    private void exec(EndTurnAction x){
 
     }
 
-    private void exec(hireMonsterAction x){
+    private void exec(HireMonsterAction x){
 
     }
 
-    private void exec(placeBidAction x){
+    private void exec(PlaceBidAction x){
 
     }
 
-    private void exec(monsterAction x){
+    private void exec(MonsterAction x){
 
     }
 
-    private void exec(monsterTargetAction x){
+    private void exec(MonsterTargetedAction x){
 
     }
 
@@ -50,7 +50,7 @@ public abstract class Phase {
 
     }
 
-    private void exec(ActiveRoomAction x){
+    private void exec(ActivateRoomAction x){
 
     }
 

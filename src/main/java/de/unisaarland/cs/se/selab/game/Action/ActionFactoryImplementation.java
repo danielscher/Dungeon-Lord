@@ -3,7 +3,7 @@ import de.unisaarland.cs.se.selab.comm.ActionFactory;
 import de.unisaarland.cs.se.selab.comm.BidType;
 
 
-public abstract class ActionFactoryImplementation implements ActionFactory {
+public abstract class ActionFactoryImplementation implements ActionFactory<Action> {
 
 
     public Action createActivateRoom(int commID, int roomID){
