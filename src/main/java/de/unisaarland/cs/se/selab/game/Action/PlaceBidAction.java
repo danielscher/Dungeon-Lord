@@ -1,7 +1,9 @@
 package de.unisaarland.cs.se.selab.game.Action;
+
 import de.unisaarland.cs.se.selab.comm.BidType;
 
-public class PlaceBidAction extends Action{
+public class PlaceBidAction extends Action {
+
     private BidType bid;
     private int slot;
 

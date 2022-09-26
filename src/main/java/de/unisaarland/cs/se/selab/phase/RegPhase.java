@@ -1,4 +1,10 @@
 package de.unisaarland.cs.se.selab.phase;
 
-public class RegPhase {
+import de.unisaarland.cs.se.selab.game.GameData;
+
+public class RegPhase extends Phase {
+
+    public RegPhase(GameData gd) {
+        super(gd);
+    }
 }

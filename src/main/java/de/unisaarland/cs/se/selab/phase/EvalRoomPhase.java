@@ -1,4 +1,10 @@
 package de.unisaarland.cs.se.selab.phase;
 
-public class EvalRoomPhase {
+import de.unisaarland.cs.se.selab.game.GameData;
+
+public class EvalRoomPhase extends Phase {
+
+    public EvalRoomPhase(GameData gd) {
+        super(gd);
+    }
 }

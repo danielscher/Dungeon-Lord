@@ -1,4 +1,10 @@
 package de.unisaarland.cs.se.selab.phase;
 
-public class Combatphase {
+import de.unisaarland.cs.se.selab.game.GameData;
+
+public class Combatphase extends Phase {
+
+    public Combatphase(GameData gd) {
+        super(gd);
+    }
 }
