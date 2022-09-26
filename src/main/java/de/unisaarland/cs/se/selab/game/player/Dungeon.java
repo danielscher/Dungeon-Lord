@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 
 import de.unisaarland.cs.se.selab.game.util.BidType;
+import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.*;
 
 public class Dungeon {
@@ -42,7 +43,7 @@ public class Dungeon {
             for (int j = 0; j < grid[0].length; j++) {
                 if (grid[i][j] != null) {
                     // if tile exists
-                    if (!grid[i][j].getConquered()) {
+                    if (!grid[i][j].isConquered()) {
                         // if tile isn't conquered...
                         if (shortestDist == -1) {
                             // if no unconquered tile found yet, take this
@@ -109,5 +110,74 @@ public class Dungeon {
             }
         }
     }
+
+    /*
+    sums all heal values of all adventurers and returns the sum
+     */
+    public int getTotalHealVal() {
+        int res = 0;
+        for (Adventurer adv :
+                adventurerQueue) {
+            res += adv.getHealValue();
+        }
+        return res;
+    }
+
+    /*
+    sums all defuse values of all adventurers and returns the sum
+     */
+    public int getTotalDefuseVal() {
+        int res = 0;
+        for (Adventurer adv :
+                adventurerQueue) {
+            res += adv.getDefuseValue();
+        }
+        return res;
+    }
+
+    /*
+    checks if a room can be placed on a given coordinate
+     */
+    public boolean canPlaceRoomOn(int x, int y, Location location) {
+
+        // check if coordinates are valid (in bounds)
+        if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
+            return false;
+        }
+
+        // check if tile was already dug
+        if(grid[x][y] == null) {
+            return false;
+        }
+
+        if(grid[x][y].isConquered()) {
+            return false;
+        }
+
+        if(grid[x][y].hasRoom()) {
+            return false;
+        }
+
+       switch (location) {
+            // for return see specification
+           case UPPER_HALF -> {
+               return (y <= grid[0].length/2 - 1);
+           }
+           case LOWER_HALF -> {
+               return (y > grid[0].length/2 - 1);
+           }
+           case INNER_RING -> {
+               return ((x != 0 || x != grid.length - 1) && (y != 0 || y != grid[0].length - 1));
+           }
+           case OUTER_RING -> {
+               return ((x == 0 || x == grid.length - 1) && (y == 0 || y == grid[0].length - 1));
+           }
+       }
+        return false;
+    }
+
+
+
+
 }
 
