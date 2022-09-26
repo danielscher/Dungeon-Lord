@@ -80,7 +80,6 @@ public abstract class Phase {
     broadcasts "actNow" to every player
      */
     protected void broadcastActNow() {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendActNow
         for (Integer commID : commIDs) {
@@ -92,7 +91,6 @@ public abstract class Phase {
     broadcasts "adventurerArrived" to every player
      */
     protected void broadcastAdventurerArrived(int adventurer, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerArrived
         for (Integer commID : commIDs) {
@@ -104,7 +102,6 @@ public abstract class Phase {
     broadcasts "adventurerDamaged" to every player
      */
     protected void broadcastAdventurerDamaged(int adventurer, int amount, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerDamaged
         for (Integer commID : commIDs) {
@@ -116,7 +113,6 @@ public abstract class Phase {
     broadcasts "adventurerDrawn" to every player
      */
     protected void broadcastAdventurerDrawn(int adventurer) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerDrawn
         for (Integer commID : commIDs) {
@@ -128,7 +124,6 @@ public abstract class Phase {
     broadcasts "adventurerFled" to every player
      */
     protected void broadcastAdventurerFled(int adventurer) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerFled
         for (Integer commID : commIDs) {
@@ -140,7 +135,6 @@ public abstract class Phase {
     broadcasts "adventurerHealed" to every player
      */
     protected void broadcastAdventurerHealed(int amount, int priest, int target) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerHealed
         for (Integer commID : commIDs) {
@@ -152,7 +146,6 @@ public abstract class Phase {
     broadcasts "adventurerImprisoned" to every player
      */
     protected void broadcastAdventurerImprisoned(int adventurer, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendAdventurerImprisoned
         for (Integer commID : commIDs) {
@@ -164,7 +157,6 @@ public abstract class Phase {
     broadcasts "BattleGroundSet" to every player
      */
     protected void broadcastBattleGroundSet(int player, int x, int y) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendBattleGroundSet
         for (Integer commID : commIDs) {
@@ -176,7 +168,6 @@ public abstract class Phase {
     broadcasts "BiddingStarted" to every player
      */
     protected void broadcastBiddingStarted() {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendBiddingStarted
         for (Integer commID : commIDs) {
@@ -188,7 +179,6 @@ public abstract class Phase {
     broadcasts "EvilnessChanged" to every player
      */
     protected void broadcastEvilnessChanged(int amount, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendEvilnessChanged
         for (Integer commID : commIDs) {
@@ -200,7 +190,6 @@ public abstract class Phase {
     broadcasts "FoodChanged" to every player
      */
     protected void broadcastFoodChanged(int amount, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendFoodChanged
         for (Integer commID : commIDs) {
@@ -212,7 +201,6 @@ public abstract class Phase {
     broadcasts "GoldChanged" to every player
      */
     protected void broadcastGoldChanged(int amount, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendGoldChanged
         for (Integer commID : commIDs) {
@@ -224,7 +212,6 @@ public abstract class Phase {
     broadcasts "GameEnd" to every player
      */
     protected void broadcastGameEnd(int player, int points) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendGameEnd
         for (Integer commID : commIDs) {
@@ -236,7 +223,6 @@ public abstract class Phase {
     broadcasts "GameStarted" to every player
      */
     protected void broadcastGameStarted() {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendGameStarted
         for (Integer commID : commIDs) {
@@ -248,7 +234,6 @@ public abstract class Phase {
     broadcasts "ImpsChanged" to every player
      */
     protected void broadcastImpsChanged(int amount, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendImpsChanged
         for (Integer commID : commIDs) {
@@ -260,7 +245,6 @@ public abstract class Phase {
     broadcasts "Left" to every player
      */
     protected void broadcastLeft(int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendLeft
         for (Integer commID : commIDs) {
@@ -272,7 +256,6 @@ public abstract class Phase {
     broadcasts "MonsterDrawn" to every player
      */
     protected void broadcastMonsterDrawn(int monster) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendMonsterDrawn
         for (Integer commID : commIDs) {
@@ -284,7 +267,6 @@ public abstract class Phase {
     broadcasts "MonsterHired" to every player
      */
     protected void broadcastMonsterHired(int monster, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendMonsterHired
         for (Integer commID : commIDs) {
@@ -296,7 +278,6 @@ public abstract class Phase {
     broadcasts "MonsterPlaced" to every player
     */
     protected void broadcastMonsterPlaced(int monster, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendMonsterPlaced
         for (Integer commID : commIDs) {
@@ -308,7 +289,6 @@ public abstract class Phase {
     broadcasts "NextRound" to every player
      */
     protected void broadcastNextRound(int round) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendNextRound
         for (Integer commID : commIDs) {
@@ -320,7 +300,6 @@ public abstract class Phase {
     broadcasts "NextYear" to every player
      */
     protected void broadcastNextYear(int year) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendNextYear
         for (Integer commID : commIDs) {
@@ -333,7 +312,6 @@ public abstract class Phase {
     NOTE: this BidType is the provided one, not our BidType!!!
      */
     protected void broadcastBidPlaced(BidType bid, int player, int slot) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendBidPlaced
         for (Integer commID : commIDs) {
@@ -346,7 +324,6 @@ public abstract class Phase {
     NOTE: this BidType is the provided one, not our BidType!!!
      */
     protected void broadcastBidRetrieved(BidType bid, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendBidRetrieved
         for (Integer commID : commIDs) {
@@ -359,7 +336,6 @@ public abstract class Phase {
     NOTE: needs to be called once for every registered playerID
      */
     protected void broadcastPlayer(String name, int player) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendPlayer
         for (Integer commID : commIDs) {
@@ -371,7 +347,6 @@ public abstract class Phase {
     broadcasts "RegistrationAborted" to every player
      */
     protected void broadcastRegistrationAborted() {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendPlayer
         for (Integer commID : commIDs) {
@@ -383,7 +358,6 @@ public abstract class Phase {
     broadcasts "RoomActivated" to every player
     */
     protected void broadcastRoomActivated(int player, int room) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendRoomActivated
         for (Integer commID : commIDs) {
@@ -395,7 +369,6 @@ public abstract class Phase {
     broadcasts "RoomBuilt" to every player
     */
     protected void broadcastRoomBuilt(int player, int room, int x, int y) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendRoomBuilt
         for (Integer commID : commIDs) {
@@ -407,7 +380,6 @@ public abstract class Phase {
     broadcasts "RoomDrawn" to every player
     */
     protected void broadcastRoomDrawn(int room) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendRoomDrawn
         for (Integer commID : commIDs) {
@@ -419,7 +391,6 @@ public abstract class Phase {
     broadcasts "TrapAcquired" to every player
     */
     protected void broadcastTrapAcquired(int player, int trap) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendTrapAcquired
         for (Integer commID : commIDs) {
@@ -431,7 +402,6 @@ public abstract class Phase {
     broadcasts "TrapPlaced" to every player
     */
     protected void broadcastTrapPlaced(int player, int trap) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendTrapPlaced
         for (Integer commID : commIDs) {
@@ -443,7 +413,6 @@ public abstract class Phase {
     broadcasts "TunnelConquered" to every player
     */
     protected void broadcastTunnelConquered(int adventurer, int x, int y) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendTunnelConquered
         for (Integer commID : commIDs) {
@@ -455,7 +424,6 @@ public abstract class Phase {
     broadcasts "TunnelTunnel" to every player
     */
     protected void broadcastTunnelDug(int player, int x, int y) {
-
         Set<Integer> commIDs = gd.getCommIDSet();
         // for each commID, invoke sendTunnelDug
         for (Integer commID : commIDs) {
