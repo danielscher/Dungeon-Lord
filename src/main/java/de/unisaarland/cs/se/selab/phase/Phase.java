@@ -8,6 +8,7 @@ public abstract class Phase {
 
     public Phase run(){
         //return NULL;
+        return null;
     }
 
     private void exec(RegAction x){
