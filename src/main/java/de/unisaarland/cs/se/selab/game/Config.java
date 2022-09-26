@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab;
+package de.unisaarland.cs.se.selab.game;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 
 import java.util.*;
