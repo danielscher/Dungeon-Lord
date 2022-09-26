@@ -4,8 +4,6 @@ import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
-
-import de.unisaarland.cs.se.selab.game.util.BidType;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.*;
 
@@ -20,6 +18,10 @@ public class Dungeon {
     private int[] currBattleGround = new int[2];
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps, tunnelDiggingImps, goldMiningImps, producingImps;
+
+    public Dungeon() {
+        restingImps = 3;
+    }
 
     /*
     recalculates distances to entrance and returns closest tiles
@@ -104,7 +106,7 @@ public class Dungeon {
     private void clearDistances() {
         for (Tile[] tileRow : grid) {  // for each tile row of grid
             for (Tile tile : tileRow) {  // for each tile of tile row
-                if(tile != null) {
+                if (tile != null) {
                     tile.setDistanceToEntrance(-1);  // set distance to default value
                 }
             }
@@ -149,41 +151,158 @@ public class Dungeon {
     public boolean canPlaceRoomOn(int x, int y, Location location) {
 
         // check if coordinates are valid (in bounds)
-        if(x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
             return false;
         }
 
         // check if tile was already dug
-        if(grid[x][y] == null) {
+        if (grid[x][y] == null) {
             return false;
         }
 
-        if(grid[x][y].isConquered()) {
+        if (grid[x][y].isConquered()) {
             return false;
         }
 
-        if(grid[x][y].hasRoom()) {
+        if (grid[x][y].hasRoom()) {
             return false;
         }
 
-       switch (location) {
+        switch (location) {
             // for return see specification
-           case UPPER_HALF -> {
-               return (y <= grid[0].length/2 - 1);
-           }
-           case LOWER_HALF -> {
-               return (y > grid[0].length/2 - 1);
-           }
-           case INNER_RING -> {
-               return ((x != 0 || x != grid.length - 1) && (y != 0 || y != grid[0].length - 1));
-           }
-           case OUTER_RING -> {
-               return ((x == 0 || x == grid.length - 1) && (y == 0 || y == grid[0].length - 1));
-           }
-       }
+            case UPPER_HALF -> {
+                return (y <= grid[0].length / 2 - 1);
+            }
+            case LOWER_HALF -> {
+                return (y > grid[0].length / 2 - 1);
+            }
+            case INNER_RING -> {
+                return ((x != 0 || x != grid.length - 1) && (y != 0 || y != grid[0].length - 1));
+            }
+            case OUTER_RING -> {
+                return ((x == 0 || x == grid.length - 1) && (y == 0 || y == grid[0].length - 1));
+            }
+        }
         return false;
     }
 
+    /*
+    checks if a player has at least one free tile in a given location for placing rooms
+     */
+    public boolean checkForFreeTilesIn(Location location) {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[0].length; j++) {
+                if (canPlaceRoomOn(i, j, location)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /*
+    checks if a tile can be dug at the given coordinates
+     */
+    private boolean canDig(int x, int y) {
+        if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
+            return false;
+        }
+
+        return (grid[x][y] == null);
+    }
+
+    /*
+    tries to dig a tile at a given location
+    return == success
+     */
+    public boolean dig(int x, int y) {
+        if(canDig(x,y)) {
+            grid[x][y] = new Tile();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
+    public boolean isTileConquered(int x, int y) {
+        return grid[x][y].isConquered();
+    }
+
+    public boolean hasTileRoom(int x, int y) {
+        return grid[x][y].hasRoom();
+    }
+
+    /*
+    returns all imps doing tasks
+     */
+    public void returnImps() {
+        restingImps += tunnelDiggingImps;
+        tunnelDiggingImps = 0;
+        restingImps += goldMiningImps;
+        goldMiningImps = 0;
+        restingImps += producingImps;
+        producingImps = 0;
+    }
+
+    /*
+    tries to send imps to mine gold
+    return == possible (enough resting imps available)
+     */
+    public boolean sendImpsToMineGold(int amount) {
+        if(amount < 0) {
+            return false;
+        }
+        if(amount > restingImps) {
+            return false;
+        }
+        restingImps -= amount;
+        goldMiningImps += amount;
+        return true;
+    }
+
+    /*
+    tries to send imps to dig the tunnel
+    return == possible (enough resting imps available)
+     */
+    public boolean sendImpsToDigTunnel(int amount) {
+        if(amount < 0) {
+            return false;
+        }
+        if(amount > restingImps) {
+            return false;
+        }
+        restingImps -= amount;
+        tunnelDiggingImps += amount;
+        return true;
+    }
+
+    /*
+    tries to send imps to dig the tunnel
+    return == possible (enough resting imps available)
+    NOTE: should never be used without activating a room, therefore private
+     */
+    private boolean sendImpsToProduce(int amount) {
+        if(amount < 0) {
+            return false;
+        }
+        if(amount > restingImps) {
+            return false;
+        }
+        restingImps -= amount;
+        producingImps += amount;
+        return true;
+    }
+
+    public void insertAdventurer(Adventurer adv) {
+        if(adv.getCharge()) {
+            // if warrior, insert in front
+            adventurerQueue.addFirst(adv);
+        } else {
+            // if not a warrior, insert at the end
+            adventurerQueue.addLast(adv);
+        }
+    }
 
 
 
