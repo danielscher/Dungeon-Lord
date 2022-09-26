@@ -13,7 +13,7 @@ public class ChooseBattleGroundPhase extends Phase{
 
     public Phase run(){
         //TODO
-        return new Combatphase();
+        return null;
     }
 
     private void exec(BattleGroundAction bga){

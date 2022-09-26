@@ -13,7 +13,7 @@ public class EvalRoomPhase extends Phase{
 
     public Phase run(){
         //TODO
-        return new ChooseBattleGroundPhase();
+        return null;
     }
 
     private void eval(){

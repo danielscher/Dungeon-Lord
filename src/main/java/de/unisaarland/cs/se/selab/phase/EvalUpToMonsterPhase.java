@@ -15,7 +15,7 @@ public class EvalUpToMonsterPhase extends Phase{
 
     public Phase run(){
         //TODO
-        return new EvalRoomPhase();
+        return null;
     }
 
     private void eval(){
