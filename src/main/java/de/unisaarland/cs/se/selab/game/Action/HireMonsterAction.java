@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
-public class HireMonsterAction extends Action{
+public class HireMonsterAction extends Action {
+
     private int monster;
 
     public HireMonsterAction(int commID, int monster) {

@@ -39,7 +39,7 @@ public class Player {
      */
     public boolean addBid(BidType type, int priority) {
         // priority == 0 means "bid number 1" within the game rules
-        if(canAddBid(type, priority)) {
+        if (canAddBid(type, priority)) {
             currBids[priority] = type;
             return true;
         } else {
@@ -105,7 +105,7 @@ public class Player {
         }
 
         // check if requested priority is a valid priority
-        if(priority < 0 || priority >= currBids.length) {
+        if (priority < 0 || priority >= currBids.length) {
             return false;
         }
 
@@ -124,9 +124,9 @@ public class Player {
     negative amounts always succeed (return == true), but evilness will not go below 0
      */
     public boolean changeEvilnessBy(int amount) {
-        if(amount > 0) {
+        if (amount > 0) {
             // if evilness increases, check if it exceeds bounds
-            if(evilLevel + amount > 15) {
+            if (evilLevel + amount > 15) {
                 evilLevel += amount;
                 return true;
             } else {
@@ -134,7 +134,7 @@ public class Player {
             }
         } else {
             // if evilness decreases, just change until 0
-            if(evilLevel + amount < 0) {
+            if (evilLevel + amount < 0) {
                 evilLevel = 0;
             } else {
                 evilLevel += amount;
@@ -148,7 +148,7 @@ public class Player {
     return == success?
      */
     public boolean changeGoldBy(int amount) {
-        if(gold + amount < 0) {
+        if (gold + amount < 0) {
             return false;
         } else {
             gold += amount;
@@ -161,7 +161,7 @@ public class Player {
     return == success?
      */
     public boolean changeFoodBy(int amount) {
-        if(food + amount < 0) {
+        if (food + amount < 0) {
             return false;
         } else {
             food += amount;

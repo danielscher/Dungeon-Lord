@@ -216,7 +216,7 @@ public class Dungeon {
     return == success
      */
     public boolean dig(int x, int y) {
-        if(canDig(x,y)) {
+        if (canDig(x, y)) {
             grid[x][y] = new Tile();
             return true;
         } else {
@@ -250,10 +250,10 @@ public class Dungeon {
     return == possible (enough resting imps available)
      */
     public boolean sendImpsToMineGold(int amount) {
-        if(amount < 0) {
+        if (amount < 0) {
             return false;
         }
-        if(amount > restingImps) {
+        if (amount > restingImps) {
             return false;
         }
         restingImps -= amount;
@@ -266,10 +266,10 @@ public class Dungeon {
     return == possible (enough resting imps available)
      */
     public boolean sendImpsToDigTunnel(int amount) {
-        if(amount < 0) {
+        if (amount < 0) {
             return false;
         }
-        if(amount > restingImps) {
+        if (amount > restingImps) {
             return false;
         }
         restingImps -= amount;
@@ -283,10 +283,10 @@ public class Dungeon {
     NOTE: should never be used without activating a room, therefore private
      */
     private boolean sendImpsToProduce(int amount) {
-        if(amount < 0) {
+        if (amount < 0) {
             return false;
         }
-        if(amount > restingImps) {
+        if (amount > restingImps) {
             return false;
         }
         restingImps -= amount;
@@ -298,7 +298,7 @@ public class Dungeon {
     inserts an adventurer to the queue (with respect to the game rules)
      */
     public void insertAdventurer(Adventurer adv) {
-        if(adv.getCharge()) {
+        if (adv.getCharge()) {
             // if warrior, insert in front
             adventurerQueue.addFirst(adv);
         } else {
@@ -312,7 +312,7 @@ public class Dungeon {
     NOTE: returns null if position empty
      */
     public Adventurer getAdventurer(int index) {
-        if(index >= 0 && index < adventurerQueue.size()) {
+        if (index >= 0 && index < adventurerQueue.size()) {
             return adventurerQueue.get(index);
         } else {
             return null;

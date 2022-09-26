@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.entities;
 
 public class Adventurer {
+
     private int adventurerID;
     private int difficulty;
     private int healthPoints;
@@ -9,7 +10,8 @@ public class Adventurer {
     private int defuseValue;
     private boolean charge;
 
-    public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue, int defuseValue, boolean charge) {
+    public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue,
+            int defuseValue, boolean charge) {
         this.adventurerID = adventurerID;
         this.difficulty = difficulty;
         this.maxHealthPoints = maxHealthPoints;
