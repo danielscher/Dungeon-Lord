@@ -4,9 +4,14 @@ import de.unisaarland.cs.se.selab.game.Action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.Action.DigTunnelAction;
 import de.unisaarland.cs.se.selab.game.Action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.Action.HireMonsterAction;
+import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.player.Player;
 
 public class EvalUpToMonsterPhase extends Phase{
+
+    public EvalUpToMonsterPhase(GameData gd) {
+        super(gd);
+    }
 
     public Phase run(){
         //TODO
