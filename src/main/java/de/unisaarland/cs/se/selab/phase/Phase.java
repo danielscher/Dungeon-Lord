@@ -1,12 +1,17 @@
 package de.unisaarland.cs.se.selab.phase;
 
+<<<<<<< HEAD
+import de.unisaarland.cs.se.selab.game.TimeStamp;
+import de.unisaarland.cs.se.selab.game.GameData;
+=======
 import de.unisaarland.cs.se.selab.game.Action.*;
 import de.unisaarland.cs.se.selab.game.GameData;
 
+>>>>>>> 2ac4208b23ce756f708c52efdc81d35221c06be2
 
 public abstract class Phase {
 
-    private GameData gd;
+    protected GameData gd;
 
     public Phase(GameData gd) {
         this.gd = gd;
@@ -14,6 +19,7 @@ public abstract class Phase {
 
     public Phase run() {
         //return NULL;
+        return null;
     }
 
     private void exec(RegAction x) {

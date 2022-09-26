@@ -1,42 +1,43 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.game.Action.*;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.player.Player;
 
-public class CollectAndPlaceBidPhase extends Phase {
+public class CollectAndPlaceBidPhase extends Phase{
 
     public CollectAndPlaceBidPhase(GameData gd) {
         super(gd);
     }
 
-    public Phase run() {
-        //    return NULL;
+    public Phase run(){
+    //TODO
+        return null;
     }
-
-    private void eval() {
+    private void eval(){
         //to_do
         //iterates over Bidding Square
     }
 
-    private void grant(Player p, int r, int c) {
+    private void grant(Player p,int r, int c){
         //to_do
         //grants a single bid
     }
 
-    private void exec(PlaceBidAction pba) {
+    private void exec(PlaceBidAction pba){
         //to_do
     }
 
-    private void exec(ActivateRoomAction ara) {
+    private void exec(ActivateRoomAction ara){
         //to_do
     }
 
-    private boolean checkIfAllBidsChosen() {
+    private boolean checkIfAllBidsChosen(){
         //to_do
         return false;
     }
 
-    private void blockBids() {
+    private void blockBids(){
         //to_to
     }
 }
