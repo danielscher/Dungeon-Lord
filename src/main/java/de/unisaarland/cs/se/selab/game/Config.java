@@ -1,10 +1,16 @@
 package de.unisaarland.cs.se.selab.game;
+<<<<<<< HEAD
+=======
+
+import de.unisaarland.cs.se.selab.comm.ServerConnection;
+>>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
 
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
+<<<<<<< HEAD
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,8 +21,12 @@ import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+=======
+import java.util.*;
+>>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
 
 public class Config {
+
     private String configFilePath;
     private int maxPlayer =-1;
     private int maxYear=-1;
@@ -30,6 +40,7 @@ public class Config {
     private ArrayList<Trap> traps;
     private ArrayList<Room> rooms;
 
+<<<<<<< HEAD
     private boolean parse(){
     parserResult=true;
     JSONObject obj= new JSONObject(".\\resources\\configuration.json");
@@ -161,21 +172,34 @@ public class Config {
     //   HashSet<Trap> checkTraps = new HashSet<>(Arrays.asList(traps));
 
         return configResult;
+=======
+    private boolean parse() {
+        return false;
     }
 
-    private Monster createMonster(/*...need parameter*/){
+    private boolean checkIfValid() {
+        return false;
+>>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
+    }
+
+    private Monster createMonster(/*...need parameter*/) {
+
+<<<<<<< HEAD
+        return null;
+=======
+        // return NULL;
+>>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
+    }
+
+    private Adventurer createAdventurer(/*...need parameter*/) {
 
         return null;
     }
 
-    private Adventurer createAdventurer(/*...need parameter*/){
-
-        return null;
+    private void shuffle() {
     }
 
-    private void shuffle(){}
-
-    public List<Adventurer> drawAdventurers( int amount){
+    public List<Adventurer> drawAdventurers(int amount) {
 
         return null;
     }

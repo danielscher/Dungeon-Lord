@@ -1,10 +1,18 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.game.Action.*;
+import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.player.Player;
 
-public class CollectAndPlaceBidPhase {
+public class CollectAndPlaceBidPhase extends Phase{
+
+    public CollectAndPlaceBidPhase(GameData gd) {
+        super(gd);
+    }
+
     public Phase run(){
-    //    return NULL;
+    //TODO
+        return null;
     }
     private void eval(){
         //to_do

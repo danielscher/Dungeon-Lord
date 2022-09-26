@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,7 +11,9 @@ public class BiddingSquare {
     private final Map<BidType, Integer> typeToColumnMap = new HashMap<BidType, Integer>();
     private final Map<Integer, BidType> columnToTypeMap = new HashMap<Integer, BidType>();
 
-
+    public BiddingSquare(){
+        Arrays.fill(this.biddingSlots,-1);
+    }
     public boolean insert(BidType bidType, int playerID) {
         // get the uppermost free row
         int columnId = typeToColumn(bidType);
@@ -36,11 +39,11 @@ public class BiddingSquare {
 
     }
 
-    private int typeToColumn(BidType bidType) {
+    public int typeToColumn(BidType bidType) {
         return typeToColumnMap.get(bidType);
     }
 
-    private BidType columnToType(int column) {
+    public BidType columnToType(int column) {
         return columnToTypeMap.get(column);
     }
 

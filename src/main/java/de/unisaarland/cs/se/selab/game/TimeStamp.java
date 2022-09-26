@@ -9,6 +9,11 @@ public class TimeStamp {
 
     private int season, year;
 
+    public TimeStamp(){
+        this.season = 1;
+        this.year = 1;
+    }
+
     public int getSeason() {
         return season;
     }
