@@ -13,6 +13,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public class GameData {
 
@@ -25,7 +26,7 @@ public class GameData {
     private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
     private final List<Room> currAvailableRooms = new ArrayList<Room>();
-    private final ServerConnection serverconnection = new ServerConnection(8080, 5000,  ActionFactoryImplementation());
+    private final ServerConnection serverconnection = new ServerConnection(8080, 5000, new ActionFactoryImplementation());
     private final Config config = new Config();
     private int lastPlayerToStartBidding, idCounter;
 
@@ -77,6 +78,13 @@ public class GameData {
 
     public ServerConnection getServerConnection() {
         return this.serverconnection;
+    }
+
+    /*
+    returns a set of all commIDs
+     */
+    public Set<Integer> getCommIDSet() {
+        return commIDToPlayerIDMap.keySet();
     }
 
     public boolean checkIfRegistered(int CommID) {
