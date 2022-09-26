@@ -103,7 +103,9 @@ public class Dungeon {
     private void clearDistances() {
         for (Tile[] tileRow : grid) {  // for each tile row of grid
             for (Tile tile : tileRow) {  // for each tile of tile row
-                tile.setDistanceToEntrance(-1);  // set distance to default value
+                if(tile != null) {
+                    tile.setDistanceToEntrance(-1);  // set distance to default value
+                }
             }
         }
     }
