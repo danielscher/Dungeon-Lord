@@ -14,6 +14,17 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+/*
+class NoSuchCommIDException extends Exception {
+    public NoSuchCommIDException() {
+    }
+}
+
+class NoSuchPlayerIDException extends Exception {
+    public NoSuchPlayerIDException() {
+    }
+}
+*/
 
 public class GameData {
 

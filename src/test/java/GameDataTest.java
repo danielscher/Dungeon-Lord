@@ -1,6 +1,4 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.TimeStamp;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
@@ -16,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 public class GameDataTest extends GameData{
     GameData g = new GameData();
-    Player p1 = new Player();
+    Player p1 = new Player("Plyer1",1,1);
 
 
     private Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
@@ -37,25 +35,33 @@ public class GameDataTest extends GameData{
         g.registerPlayer("Player1",1);
         assertEquals(g.getPlayerByCommID(1), p1);
     }
-    /*
     @Test
     public void TestGetPlayerByPlayerID(){
-        g.addPlayer(p1,1);
+        g.registerPlayer("Player1",1);
         assertEquals(g.getPlayerByPlayerID(1),p1);
     }
 
     @Test
     public void TestGetPlayerIDByCommID(){
         g.registerPlayer("Player1",1);
-        g.addPlayer(p1,1);
         assertEquals(g.getPlayerIDByCommID(1),1);
     }
-    */
+
+    @Test
+    public void TestGetCommIDByPlayerID(){
+        g.registerPlayer("Player1",1);
+        assertEquals(g.getCommIDByPlayerID(1),1);
+    }
+
     @Test
     public void TestCheckIfRegistered(){
         g.registerPlayer("Player1",1);
         assertEquals(true, g.checkIfRegistered(1));
         assertEquals(false, g.checkIfRegistered(2));
+    }
+    @Test
+    public void TestGetCommIDSet(){
+        //todo
     }
     @Test
     public void TestGetNextStartPlayer(){
