@@ -5,7 +5,7 @@ public class Tile {
     private boolean conquered, hasRoom;
     private int distanceToEntrance, numTraps, numMonsters;
 
-    private Tile() {
+    public Tile() {
         this.distanceToEntrance = -1;
     }
 
@@ -19,6 +19,10 @@ public class Tile {
 
     public boolean isConquered() {
         return conquered;
+    }
+
+    public void setConquered() {
+        this.conquered = true;
     }
 
     public boolean hasRoom() {

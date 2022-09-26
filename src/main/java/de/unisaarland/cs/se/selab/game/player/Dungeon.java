@@ -111,6 +111,14 @@ public class Dungeon {
         }
     }
 
+    public Tile[][] getGrid() {
+        return grid;
+    }
+
+    public void setGrid(Tile[][] grid) {
+        this.grid = grid;
+    }
+
     /*
     sums all heal values of all adventurers and returns the sum
      */

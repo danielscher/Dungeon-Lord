@@ -1,20 +1,21 @@
 package de.unisaarland.cs.se.selab.game.Action;
+import de.unisaarland.cs.se.selab.comm.BidType;
 
 public class PlaceBidAction extends Action{
     private BidType bid;
-    private int bidNum;
+    private int slot;
 
-    public PlaceBidAction(int commID, BidType bid, int bidNum) {
+    public PlaceBidAction(int commID, BidType bid, int slot) {
         super(commID);
         this.bid = bid;
-        this.bidNum = bidNum;
+        this.slot = slot;
     }
 
     public BidType getBid() {
         return bid;
     }
 
-    public int getBidNum() {
-        return bidNum;
+    public int getSlot() {
+        return slot;
     }
 }
