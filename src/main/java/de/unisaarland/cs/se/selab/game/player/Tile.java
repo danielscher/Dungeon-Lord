@@ -17,11 +17,15 @@ public class Tile {
         return distanceToEntrance;
     }
 
-    public boolean getConquered() {
+    public boolean isConquered() {
         return conquered;
     }
 
     public void setConquered() {
         this.conquered = true;
+    }
+
+    public boolean hasRoom() {
+        return hasRoom;
     }
 }

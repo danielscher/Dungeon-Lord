@@ -1,31 +1,62 @@
 package de.unisaarland.cs.se.selab.game.Action;
+
 import de.unisaarland.cs.se.selab.comm.ActionFactory;
 import de.unisaarland.cs.se.selab.comm.BidType;
 
 
-public abstract class ActionFactoryImplementation implements ActionFactory {
+public class ActionFactoryImplementation implements ActionFactory<Action> {
 
-    public abstract Action createActivateRoom(int commID, int roomID);
 
-    public abstract Action createBattleGround(int commID, int x, int y);
+    public Action createActivateRoom(int commID, int roomID) {
+        return new ActivateRoomAction(commID, roomID);
+    }
 
-    public abstract Action createEndTurn(int commID);
+    public Action createBattleGround(int commID, int x, int y) {
+        return new BattleGroundAction(commID, x, y);
+    }
 
-    public abstract Action createLeave(int commID);
+    @Override
+    public Action createBuildRoom(int commID, int x, int y, int roomID) {
+        return new BuildRoomAction(commID, roomID, x, y);
+    }
 
-    public abstract Action createStartGame(int commID);
+    public Action createEndTurn(int commID) {
+        return new EndTurnAction(commID);
+    }
 
-    public abstract Action createHireMonster(int commID, int monsterID);
+    public Action createLeave(int commID) {
+        return new LeaveAction(commID);
+    }
 
-    public abstract Action createMonster(int commID, int monsterID);
+    public Action createStartGame(int commID) {
+        return new StartGameAction(commID);
+    }
 
-    public abstract Action createMonsterTargeted(int commID, int monsterID, int position);
+    public Action createHireMonster(int commID, int monsterID) {
+        return new HireMonsterAction(commID, monsterID);
+    }
 
-    public abstract Action createRegister(int commID, String name);
+    public Action createMonster(int commID, int monsterID) {
+        return new MonsterAction(commID, monsterID);
+    }
 
-    public abstract Action createPlaceBid(int commID, BidType bid, int slot);
+    public Action createMonsterTargeted(int commID, int monsterID, int position) {
+        return new MonsterTargetedAction(commID, monsterID, position);
+    }
 
-    public abstract Action createDigTunnel(int commID, int x, int y);
+    public Action createRegister(int commID, String name) {
+        return new RegAction(commID, name);
+    }
 
-    public abstract Action createTrap(int commID, int trapID);
+    public Action createPlaceBid(int commID, BidType bid, int slot) {
+        return new PlaceBidAction(commID, bid, slot);
+    }
+
+    public Action createDigTunnel(int commID, int x, int y) {
+        return new DigTunnelAction(commID, x, y);
+    }
+
+    public Action createTrap(int commID, int trapID) {
+        return new TrapAction(commID, trapID);
+    }
 }

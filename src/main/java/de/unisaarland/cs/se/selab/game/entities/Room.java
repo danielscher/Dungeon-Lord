@@ -13,7 +13,8 @@ public class Room {
     private boolean activated;
     private Location placementLoc;
 
-    public Room(int roomID, int activationCost, int foodProduction, int goldProduction, int impProduction, int niceness, Location placementLoc) {
+    public Room(int roomID, int activationCost, int foodProduction, int goldProduction,
+            int impProduction, int niceness, Location placementLoc) {
         this.roomID = roomID;
         this.activationCost = activationCost;
         this.foodProduction = foodProduction;
