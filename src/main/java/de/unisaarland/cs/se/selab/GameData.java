@@ -32,12 +32,14 @@ public class GameData {
     //int is commID
 
     public Player getPlayerByCommID (int x) {
-        return NULL ;
+
+        //return NULL ;
     }
 
 
     public Player getPlayerByPlayerID (int x) {
-        return NULL ;
+
+        //return NULL ;
     }
 
     public int getPlayerIDByCommID (int x) {
@@ -49,7 +51,8 @@ public class GameData {
     }
 
     public ServerConnection getServerConnection(){
-        return NUll ;
+
+        //return NUll ;
     }
 
     public boolean checkIfRegistered (int x) {

@@ -2,7 +2,7 @@ package de.unisaarland.cs.se.selab.phase;
 
 public class CollectAndPlaceBidPhase {
     public Phase run(){
-        return NULL;
+    //    return NULL;
     }
     private void eval(){
         //to_do

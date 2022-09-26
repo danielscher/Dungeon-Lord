@@ -19,17 +19,20 @@ public class Config {
     }
 
     private Monster createMonster(/*...need parameter*/){
-        return NULL;
+
+       // return NULL;
     }
 
     private Adventurer createAdventurer(/*...need parameter*/){
-        return NULL;
+
+        //return NULL;
     }
 
     private void shuffle(){}
 
     public List<Adventurer> drawAdventurers( int amount){
-        return NULL;
+
+        //return NULL;
     }
 // i think we still need getter to pass the data to GameData class.
 }

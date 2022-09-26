@@ -27,7 +27,8 @@ public class BiddingSquare {
     }
 
     private BidType columnToType(int column){
-        return NULL;
+
+        //return NULL;
     }
 
     public int countTrapBids(){

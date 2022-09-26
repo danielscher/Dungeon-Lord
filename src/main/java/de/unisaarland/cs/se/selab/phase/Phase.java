@@ -6,7 +6,8 @@ public abstract class Phase {
     private GameData gd;
 
     public Phase run(){
-        return NULL;
+
+        //return NULL;
     }
 
     private void exec(regAction x){
