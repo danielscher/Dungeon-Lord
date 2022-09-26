@@ -27,7 +27,7 @@ public class ChooseBattleGroundPhase extends Phase{
 
     public Phase run() throws TimeoutException {
 
-        for (int i: allPlayerCommID){                                                                  //send broadcast event "NextRound"
+        for (int i: allPlayerCommID){                                                               //send broadcast event "NextRound"
             sc.sendNextRound(i, round);
         }
 
@@ -36,7 +36,7 @@ public class ChooseBattleGroundPhase extends Phase{
         BattleGroundAction bga = (BattleGroundAction) sc.nextAction();                              //create battlegound action
         exec(bga);
 
-        return null; //TODO how to pass the gd to new phase?
+        return new Combatphase(gd);
     }
 
     private void exec(BattleGroundAction bga) {

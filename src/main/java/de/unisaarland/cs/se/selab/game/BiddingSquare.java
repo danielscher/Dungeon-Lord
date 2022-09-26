@@ -14,6 +14,7 @@ public class BiddingSquare {
     public BiddingSquare(){
         Arrays.fill(this.biddingSlots,-1);
     }
+
     public boolean insert(BidType bidType, int playerID) {
         // get the uppermost free row
         int columnId = typeToColumn(bidType);
@@ -24,7 +25,6 @@ public class BiddingSquare {
                 res = true;
                 break;
             }
-
         }
         return res;
     }
@@ -36,7 +36,6 @@ public class BiddingSquare {
     public int getIDByBidSlot(BidType bidType, int row) {
         int columnId = typeToColumn(bidType);
         return biddingSlots[row][columnId];
-
     }
 
     public int typeToColumn(BidType bidType) {
