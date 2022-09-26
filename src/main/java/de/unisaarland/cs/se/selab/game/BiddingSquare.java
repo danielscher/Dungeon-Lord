@@ -39,11 +39,11 @@ public class BiddingSquare {
 
     }
 
-    private int typeToColumn(BidType bidType) {
+    public int typeToColumn(BidType bidType) {
         return typeToColumnMap.get(bidType);
     }
 
-    private BidType columnToType(int column) {
+    public BidType columnToType(int column) {
         return columnToTypeMap.get(column);
     }
 
