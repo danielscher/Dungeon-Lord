@@ -4,7 +4,7 @@ import de.unisaarland.cs.se.selab.comm.ActionFactory;
 import de.unisaarland.cs.se.selab.comm.BidType;
 
 
-public abstract class ActionFactoryImplementation implements ActionFactory<Action> {
+public class ActionFactoryImplementation implements ActionFactory<Action> {
 
 
     public Action createActivateRoom(int commID, int roomID) {
@@ -13,6 +13,11 @@ public abstract class ActionFactoryImplementation implements ActionFactory<Actio
 
     public Action createBattleGround(int commID, int x, int y) {
         return new BattleGroundAction(commID, x, y);
+    }
+
+    @Override
+    public Action createBuildRoom(int commID, int x, int y, int roomID) {
+        return new BuildRoomAction(commID, roomID, x, y);
     }
 
     public Action createEndTurn(int commID) {
