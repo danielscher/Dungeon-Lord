@@ -11,7 +11,7 @@ import de.unisaarland.cs.se.selab.game.GameData;
 
 public abstract class Phase {
 
-    private GameData gd;
+    protected GameData gd;
 
     public Phase(GameData gd) {
         this.gd = gd;
