@@ -20,7 +20,7 @@ public class GameData {
     private final Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
     private final Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
     private final TimeStamp time = new TimeStamp();
-    private final BiddingSquare biddingsquare = new BiddingSquare();
+    private final BiddingSquare biddingSquare = new BiddingSquare();
     private final List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
     private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
@@ -106,6 +106,8 @@ public class GameData {
         // TODO: 25.09.22  
     }
 
-
+    public BiddingSquare getBiddingSquare() {
+        return biddingSquare;
+    }
 }
 
