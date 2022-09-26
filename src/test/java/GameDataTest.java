@@ -32,17 +32,33 @@ public class GameDataTest extends GameData{
     //config
     private int lastPlayerToStartBidding, idCounter;
 
-    @Test void TestGetPlayerByCommID(){
+    @Test
+    public void TestGetPlayerByCommID(){
         g.registerPlayer("Player1",1);
         assertEquals(g.getPlayerByCommID(1), p1);
     }
     /*
-    @Test void TestGetPlayerByPlayerID(){
+    @Test
+    public void TestGetPlayerByPlayerID(){
         g.addPlayer(p1,1);
         assertEquals(g.getPlayerByPlayerID(1),p1);
     }
+
+    @Test
+    public void TestGetPlayerIDByCommID(){
+        g.registerPlayer("Player1",1);
+        g.addPlayer(p1,1);
+        assertEquals(g.getPlayerIDByCommID(1),1);
+    }
     */
-
-    @Test void
-
+    @Test
+    public void TestCheckIfRegistered(){
+        g.registerPlayer("Player1",1);
+        assertEquals(true, g.checkIfRegistered(1));
+        assertEquals(false, g.checkIfRegistered(2));
+    }
+    @Test
+    public void TestGetNextStartPlayer(){
+        //todo
+    }
 }
