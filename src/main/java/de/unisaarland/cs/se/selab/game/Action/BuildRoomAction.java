@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
 public class BuildRoomAction extends Action {
+
     private int roomID, x, y;
 
     public BuildRoomAction(int commID, int roomID, int x, int y) {

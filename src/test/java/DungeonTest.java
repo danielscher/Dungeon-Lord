@@ -1,5 +1,3 @@
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Tile;
@@ -8,7 +6,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-public class JUnitTesting extends Dungeon {
+public class DungeonTest {
 
     Dungeon d = new Dungeon();
     private Tile[][] grid = new Tile[15][15];
@@ -23,7 +21,7 @@ public class JUnitTesting extends Dungeon {
     };
 
     @Test
-    public void test() {
+    public void testGetPossibleBattleCoords() {
 
         List<int[]> coords = new ArrayList<int[]>();
         int[] arr = {0,2};
@@ -34,4 +32,18 @@ public class JUnitTesting extends Dungeon {
         assertTrue(coords.contains(actualCoords));
     }
 
+    @Test
+    void getTotalHealVal() {
+        //TODO: implement this.
+    }
+
+    @Test
+    void getTotalDefuseVal() {
+        //TODO: implement this.
+    }
+
+    @Test
+    void canPlaceRoomOn() {
+        //TODO: implement this.
+    }
 }

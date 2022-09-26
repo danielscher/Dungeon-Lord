@@ -1,4 +1,5 @@
 package de.unisaarland.cs.se.selab.game;
+
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
@@ -6,7 +7,9 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import java.util.*;
+
 public class Config {
+
     private String configFilePath;
     private int maxPlayer, maxYear;
     private LinkedList<Monster> monsters;
@@ -14,27 +17,28 @@ public class Config {
     private LinkedList<Trap> traps;
     private LinkedList<Room> rooms;
 
-    private boolean parse(){
+    private boolean parse() {
         return false;
     }
 
-    private boolean checkIfValid(){
+    private boolean checkIfValid() {
         return false;
     }
 
-    private Monster createMonster(/*...need parameter*/){
+    private Monster createMonster(/*...need parameter*/) {
 
-       // return NULL;
+        // return NULL;
     }
 
-    private Adventurer createAdventurer(/*...need parameter*/){
+    private Adventurer createAdventurer(/*...need parameter*/) {
 
         //return NULL;
     }
 
-    private void shuffle(){}
+    private void shuffle() {
+    }
 
-    public List<Adventurer> drawAdventurers( int amount){
+    public List<Adventurer> drawAdventurers(int amount) {
 
         //return NULL;
     }

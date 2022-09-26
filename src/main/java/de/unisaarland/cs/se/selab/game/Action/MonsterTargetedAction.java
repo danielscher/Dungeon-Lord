@@ -1,6 +1,6 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
-public class MonsterTargetedAction extends Action{
+public class MonsterTargetedAction extends Action {
 
     private int monster, position;
 

@@ -1,7 +1,8 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
 public class BattleGroundAction extends Action {
-    private int x,y;
+
+    private int x, y;
 
     public BattleGroundAction(int commID, int x, int y) {
         super(commID);
@@ -9,7 +10,7 @@ public class BattleGroundAction extends Action {
         this.y = y;
     }
 
-    public int[] getCoords(){
-        return new int[]{x,y};
+    public int[] getCoords() {
+        return new int[]{x, y};
     }
 }
