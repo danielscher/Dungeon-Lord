@@ -9,9 +9,6 @@ public class Adventurer {
     private int healValue;
     private int defuseValue;
     private boolean charge;
-<<<<<<< HEAD
-    private String name;
-=======
 
     public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue,
             int defuseValue, boolean charge) {
@@ -48,5 +45,4 @@ public class Adventurer {
     public boolean getCharge() {
         return charge;
     }
->>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
 }
