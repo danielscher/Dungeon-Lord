@@ -3,6 +3,10 @@ package de.unisaarland.cs.se.selab.game.entities;
 import de.unisaarland.cs.se.selab.game.util.Location;
 
 public class Room {
+<<<<<<< HEAD
+    private String name;
+    private int roomID, activationCost, foodProduction, goldProduction, impProduction, niceness;
+=======
 
     private int roomID;
     private int activationCost;
@@ -10,6 +14,7 @@ public class Room {
     private int goldProduction;
     private int impProduction;
     private int niceness;
+>>>>>>> c62f79381689a371ce5299546e55d2edbef794f4
     private boolean activated;
     private Location placementLoc;
 
