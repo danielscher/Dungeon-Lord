@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.game.action;
 
+import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class BattleGroundAction extends Action {
@@ -13,8 +14,8 @@ public class BattleGroundAction extends Action {
         this.col = y;
     }
 
-    public int[] getCoords() {
-        return new int[]{row, col};
+    public Coordinate getCoords() {
+        return new Coordinate(row, col);
     }
 
     public void invoke(Phase phase) {
