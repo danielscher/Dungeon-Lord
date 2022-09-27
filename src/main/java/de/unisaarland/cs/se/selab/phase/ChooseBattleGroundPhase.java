@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.BattleGroundAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
+import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import java.util.List;
 
 public class ChooseBattleGroundPhase extends Phase {
@@ -38,7 +39,7 @@ public class ChooseBattleGroundPhase extends Phase {
     }
 
     public void exec(BattleGroundAction bga) {
-        List<int[]> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
+        List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
         int[] chosenCoords = bga.getCoords();
         if (!possibleCoords.contains(
                 chosenCoords)) { //invalid coordinates

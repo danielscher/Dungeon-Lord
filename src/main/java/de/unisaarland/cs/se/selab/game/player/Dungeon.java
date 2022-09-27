@@ -4,6 +4,7 @@ import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
+import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -33,7 +34,7 @@ public class Dungeon {
     /*
     recalculates distances to entrance and returns closest tiles
      */
-    public List<int[]> getPossibleBattleCoords() {
+    public List<Coordinate> getPossibleBattleCoords() {
         clearDistances();
         calcDistToEntrance(0, 0, 0);
         return findClosestUnconqueredTiles();
@@ -43,9 +44,9 @@ public class Dungeon {
     finds the tiles which have the smallest distance value
     requires distance calculation to be done first
      */
-    private List<int[]> findClosestUnconqueredTiles() {
+    private List<Coordinate> findClosestUnconqueredTiles() {
         int shortestDist = -1;
-        List<int[]> res = new ArrayList<int[]>();
+        List<Coordinate> res = new ArrayList<Coordinate>();
 
         // iterate over grid...
         for (int i = 0; i < grid.length; i++) {
@@ -58,16 +59,16 @@ public class Dungeon {
                             // if no unconquered tile found yet
                             // take this
                             shortestDist = grid[i][j].getDistanceToEntrance();
-                            res.add(new int[]{i, j});
+                            res.add(new Coordinate(i, j));
                         } else if (shortestDist == grid[i][j].getDistanceToEntrance()) {
                             // if this tile has same distance
                             // as previous closest tiles, add to list
-                            res.add(new int[]{i, j});
+                            res.add(new Coordinate(i, j));
                         } else if (shortestDist > grid[i][j].getDistanceToEntrance()) {
                             // if tile is closer than previous, clear list and add this
                             shortestDist = grid[i][j].getDistanceToEntrance();
                             res.clear();
-                            res.add(new int[]{i, j});
+                            res.add(new Coordinate(i, j));
                         }
                     }
 
@@ -296,6 +297,10 @@ public class Dungeon {
         Room roomToActivate = getRoomById(roomId);  // get room
         if (roomToActivate == null) {
             // if player doesnt have room, return false
+            return false;
+        }
+
+        if(roomToActivate.isActivated()) {
             return false;
         }
 
