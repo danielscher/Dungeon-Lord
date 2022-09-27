@@ -1,13 +1,16 @@
 package de.unisaarland.cs.se.selab.phase;
+
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.game.action.*;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.Action;
+import de.unisaarland.cs.se.selab.game.action.RegAction;
+import de.unisaarland.cs.se.selab.game.action.StartGameAction;
 import java.util.Set;
 
 public class RegPhase extends Phase {
 
 
-    private int max_players = gd.getConfig().getMaxPlayer();
+    private int maxPlayers = gd.getConfig().getMaxPlayer();
     private boolean isStarted = false;
 
     public RegPhase(GameData gd) {
@@ -15,7 +18,7 @@ public class RegPhase extends Phase {
     }
 
     public Phase run() throws TimeoutException {
-        for (int i = 0; i < max_players; i++) {
+        for (int i = 0; i < maxPlayers; i++) {
             if (isStarted == true) {
                 break;
             }
@@ -42,13 +45,14 @@ public class RegPhase extends Phase {
         }
     }
 
+    public void exec(StartGameAction sga) {
+        this.isStarted = true;
+        this.broadcastGameStarted();
+    }
+
 
     private boolean checkForStartAction() {
         return this.isStarted;
     }
 
-    public void exec(StartGameAction sga) {
-        this.isStarted = true;
-        this.broadcastGameStarted();
-    }
 }

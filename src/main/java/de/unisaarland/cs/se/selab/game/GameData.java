@@ -136,11 +136,11 @@ public class GameData {
         return playerIDList;
     }
 
-    public void removePlayer(int CommId) {
-        int playerId = getPlayerIdByCommID(CommId);
+    public void removePlayer(int commId) {
+        int playerId = getPlayerIdByCommID(commId);
         this.playerIdToCommIDMap.remove(playerId);
         this.idToPlayerMap.remove(playerId);
-        this.commIdToPlayerIdMap.remove(CommId);
+        this.commIdToPlayerIdMap.remove(commId);
 
 
     }

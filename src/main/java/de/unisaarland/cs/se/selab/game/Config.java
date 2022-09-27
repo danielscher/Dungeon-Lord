@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.game;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
@@ -8,11 +7,7 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -183,11 +178,11 @@ public class Config {
 
     public List<Adventurer> drawAdventurers(int amount) {
 
-            return null;
+        return null;
     }
 
-    public int getMaxPlayer(){
+    public int getMaxPlayer() {
         return maxPlayer;
     }
     // i think we still need getter to pass the data to GameData class.
-    }
+}

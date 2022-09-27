@@ -12,12 +12,12 @@ public class Tile {
         this.distanceToEntrance = -1;
     }
 
-    protected void setDistanceToEntrance(int distanceToEntrance) {
-        this.distanceToEntrance = distanceToEntrance;
-    }
-
     protected int getDistanceToEntrance() {
         return distanceToEntrance;
+    }
+
+    protected void setDistanceToEntrance(int distanceToEntrance) {
+        this.distanceToEntrance = distanceToEntrance;
     }
 
     public boolean isConquered() {

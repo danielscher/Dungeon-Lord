@@ -13,8 +13,9 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 public class GameDataTest {
+
     GameData g = new GameData();
-    Player p1 = new Player("Plyer1",1,1);
+    Player p1 = new Player("Plyer1", 1, 1);
 
 
     private Map<Integer, Integer> commIDToPlayerIdMap = new HashMap<Integer, Integer>();
@@ -31,40 +32,43 @@ public class GameDataTest {
     private int lastPlayerToStartBidding, idCounter;
 
     @Test
-    public void testGetPlayerByCommID(){
-        g.registerPlayer("Player1",1);
+    public void testGetPlayerByCommID() {
+        g.registerPlayer("Player1", 1);
         assertEquals(g.getPlayerByCommID(1), p1);
     }
+
     @Test
-    public void testGetPlayerByPlayerId(){
-        g.registerPlayer("Player1",1);
-        assertEquals(g.getPlayerByPlayerId(1),p1);
+    public void testGetPlayerByPlayerId() {
+        g.registerPlayer("Player1", 1);
+        assertEquals(g.getPlayerByPlayerId(1), p1);
     }
 
     @Test
-    public void testGetPlayerIdByCommID(){
-        g.registerPlayer("Player1",1);
-        assertEquals(g.getPlayerIdByCommID(1),1);
+    public void testGetPlayerIdByCommID() {
+        g.registerPlayer("Player1", 1);
+        assertEquals(g.getPlayerIdByCommID(1), 1);
     }
 
     @Test
-    public void testGetCommIDByPlayerId(){
-        g.registerPlayer("Player1",1);
-        assertEquals(g.getCommIDByPlayerId(1),1);
+    public void testGetCommIDByPlayerId() {
+        g.registerPlayer("Player1", 1);
+        assertEquals(g.getCommIDByPlayerId(1), 1);
     }
 
     @Test
-    public void testCheckIfRegistered(){
-        g.registerPlayer("Player1",1);
+    public void testCheckIfRegistered() {
+        g.registerPlayer("Player1", 1);
         assertEquals(true, g.checkIfRegistered(1));
         assertEquals(false, g.checkIfRegistered(2));
     }
+
     @Test
-    public void testGetCommIDSet(){
+    public void testGetCommIDSet() {
         //todo
     }
+
     @Test
-    public void testGetNextStartPlayer(){
+    public void testGetNextStartPlayer() {
         //todo
     }
 }

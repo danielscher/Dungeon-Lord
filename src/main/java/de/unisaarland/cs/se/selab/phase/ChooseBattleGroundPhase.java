@@ -43,8 +43,7 @@ public class ChooseBattleGroundPhase extends Phase {
                 chosenCoords)) { //invalid coordinates
             gd.getServerConnection().sendActionFailed(currPlayer.getCommID(),
                     "Chosen coordinates are not available.");
-        }
-        else {
+        } else {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
         }
     }
