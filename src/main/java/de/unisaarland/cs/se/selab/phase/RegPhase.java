@@ -1,6 +1,8 @@
 package de.unisaarland.cs.se.selab.phase;
-import de.unisaarland.cs.se.selab.game.Action.*;
+import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.game.action.*;
 import de.unisaarland.cs.se.selab.game.GameData;
+import java.util.Set;
 
 public class RegPhase extends Phase {
 
@@ -24,7 +26,7 @@ public class RegPhase extends Phase {
         //send the registered players for all players
         for (Integer commID : commIDs) {
             this.broadcastPlayer(gd.getPlayerByCommID(commID).getName(),
-                    gd.getPlayerIDByCommID(commID));
+                    gd.getPlayerIdByCommID(commID));
         }
         return new CollectAndPlaceBidPhase(gd);
     }
