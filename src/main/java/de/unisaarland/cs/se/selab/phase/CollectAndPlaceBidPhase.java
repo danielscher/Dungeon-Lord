@@ -20,6 +20,8 @@ public class CollectAndPlaceBidPhase extends Phase {
         ServerConnection<Action> sc = gd.getServerConnection();
         Set<Integer> commIDs = gd.getCommIDSet();
 
+        broadcastActNow();
+
         while (!checkIfAllBidsChosen()) {
             sc.nextAction().invoke(this);
         }
@@ -62,6 +64,8 @@ public class CollectAndPlaceBidPhase extends Phase {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
+                int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
+                broadcastImpsChanged(cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
         }

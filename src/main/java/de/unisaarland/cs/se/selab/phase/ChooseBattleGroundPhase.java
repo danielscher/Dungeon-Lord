@@ -13,16 +13,8 @@ public class ChooseBattleGroundPhase extends Phase {
     private Player currPlayer;
     private int round;
 
-
-    public ChooseBattleGroundPhase(GameData gd, Player currPlayer) {
+    public ChooseBattleGroundPhase(GameData gd) {
         super(gd);
-        this.currPlayer = currPlayer;
-    }
-
-    public ChooseBattleGroundPhase(GameData gd, Player currPlayer, int round) {
-        super(gd);
-        this.currPlayer = currPlayer;
-        this.round = round;
     }
 
     public Phase run() throws TimeoutException {
