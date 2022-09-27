@@ -19,8 +19,8 @@ public class Dungeon {
     private List<Trap> traps = new ArrayList<Trap>();
     private LinkedList<Adventurer> adventurerQueue = new LinkedList<Adventurer>();
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
-    private int[] currAdvPos = new int[2];
-    private int[] currBattleGround = new int[2];
+    private Coordinate currAdvPos;
+    private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps;
     private int tunnelDiggingImps;
@@ -372,7 +372,7 @@ public class Dungeon {
         return hiredMonsters;
     }
 
-    public void setBattleGround(int[] bg) {
+    public void setBattleGround(Coordinate bg) {
         currBattleGround = bg;
     }
 
