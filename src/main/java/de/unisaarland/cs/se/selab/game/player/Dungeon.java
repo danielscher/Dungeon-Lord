@@ -336,5 +336,53 @@ public class Dungeon {
     public void setBattleGround(int[] bg) {
         currBattleGround = bg;
     }
+
+    public int getNumImps() {
+        int res = restingImps;
+        res += tunnelDiggingImps;
+        res += producingImps;
+        res += goldMiningImps;
+        return res;
+    }
+
+    public int getNumRooms() {
+        return rooms.size();
+    }
+
+    public int getNumUnconqueredTiles() {
+        int res = 0;
+        for (Tile[] tileRow : grid) {
+            for (Tile tile : tileRow) {
+                if (tile != null) {
+                    if(!tile.isConquered()) {
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public int getNumConqueredTiles() {
+        int res = 0;
+        for (Tile[] tileRow : grid) {
+            for (Tile tile : tileRow) {
+                if (tile != null) {
+                    if(tile.isConquered()) {
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
+    public int getNumImprisonedAdventurers() {
+        return prison.size();
+    }
+
+
+
+
 }
 
