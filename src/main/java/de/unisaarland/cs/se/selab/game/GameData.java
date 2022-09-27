@@ -28,16 +28,17 @@ class NoSuchPlayerIDException extends Exception {
 
 public class GameData {
 
-    private final Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
-    private final TimeStamp time = new TimeStamp();
-    private final BiddingSquare biddingSquare = new BiddingSquare();
-    private final List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
-    private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
-    private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
-    private final List<Room> currAvailableRooms = new ArrayList<Room>();
-    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation());
+    private Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
+    private TimeStamp time = new TimeStamp();
+    private BiddingSquare biddingSquare = new BiddingSquare();
+    private List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
+    private List<Monster> currAvailableMonsters = new ArrayList<Monster>();
+    private List<Trap> currAvailableTraps = new ArrayList<Trap>();
+    private List<Room> currAvailableRooms = new ArrayList<Room>();
+    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
+            5000, new ActionFactoryImplementation());
     private final Config config = new Config();
     private int lastPlayerToStartBidding, idCounter;
 
@@ -127,6 +128,10 @@ public class GameData {
 
     public BiddingSquare getBiddingSquare() {
         return biddingSquare;
+    }
+
+    public Config getConfig() {
+        return this.config;
     }
 }
 

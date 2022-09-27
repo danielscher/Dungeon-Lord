@@ -189,5 +189,9 @@ public class Config {
 
             return null;
         }
+
+        public int getMaxPlayer(){
+            return maxPlayer;
+        }
 // i think we still need getter to pass the data to GameData class.
     }
