@@ -442,6 +442,8 @@ public class Dungeon {
         return null;
     }
 
-
+    public int getRestingImps() {
+        return restingImps;
+    }
 }
 
