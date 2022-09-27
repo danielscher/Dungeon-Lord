@@ -10,8 +10,7 @@ import java.util.List;
 public class ChooseBattleGroundPhase extends Phase{
     private Player currPlayer;
     private int round;
-    private ServerConnection sc;
-    private int[] allPlayerCommID;
+
 
 
     public ChooseBattleGroundPhase(GameData gd, Player currPlayer) {
@@ -27,13 +26,10 @@ public class ChooseBattleGroundPhase extends Phase{
 
     public Phase run() throws TimeoutException {
 
-        for (int i: allPlayerCommID){                                                               //send broadcast event "NextRound"
-            sc.sendNextRound(i, round);
-        }
+       broadcastNextRound(round);
+       gd.getServerConnection().sendActNow(currPlayer.getCommID());                                 //send individual event "ActNow"
 
-        sc.sendActNow(currPlayer.getCommID());                                                      //send individual event "ActNow"
-
-        BattleGroundAction bga = (BattleGroundAction) sc.nextAction();                              //create battlegound action
+        BattleGroundAction bga = (BattleGroundAction) gd.getServerConnection().nextAction();        //create battlegound action
         exec(bga);
 
         return new Combatphase(gd);
@@ -44,7 +40,7 @@ public class ChooseBattleGroundPhase extends Phase{
         int[] chosenCoords = bga.getCoords();
 
         if (!PossibleCoords.contains(chosenCoords)){                                                //invalid coordinates
-            sc.sendActionFailed(currPlayer.getCommID(), "Chosen coordinates are not available.");
+            gd.getServerConnection().sendActionFailed(currPlayer.getCommID(), "Chosen coordinates are not available.");
         } else {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
         }
