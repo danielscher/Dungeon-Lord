@@ -31,7 +31,7 @@ public class ChooseBattleGroundPhase extends Phase {
                 currPlayer.getCommID()); //send individual event "ActNow"
 
         Action action = gd.getServerConnection().nextAction();
-        if (action.getCommID() == currPlayer.getCommID()){
+        if (action.getCommID() == currPlayer.getCommID()) {
             action.invoke(this);
         }
         return new Combatphase(gd);
