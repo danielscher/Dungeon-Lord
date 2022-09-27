@@ -14,7 +14,7 @@ public class GameEndPhase extends Phase {
         return null;
     }
 
-    private void evaluateScores(){
+    private void evaluateScores() {
         //TODO
     }
 

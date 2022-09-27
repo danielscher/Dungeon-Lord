@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 

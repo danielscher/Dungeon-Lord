@@ -11,8 +11,8 @@ public class BiddingSquare {
     private final Map<BidType, Integer> typeToColumnMap = new HashMap<BidType, Integer>();
     private final Map<Integer, BidType> columnToTypeMap = new HashMap<Integer, BidType>();
 
-    public BiddingSquare(){
-        Arrays.fill(this.biddingSlots,-1);
+    public BiddingSquare() {
+        Arrays.fill(this.biddingSlots, -1);
     }
 
     public boolean insert(BidType bidType, int playerID) {

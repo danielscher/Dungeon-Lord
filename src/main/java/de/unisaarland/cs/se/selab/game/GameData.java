@@ -1,8 +1,8 @@
 package de.unisaarland.cs.se.selab.game;
 
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
-import de.unisaarland.cs.se.selab.game.Action.Action;
-import de.unisaarland.cs.se.selab.game.Action.ActionFactoryImplementation;
+import de.unisaarland.cs.se.selab.game.action.Action;
+import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
@@ -20,16 +20,16 @@ class NoSuchCommIDException extends Exception {
     }
 }
 
-class NoSuchPlayerIDException extends Exception {
-    public NoSuchPlayerIDException() {
+class NoSuchplayerIdException extends Exception {
+    public NoSuchplayerIdException() {
     }
 }
 */
 
 public class GameData {
 
-    private final Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
+    private final Map<Integer, Integer> commIdToPlayerIdMap = new HashMap<Integer, Integer>();
+    private final Map<Integer, Integer> playerIdToCommIDMap = new HashMap<Integer, Integer>();
     private final Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
     private final TimeStamp time = new TimeStamp();
     private final BiddingSquare biddingSquare = new BiddingSquare();
@@ -37,9 +37,11 @@ public class GameData {
     private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
     private final List<Room> currAvailableRooms = new ArrayList<Room>();
-    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation());
+    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
+            5000, new ActionFactoryImplementation());
     private final Config config = new Config();
-    private int lastPlayerToStartBidding, idCounter;
+    private int lastPlayerToStartBidding;
+    private int idCounter;
 
     public GameData() {
         this.lastPlayerToStartBidding = 0;
@@ -47,20 +49,20 @@ public class GameData {
     }
 
     private void addPlayer(Player player, int id) {
-        int CommId = player.getCommID();
+        int commId = player.getCommID();
         idToPlayerMap.put(id, player);
-        commIDToPlayerIDMap.put(CommId, id);
-        playerIDToCommIDMap.put(id, CommId);
+        commIdToPlayerIdMap.put(commId, id);
+        playerIdToCommIDMap.put(id, commId);
     }
 
-    public boolean registerPlayer(String name, int CommID) {
+    public boolean registerPlayer(String name, int commId) {
         Boolean res = false;
 
-        List<Integer> CommList = new ArrayList<Integer>(commIDToPlayerIDMap.keySet());
-        if (CommList.contains(CommID)) {
+        List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
+        if (commList.contains(commId)) {
             res = false;
         } else {
-            Player player = new Player(name, idCounter, CommID);
+            Player player = new Player(name, idCounter, commId);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             res = true;
@@ -70,21 +72,21 @@ public class GameData {
 
     }
 
-    public Player getPlayerByCommID(int CommID) {
-        int playerID = commIDToPlayerIDMap.get(CommID);
-        return idToPlayerMap.get(playerID);
+    public Player getPlayerByCommID(int commId) {
+        int playerId = commIdToPlayerIdMap.get(commId);
+        return idToPlayerMap.get(playerId);
     }
 
-    public Player getPlayerByPlayerID(int playerID) {
-        return idToPlayerMap.get(playerID);
+    public Player getPlayerByPlayerId(int playerId) {
+        return idToPlayerMap.get(playerId);
     }
 
-    public int getPlayerIDByCommID(int CommID) {
-        return commIDToPlayerIDMap.get(CommID);
+    public int getPlayerIdByCommID(int commId) {
+        return commIdToPlayerIdMap.get(commId);
     }
 
-    public int getCommIDByPlayerID(int PlayerID) {
-        return playerIDToCommIDMap.get(PlayerID);
+    public int getCommIDByPlayerId(int playerId) {
+        return playerIdToCommIDMap.get(playerId);
     }
 
     public ServerConnection<Action> getServerConnection() {
@@ -92,29 +94,29 @@ public class GameData {
     }
 
     /*
-    returns a set of all commIDs
+    returns a set of all commIds
      */
     public Set<Integer> getCommIDSet() {
-        return commIDToPlayerIDMap.keySet();
+        return commIdToPlayerIdMap.keySet();
     }
 
-    public boolean checkIfRegistered(int CommID) {
+    public boolean checkIfRegistered(int commId) {
         Boolean res = false;
-        List<Integer> CommList = new ArrayList<Integer>(commIDToPlayerIDMap.keySet());
-        if (CommList.contains(CommID)) {
+        List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
+        if (commList.contains(commId)) {
             res = true;
         }
         return res;
     }
 
     public int getNextStartPlayer() {
-        List<Integer> PlayerList = new ArrayList<Integer>(playerIDToCommIDMap.keySet());
-        PlayerList.sort(Comparator.naturalOrder());
-        int pos = PlayerList.indexOf(lastPlayerToStartBidding);
-        if (pos == PlayerList.size() - 1) {
-            this.lastPlayerToStartBidding = PlayerList.get(0);
+        List<Integer> playerList = new ArrayList<Integer>(playerIdToCommIDMap.keySet());
+        playerList.sort(Comparator.naturalOrder());
+        int pos = playerList.indexOf(lastPlayerToStartBidding);
+        if (pos == playerList.size() - 1) {
+            this.lastPlayerToStartBidding = playerList.get(0);
         } else {
-            this.lastPlayerToStartBidding = PlayerList.get(pos + 1);
+            this.lastPlayerToStartBidding = playerList.get(pos + 1);
         }
 
         return lastPlayerToStartBidding;

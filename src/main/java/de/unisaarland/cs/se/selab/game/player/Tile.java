@@ -2,8 +2,11 @@ package de.unisaarland.cs.se.selab.game.player;
 
 public class Tile {
 
-    private boolean conquered, hasRoom;
-    private int distanceToEntrance, numTraps, numMonsters;
+    private boolean conquered;
+    private boolean hasRoom;
+    private int distanceToEntrance;
+    private int numTraps;
+    private int numMonsters;
 
     public Tile() {
         this.distanceToEntrance = -1;

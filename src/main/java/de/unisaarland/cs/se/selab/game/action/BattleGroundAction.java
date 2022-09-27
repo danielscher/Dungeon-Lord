@@ -1,16 +1,17 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 public class BattleGroundAction extends Action {
 
-    private int x, y;
+    private int row;
+    private int col;
 
     public BattleGroundAction(int commID, int x, int y) {
         super(commID);
-        this.x = x;
-        this.y = y;
+        this.row = x;
+        this.col = y;
     }
 
     public int[] getCoords() {
-        return new int[]{x, y};
+        return new int[]{row, col};
     }
 }

@@ -1,8 +1,9 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 public class MonsterTargetedAction extends Action {
 
-    private int monster, position;
+    private int monster;
+    private int position;
 
     public MonsterTargetedAction(int commID, int monster, int position) {
         super(commID);

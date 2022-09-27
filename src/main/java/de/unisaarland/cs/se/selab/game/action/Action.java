@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 public abstract class Action {
 
@@ -13,3 +13,4 @@ public abstract class Action {
     }
 
 }
+

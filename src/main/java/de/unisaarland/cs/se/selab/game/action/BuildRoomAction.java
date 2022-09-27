@@ -1,14 +1,16 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 public class BuildRoomAction extends Action {
 
-    private int roomID, x, y;
+    private int roomID;
+    private int row;
+    private int col;
 
-    public BuildRoomAction(int commID, int roomID, int x, int y) {
+    public BuildRoomAction(int commID, int roomID, int row, int col) {
         super(commID);
         this.roomID = roomID;
-        this.x = x;
-        this.y = y;
+        this.row = row;
+        this.col = col;
     }
 
     public int getRoomID() {
@@ -16,6 +18,6 @@ public class BuildRoomAction extends Action {
     }
 
     public int[] getcoords() {
-        return new int[]{x, y};
+        return new int[]{row, col};
     }
 }

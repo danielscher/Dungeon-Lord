@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.game.Action;
+package de.unisaarland.cs.se.selab.game.action;
 
 public class StartGameAction extends Action {
 
