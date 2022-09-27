@@ -300,6 +300,10 @@ public class Dungeon {
             return false;
         }
 
+        if(roomToActivate.isActivated()) {
+            return false;
+        }
+
         int neededImps = roomToActivate.getActivationCost();
 
         if (sendImpsToProduce(neededImps)) {
