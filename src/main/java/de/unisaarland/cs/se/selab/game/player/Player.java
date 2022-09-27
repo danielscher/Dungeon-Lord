@@ -170,6 +170,16 @@ public class Player {
         }
     }
 
+    public int getNumPlacedBids() {
+        int res = 0;
+        for (BidType bid : currBids) {
+            if(bid != null) {
+                res++;
+            }
+        }
+        return res;
+    }
+
     public int getEvilLevel() {
         return evilLevel;
     }
