@@ -440,6 +440,23 @@ public class Dungeon {
         return res;
     }
 
+    /*
+    returns the number of tiles you can mine gold on
+     */
+    public int getNumGoldMineAbleTiles() {
+        int res = 0;
+        for (Tile[] tileRow : grid) {
+            for (Tile tile : tileRow) {
+                if (tile != null) {
+                    if (!tile.isConquered() && !tile.hasRoom()) {
+                        res++;
+                    }
+                }
+            }
+        }
+        return res;
+    }
+
     public int getNumImprisonedAdventurers() {
         return prison.size();
     }
