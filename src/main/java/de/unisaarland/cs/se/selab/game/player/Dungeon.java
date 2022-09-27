@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -23,6 +24,7 @@ public class Dungeon {
     private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps;
+    private int supervisingImps;
     private int tunnelDiggingImps;
     private int goldMiningImps;
     private int producingImps;
@@ -245,9 +247,8 @@ public class Dungeon {
         return grid[x][y].hasRoom();
     }
 
-    /*
-    returns all imps doing tasks
-     */
+
+    //returns all imps doing tasks
     public void returnImps() {
         restingImps += tunnelDiggingImps;
         tunnelDiggingImps = 0;
@@ -255,6 +256,8 @@ public class Dungeon {
         goldMiningImps = 0;
         restingImps += producingImps;
         producingImps = 0;
+        restingImps += supervisingImps;
+        supervisingImps = 0;
     }
 
     /*
@@ -268,9 +271,21 @@ public class Dungeon {
         if (amount > restingImps) {
             return false;
         }
-        restingImps -= amount;
-        goldMiningImps += amount;
-        return true;
+        if (amount < 4) {
+            restingImps -= amount;
+            goldMiningImps += amount;
+            return true;
+        }
+        //for more than 4 imps send one to supervise
+        if (amount >= 4 && restingImps > amount) {
+            restingImps -= amount + 1;
+            goldMiningImps += amount;
+            supervisingImps += 1;
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /*
@@ -300,7 +315,7 @@ public class Dungeon {
             return false;
         }
 
-        if(roomToActivate.isActivated()) {
+        if (roomToActivate.isActivated()) {
             return false;
         }
 
