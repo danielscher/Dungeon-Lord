@@ -8,7 +8,6 @@ import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -285,8 +284,7 @@ public class Dungeon {
             goldMiningImps += amount;
             supervisingImps += 1;
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -479,11 +477,10 @@ public class Dungeon {
     }
 
     //adds more resting imps
-    public void addImps(int imps){
-        if (imps < 0){ // do nothing if illegal argument
+    public void addImps(int imps) {
+        if (imps < 0) { // do nothing if illegal argument
             restingImps += 0;
-        }
-        else{
+        } else {
             restingImps += imps;
         }
     }
