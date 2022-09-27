@@ -1,7 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.game.Action.Action;
 import de.unisaarland.cs.se.selab.game.Action.BattleGroundAction;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.player.Player;
@@ -26,12 +26,13 @@ public class ChooseBattleGroundPhase extends Phase{
 
     public Phase run() throws TimeoutException {
 
-       broadcastNextRound(round);
-       gd.getServerConnection().sendActNow(currPlayer.getCommID());                                 //send individual event "ActNow"
+        broadcastNextRound(round);
+        gd.getServerConnection().sendActNow(currPlayer.getCommID());                                //send individual event "ActNow"
 
-        BattleGroundAction bga = (BattleGroundAction) gd.getServerConnection().nextAction();        //create battlegound action
-        exec(bga);
-
+        Action ac = gd.getServerConnection().nextAction();
+        if (ac.getCommID() == currPlayer.getCommID()){
+            ac.invoke(this);                                                                 //create and execute battlegound action
+        }
         return new Combatphase(gd);
     }
 
@@ -40,7 +41,7 @@ public class ChooseBattleGroundPhase extends Phase{
         int[] chosenCoords = bga.getCoords();
 
         if (!PossibleCoords.contains(chosenCoords)){                                                //invalid coordinates
-            gd.getServerConnection().sendActionFailed(currPlayer.getCommID(), "Chosen coordinates are not available.");
+            gd.getServerConnection().sendActionFailed(currPlayer.getCommID(), "Chosen coordinates not available.");
         } else {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
         }
