@@ -18,16 +18,20 @@
           "enum": ["UPPER_HALF","LOWER_HALF","OUTER_RING","INNER_RING"]
         },
         "food": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         },
         "gold": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         },
         "imps": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         },
         "niceness": {
-          "type": "number"
+          "type": "number",
+          "minimum": 0
         }
       },
       "required": [
