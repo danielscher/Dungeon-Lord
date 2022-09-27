@@ -176,9 +176,20 @@ public class Config {
     private void shuffle() {
     }
 
-    public List<Adventurer> drawAdventurers(int amount) {
+    public List<Adventurer> getAllAdventurers() {
+        return this.adventurers;
+    }
 
-        return null;
+    public List<Monster> getAllMonsters() {
+        return this.monsters;
+    }
+
+    public List<Room> getAllRooms() {
+        return this.rooms;
+    }
+
+    public List<Trap> getAllTraps() {
+        return this.traps;
     }
 
     public int getMaxPlayer() {
