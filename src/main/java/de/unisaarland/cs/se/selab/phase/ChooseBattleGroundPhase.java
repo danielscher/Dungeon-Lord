@@ -40,7 +40,7 @@ public class ChooseBattleGroundPhase extends Phase {
 
     public void exec(BattleGroundAction bga) {
         List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
-        int[] chosenCoords = bga.getCoords();
+        Coordinate chosenCoords = bga.getCoords();
         if (!possibleCoords.contains(
                 chosenCoords)) { //invalid coordinates
             gd.getServerConnection().sendActionFailed(currPlayer.getCommID(),

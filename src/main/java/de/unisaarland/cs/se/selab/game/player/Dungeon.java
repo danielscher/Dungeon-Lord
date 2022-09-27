@@ -33,6 +33,10 @@ public class Dungeon {
         restingImps = 3;
     }
 
+    public List<Room> getRooms() {
+        return rooms;
+    }
+
     /*
     recalculates distances to entrance and returns closest tiles
      */
@@ -73,7 +77,6 @@ public class Dungeon {
                             res.add(new Coordinate(i, j));
                         }
                     }
-
                 }
             }
         }
@@ -446,8 +449,7 @@ public class Dungeon {
     might return null if room isn't in this dungeon
      */
     public Room getRoomById(int id) {
-        for (Room room :
-                rooms) {
+        for (Room room : rooms) {
             if (room.getRoomID() == id) {
                 return room;
             }
@@ -455,6 +457,8 @@ public class Dungeon {
         return null;
     }
 
-
+    public int getRestingImps() {
+        return restingImps;
+    }
 }
 
