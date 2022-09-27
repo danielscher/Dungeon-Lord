@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class BiddingsquareTest extends BiddingSquare{
+public class BiddingsquareTest {
     BiddingSquare b = new BiddingSquare();
     private int[][] biddingSlots = new int[3][8];
     private Map<BidType, Integer> typeToColumnMap = new HashMap<BidType, Integer>();
