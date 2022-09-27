@@ -35,7 +35,7 @@ public class ChooseBattleGroundPhase extends Phase{
         return new Combatphase(gd);
     }
 
-    private void exec(BattleGroundAction bga) {
+    public void exec(BattleGroundAction bga) {
         List<int[]> PossibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
         int[] chosenCoords = bga.getCoords();
 

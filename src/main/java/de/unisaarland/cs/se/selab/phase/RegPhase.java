@@ -13,7 +13,7 @@ public class RegPhase extends Phase{
         //TODO
     }
 
-    private void exec(RegAction ra){
+    public void exec(RegAction ra){
     //TODO
     }
 
@@ -22,7 +22,7 @@ public class RegPhase extends Phase{
         return false;
     }
 
-    private void exec(StartGameAction sga){
+    public void exec(StartGameAction sga){
     //TODO
     }
 }

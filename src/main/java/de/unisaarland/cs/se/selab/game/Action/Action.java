@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
+import de.unisaarland.cs.se.selab.phase.Phase;
+
 public abstract class Action {
 
     private int commID;
@@ -10,6 +12,10 @@ public abstract class Action {
 
     public int getCommID() {
         return commID;
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 
 }

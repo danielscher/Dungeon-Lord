@@ -25,11 +25,11 @@ public class EvalUpToTunnelPhase extends Phase{
         //TODO
     }
 
-    private void exec(DigTunnelAction dta){
+    public void exec(DigTunnelAction dta){
         //TODO
     }
 
-    private void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara){
         //TODO
     }
 

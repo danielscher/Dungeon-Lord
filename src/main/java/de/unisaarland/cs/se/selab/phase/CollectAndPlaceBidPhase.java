@@ -53,7 +53,7 @@ public class CollectAndPlaceBidPhase extends Phase{
         //grants a single bid
     }
 
-    private void exec(PlaceBidAction pba){
+    public void exec(PlaceBidAction pba){
         boolean bidAdded = false;
         Player currPlayer = gd.getPlayerByCommID(pba.getCommID());
         bidAdded = currPlayer.addBid(pba.getBid(), pba.getSlot());
@@ -62,7 +62,7 @@ public class CollectAndPlaceBidPhase extends Phase{
         }
     }
 
-    private void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara){
         //TODO
     }
 

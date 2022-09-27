@@ -68,15 +68,15 @@ public class EvalUpToMonsterPhase extends Phase{
         }
     }
 
-    private void exec(HireMonsterAction hma){
+    public void exec(HireMonsterAction hma){
         //TODO
     }
 
-    private void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara){
         //TODO
     }
 
-    private void exec(EndTurnAction eta){
+    public void exec(EndTurnAction eta){
         //TODO
     }
 
