@@ -17,9 +17,6 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
-import java.util.*;
-
-
 public class Config {
 
     private String configFilePath;
@@ -29,7 +26,8 @@ public class Config {
     private int initFood = -1;
     private int initGold = -1;
     private int initImps = -1;
-    private boolean parserResult, configResult;
+    private boolean parserResult;
+    private boolean configResult;
     private ArrayList<Monster> monsters;
     private ArrayList<Adventurer> adventurers;
     private ArrayList<Trap> traps;
@@ -47,8 +45,8 @@ public class Config {
         initImps = (Integer) obj.get("initialImps");
 
         JSONArray monsterArray = obj.getJSONArray("monsters");
-        int mALength = monsterArray.length();
-        for (int i = 0; i < mALength; i++) {
+        int monArrLen = monsterArray.length();
+        for (int i = 0; i < monArrLen; i++) {
             JSONObject monsterObj = monsterArray.getJSONObject(i);
             int id = (Integer) monsterObj.get("id");
             String name = (String) monsterObj.get("name");
@@ -70,8 +68,8 @@ public class Config {
         }
 
         JSONArray adventurerArray = obj.getJSONArray("adventurers");
-        int aALength = adventurerArray.length();
-        for (int i = 0; i < aALength; i++) {
+        int advArrLen = adventurerArray.length();
+        for (int i = 0; i < advArrLen; i++) {
             JSONObject adventurerObj = adventurerArray.getJSONObject(i);
             int id = (Integer) adventurerObj.get("id");
             String name = (String) adventurerObj.get("name");
@@ -94,8 +92,8 @@ public class Config {
         }
 
         JSONArray trapArray = obj.getJSONArray("traps");
-        int tALength = trapArray.length();
-        for (int i = 0; i < tALength; i++) {
+        int trpArrLen = trapArray.length();
+        for (int i = 0; i < trpArrLen; i++) {
             JSONObject trapObj = trapArray.getJSONObject(i);
             int id = (Integer) trapObj.get("id");
             String name = (String) trapObj.get("name");
@@ -115,8 +113,8 @@ public class Config {
         }
 
         JSONArray roomArray = obj.getJSONArray("rooms");
-        int rALength = roomArray.length();
-        for (int i = 0; i < rALength; i++) {
+        int roomArrLen = roomArray.length();
+        for (int i = 0; i < roomArrLen; i++) {
             JSONObject roomObj = roomArray.getJSONObject(i);
             int id = (Integer) roomObj.get("id");
             String name = (String) roomObj.get("name");
@@ -171,21 +169,21 @@ public class Config {
         return configResult;
     }
 
-        private Monster createMonster (/*...need parameter*/) {
-            // return NULL;
-            return null;
-        }
-
-        private Adventurer createAdventurer (/*...need parameter*/) {
-            return null;
-        }
-
-        private void shuffle () {
-        }
-
-        public List<Adventurer> drawAdventurers ( int amount){
-
-            return null;
-        }
-// i think we still need getter to pass the data to GameData class.
+    private Monster createMonster(/*...need parameter*/) {
+        // return NULL;
+        return null;
     }
+
+    private Adventurer createAdventurer(/*...need parameter*/) {
+        return null;
+    }
+
+    private void shuffle() {
+    }
+
+    public List<Adventurer> drawAdventurers(int amount) {
+
+        return null;
+    }
+    // i think we still need getter to pass the data to GameData class.
+}

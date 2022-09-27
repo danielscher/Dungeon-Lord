@@ -1,39 +1,39 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.game.Action.ActivateRoomAction;
-import de.unisaarland.cs.se.selab.game.Action.DigTunnelAction;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
+import de.unisaarland.cs.se.selab.game.action.DigTunnelAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 
-public class EvalUpToTunnelPhase extends Phase{
+public class EvalUpToTunnelPhase extends Phase {
 
     public EvalUpToTunnelPhase(GameData gd) {
         super(gd);
     }
 
-    public Phase run(){
+    public Phase run() {
         //TODO
         return null;
     }
 
-    private void eval(){
+    private void eval() {
         //TODO
         //iterate over BiddingSquare
     }
 
-    private void grant(Player player, int bidtype, int slot){
+    private void grant(Player player, int bidtype, int slot) {
         //TODO
     }
 
-    public void exec(DigTunnelAction dta){
+    public void exec(DigTunnelAction dta) {
         //TODO
     }
 
-    public void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara) {
         //TODO
     }
 
-    private int[] collectBidWinners(){
+    private int[] collectBidWinners() {
         //TODO
         return new int[0]; //collect the playerID
     }

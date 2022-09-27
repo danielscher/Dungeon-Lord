@@ -32,11 +32,10 @@ public class GameEndPhase extends Phase {
         return  null;
     }
 
-    public void evaluateScores(){
+    public void evaluateScores() {
         // use this to calculate the final points and give
         // for(int i=0;i<)
         //  gd.getPlayerByPlayerID()
-
     }
 
     private void calculateFoodPoint(){

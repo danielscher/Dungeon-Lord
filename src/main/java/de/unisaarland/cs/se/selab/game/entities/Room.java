@@ -5,7 +5,12 @@ import de.unisaarland.cs.se.selab.game.util.Location;
 public class Room {
 
     private String name;
-    private int roomID, activationCost, foodProduction, goldProduction, impProduction, niceness;
+    private int roomID;
+    private int activationCost;
+    private int foodProduction;
+    private int goldProduction;
+    private int impProduction;
+    private int niceness;
 
     private boolean activated;
     private Location placementLoc;

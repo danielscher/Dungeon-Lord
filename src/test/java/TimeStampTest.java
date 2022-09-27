@@ -12,23 +12,23 @@ public class TimeStampTest {
     }
 
     @Test
-    public void TestGetSeason(){
+    public void testGetSeason(){
         assertEquals(1, t.getSeason());
     }
 
     @Test
-    public void TestGetYear(){
+    public void testGetYear(){
         assertEquals(1, t.getYear());
     }
 
     @Test
-    public void TestNextSeason(){
+    public void testNextSeason(){
         t.nextSeason();
         assertEquals(2, t.getSeason());
     }
 
     @Test
-    public void TestNextYear(){
+    public void testNextYear(){
         t.nextyear();
         assertEquals(2, t.getYear());
     }

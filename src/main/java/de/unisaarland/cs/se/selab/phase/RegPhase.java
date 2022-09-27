@@ -1,23 +1,29 @@
 package de.unisaarland.cs.se.selab.phase;
-import de.unisaarland.cs.se.selab.game.Action.*;
-import de.unisaarland.cs.se.selab.game.GameData;
 
-public class RegPhase extends Phase{
+import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.RegAction;
+import de.unisaarland.cs.se.selab.game.action.StartGameAction;
+
+public class RegPhase extends Phase {
 
     public RegPhase(GameData gd) {
         super(gd);
     }
 
-    public CollectAndPlaceBidPhase run(){
+    public CollectAndPlaceBidPhase run() {
         return null;
         //TODO
     }
 
-    public void exec(RegAction ra){
-    //TODO
+    public void exec(RegAction ra) {
+        //TODO
     }
 
-    private boolean checkForStartAction(){
+    private void exec(StartGameAction sga) {
+        //TODO
+    }
+
+    private boolean checkForStartAction() {
         //TODO
         return false;
     }

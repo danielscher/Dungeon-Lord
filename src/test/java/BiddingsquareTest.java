@@ -29,29 +29,29 @@ public class BiddingsquareTest {
 //                [4,-1,-1,-1,-1,-1,-1,-1]}
 
     @Test
-    public void TestInsert(){
+    public void testInsert(){
         assertEquals(false, b.insert(BidType.FOOD , 3));
         assertEquals(true, b.insert(BidType.GOLD , 3));
     }
 
     @Test
-    public void TestGetIDByBidSlot(){
+    public void testGetIDByBidSlot(){
         assertEquals( '2', b.getIDByBidSlot(0, 0));
         assertEquals('2', b.getIDByBidSlot(BidType.FOOD, 0));
     }
 
     @Test
-    public void TestTypeToColumn(){
+    public void testTypeToColumn(){
         assertEquals(0, b.typeToColumn(BidType.FOOD) );
     }
 
     @Test
-    public void TestColumnToType(){
+    public void testColumnToType(){
         assertEquals(BidType.FOOD, b.columnToType(0));
     }
 
     @Test
-    public void TestCountTrapBids(){
+    public void testCountTrapBids(){
         assertEquals(2, b.countTrapBids());
     }
 

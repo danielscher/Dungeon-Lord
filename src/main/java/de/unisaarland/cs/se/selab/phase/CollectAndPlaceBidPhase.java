@@ -1,13 +1,13 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.game.Action.ActivateRoomAction;
-import de.unisaarland.cs.se.selab.game.Action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
+import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 
-public class CollectAndPlaceBidPhase extends Phase{
+public class CollectAndPlaceBidPhase extends Phase {
 
     private int[] allPlayerCommID;
     private Player[] allPlayers;
@@ -27,15 +27,18 @@ public class CollectAndPlaceBidPhase extends Phase{
         if (!checkIfAllBidsChosen()) {
             throw new IllegalStateException("All bids have to be chosen");
         } else {
-            blockBids();                                                                            //block 2nd and 3rd bids, release old blocked bids
-
-            for (int i = 0; i < 3; i++) {                                                           //the sequence of inserting bid on bidding square: go through players
-                for(Player p : allPlayers) {                                                        // to get their first bids, insert, then 2nd bids of players, insert
+            blockBids(); //block 2nd and 3rd bids, release old blocked bids
+            //the sequence of inserting bid on bidding square: go through players
+            for (int i = 0; i < 3;
+                    i++) {
+                // to get their first bids, insert, then 2nd bids of players, insert
+                for (Player p : allPlayers) {
                     boolean inserted = bs.insert(p.getBid(i), p.getPlayerID());
                     if (!inserted) {
                         throw new IllegalStateException("Slot occupied");
                     } else {
-                        gd.getServerConnection().sendBidPlaced(p.getCommID(), p.getBid(i), p.getPlayerID(), i);
+                        gd.getServerConnection()
+                                .sendBidPlaced(p.getCommID(), p.getBid(i), p.getPlayerID(), i);
                     }
                 }
             }
@@ -43,35 +46,36 @@ public class CollectAndPlaceBidPhase extends Phase{
         return new EvalUpToTunnelPhase(gd);
     }
 
-    private void eval(){
+    private void eval() {
         //TODO
         //iterates over Bidding Square
     }
 
-    private void grant(Player p,int r, int c){
+    private void grant(Player p, int r, int c) {
         //TODO
         //grants a single bid
     }
 
-    public void exec(PlaceBidAction pba){
+    public void exec(PlaceBidAction pba) {
         boolean bidAdded = false;
         Player currPlayer = gd.getPlayerByCommID(pba.getCommID());
         bidAdded = currPlayer.addBid(pba.getBid(), pba.getSlot());
-        if (!bidAdded){
-            gd.getServerConnection().sendActionFailed(currPlayer.getCommID(), "can't choose this bid");
+        if (!bidAdded) {
+            gd.getServerConnection()
+                    .sendActionFailed(currPlayer.getCommID(), "can't choose this bid");
         }
     }
 
-    public void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara) {
         //TODO
     }
 
-    private boolean checkIfAllBidsChosen(){
+    private boolean checkIfAllBidsChosen() {
         //to_do
         return false;
     }
 
-    private void blockBids(){
+    private void blockBids() {
         //to_to
     }
 }

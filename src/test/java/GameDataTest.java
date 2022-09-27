@@ -17,8 +17,8 @@ public class GameDataTest {
     Player p1 = new Player("Plyer1",1,1);
 
 
-    private Map<Integer, Integer> commIDToPlayerIDMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> playerIDToCommIDMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> commIDToPlayerIdMap = new HashMap<Integer, Integer>();
+    private Map<Integer, Integer> playerIdToCommIDMap = new HashMap<Integer, Integer>();
     private Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
     private TimeStamp time = new TimeStamp();
     //bidding square
@@ -31,40 +31,40 @@ public class GameDataTest {
     private int lastPlayerToStartBidding, idCounter;
 
     @Test
-    public void TestGetPlayerByCommID(){
+    public void testGetPlayerByCommID(){
         g.registerPlayer("Player1",1);
         assertEquals(g.getPlayerByCommID(1), p1);
     }
     @Test
-    public void TestGetPlayerByPlayerID(){
+    public void testGetPlayerByPlayerId(){
         g.registerPlayer("Player1",1);
-        assertEquals(g.getPlayerByPlayerID(1),p1);
+        assertEquals(g.getPlayerByPlayerId(1),p1);
     }
 
     @Test
-    public void TestGetPlayerIDByCommID(){
+    public void testGetPlayerIdByCommID(){
         g.registerPlayer("Player1",1);
-        assertEquals(g.getPlayerIDByCommID(1),1);
+        assertEquals(g.getPlayerIdByCommID(1),1);
     }
 
     @Test
-    public void TestGetCommIDByPlayerID(){
+    public void testGetCommIDByPlayerId(){
         g.registerPlayer("Player1",1);
-        assertEquals(g.getCommIDByPlayerID(1),1);
+        assertEquals(g.getCommIDByPlayerId(1),1);
     }
 
     @Test
-    public void TestCheckIfRegistered(){
+    public void testCheckIfRegistered(){
         g.registerPlayer("Player1",1);
         assertEquals(true, g.checkIfRegistered(1));
         assertEquals(false, g.checkIfRegistered(2));
     }
     @Test
-    public void TestGetCommIDSet(){
+    public void testGetCommIDSet(){
         //todo
     }
     @Test
-    public void TestGetNextStartPlayer(){
+    public void testGetNextStartPlayer(){
         //todo
     }
 }

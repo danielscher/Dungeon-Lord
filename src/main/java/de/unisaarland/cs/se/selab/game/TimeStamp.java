@@ -7,9 +7,10 @@ import java.util.Map;
 
 public class TimeStamp {
 
-    private int season, year;
+    private int season;
+    private int year;
 
-    public TimeStamp(){
+    public TimeStamp() {
         this.season = 1;
         this.year = 1;
     }
@@ -29,6 +30,5 @@ public class TimeStamp {
     public void nextyear() {
         this.year = year + 1;
     }
-
 
 }

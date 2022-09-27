@@ -1,17 +1,15 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
-import de.unisaarland.cs.se.selab.game.Action.Action;
-import de.unisaarland.cs.se.selab.game.Action.ActivateRoomAction;
-import de.unisaarland.cs.se.selab.game.Action.EndTurnAction;
-import de.unisaarland.cs.se.selab.game.Action.HireMonsterAction;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.player.Dungeon;
-import de.unisaarland.cs.se.selab.game.player.Player;
-import de.unisaarland.cs.se.selab.comm.BidType;
+import de.unisaarland.cs.se.selab.game.action.Action;
+import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
+import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
+import de.unisaarland.cs.se.selab.game.action.HireMonsterAction;
 
-public class EvalUpToMonsterPhase extends Phase{
+public class EvalUpToMonsterPhase extends Phase {
 
     //Evaluation for the Gold, Imp, Trap and monster bids.
 
@@ -19,7 +17,7 @@ public class EvalUpToMonsterPhase extends Phase{
         super(gd);
     }
 
-    public Phase run(){
+    public Phase run() {
         //retrieve Player ids of bid winners for corresponding bid type.
         int[] goldWinners = collectBidWinners(BidType.GOLD);
         int[] impWinners = collectBidWinners(BidType.IMPS);
@@ -28,64 +26,66 @@ public class EvalUpToMonsterPhase extends Phase{
 
         ServerConnection<Action> sc = gd.getServerConnection();
 
-
         return new EvalRoomPhase(super.gd);
     }
 
-    private void eval(){
+    private void eval() {
         //TODO
         //iterate over BiddingSquare
     }
 
-    private void grant(Player player, int bidtype, int slot){
+    /*private void grant(Player player, BidType bidtype, int slot){
         Dungeon d = player.getDungeon();
         switch (bidtype) {
-            case 3: // GOLD
+            case GOLD:
                 switch (slot){
                     case 0:
-                        d.sendImpsToMineGold(2);
                     case 1:
                     case 2:
+                    break;
                 }
-            case 4: // IMP
+            case IMPS: // IMP
                 switch (slot){
                     case 0:
                     case 1:
                     case 2:
+                    break;
                 }
-            case 5: // TRAP
+            case TRAP:
                 switch (slot){
                     case 0:
                     case 1:
                     case 2:
+                    break;
                 }
-            case 6: // MONSTER
+            case MONSTER:
                 switch (slot){
                     case 0:
                     case 1:
                     case 2:
+                    break;
                 }
         }
-    }
+    }*/
 
-    public void exec(HireMonsterAction hma){
+    public void exec(HireMonsterAction hma) {
         //TODO
     }
 
-    public void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara) {
         //TODO
     }
 
-    public void exec(EndTurnAction eta){
+    public void exec(EndTurnAction eta) {
         //TODO
     }
 
     //returns list of player ids for a specific bid type.
-    private int[] collectBidWinners(BidType bt){
+    private int[] collectBidWinners(BidType bt) {
         BiddingSquare bs = gd.getBiddingSquare();
-        int [] ids = new int[3];
-        for (int i = 0; i < 3; i++){
-            ids[i] = bs.getIDByBidSlot(bt,i);
+        int[] ids = new int[3];
+        for (int i = 0; i < 3; i++) {
+            ids[i] = bs.getIDByBidSlot(bt, i);
         }
         return ids; //collect the playerID
     }

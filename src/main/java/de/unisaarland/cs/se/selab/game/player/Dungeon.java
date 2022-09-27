@@ -5,7 +5,11 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 public class Dungeon {
 
@@ -17,7 +21,10 @@ public class Dungeon {
     private int[] currAdvPos = new int[2];
     private int[] currBattleGround = new int[2];
     private List<Room> rooms = new ArrayList<Room>();
-    private int restingImps, tunnelDiggingImps, goldMiningImps, producingImps;
+    private int restingImps;
+    private int tunnelDiggingImps;
+    private int goldMiningImps;
+    private int producingImps;
 
     public Dungeon() {
         restingImps = 3;
@@ -48,11 +55,13 @@ public class Dungeon {
                     if (!grid[i][j].isConquered()) {
                         // if tile isn't conquered...
                         if (shortestDist == -1) {
-                            // if no unconquered tile found yet, take this
+                            // if no unconquered tile found yet
+                            // take this
                             shortestDist = grid[i][j].getDistanceToEntrance();
                             res.add(new int[]{i, j});
                         } else if (shortestDist == grid[i][j].getDistanceToEntrance()) {
-                            // if this tile has same distance than previous closest tiles, add to list
+                            // if this tile has same distance
+                            // as previous closest tiles, add to list
                             res.add(new int[]{i, j});
                         } else if (shortestDist > grid[i][j].getDistanceToEntrance()) {
                             // if tile is closer than previous, clear list and add this
@@ -78,7 +87,8 @@ public class Dungeon {
             // only try to calculate if tile exists
             if (grid[x][y].getDistanceToEntrance() > n
                     || grid[x][y].getDistanceToEntrance() == -1) {
-                // if this tile hasn't been calculated yet or was reached using more steps than now...
+                // if this tile hasn't been calculated yet
+                // or was reached using more steps than now...
                 grid[x][y].setDistanceToEntrance(n);  // change distance to needed steps
 
                 // now check nearby tiles with incremented step counter (n+1)
@@ -170,20 +180,21 @@ public class Dungeon {
 
         switch (location) {
             // for return see specification
-            case UPPER_HALF -> {
+            case UPPER_HALF: {
                 return (y <= grid[0].length / 2 - 1);
             }
-            case LOWER_HALF -> {
+            case LOWER_HALF: {
                 return (y > grid[0].length / 2 - 1);
             }
-            case INNER_RING -> {
+            case INNER_RING: {
                 return ((x != 0 || x != grid.length - 1) && (y != 0 || y != grid[0].length - 1));
             }
-            case OUTER_RING -> {
+            case OUTER_RING: {
                 return ((x == 0 || x == grid.length - 1) && (y == 0 || y == grid[0].length - 1));
             }
+            default:
+                return false;
         }
-        return false;
     }
 
     /*
