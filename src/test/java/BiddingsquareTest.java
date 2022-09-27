@@ -8,15 +8,15 @@ import org.junit.jupiter.api.Test;
 public class BiddingsquareTest {
 
     BiddingSquare b = new BiddingSquare();
-    boolean a1 = b.insert(BidType.FOOD, 2);
-    boolean a2 = b.insert(BidType.FOOD, 3);
-    boolean a3 = b.insert(BidType.FOOD, 4);
-    boolean a4 = b.insert(BidType.GOLD, 3);
-    boolean a5 = b.insert(BidType.TRAP, 4);
-    boolean a6 = b.insert(BidType.TRAP, 2);
     private int[][] biddingSlots = new int[3][8];
     private Map<BidType, Integer> typeToColumnMap = new HashMap<BidType, Integer>();
     private Map<Integer, BidType> columnToTypeMap = new HashMap<Integer, BidType>();
+    private final boolean a1 = b.insert(BidType.FOOD, 2);
+    private final boolean a2 = b.insert(BidType.FOOD, 3);
+    private final boolean a3 = b.insert(BidType.FOOD, 4);
+    private final boolean a4 = b.insert(BidType.GOLD, 3);
+    private final boolean a5 = b.insert(BidType.TRAP, 4);
+    private final boolean a6 = b.insert(BidType.TRAP, 2);
 //biddingslots = {[2,3,-1,-1,-1,4,-1,-1],
 //                [3,-1,-1,-1,-1,2,-1,-1],
 //                [4,-1,-1,-1,-1,-1,-1,-1]}
@@ -46,10 +46,5 @@ public class BiddingsquareTest {
     @Test
     public void testCountTrapBids() {
         assertEquals(2, b.countTrapBids());
-    }
-
-    @Test
-    public void TestOutofIndexGetIDByBidSlot() {
-        // to throw exception
     }
 }
