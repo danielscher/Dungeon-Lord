@@ -1,9 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import de.unisaarland.cs.se.selab.game.player.Dungeon;
+
 import de.unisaarland.cs.se.selab.game.player.Tile;
-import java.util.ArrayList;
-import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 public class TileTest {

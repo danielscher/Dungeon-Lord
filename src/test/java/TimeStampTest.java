@@ -1,5 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import de.unisaarland.cs.se.selab.game.TimeStamp;
 import org.junit.jupiter.api.Test;
 
