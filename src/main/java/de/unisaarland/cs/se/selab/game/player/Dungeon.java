@@ -460,5 +460,15 @@ public class Dungeon {
     public int getRestingImps() {
         return restingImps;
     }
+
+    //adds more resting imps
+    public void addImps(int imps){
+        if (imps < 0){ // do nothing if illegal argument
+            restingImps += 0;
+        }
+        else{
+            restingImps += imps;
+        }
+    }
 }
 
