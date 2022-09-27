@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
+import de.unisaarland.cs.se.selab.phase.Phase;
+
 public class BuildRoomAction extends Action {
 
     private int roomID, x, y;
@@ -17,5 +19,9 @@ public class BuildRoomAction extends Action {
 
     public int[] getcoords() {
         return new int[]{x, y};
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 }

@@ -25,11 +25,11 @@ public class EvalRoomPhase extends Phase{
         //TODO
     }
 
-    private void exec(BuildRoomAction bra){
+    public void exec(BuildRoomAction bra){
         //TODO
     }
 
-    private void exec(ActivateRoomAction ara){
+    public void exec(ActivateRoomAction ara){
         //TODO
     }
 

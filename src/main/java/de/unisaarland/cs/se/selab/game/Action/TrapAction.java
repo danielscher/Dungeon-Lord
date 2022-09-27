@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
+import de.unisaarland.cs.se.selab.phase.Phase;
+
 public class TrapAction extends Action {
 
     private int trapID;
@@ -11,5 +13,9 @@ public class TrapAction extends Action {
 
     public int getTrapID() {
         return trapID;
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 }

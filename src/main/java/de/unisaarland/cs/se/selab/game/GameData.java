@@ -37,7 +37,7 @@ public class GameData {
     private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
     private final List<Room> currAvailableRooms = new ArrayList<Room>();
-    private final ServerConnection serverconnection = new ServerConnection(8080, 5000, new ActionFactoryImplementation());
+    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation());
     private final Config config = new Config();
     private int lastPlayerToStartBidding, idCounter;
 
@@ -87,7 +87,7 @@ public class GameData {
         return playerIDToCommIDMap.get(PlayerID);
     }
 
-    public ServerConnection getServerConnection() {
+    public ServerConnection<Action> getServerConnection() {
         return this.serverconnection;
     }
 

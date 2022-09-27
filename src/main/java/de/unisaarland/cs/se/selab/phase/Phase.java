@@ -19,59 +19,59 @@ public abstract class Phase {
         return null;
     }
 
-    private void exec(RegAction x) {
+    public void exec(RegAction x) {
 
     }
 
-    private void exec(StartGameAction x) {
+    public void exec(StartGameAction x) {
 
     }
 
-    private void exec(LeaveAction x) {
+    public void exec(LeaveAction x) {
 
     }
 
-    private void exec(EndTurnAction x) {
+    public void exec(EndTurnAction x) {
 
     }
 
-    private void exec(HireMonsterAction x) {
+    public void exec(HireMonsterAction x) {
 
     }
 
-    private void exec(PlaceBidAction x) {
+    public void exec(PlaceBidAction x) {
 
     }
 
-    private void exec(MonsterAction x) {
+    public void exec(MonsterAction x) {
 
     }
 
-    private void exec(MonsterTargetedAction x) {
+    public void exec(MonsterTargetedAction x) {
 
     }
 
-    private void exec(BattleGroundAction x) {
+    public void exec(BattleGroundAction x) {
 
     }
 
-    private void exec(DigTunnelAction x) {
+    public void exec(DigTunnelAction x) {
 
     }
 
-    private void exec(ActivateRoomAction x) {
+    public void exec(ActivateRoomAction x) {
 
     }
 
-    private void exec(TrapAction x) {
+    public void exec(TrapAction x) {
 
     }
 
-    private void exec(BuildRoomAction x) {
+    public void exec(BuildRoomAction x) {
 
     }
 
-    private void exec(Action x) {
+    public void exec(Action x) {
 
     }
 

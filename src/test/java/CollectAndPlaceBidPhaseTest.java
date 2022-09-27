@@ -4,10 +4,8 @@ import de.unisaarland.cs.se.selab.phase.CollectAndPlaceBidPhase;
 import de.unisaarland.cs.se.selab.phase.Phase;
 import org.junit.jupiter.api.Test;
 
-public class CollectAndPlaceBidPhaseTest extends CollectAndPlaceBidPhase{
+public class CollectAndPlaceBidPhaseTest {
 
-    public CollectAndPlaceBidPhaseTest(final GameData gd) {
-        super(gd);
-    }
+
     //todo
 }

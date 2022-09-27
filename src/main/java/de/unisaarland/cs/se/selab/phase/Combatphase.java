@@ -19,19 +19,19 @@ public class Combatphase extends Phase{
         return null;
     }
 
-    private void exec(TrapAction ta){
+    public void exec(TrapAction ta){
         //TODO
     }
 
-    private void exec(MonsterAction ma){
+    public void exec(MonsterAction ma){
         //TODO
     }
 
-    private void exec(MonsterTargetedAction mta){
+    public void exec(MonsterTargetedAction mta){
         //TODO
     }
 
-    private void exec(EndTurnAction eta){
+    public void exec(EndTurnAction eta){
         //TODO
     }
 
