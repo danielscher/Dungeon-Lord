@@ -10,16 +10,24 @@ import java.util.Set;
 public class RegPhase extends Phase {
 
 
-    private int maxPlayers = gd.getConfig().getMaxPlayer();
+    private final int maxPlayers = gd.getConfig().getMaxPlayer();
+
+    /*
+    whenever we get the startGame action this is set to true
+     */
     private boolean isStarted = false;
 
     public RegPhase(GameData gd) {
         super(gd);
     }
 
+    /*
+    loop over the maximum players and ask the nextAction from the serverconnection
+     */
+
     public Phase run() throws TimeoutException {
         for (int i = 0; i < maxPlayers; i++) {
-            if (isStarted == true) {
+            if (isStarted) {
                 break;
             }
             Action action = gd.getServerConnection().nextAction();
@@ -39,7 +47,7 @@ public class RegPhase extends Phase {
             gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
         } else {
             boolean res = gd.registerPlayer(ra.getName(), ra.getCommID());
-            if (res == false) {
+            if (!res) {
                 gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
             }
         }
