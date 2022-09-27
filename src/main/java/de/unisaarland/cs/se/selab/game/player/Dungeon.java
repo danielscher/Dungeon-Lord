@@ -289,6 +289,29 @@ public class Dungeon {
     }
 
     /*
+    activates a room by its ID
+    return == success?
+     */
+    public boolean activateRoom(int roomId) {
+        Room roomToActivate = getRoomById(roomId);  // get room
+        if (roomToActivate == null) {
+            // if player doesnt have room, return false
+            return false;
+        }
+
+        int neededImps = roomToActivate.getActivationCost();
+
+        if (sendImpsToProduce(neededImps)) {
+            // if player has enough resting imps, they are transferred to work
+            roomToActivate.activate();
+            return true;
+        } else {
+            // not enough imps
+            return false;
+        }
+    }
+
+    /*
     tries to send imps to dig the tunnel
     return == possible (enough resting imps available)
     NOTE: should never be used without activating a room, therefore private
