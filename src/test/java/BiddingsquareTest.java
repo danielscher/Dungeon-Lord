@@ -1,10 +1,15 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+<<<<<<< HEAD
+import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+=======
+
+>>>>>>> 83c99704d1be4bcc0daa8872e806aa4a12c55961
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
-import java.util.ArrayList;
+
 import java.util.HashMap;
-import java.util.List;
+
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
@@ -48,5 +53,10 @@ public class BiddingsquareTest {
     @Test
     public void TestCountTrapBids(){
         assertEquals(2, b.countTrapBids());
+    }
+
+    @Test
+    public void TestOutofIndexGetIDByBidSlot(){
+    // to throw exception
     }
 }
