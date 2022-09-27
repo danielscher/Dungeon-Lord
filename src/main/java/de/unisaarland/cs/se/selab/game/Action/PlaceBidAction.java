@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
+import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class PlaceBidAction extends Action {
 
@@ -19,5 +20,9 @@ public class PlaceBidAction extends Action {
 
     public int getSlot() {
         return slot;
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 }

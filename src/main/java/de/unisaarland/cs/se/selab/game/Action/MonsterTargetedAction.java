@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
+import de.unisaarland.cs.se.selab.phase.Phase;
+
 public class MonsterTargetedAction extends Action {
 
     private int monster, position;
@@ -16,5 +18,9 @@ public class MonsterTargetedAction extends Action {
 
     public int getPosition() {
         return position;
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 }

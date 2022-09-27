@@ -1,5 +1,7 @@
 package de.unisaarland.cs.se.selab.game.Action;
 
+import de.unisaarland.cs.se.selab.phase.Phase;
+
 public class ActivateRoomAction extends Action {
 
     private int roomID;
@@ -12,5 +14,9 @@ public class ActivateRoomAction extends Action {
 
     public int getRoomID() {
         return roomID;
+    }
+
+    public void invoke(Phase phase) {
+        phase.exec(this);
     }
 }
