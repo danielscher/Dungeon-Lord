@@ -3,12 +3,11 @@ package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
-<<<<<<< HEAD
+
 import de.unisaarland.cs.se.selab.game.util.Title;
 import java.util.ArrayList;
-=======
 import de.unisaarland.cs.se.selab.game.player.Player;
->>>>>>> 83c99704d1be4bcc0daa8872e806aa4a12c55961
+
 
 public class GameEndPhase extends Phase {
     private ArrayList <Integer> darkSeedPlayerIDList;
