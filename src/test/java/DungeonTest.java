@@ -22,7 +22,6 @@ public class DungeonTest {
 
     @Test
     public void testGetPossibleBattleCoords() {
-
         List<int[]> coords = new ArrayList<int[]>();
         int[] arr = {0,2};
         coords.add(arr);
