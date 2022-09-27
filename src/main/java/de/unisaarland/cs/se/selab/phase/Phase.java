@@ -39,7 +39,14 @@ public abstract class Phase {
 
     }
 
-    public void exec(LeaveAction x) {
+    public void exec(LeaveAction la) {
+        if (gd.checkIfRegistered(la.getCommID())) {
+            gd.removePlayer(la.getCommID());
+            broadcastLeft(gd.getPlayerIDByCommID(la.getCommID()));
+        } else {
+            gd.getServerConnection()
+                    .sendActionFailed(la.getCommID(), "Player is not registered to leave");
+        }
 
     }
 

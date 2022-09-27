@@ -131,9 +131,22 @@ public class GameData {
         return biddingSquare;
     }
 
-    public List<Integer> getAllPlayerID(){
+    public List<Integer> getAllPlayerID() {
         List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
         return playerIDList;
+    }
+
+    public void removePlayer(int CommId) {
+        int playerId = getPlayerIDByCommID(CommId);
+        this.playerIDToCommIDMap.remove(playerId);
+        this.idToPlayerMap.remove(playerId);
+        this.commIDToPlayerIDMap.remove(CommId);
+
+
+    }
+
+    public Config getConfig() {
+        return config;
     }
 }
 

@@ -10,6 +10,7 @@ import java.util.List;
 
 public class Player {
 
+
     private String name;
     private int playerID;
     private int commID;
@@ -176,7 +177,7 @@ public class Player {
     public int getNumPlacedBids() {
         int res = 0;
         for (BidType bid : currBids) {
-            if(bid != null) {
+            if (bid != null) {
                 res++;
             }
         }
@@ -221,5 +222,9 @@ public class Player {
 
     public int getCommID() {
         return commID;
+    }
+
+    public String getName() {
+        return name;
     }
 }
