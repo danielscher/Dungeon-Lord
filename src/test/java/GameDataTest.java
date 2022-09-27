@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
 
-public class GameDataTest extends GameData{
+public class GameDataTest {
     GameData g = new GameData();
     Player p1 = new Player("Plyer1",1,1);
 
