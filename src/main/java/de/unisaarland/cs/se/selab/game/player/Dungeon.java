@@ -300,9 +300,21 @@ public class Dungeon {
         if (amount > restingImps) {
             return false;
         }
-        restingImps -= amount;
-        tunnelDiggingImps += amount;
-        return true;
+
+        if (amount < 4) {
+            restingImps -= amount;
+            tunnelDiggingImps += amount;
+            return true;
+        }
+        //for more than 4 imps send one to supervise
+        if (amount >= 4 && restingImps > amount) {
+            restingImps -= amount + 1;
+            tunnelDiggingImps += amount;
+            supervisingImps += 1;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /*
@@ -337,7 +349,7 @@ public class Dungeon {
     return == possible (enough resting imps available)
     NOTE: should never be used without activating a room, therefore private
      */
-    private boolean sendImpsToProduce(int amount) {
+    public boolean sendImpsToProduce(int amount) {
         if (amount < 0) {
             return false;
         }

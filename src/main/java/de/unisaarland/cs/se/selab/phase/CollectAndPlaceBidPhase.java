@@ -20,6 +20,14 @@ public class CollectAndPlaceBidPhase extends Phase {
         ServerConnection<Action> sc = gd.getServerConnection();
         Set<Integer> commIDs = gd.getCommIDSet();
 
+        gd.drawEntities();
+        if (!gd.getCurrAvailableAdventurers().isEmpty()) {
+            broadcastAdventurerDrawn(gd.getCurrAvailableAdventurers().size());
+        }
+        broadcastMonsterDrawn(3);
+        broadcastRoomDrawn(2);
+
+        broadcastBiddingStarted();
         broadcastActNow();
 
         while (!checkIfAllBidsChosen()) {
