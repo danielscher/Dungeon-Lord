@@ -1,14 +1,15 @@
 package de.unisaarland.cs.se.selab.game.player;
 
 //import de.unisaarland.cs.se.selab.game.util.BidType;
+
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.util.Title;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class Player {
+
 
     private String name;
     private int playerID, commID;
@@ -173,7 +174,7 @@ public class Player {
     public int getNumPlacedBids() {
         int res = 0;
         for (BidType bid : currBids) {
-            if(bid != null) {
+            if (bid != null) {
                 res++;
             }
         }
@@ -218,5 +219,9 @@ public class Player {
 
     public int getCommID() {
         return commID;
+    }
+
+    public String getName() {
+        return name;
     }
 }

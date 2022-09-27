@@ -1,10 +1,22 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
-import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.game.Action.*;
+import de.unisaarland.cs.se.selab.game.Action.Action;
+import de.unisaarland.cs.se.selab.game.Action.ActivateRoomAction;
+import de.unisaarland.cs.se.selab.game.Action.BattleGroundAction;
+import de.unisaarland.cs.se.selab.game.Action.BuildRoomAction;
+import de.unisaarland.cs.se.selab.game.Action.DigTunnelAction;
+import de.unisaarland.cs.se.selab.game.Action.EndTurnAction;
+import de.unisaarland.cs.se.selab.game.Action.HireMonsterAction;
+import de.unisaarland.cs.se.selab.game.Action.LeaveAction;
+import de.unisaarland.cs.se.selab.game.Action.MonsterAction;
+import de.unisaarland.cs.se.selab.game.Action.MonsterTargetedAction;
+import de.unisaarland.cs.se.selab.game.Action.PlaceBidAction;
+import de.unisaarland.cs.se.selab.game.Action.RegAction;
+import de.unisaarland.cs.se.selab.game.Action.StartGameAction;
+import de.unisaarland.cs.se.selab.game.Action.TrapAction;
+import de.unisaarland.cs.se.selab.game.GameData;
 import java.util.Set;
 
 public abstract class Phase {
@@ -16,6 +28,8 @@ public abstract class Phase {
     }
 
     public Phase run() throws TimeoutException {
+
+        //return NULL;
         return null;
     }
 
@@ -27,7 +41,14 @@ public abstract class Phase {
 
     }
 
-    public void exec(LeaveAction x) {
+    public void exec(LeaveAction la) {
+        if (gd.checkIfRegistered(la.getCommID())) {
+            gd.removePlayer(la.getCommID());
+            broadcastLeft(gd.getPlayerIDByCommID(la.getCommID()));
+        } else {
+            gd.getServerConnection()
+                    .sendActionFailed(la.getCommID(), "Player is not registered to leave");
+        }
 
     }
 

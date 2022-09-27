@@ -37,7 +37,8 @@ public class GameData {
     private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
     private final List<Room> currAvailableRooms = new ArrayList<Room>();
-    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation());
+    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
+            5000, new ActionFactoryImplementation());
     private final Config config = new Config();
     private int lastPlayerToStartBidding, idCounter;
 
@@ -129,9 +130,22 @@ public class GameData {
         return biddingSquare;
     }
 
-    public List<Integer> getAllPlayerID(){
+    public List<Integer> getAllPlayerID() {
         List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
         return playerIDList;
+    }
+
+    public void removePlayer(int CommId) {
+        int playerId = getPlayerIDByCommID(CommId);
+        this.playerIDToCommIDMap.remove(playerId);
+        this.idToPlayerMap.remove(playerId);
+        this.commIDToPlayerIDMap.remove(CommId);
+
+
+    }
+
+    public Config getConfig() {
+        return config;
     }
 }
 
