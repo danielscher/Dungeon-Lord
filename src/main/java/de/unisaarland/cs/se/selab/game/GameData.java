@@ -9,6 +9,7 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -53,6 +54,10 @@ public class GameData {
         idToPlayerMap.put(id, player);
         commIdToPlayerIdMap.put(commId, id);
         playerIdToCommIDMap.put(id, commId);
+    }
+
+    public TimeStamp getTime() {
+        return time;
     }
 
     public boolean registerPlayer(String name, int commId) {
@@ -124,8 +129,59 @@ public class GameData {
     }
 
     public void drawEntities() {
-        // TODO: 25.09.22  
+        discardMonster();   //discard old unsold monsters
+        config.drawMonsters(3); //draw 3 new monsters
+        discardRoom();  //discard old unsold rooms
+        config.drawRooms(2); //draw 2 new rooms
+        if (time.getSeason() < 4) {
+            config.drawAdventurers(commIdToPlayerIdMap.size()); //draw as many new adv as players
+        }
     }
+
+    public List<Monster> getCurrAvailableMonsters() {
+        return currAvailableMonsters;
+    }
+
+    public List<Room> getCurrAvailableRooms() {
+        return currAvailableRooms;
+    }
+
+    public List<Adventurer> getCurrAvailableAdventurers() {
+        return currAvailableAdventurers;
+    }
+
+    public List<Trap> getCurrAvailableTraps() {
+        return currAvailableTraps;
+    }
+
+    public void addMonster(Monster m) {
+        currAvailableMonsters.add(m);
+    }
+
+    public void discardMonster() {
+        for (Monster m : currAvailableMonsters) {
+            currAvailableMonsters.remove(m);
+        }
+    }
+
+    public void addRoom(Room r) {
+        currAvailableRooms.add(r);
+    }
+
+    public void discardRoom() {
+        for (Room r : currAvailableRooms) {
+            currAvailableRooms.remove(r);
+        }
+    }
+
+    public void addAdventurer(Adventurer a) {
+        currAvailableAdventurers.add(a);
+    }
+
+    public void addTrap(Trap t) {
+        currAvailableTraps.add(t);
+    }
+
 
     public BiddingSquare getBiddingSquare() {
         return biddingSquare;
@@ -141,9 +197,8 @@ public class GameData {
         this.playerIdToCommIDMap.remove(playerId);
         this.idToPlayerMap.remove(playerId);
         this.commIdToPlayerIdMap.remove(commId);
-
-
     }
+
 
     public Config getConfig() {
         return config;

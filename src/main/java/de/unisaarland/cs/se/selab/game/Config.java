@@ -181,6 +181,21 @@ public class Config {
         return null;
     }
 
+    public List<Monster> drawMonsters(int amount) {
+
+        return null;
+    }
+
+    public List<Room> drawRooms(int amount) {
+
+        return null;
+    }
+
+    public List<Trap> drawTraps(int amount) {
+
+        return null;
+    }
+
     public int getMaxPlayer() {
         return maxPlayer;
     }
