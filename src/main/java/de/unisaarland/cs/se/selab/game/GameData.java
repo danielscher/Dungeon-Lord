@@ -128,5 +128,10 @@ public class GameData {
     public BiddingSquare getBiddingSquare() {
         return biddingSquare;
     }
+
+    public List<Integer> getAllPlayerID(){
+        List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
+        return playerIDList;
+    }
 }
 

@@ -1,13 +1,11 @@
 package de.unisaarland.cs.se.selab.game;
 
-
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
-
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
 import java.util.Arrays;
