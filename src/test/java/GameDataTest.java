@@ -1,4 +1,5 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.TimeStamp;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
@@ -14,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 public class GameDataTest {
 
-    GameData g = new GameData();
+    GameData gd = new GameData();
     Player p1 = new Player("Plyer1", 1, 1);
 
 
@@ -29,37 +30,38 @@ public class GameDataTest {
     private List<Room> currAvailableRooms = new ArrayList<Room>();
     //Server connection
     //config
-    private int lastPlayerToStartBidding, idCounter;
+    private int lastPlayerToStartBidding;
+    private int idCounter;
 
     @Test
     public void testGetPlayerByCommID() {
-        g.registerPlayer("Player1", 1);
-        assertEquals(g.getPlayerByCommID(1), p1);
+        gd.registerPlayer("Player1", 1);
+        assertEquals(gd.getPlayerByCommID(1), p1);
     }
 
     @Test
     public void testGetPlayerByPlayerId() {
-        g.registerPlayer("Player1", 1);
-        assertEquals(g.getPlayerByPlayerId(1), p1);
+        gd.registerPlayer("Player1", 1);
+        assertEquals(gd.getPlayerByPlayerId(1), p1);
     }
 
     @Test
     public void testGetPlayerIdByCommID() {
-        g.registerPlayer("Player1", 1);
-        assertEquals(g.getPlayerIdByCommID(1), 1);
+        gd.registerPlayer("Player1", 1);
+        assertEquals(gd.getPlayerIdByCommID(1), 1);
     }
 
     @Test
     public void testGetCommIDByPlayerId() {
-        g.registerPlayer("Player1", 1);
-        assertEquals(g.getCommIDByPlayerId(1), 1);
+        gd.registerPlayer("Player1", 1);
+        assertEquals(gd.getCommIDByPlayerId(1), 1);
     }
 
     @Test
     public void testCheckIfRegistered() {
-        g.registerPlayer("Player1", 1);
-        assertEquals(true, g.checkIfRegistered(1));
-        assertEquals(false, g.checkIfRegistered(2));
+        gd.registerPlayer("Player1", 1);
+        assertEquals(true, gd.checkIfRegistered(1));
+        assertEquals(false, gd.checkIfRegistered(2));
     }
 
     @Test
