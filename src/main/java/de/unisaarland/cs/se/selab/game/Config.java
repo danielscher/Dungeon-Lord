@@ -6,6 +6,10 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.json.JSONArray;
@@ -28,13 +32,49 @@ public class Config {
     private ArrayList<Trap> traps;
     private ArrayList<Room> rooms;
 
+    /*   public Config(String path){
+           maxPlayer = -1;
+           maxYear = -1;
+           dungeonSidelength = -1;
+           initFood = -1;
+           initGold = -1;
+           initImps = -1;
+           configFilePath =path;
+      }
+    */
+    //
+    public void setConfigFilePath(String s) {
+        this.configFilePath = s;
+    }
 
-    private boolean parse() {
+    public void display() {
+        System.out.println("maxYear =" + maxYear);
+        System.out.println("maxPlayer =" + maxPlayer);
+    }
+
+    public void parse(String configFilePath) throws FileNotFoundException {
         parserResult = true;
-        JSONObject obj = new JSONObject(".\\resources\\configuration.json");
+
+        // FileReader fileReader= (new FileReader(configFilePath));
+        // System.out.println("log filereader ="+fileReader);
+        // JSONObject obj = new JSONObject(fileReader);
+        StringBuilder builder = new StringBuilder();
+        try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
+            String s;
+            while ((s = br.readLine()) != null) {
+                builder.append(s);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String allJSONdata = builder.toString();
+        //  System.out.println(allJSONdata);
+        JSONObject obj = new JSONObject(allJSONdata);
+
         maxYear = (Integer) obj.get("years");
         maxPlayer = (Integer) obj.get("maxPlayers");
-        dungeonSidelength = (Integer) obj.get("dungeonSidelength");
+        dungeonSidelength = (Integer) obj.get("dungeonSideLength");
         initFood = (Integer) obj.get("initialFood");
         initGold = (Integer) obj.get("initialGold");
         initImps = (Integer) obj.get("initialImps");
@@ -45,10 +85,27 @@ public class Config {
             JSONObject monsterObj = monsterArray.getJSONObject(i);
             int id = (Integer) monsterObj.get("id");
             String name = (String) monsterObj.get("name");
-            int hunger = (Integer) monsterObj.get("hunger");
-            int evilness = (Integer) monsterObj.get("evilness");
+            int hunger = 0;
+            try {
+                String hungerValString = monsterObj.getString("hunger");
+                hunger = Integer.valueOf(hungerValString); //(Integer) monsterObj.get("hunger");
+            } catch (Exception e) {
+                //    System.out.println("this monster does not have hunger");
+            }
+
+            int evilness = 0;
+            try {
+                String evilnessValString = monsterObj.getString("evilness");
+                hunger = Integer.valueOf(evilnessValString);
+            } catch (Exception e) {
+                //    System.out.println("this monster does not have evilness");
+            }
+
+            //  int evilness = (Integer) monsterObj.get("evilness");
             int damage = (Integer) monsterObj.get("damage");
-            Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
+            //    Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
+            String attackStrategyString = (String) monsterObj.get("attackStrategy");
+            Attack attackStrategy = Attack.valueOf(attackStrategyString);
             if (evilness < 0 || hunger < 0) {
                 parserResult = false;
                 break;
@@ -70,10 +127,35 @@ public class Config {
             String name = (String) adventurerObj.get("name");
             int difficulty = (Integer) adventurerObj.get("difficulty");
             int healthPoints = (Integer) adventurerObj.get("healthPoints");
-            int healValue = (Integer) adventurerObj.get("healValue");
-            int defuseValue = (Integer) adventurerObj.get("defuseValue");
-            boolean charge = (boolean) adventurerObj.get("charge");
-            if (difficulty < 0 || healthPoints < 1 || healValue < 0 || defuseValue < 0) {
+            //  int healValue = (Integer) adventurerObj.get("healValue");
+            int healValue = 0;
+            try {
+                String healValueValString = adventurerObj.getString("healValue");
+                healValue = Integer.valueOf(healValueValString);
+            } catch (Exception e) {
+                //    System.out.println("not a priest");
+            }
+
+            //  int defuseValue = (Integer) adventurerObj.get("defuseValue");
+            int defuseValue = 0;
+            try {
+                String defuseValueValString = adventurerObj.getString("defuseValue");
+                defuseValue = Integer.valueOf(defuseValueValString);
+            } catch (Exception e) {
+                //    System.out.println("not a thief");
+            }
+
+            //   boolean charge = (Boolean) adventurerObj.get("charge");
+            boolean charge = false;
+            try {
+                String chargeValString = adventurerObj.getString("charge");
+                charge = Boolean.valueOf(chargeValString);
+            } catch (Exception e) {
+                //    System.out.println("not in charge");
+            }
+
+            if (difficulty < 0 || healthPoints < 1 || healValue < 0 || defuseValue < 0
+                    || difficulty > 8) {
                 parserResult = false;
                 break;
             }
@@ -93,8 +175,19 @@ public class Config {
             int id = (Integer) trapObj.get("id");
             String name = (String) trapObj.get("name");
             int damage = (Integer) trapObj.get("damage");
-            Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
-            int target = (Integer) trapObj.get("target");
+            //  Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
+            String attackStrategyString = (String) trapObj.get("attackStrategy");
+            Attack attackStrategy = Attack.valueOf(attackStrategyString);
+
+            //    int target = (Integer) trapObj.get("target");
+            int target = -1;
+            try {
+                String targetValString = trapObj.getString("target");
+                target = Integer.valueOf(targetValString);
+            } catch (Exception e) {
+                //    System.out.println("not targeted");
+            }
+
             if (id < 0 || damage < 1) {
                 parserResult = false;
                 break;
@@ -114,27 +207,57 @@ public class Config {
             int id = (Integer) roomObj.get("id");
             String name = (String) roomObj.get("name");
             int activationCost = (Integer) roomObj.get("activation");
-            Location placementLoc = (Location) roomObj.get("restriction");
-            int foodProduction = (Integer) roomObj.get("food");
-            int goldProduction = (Integer) roomObj.get("gold");
-            int impProduction = (Integer) roomObj.get("imps");
-            int niceness = (Integer) roomObj.get("niceness");
+            //    Location placementLoc = (Location) roomObj.get("restriction");
+            String locationString = (String) roomObj.get("restriction");
+            Location placementLoc = Location.valueOf(locationString);
+
+            //  int foodProduction = (Integer) roomObj.get("food");
+            int foodProduction = 0;
+            try {
+                String foodValString = roomObj.getString("food");
+                foodProduction = Integer.valueOf(foodValString);
+            } catch (Exception e) {
+                //    System.out.println("not produce food");
+            }
+
+            //    int goldProduction = (Integer) roomObj.get("gold");
+            int goldProduction = 0;
+            try {
+                String goldValString = roomObj.getString("gold");
+                goldProduction = Integer.valueOf(goldValString);
+            } catch (Exception e) {
+                //    System.out.println("not produce gold");
+            }
+            //    int impProduction = (Integer) roomObj.get("imps");
+            int impProduction = 0;
+            try {
+                String impsValString = roomObj.getString("imps");
+                impProduction = Integer.valueOf(impsValString);
+            } catch (Exception e) {
+                //    System.out.println("not produce imps");
+            }
+            //    int niceness = (Integer) roomObj.get("niceness");
+            int niceness = 0;
+            try {
+                String nicenessValString = roomObj.getString("niceness");
+                foodProduction = Integer.valueOf(nicenessValString);
+            } catch (Exception e) {
+                //    System.out.println("no niceness");
+            }
+
             if (id < 0) {
                 parserResult = false;
                 break;
             }
         }
 
-        return parserResult;
+        //    return parserResult;
     }
 
 
     private boolean checkIfValid() {
-        configResult = true;
-        if (maxYear < 1 || maxPlayer < 1) {
-            configResult = false;
-            //not enough years/player,
-        }
+        //not enough years/player,
+        configResult = maxYear >= 1 && maxPlayer >= 1;
         if (traps.size() < 4 * 4 * maxYear) {
             configResult = false;
             //not enough traps
@@ -176,6 +299,7 @@ public class Config {
     private void shuffle() {
     }
 
+    //below are 4 getters.
     public List<Adventurer> getAllAdventurers() {
         return this.adventurers;
     }
@@ -191,6 +315,7 @@ public class Config {
     public List<Trap> getAllTraps() {
         return this.traps;
     }
+    //maybe setter to give data to gamedata class?
 
     public List<Monster> drawMonsters() {
         int amount = 3;
@@ -237,4 +362,7 @@ public class Config {
         return maxPlayer;
     }
     // i think we still need getter to pass the data to GameData class.
+
+
 }
+
