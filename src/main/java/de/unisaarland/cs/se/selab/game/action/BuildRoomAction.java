@@ -20,13 +20,13 @@ public class BuildRoomAction extends Action {
         return roomID;
     }
 
-   public int getRow() {
+    public int getRow() {
         return row;
-   }
+    }
 
-   public int getCol() {
-       return col;
-   }
+    public int getCol() {
+        return col;
+    }
 
     public void invoke(Phase phase) {
         phase.exec(this);

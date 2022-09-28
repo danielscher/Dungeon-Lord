@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import static de.unisaarland.cs.se.selab.comm.BidType.ROOM;
+
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
@@ -50,7 +51,7 @@ public class EvalRoomPhase extends Phase {
 
     private void grantRoom(Player player, int slot) throws TimeoutException {
 
-        switch(slot){
+        switch (slot) {
             case 0:
             case 1:
                 if (player.changeGoldBy(-1)) {
@@ -58,7 +59,7 @@ public class EvalRoomPhase extends Phase {
                     broadcastGoldChanged(-1, player.getPlayerID());
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
-                    while (!endTurn){
+                    while (!endTurn) {
                         sc.nextAction().invoke(this);
                     }
                 }
@@ -72,24 +73,26 @@ public class EvalRoomPhase extends Phase {
                     }
                 }
                 break;
+            default:
+                throw new IllegalArgumentException("Invalid Slot Number");
         }
     }
 
     public void exec(BuildRoomAction bra) {
         Player player = gd.getPlayerByCommID(bra.getCommID());
-        if (player == null){
+        if (player == null) {
             return;
         }
 
         Room room = null;
-        for (Room r : gd.getCurrAvailableRooms()){
+        for (Room r : gd.getCurrAvailableRooms()) {
             //To find the chosen room in the list of available rooms
-            if (r.getRoomID() == bra.getRoomID()){
+            if (r.getRoomID() == bra.getRoomID()) {
                 room = r;
                 break;
             }
         }
-        if (room == null){
+        if (room == null) {
             throw new IllegalArgumentException("Chosen room is not available");
         }
 
@@ -99,15 +102,15 @@ public class EvalRoomPhase extends Phase {
         if (!d.checkForFreeTilesIn(loc)) {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
-        } else if (!d.placeRoom(bra.getRow(), bra.getCol(),room)) {
+        } else if (!d.placeRoom(bra.getRow(), bra.getCol(), room)) {
             sc.sendActionFailed(bra.getCommID(),
                     "Invalid coordinates to place this room.");
-            } else {
-                broadcastRoomBuilt(player.getPlayerID(),
-                        bra.getRoomID(), bra.getRow(),bra.getCol()); //broadcast room built
-                gd.getCurrAvailableRooms().remove(room);    //remove room from options list
-                endTurn = true;
-            }
+        } else {
+            broadcastRoomBuilt(player.getPlayerID(),
+                    bra.getRoomID(), bra.getRow(), bra.getCol()); //broadcast room built
+            gd.getCurrAvailableRooms().remove(room);    //remove room from options list
+            endTurn = true;
+        }
     }
 
     public void exec(ActivateRoomAction ara) {
@@ -134,6 +137,12 @@ public class EvalRoomPhase extends Phase {
         endTurn = true;
     }
 
+    @Override
+    public void exec(LeaveAction la) {
+        endTurn = true; // to prevent any further placing room request from this user
+        super.exec(la);
+    }
+
     public void blockRetrieveBids(){
 
     }
@@ -141,11 +150,5 @@ public class EvalRoomPhase extends Phase {
     private int[] collectBidWinners() {
         //TODO
         return new int[0]; //collect the playerID
-    }
-
-    @Override
-    public void exec(LeaveAction la) {
-        endTurn = true; // to prevent any further placing room request from this user
-        super.exec(la);
     }
 }
