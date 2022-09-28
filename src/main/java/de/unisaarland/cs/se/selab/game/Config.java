@@ -192,7 +192,8 @@ public class Config {
         return this.traps;
     }
 
-    public List<Monster> drawMonsters(int amount) {
+    public List<Monster> drawMonsters() {
+        int amount = 3;
         int tailIndex = monsters.size();
         // Gets items in range [i,j) "[": including, ")":excluding
         List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex);
@@ -200,7 +201,8 @@ public class Config {
         return drawnMonsters;
     }
 
-    public List<Room> drawRooms(int amount) {
+    public List<Room> drawRooms() {
+        int amount = 2;
         int tailIndex = rooms.size();
         // Gets items in range [i,j) "[": including, ")":excluding
         List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex);
@@ -208,11 +210,12 @@ public class Config {
         return drawnRooms;
     }
 
-    public List<Trap> drawTraps(int amount) {
+    public List<Trap> drawTraps(int amountPlaceTrapBids) {
         int tailIndex = traps.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Trap> drawnTraps = traps.subList(tailIndex - amount, tailIndex);
-        traps.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
+        List<Trap> drawnTraps = traps.subList(tailIndex - amountPlaceTrapBids, tailIndex);
+        traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
+                .clear(); // removes this sublist from list.
         return drawnTraps;
     }
 

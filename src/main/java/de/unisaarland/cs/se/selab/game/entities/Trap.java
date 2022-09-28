@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Trap {
 
-    private String name;
     private int trapID;
     private int damage;
     private int target;

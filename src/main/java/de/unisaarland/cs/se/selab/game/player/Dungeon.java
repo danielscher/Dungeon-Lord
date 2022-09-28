@@ -19,9 +19,6 @@ public class Dungeon {
     private List<Trap> traps = new ArrayList<Trap>();
     private LinkedList<Adventurer> adventurerQueue = new LinkedList<Adventurer>();
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
-    private Coordinate currAdvPos;
-
-
     private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps;
@@ -173,6 +170,12 @@ public class Dungeon {
         }
     }
 
+    /*
+    overloading of below method to adapt to usage of coordinate class
+     */
+    public boolean canPlaceRoomOn(Coordinate coordinate, Location location) {
+        return canPlaceRoomOn(coordinate.getxpos(), coordinate.getypos(), location);
+    }
 
     /*
     checks if a room can be placed on a given coordinate
@@ -206,10 +209,10 @@ public class Dungeon {
                 return (y > grid[0].length / 2 - 1);
             }
             case INNER_RING: {
-                return ((x != 0 || x != grid.length - 1) && (y != 0 || y != grid[0].length - 1));
+                return ((x > 0 && x < grid.length - 1) && (y > 0 && y < grid[0].length - 1));
             }
             case OUTER_RING: {
-                return ((x == 0 || x == grid.length - 1) && (y == 0 || y == grid[0].length - 1));
+                return !((x > 0 && x < grid.length - 1) && (y > 0 && y < grid[0].length - 1));
             }
             default:
                 return false;

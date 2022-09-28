@@ -34,10 +34,10 @@ public class GameData {
     private final Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
     private final TimeStamp time = new TimeStamp();
     private final BiddingSquare biddingSquare = new BiddingSquare();
-    private final List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
-    private final List<Monster> currAvailableMonsters = new ArrayList<Monster>();
-    private final List<Trap> currAvailableTraps = new ArrayList<Trap>();
-    private final List<Room> currAvailableRooms = new ArrayList<Room>();
+    private List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
+    private List<Monster> currAvailableMonsters = new ArrayList<Monster>();
+    private List<Trap> currAvailableTraps = new ArrayList<Trap>();
+    private List<Room> currAvailableRooms = new ArrayList<Room>();
     private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
             5000, new ActionFactoryImplementation());
     private final Config config = new Config();
@@ -138,6 +138,11 @@ public class GameData {
         }
     }
 
+    // Getters:
+    public List<Adventurer> getCurrAvailableAdventurers() {
+        return currAvailableAdventurers;
+    }
+
     public List<Monster> getCurrAvailableMonsters() {
         return currAvailableMonsters;
     }
@@ -146,15 +151,35 @@ public class GameData {
         return currAvailableRooms;
     }
 
-    public List<Adventurer> getCurrAvailableAdventurers() {
-        return currAvailableAdventurers;
-    }
-
     public List<Trap> getCurrAvailableTraps() {
         return currAvailableTraps;
     }
 
-    public void discardMonster() {
+    public Trap getOneCurrAvailableTrap() {
+        Trap trap = currAvailableTraps.get(0);
+        currAvailableTraps.remove(0);
+        return trap;
+    }
+
+    public BiddingSquare getBiddingSquare() {
+        return biddingSquare;
+    }
+
+    public List<Integer> getAllPlayerID() {
+        List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
+        return playerIDList;
+    }
+
+    public int getMaxPlayers() {
+        return config.getMaxPlayer();
+    }
+
+    public int getNumCurrPlayers() {
+        //TODO: returns the number of currently registered players.
+        return 1;
+    }
+
+    public void discardMonster() { // removes all monsters from currMonsters list.
         for (Monster m : currAvailableMonsters) {
             currAvailableMonsters.remove(m);
         }
@@ -189,27 +214,17 @@ public class GameData {
     }
 
     private void addDrawnMonsters() {
-        List<Monster> drawnMonsters = config.drawMonsters(getNumCurrPlayers());
+        List<Monster> drawnMonsters = config.drawMonsters();
         for (Monster mon : drawnMonsters) {
             currAvailableMonsters.add(mon);
         }
     }
 
     private void addDrawnRooms() {
-        List<Room> drawnRooms = config.drawRooms(getNumCurrPlayers());
+        List<Room> drawnRooms = config.drawRooms();
         for (Room room : drawnRooms) {
             currAvailableRooms.add(room);
         }
-    }
-
-
-    public BiddingSquare getBiddingSquare() {
-        return biddingSquare;
-    }
-
-    public List<Integer> getAllPlayerID() {
-        List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
-        return playerIDList;
     }
 
     public void removePlayer(int commId) {
@@ -219,14 +234,5 @@ public class GameData {
         this.commIdToPlayerIdMap.remove(commId);
     }
 
-
-    public Config getConfig() {
-        return config;
-    }
-
-    public int getNumCurrPlayers() {
-        //TODO: returns the number of currently registered players.
-        return 1;
-    }
 
 }
