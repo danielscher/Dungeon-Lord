@@ -9,7 +9,6 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -61,20 +60,15 @@ public class GameData {
     }
 
     public boolean registerPlayer(String name, int commId) {
-        Boolean res = false;
-
         List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
         if (commList.contains(commId)) {
-            res = false;
+            return false;
         } else {
             Player player = new Player(name, idCounter, commId);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
-            res = true;
+            return true;
         }
-
-        return res;
-
     }
 
     public Player getPlayerByCommID(int commId) {
@@ -106,12 +100,8 @@ public class GameData {
     }
 
     public boolean checkIfRegistered(int commId) {
-        Boolean res = false;
         List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
-        if (commList.contains(commId)) {
-            res = true;
-        }
-        return res;
+        return commList.contains(commId);
     }
 
     public int getNextStartPlayer() {
@@ -143,8 +133,16 @@ public class GameData {
         return currAvailableAdventurers;
     }
 
-    public List<Monster> getCurrAvailableMonsters() {
-        return currAvailableMonsters;
+    public Monster getCurrAvailableMonster(int monsterId) throws Exception {
+        Monster chosenMonster;
+        for (Monster mon : currAvailableMonsters) {
+            if (mon.getMonsterID() == monsterId) {
+                chosenMonster = mon;
+                currAvailableMonsters.remove(mon);
+                return chosenMonster;
+            }
+        }
+        throw new Exception("no such Monster exists");
     }
 
     public List<Room> getCurrAvailableRooms() {
@@ -166,8 +164,7 @@ public class GameData {
     }
 
     public List<Integer> getAllPlayerID() {
-        List<Integer> playerIDList = new ArrayList<Integer>(idToPlayerMap.keySet());
-        return playerIDList;
+        return new ArrayList<Integer>(idToPlayerMap.keySet());
     }
 
     public int getMaxPlayers() {
@@ -180,44 +177,32 @@ public class GameData {
     }
 
     public void discardMonster() { // removes all monsters from currMonsters list.
-        for (Monster m : currAvailableMonsters) {
-            currAvailableMonsters.remove(m);
-        }
+        currAvailableMonsters.clear();
     }
 
 
     public void discardRoom() {
-        for (Room r : currAvailableRooms) {
-            currAvailableRooms.remove(r);
-        }
+        currAvailableRooms.clear();
     }
 
     private void addDrawnAdventurers() {
         List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
-        for (Adventurer adv : drawnAdv) {
-            currAvailableAdventurers.add(adv);
-        }
+        currAvailableAdventurers.addAll(drawnAdv);
     }
 
-    public void addDrawnTraps() { // Adds drawn traps to the curr available.
-        List<Trap> drawnTraps = config.drawTraps(getNumCurrPlayers());
-        for (Trap t : drawnTraps) {
-            currAvailableTraps.add(t);
-        }
+    public void addDrawnTraps(int amountPlaceTrapBids) { // Adds drawn traps to the curr available.
+        List<Trap> drawnTraps = config.drawTraps(amountPlaceTrapBids);
+        currAvailableTraps.addAll(drawnTraps);
     }
 
     private void addDrawnMonsters() {
         List<Monster> drawnMonsters = config.drawMonsters();
-        for (Monster mon : drawnMonsters) {
-            currAvailableMonsters.add(mon);
-        }
+        currAvailableMonsters.addAll(drawnMonsters);
     }
 
     private void addDrawnRooms() {
         List<Room> drawnRooms = config.drawRooms();
-        for (Room room : drawnRooms) {
-            currAvailableRooms.add(room);
-        }
+        currAvailableRooms.addAll(drawnRooms);
     }
 
     public void removePlayer(int commId) {

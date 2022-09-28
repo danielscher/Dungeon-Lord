@@ -20,7 +20,6 @@ public class Adventurer {
         this.healValue = healValue;
         this.defuseValue = defuseValue;
         this.charge = charge;
-
     }
 
     public int getAdventurerID() {
@@ -39,6 +38,10 @@ public class Adventurer {
         return healValue;
     }
 
+    public int getMaxHealthPoints() {
+        return maxHealthPoints;
+    }
+
     public int getDefuseValue() {
         return defuseValue;
     }
@@ -46,5 +49,6 @@ public class Adventurer {
     public boolean getCharge() {
         return charge;
     }
+
 
 }
