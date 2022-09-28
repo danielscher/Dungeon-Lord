@@ -370,7 +370,7 @@ public abstract class Phase {
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
         playerIDs.stream().sorted().forEach(n ->
-                sc.sendBidRetrieved(gd.getCommIDByPlayerId(n), bid,player));
+                sc.sendBidRetrieved(gd.getCommIDByPlayerId(n), bid, player));
     }
 
     /*
@@ -467,7 +467,7 @@ public abstract class Phase {
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
         playerIDs.stream().sorted().forEach(n ->
-                sc.sendTunnelConquered(gd.getCommIDByPlayerId(n), adventurer,x,y));
+                sc.sendTunnelConquered(gd.getCommIDByPlayerId(n), adventurer, x, y));
     }
 
     /*
