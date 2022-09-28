@@ -25,8 +25,8 @@ public class CollectAndPlaceBidPhase extends Phase {
             broadcastNextRound(gd.getTime().getSeason());
         } else if (gd.getTime().getYear() > 1) {
             broadcastNextYear(gd.getTime().getYear());
-            for (int commID : commIDs) {
-                Player p = gd.getPlayerByCommID(commID);
+            for (int id: gd.getAllPlayerID()) {
+                Player p = gd.getPlayerByPlayerId(id);
                 for (BidType b : p.getBlockedBids()) {
                     broadcastBidRetrieved(b, p.getPlayerID());
                 }
