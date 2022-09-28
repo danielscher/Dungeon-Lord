@@ -73,7 +73,7 @@ public class CombatPhase extends Phase {
 
         // get the total defuse value
         int totalDefuseVal = ad1.getDefuseValue() + ad2.getDefuseValue() + ad3.getDefuseValue();
-        // ask Leo
+        // ask Leo for the traps
         if (placedtrap != null) {
             if (totalDefuseVal < placedtrap.getDamage()) {
                 switch (placedtrap.getAttack()) {
