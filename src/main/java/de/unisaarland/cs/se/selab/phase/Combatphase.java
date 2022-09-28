@@ -142,7 +142,7 @@ public class Combatphase extends Phase {
     }
 
     public void exec(EndTurnAction eta) {
-        //TODO
+        //nothing to do
     }
 
 
