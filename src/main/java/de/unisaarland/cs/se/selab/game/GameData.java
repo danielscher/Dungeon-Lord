@@ -133,8 +133,16 @@ public class GameData {
         return currAvailableAdventurers;
     }
 
-    public List<Monster> getCurrAvailableMonsters() {
-        return currAvailableMonsters;
+    public Monster getCurrAvailableMonster(int monsterId) throws Exception {
+        Monster chosenMonster;
+        for (Monster mon : currAvailableMonsters) {
+            if (mon.getMonsterID() == monsterId) {
+                chosenMonster = mon;
+                currAvailableMonsters.remove(mon);
+                return chosenMonster;
+            }
+        }
+        throw new Exception("no such Monster exists");
     }
 
     public List<Room> getCurrAvailableRooms() {
@@ -189,8 +197,8 @@ public class GameData {
         currAvailableAdventurers.addAll(drawnAdv);
     }
 
-    public void addDrawnTraps() { // Adds drawn traps to the curr available.
-        List<Trap> drawnTraps = config.drawTraps(getNumCurrPlayers());
+    public void addDrawnTraps(int amountPlaceTrapBids) { // Adds drawn traps to the curr available.
+        List<Trap> drawnTraps = config.drawTraps(amountPlaceTrapBids);
         currAvailableTraps.addAll(drawnTraps);
     }
 
