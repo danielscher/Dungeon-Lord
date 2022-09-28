@@ -507,7 +507,7 @@ public class Dungeon {
      */
     public boolean imprison(int adventurerID) {
         Adventurer adv = getAdventurerById(adventurerID);
-        if(adv == null) {
+        if (adv == null) {
             return false;
         }
         adventurerQueue.remove(adv);
@@ -535,6 +535,10 @@ public class Dungeon {
         } else {
             restingImps += imps;
         }
+    }
+
+    public int getTunnelDiggingImps() {
+        return tunnelDiggingImps;
     }
 }
 

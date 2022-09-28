@@ -186,6 +186,18 @@ public class EvalUpToTunnelPhase extends Phase {
             commIdsToDigTunnel.add(commId);
             serverConn.sendDigTunnel(commId); // send DigTunnel once for every possible tile
 
+            // if player activated room it might be the case that he hasn't enough imps anymore
+            if (impsToMine > dungeon.getRestingImps()) {
+                continue; // go to next iteration to reduce impsToMine
+            }
+
+            // this if statement prevents getting the next tunnel action when the
+            // player hasn't enough imps anymore for the 4th mining imp
+            // due to activating rooms or something else
+            if (dungeon.getTunnelDiggingImps() == 3 && dungeon.getRestingImps() < 2) {
+                break;
+            }
+
             while (commIdsToDigTunnel.size() > 1) {
                 // loop until the player we evaluate has sent an action
                 try {
