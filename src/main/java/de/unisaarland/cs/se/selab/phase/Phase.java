@@ -279,7 +279,6 @@ public abstract class Phase {
     broadcasts "Left" to every player
      */
     protected void broadcastLeft(int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendLeft
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
