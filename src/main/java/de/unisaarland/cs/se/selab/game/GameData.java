@@ -9,7 +9,6 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -201,30 +200,22 @@ public class GameData {
 
     private void addDrawnAdventurers() {
         List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
-        for (Adventurer adv : drawnAdv) {
-            currAvailableAdventurers.add(adv);
-        }
+        currAvailableAdventurers.addAll(drawnAdv);
     }
 
     public void addDrawnTraps() { // Adds drawn traps to the curr available.
         List<Trap> drawnTraps = config.drawTraps(getNumCurrPlayers());
-        for (Trap t : drawnTraps) {
-            currAvailableTraps.add(t);
-        }
+        currAvailableTraps.addAll(drawnTraps);
     }
 
     private void addDrawnMonsters() {
         List<Monster> drawnMonsters = config.drawMonsters();
-        for (Monster mon : drawnMonsters) {
-            currAvailableMonsters.add(mon);
-        }
+        currAvailableMonsters.addAll(drawnMonsters);
     }
 
     private void addDrawnRooms() {
         List<Room> drawnRooms = config.drawRooms();
-        for (Room room : drawnRooms) {
-            currAvailableRooms.add(room);
-        }
+        currAvailableRooms.addAll(drawnRooms);
     }
 
     public void removePlayer(int commId) {
