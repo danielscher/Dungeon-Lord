@@ -185,13 +185,6 @@ public class GameData {
         }
     }
 
-    public void addRoom(Room r) {
-        currAvailableRooms.add(r);
-    }
-
-    public void addMonster(Monster m) {
-        currAvailableMonsters.add(m);
-    }
 
     public void discardRoom() {
         for (Room r : currAvailableRooms) {

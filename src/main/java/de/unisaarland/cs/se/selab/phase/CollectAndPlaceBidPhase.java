@@ -80,6 +80,9 @@ public class CollectAndPlaceBidPhase extends Phase {
         Player player = gd.getPlayerByCommID((ara.getCommID()));
         ServerConnection<Action> sc = gd.getServerConnection();
 
+        if (player == null) { //if player's left the game
+            return;
+        }
         if (player.getDungeon().getRooms().isEmpty()) {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
