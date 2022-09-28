@@ -162,7 +162,7 @@ public class Dungeon {
 
     public boolean placeRoom(int x, int y, Room room) {
         Location loc = room.getPlacementLoc();
-        if(canPlaceRoomOn(x,y,loc)) {
+        if (canPlaceRoomOn(x, y, loc)) {
             rooms.add(room);
             grid[x][y].addRoom();
             return true;
