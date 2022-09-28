@@ -144,6 +144,7 @@ public class DungeonTest {
         assertFalse(dg.activateRoom(2));
         dg.addImps(3);
         assertTrue(dg.activateRoom(1));
+        assertEquals(r1, dg.getRoomById(1));
     }
 
     @Test
@@ -194,18 +195,11 @@ public class DungeonTest {
     }
 
     @Test
-    public void testgetNumImprisonedAdventurers() {
-        //todo
+    public void testImprisonedAdventurers() {
+        dg.insertAdventurer(ad1);
+        dg.insertAdventurer(ad2);
+        dg.insertAdventurer(ad3);
+        dg.imprison(1);
+        assertEquals(1, dg.getNumImprisonedAdventurers());
     }
-
-    @Test
-    public void testgetRoomById() {
-        //todo
-    }
-
-    @Test
-    public void testimprison() {
-        //todo
-    }
-
 }
