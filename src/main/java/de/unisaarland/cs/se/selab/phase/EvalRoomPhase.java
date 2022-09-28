@@ -17,7 +17,6 @@ import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class EvalRoomPhase extends Phase {
 
@@ -35,7 +34,7 @@ public class EvalRoomPhase extends Phase {
 
         gd.getTime().nextSeason();
         List<Integer> playerIds = gd.getAllPlayerID().stream().sorted().toList();
-        return new ChooseBattleGroundPhase(gd,gd.getPlayerByPlayerId(playerIds.get(0)));
+        return new ChooseBattleGroundPhase(gd, gd.getPlayerByPlayerId(playerIds.get(0)));
     }
 
     private void eval() throws TimeoutException {
@@ -97,18 +96,16 @@ public class EvalRoomPhase extends Phase {
             throw new IllegalArgumentException("Chosen room is not available");
         }
 
-
         Dungeon d = player.getDungeon();
         Location loc = room.getPlacementLoc();
         if (!d.checkForFreeTilesIn(loc)) {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
         } else if (!d.placeRoom(bra.getRow(), bra.getCol(), room)) {
-            sc.sendActionFailed(bra.getCommID(),
-                    "Invalid coordinates to place this room.");
+            sc.sendActionFailed(bra.getCommID(), "Invalid coordinates to place this room.");
         } else {
-            broadcastRoomBuilt(player.getPlayerID(),
-                    bra.getRoomID(), bra.getRow(), bra.getCol()); //broadcast room built
+            broadcastRoomBuilt(player.getPlayerID(), bra.getRoomID(), bra.getRow(),
+                    bra.getCol()); //broadcast room built
             gd.getCurrAvailableRooms().remove(room);    //remove room from options list
             endTurn = true;
         }
@@ -124,8 +121,7 @@ public class EvalRoomPhase extends Phase {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
             if (!player.getDungeon().activateRoom(ara.getRoomID())) {
-                sc.sendActionFailed(ara.getCommID(),
-                        "The chosen room can't be activated.");
+                sc.sendActionFailed(ara.getCommID(), "The chosen room can't be activated.");
             } else {
                 int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
@@ -144,7 +140,7 @@ public class EvalRoomPhase extends Phase {
         super.exec(la);
     }
 
-    public void blockRetrieveBids(){
+    public void blockRetrieveBids() {
 
     }
 

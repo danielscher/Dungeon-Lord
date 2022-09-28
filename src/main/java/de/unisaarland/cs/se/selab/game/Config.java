@@ -125,8 +125,6 @@ public class Config {
             JSONObject adventurerObj = adventurerArray.getJSONObject(i);
             int id = (Integer) adventurerObj.get("id");
             String name = (String) adventurerObj.get("name");
-            int difficulty = (Integer) adventurerObj.get("difficulty");
-            int healthPoints = (Integer) adventurerObj.get("healthPoints");
             //  int healValue = (Integer) adventurerObj.get("healValue");
             int healValue = 0;
             try {
@@ -153,6 +151,9 @@ public class Config {
             } catch (Exception e) {
                 //    System.out.println("not in charge");
             }
+
+            int difficulty = (Integer) adventurerObj.get("difficulty");
+            int healthPoints = (Integer) adventurerObj.get("healthPoints");
 
             if (difficulty < 0 || healthPoints < 1 || healValue < 0 || defuseValue < 0
                     || difficulty > 8) {
@@ -204,7 +205,6 @@ public class Config {
         int roomArrLen = roomArray.length();
         for (int i = 0; i < roomArrLen; i++) {
             JSONObject roomObj = roomArray.getJSONObject(i);
-            int id = (Integer) roomObj.get("id");
             String name = (String) roomObj.get("name");
             int activationCost = (Integer) roomObj.get("activation");
             //    Location placementLoc = (Location) roomObj.get("restriction");
@@ -244,6 +244,7 @@ public class Config {
             } catch (Exception e) {
                 //    System.out.println("no niceness");
             }
+            int id = (Integer) roomObj.get("id");
 
             if (id < 0) {
                 parserResult = false;
