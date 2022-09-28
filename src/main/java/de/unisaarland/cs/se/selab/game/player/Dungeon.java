@@ -267,18 +267,6 @@ public class Dungeon {
     }
 
 
-    //returns all imps doing tasks
-    public void returnImps() {
-        restingImps += tunnelDiggingImps;
-        tunnelDiggingImps = 0;
-        restingImps += goldMiningImps;
-        goldMiningImps = 0;
-        restingImps += producingImps;
-        producingImps = 0;
-        restingImps += supervisingImps;
-        supervisingImps = 0;
-    }
-
     /*
     tries to send imps to mine gold
     return == possible (enough resting imps available)
@@ -581,5 +569,23 @@ public class Dungeon {
         return currBattleGround;
     }
 
+    public int getGoldMiningImps() {
+        return goldMiningImps;
+    }
+
+    /*
+    method to be used to return imps from mining tunnels and gold
+    NOTE: remember to get the amount of gold mining imps first for granting gold
+     */
+    public int returnTunnelAndGoldImps() {
+        int res = 0;
+        res += tunnelDiggingImps;
+        restingImps += tunnelDiggingImps;
+        tunnelDiggingImps = 0;
+        res += goldMiningImps;
+        restingImps += goldMiningImps;
+        goldMiningImps = 0;
+        return res;
+    }
 }
 
