@@ -500,6 +500,34 @@ public class Dungeon {
         return restingImps;
     }
 
+    /*
+    this method is used to imprison an adventurer of the queue by its id
+    return == successfully imprisoned
+    NOTE: fails if the adventurer isn't in this player's queue
+     */
+    public boolean imprison(int adventurerID) {
+        Adventurer adv = getAdventurerById(adventurerID);
+        if(adv == null) {
+            return false;
+        }
+        adventurerQueue.remove(adv);
+        prison.add(adv);
+        return true;
+    }
+
+    /*
+    this method is used to get an adventurer of the queue by its id
+    NOTE: if adv isn't in the queue, this method returns NULL
+     */
+    public Adventurer getAdventurerById(int advID) {
+        for (Adventurer adv : adventurerQueue) {
+            if (adv.getAdventurerID() == advID) {
+                return adv;
+            }
+        }
+        return null;
+    }
+
     //adds more resting imps
     public void addImps(int imps) {
         if (imps < 0) { // do nothing if illegal argument
