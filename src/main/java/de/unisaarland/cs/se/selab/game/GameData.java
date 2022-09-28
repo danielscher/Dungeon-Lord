@@ -133,7 +133,7 @@ public class GameData {
         return currAvailableAdventurers;
     }
 
-    public Monster getCurrAvailableMonster(int monsterId) throws Exception {
+    public Monster getCurrAvailableMonster(int monsterId) {
         Monster chosenMonster;
         for (Monster mon : currAvailableMonsters) {
             if (mon.getMonsterID() == monsterId) {
@@ -142,7 +142,7 @@ public class GameData {
                 return chosenMonster;
             }
         }
-        throw new Exception("no such Monster exists");
+        return null;
     }
 
     public List<Room> getCurrAvailableRooms() {
