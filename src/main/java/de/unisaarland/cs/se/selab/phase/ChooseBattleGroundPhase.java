@@ -11,17 +11,20 @@ import java.util.List;
 public class ChooseBattleGroundPhase extends Phase {
 
     private Player currPlayer;
-    private int round;
 
     public ChooseBattleGroundPhase(GameData gd, Player currPlayer) {
         super(gd);
         this.currPlayer = currPlayer;
     }
 
+    public ChooseBattleGroundPhase(GameData gd) {
+        super(gd);
+    }
+
 
     public Phase run() throws TimeoutException {
 
-        broadcastNextRound(round);
+        broadcastNextRound(gd.getTime().getSeason());
         gd.getServerConnection().sendSetBattleGround(
                 currPlayer.getCommID()); //send individual event "SetBattleGround"
         gd.getServerConnection().sendActNow(
@@ -36,13 +39,14 @@ public class ChooseBattleGroundPhase extends Phase {
 
     public void exec(BattleGroundAction bga) {
         List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
-        Coordinate chosenCoords = bga.getCoords();
+        Coordinate chosenCoords = new Coordinate(bga.getRow(), bga.getCol());
         if (!possibleCoords.contains(
                 chosenCoords)) { //invalid coordinates
             gd.getServerConnection().sendActionFailed(currPlayer.getCommID(),
                     "Chosen coordinates are not available.");
         } else {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
+            broadcastBattleGroundSet(currPlayer.getPlayerID(), bga.getRow(), bga.getCol());
         }
     }
 }

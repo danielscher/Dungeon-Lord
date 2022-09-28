@@ -565,12 +565,16 @@ public class Dungeon {
         return tunnelDiggingImps;
     }
 
-    public Coordinate getCurrBattleGround() {
-        return currBattleGround;
+    public int getSupervisingImps() {
+        return supervisingImps;
     }
 
     public int getGoldMiningImps() {
         return goldMiningImps;
+    }
+
+    public Coordinate getCurrBattleGround() {
+        return currBattleGround;
     }
 
     /*

@@ -1,7 +1,9 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import static de.unisaarland.cs.se.selab.comm.BidType.ROOM;
+import static de.unisaarland.cs.se.selab.comm.BidType.TUNNEL;
 
+import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
@@ -23,6 +25,7 @@ public class EvalRoomPhase extends Phase {
     List<Integer> commIdsToPlaceRoom = new ArrayList<Integer>();
     private boolean endTurn = false;
     ServerConnection<Action> sc = gd.getServerConnection();
+    BiddingSquare bs = gd.getBiddingSquare();
 
 
     public EvalRoomPhase(GameData gd) {
@@ -31,10 +34,10 @@ public class EvalRoomPhase extends Phase {
 
     public Phase run() throws TimeoutException {
         eval();
+        blockAndRetrieveBids();
 
         gd.getTime().nextSeason();
-        List<Integer> playerIds = gd.getAllPlayerID().stream().sorted().toList();
-        return new ChooseBattleGroundPhase(gd, gd.getPlayerByPlayerId(playerIds.get(0)));
+        return new ChooseBattleGroundPhase(gd);
     }
 
     private void eval() throws TimeoutException {
@@ -96,16 +99,18 @@ public class EvalRoomPhase extends Phase {
             throw new IllegalArgumentException("Chosen room is not available");
         }
 
+
         Dungeon d = player.getDungeon();
         Location loc = room.getPlacementLoc();
         if (!d.checkForFreeTilesIn(loc)) {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
         } else if (!d.placeRoom(bra.getRow(), bra.getCol(), room)) {
-            sc.sendActionFailed(bra.getCommID(), "Invalid coordinates to place this room.");
+            sc.sendActionFailed(bra.getCommID(),
+                    "Invalid coordinates to place this room.");
         } else {
-            broadcastRoomBuilt(player.getPlayerID(), bra.getRoomID(), bra.getRow(),
-                    bra.getCol()); //broadcast room built
+            broadcastRoomBuilt(player.getPlayerID(),
+                    bra.getRoomID(), bra.getRow(), bra.getCol()); //broadcast room built
             gd.getCurrAvailableRooms().remove(room);    //remove room from options list
             endTurn = true;
         }
@@ -121,7 +126,8 @@ public class EvalRoomPhase extends Phase {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
             if (!player.getDungeon().activateRoom(ara.getRoomID())) {
-                sc.sendActionFailed(ara.getCommID(), "The chosen room can't be activated.");
+                sc.sendActionFailed(ara.getCommID(),
+                        "The chosen room can't be activated.");
             } else {
                 int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
@@ -140,12 +146,44 @@ public class EvalRoomPhase extends Phase {
         super.exec(la);
     }
 
-    public void blockRetrieveBids() {
-
+    public void blockAndRetrieveBids() {
+        for (int p : gd.getAllPlayerID()) {
+            Player player = gd.getPlayerByPlayerId(p);
+            for (BidType bid : player.getBlockedBids()) {
+                broadcastBidRetrieved(bid, p);
+            }
+            player.blockBids();
+            player.clearCurrBids();
+        }
     }
 
-    private int[] collectBidWinners() {
-        //TODO
-        return new int[0]; //collect the playerID
+    public void returnImps() {
+        for (int i = 0; i < 3; i++) {
+            int p = bs.getIDByBidSlot(TUNNEL, i);
+            if (p != -1) {
+                Player player = gd.getPlayerByPlayerId(p);
+                if (player == null) {
+                    throw new IllegalArgumentException("Player doesn't exist");
+                }
+                Dungeon d = player.getDungeon();
+                int impTunnel = d.getTunnelDiggingImps();
+                if (impTunnel > 0) {
+                    if (impTunnel > 3) {
+                        broadcastImpsChanged(impTunnel + 1,
+                                p); //return tunnel-digging imps + supervisor
+                    } else {
+                        broadcastImpsChanged(impTunnel, p); //return tunnel-digging
+                    }
+                }
+                //int impGold = d.getGoldMiningImps(); TODO
+            }
+        }
+    }
+
+    public void getProducedGoods() {
+        for (int p : gd.getSortedPlayerID()) {
+
+        }
+
     }
 }

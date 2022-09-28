@@ -9,6 +9,7 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -165,6 +166,11 @@ public class GameData {
 
     public List<Integer> getAllPlayerID() {
         return new ArrayList<Integer>(idToPlayerMap.keySet());
+    }
+
+    public List<Integer> getSortedPlayerID() {
+        Collections.sort(getAllPlayerID());
+        return getAllPlayerID();
     }
 
     public int getMaxPlayers() {

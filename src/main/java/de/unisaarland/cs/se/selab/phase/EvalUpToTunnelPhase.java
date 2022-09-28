@@ -28,7 +28,7 @@ public class EvalUpToTunnelPhase extends Phase {
 
     public Phase run() {
         eval();
-        return new EvalUpToTunnelPhase(gd);
+        return new EvalUpToMonsterPhase(gd);
     }
 
     /*

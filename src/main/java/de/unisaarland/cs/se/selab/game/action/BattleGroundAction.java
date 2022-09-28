@@ -14,8 +14,12 @@ public class BattleGroundAction extends Action {
         this.col = y;
     }
 
-    public Coordinate getCoords() {
-        return new Coordinate(row, col);
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 
     public void invoke(Phase phase) {
