@@ -52,7 +52,7 @@ public class Config {
         System.out.println("maxPlayer =" + maxPlayer);
     }
 
-    public void parse(String configFilePath) throws FileNotFoundException {
+    public boolean parse(String configFilePath) throws FileNotFoundException {
         parserResult = true;
 
         // FileReader fileReader= (new FileReader(configFilePath));
@@ -181,10 +181,12 @@ public class Config {
             Attack attackStrategy = Attack.valueOf(attackStrategyString);
 
             //    int target = (Integer) trapObj.get("target");
-            int target = -1;
+            int target = 0;
             try {
-                String targetValString = trapObj.getString("target");
-                target = Integer.valueOf(targetValString);
+            //    String targetValString = trapObj.getString("target");
+            //    target = Integer.valueOf(targetValString);
+                  target = (Integer) trapObj.get("target");
+            //    System.out.println("traget string and value?"+target);
             } catch (Exception e) {
                 //    System.out.println("not targeted");
             }
@@ -252,7 +254,7 @@ public class Config {
             }
         }
 
-        //    return parserResult;
+            return parserResult;
     }
 
 
