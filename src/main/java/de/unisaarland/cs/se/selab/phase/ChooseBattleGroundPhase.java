@@ -29,7 +29,7 @@ public class ChooseBattleGroundPhase extends Phase {
         if (action.getCommID() == currPlayer.getCommID()) {
             action.invoke(this);
         }
-        return new Combatphase(gd);
+        return new Combatphase(gd,currPlayer);
     }
 
     public void exec(BattleGroundAction bga) {
