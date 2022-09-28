@@ -17,7 +17,7 @@ import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Combatphase extends Phase {
+public class CombatPhase extends Phase {
 
     private Player currPlayingPlayer;
     private TimeStamp timeStamp = gd.getTime();
@@ -29,7 +29,7 @@ public class Combatphase extends Phase {
     private Dungeon dungeon = currPlayingPlayer.getDungeon();
 
 
-    public Combatphase(GameData gd, Player player) {
+    public CombatPhase(GameData gd, Player player) {
         super(gd);
         this.currPlayingPlayer = player;
 
@@ -83,12 +83,13 @@ public class Combatphase extends Phase {
                             dungeon.imprison(dungeon.getAdventurer(placedtrap.getTarget())
                                     .getAdventurerID());
                         }
+                        break;
                     case BASIC:
                         if (dungeon.getAdventurer(0)
                                 .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
                             dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
                         }
-
+                        break;
                     case MULTI:
                         int res1 = dungeon.getAdventurer(0)
                                 .damagehealthby(placedtrap.getDamage() - totalDefuseVal);
@@ -104,8 +105,10 @@ public class Combatphase extends Phase {
                             }
 
                         }
+                        break;
 
-
+                    default:
+                        break;
                 }
             }
 

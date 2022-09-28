@@ -131,8 +131,11 @@ public class DungeonTest {
         assertFalse(dg.sendImpsToMineGold(7));
         boolean b1 = dg.sendImpsToDigTunnel(1);
         assertEquals(5, dg.getRestingImps());
+        /*
         dg.returnImps();
         assertEquals(6, dg.getRestingImps());
+         */
+        // the method returnImps is discontinued
     }
 
     @Test
