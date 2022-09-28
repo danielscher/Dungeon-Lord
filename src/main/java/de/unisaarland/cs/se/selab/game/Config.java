@@ -193,18 +193,36 @@ public class Config {
     }
 
     public List<Monster> drawMonsters(int amount) {
-
-        return null;
+        int tailIndex = monsters.size();
+        // Gets items in range [i,j) "[": including, ")":excluding
+        List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex);
+        monsters.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
+        return drawnMonsters;
     }
 
     public List<Room> drawRooms(int amount) {
-
-        return null;
+        int tailIndex = rooms.size();
+        // Gets items in range [i,j) "[": including, ")":excluding
+        List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex);
+        rooms.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
+        return drawnRooms;
     }
 
     public List<Trap> drawTraps(int amount) {
+        int tailIndex = traps.size();
+        // Gets items in range [i,j) "[": including, ")":excluding
+        List<Trap> drawnTraps = traps.subList(tailIndex - amount, tailIndex);
+        traps.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
+        return drawnTraps;
+    }
 
-        return null;
+    public List<Adventurer> drawAdventurers(int amount) {
+        int tailIndex = adventurers.size();
+        // Gets items in range [i,j) "[": including, ")":excluding
+        List<Adventurer> drawnAdventurers = adventurers.subList(tailIndex - amount, tailIndex);
+        adventurers.subList(tailIndex - amount, tailIndex)
+                .clear(); // removes this sublist from list.
+        return drawnAdventurers;
     }
 
     public int getMaxPlayer() {
