@@ -196,7 +196,9 @@ public class Config {
         int amount = 3;
         int tailIndex = monsters.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex);
+        // List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex);
+        List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex)
+                .stream().toList();  // workaround to get a copy of this list
         monsters.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
         return drawnMonsters;
     }
@@ -205,7 +207,8 @@ public class Config {
         int amount = 2;
         int tailIndex = rooms.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex);
+        List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex)
+                .stream().toList();  // workaround to get a copy of this list
         rooms.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
         return drawnRooms;
     }
@@ -213,7 +216,8 @@ public class Config {
     public List<Trap> drawTraps(int amountPlaceTrapBids) {
         int tailIndex = traps.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Trap> drawnTraps = traps.subList(tailIndex - amountPlaceTrapBids, tailIndex);
+        List<Trap> drawnTraps = traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
+                .stream().toList();  // workaround to get a copy of this list
         traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
                 .clear(); // removes this sublist from list.
         return drawnTraps;
@@ -222,7 +226,8 @@ public class Config {
     public List<Adventurer> drawAdventurers(int amount) {
         int tailIndex = adventurers.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Adventurer> drawnAdventurers = adventurers.subList(tailIndex - amount, tailIndex);
+        List<Adventurer> drawnAdventurers = adventurers.subList(tailIndex - amount, tailIndex)
+                .stream().toList();  // workaround to get a copy of this list
         adventurers.subList(tailIndex - amount, tailIndex)
                 .clear(); // removes this sublist from list.
         return drawnAdventurers;
