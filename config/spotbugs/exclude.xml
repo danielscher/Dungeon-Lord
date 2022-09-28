@@ -7,7 +7,7 @@
   <!-- https://spotbugs.readthedocs.io/en/stable/bugDescriptions.html -->
 
   <Match>
-    <Bug code="Se,SF,SECPTI,PRMC,UAC,CLI,ACEM,FCCD,IMC,CC,EI,EI2,CE,MS,MOM"/>
+    <Bug code="Se,SF,SECPTI,PRMC,UAC,CLI,ACEM,FCCD,IMC,CC,EI,EI2,CE,MS,MOM,SECBROAD"/>
   </Match>
 
 </FindBugsFilter>
