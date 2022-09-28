@@ -299,7 +299,7 @@ public class EvalUpToTunnelPhase extends Phase {
         }
 
         Dungeon playersDungeon = player.getDungeon();
-        if(playersDungeon.activateRoom(roomId)) {
+        if (playersDungeon.activateRoom(roomId)) {
             Room activatedRoom = playersDungeon.getRoomById(roomId);
             broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
@@ -324,7 +324,7 @@ public class EvalUpToTunnelPhase extends Phase {
     @Override
     public void exec(LeaveAction la) {
         int commId = la.getCommID();
-        if(commIdsToDigTunnel.contains(commId)) {
+        if (commIdsToDigTunnel.contains(commId)) {
             commIdsToDigTunnel.remove(commId);
         }
         gotEndTurn = true; // to prevent any further tunnel dig asking from this user
