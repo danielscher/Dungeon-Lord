@@ -34,7 +34,8 @@ public class EvalRoomPhase extends Phase {
         eval();
 
         gd.getTime().nextSeason();
-        return new ChooseBattleGroundPhase(gd);
+        List<Integer> playerIds = gd.getAllPlayerID().stream().sorted().toList();
+        return new ChooseBattleGroundPhase(gd,gd.getPlayerByPlayerId(playerIds.get(0)));
     }
 
     private void eval() throws TimeoutException {
