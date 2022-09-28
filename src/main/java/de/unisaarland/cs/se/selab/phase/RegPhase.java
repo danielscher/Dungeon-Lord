@@ -10,7 +10,7 @@ import java.util.Set;
 public class RegPhase extends Phase {
 
 
-    private final int maxPlayers = gd.getConfig().getMaxPlayer();
+    private final int maxPlayers = gd.getMaxPlayers();
 
     /*
     whenever we get the startGame action this is set to true
