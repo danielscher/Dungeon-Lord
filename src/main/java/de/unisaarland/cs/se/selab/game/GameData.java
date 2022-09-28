@@ -130,11 +130,11 @@ public class GameData {
 
     public void drawEntities() {
         discardMonster();   //discard old unsold monsters
-        config.drawMonsters(3); //draw 3 new monsters
+        addDrawnMonsters(); //draw 3 new monsters
         discardRoom();  //discard old unsold rooms
-        config.drawRooms(2); //draw 2 new rooms
+        addDrawnRooms(); //draw 2 new rooms
         if (time.getSeason() < 4) {
-            config.drawAdventurers(commIdToPlayerIdMap.size()); //draw as many new adv as players
+            addDrawnAdventurers(); //draw as many new adv as players
         }
     }
 
@@ -154,10 +154,6 @@ public class GameData {
         return currAvailableTraps;
     }
 
-    public void addMonster(Monster m) {
-        currAvailableMonsters.add(m);
-    }
-
     public void discardMonster() {
         for (Monster m : currAvailableMonsters) {
             currAvailableMonsters.remove(m);
@@ -168,18 +164,42 @@ public class GameData {
         currAvailableRooms.add(r);
     }
 
+    public void addMonster(Monster m) {
+        currAvailableMonsters.add(m);
+    }
+
     public void discardRoom() {
         for (Room r : currAvailableRooms) {
             currAvailableRooms.remove(r);
         }
     }
 
-    public void addAdventurer(Adventurer a) {
-        currAvailableAdventurers.add(a);
+    private void addDrawnAdventurers() {
+        List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
+        for (Adventurer adv : drawnAdv) {
+            currAvailableAdventurers.add(adv);
+        }
     }
 
-    public void addTrap(Trap t) {
-        currAvailableTraps.add(t);
+    public void addDrawnTraps() { // Adds drawn traps to the curr available.
+        List<Trap> drawnTraps = config.drawTraps(getNumCurrPlayers());
+        for (Trap t : drawnTraps) {
+            currAvailableTraps.add(t);
+        }
+    }
+
+    private void addDrawnMonsters() {
+        List<Monster> drawnMonsters = config.drawMonsters(getNumCurrPlayers());
+        for (Monster mon : drawnMonsters) {
+            currAvailableMonsters.add(mon);
+        }
+    }
+
+    private void addDrawnRooms() {
+        List<Room> drawnRooms = config.drawRooms(getNumCurrPlayers());
+        for (Room room : drawnRooms) {
+            currAvailableRooms.add(room);
+        }
     }
 
 
@@ -203,5 +223,10 @@ public class GameData {
     public Config getConfig() {
         return config;
     }
-}
 
+    public int getNumCurrPlayers() {
+        //TODO: returns the number of currently registered players.
+        return 1;
+    }
+
+}
