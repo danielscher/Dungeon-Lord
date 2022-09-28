@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
@@ -19,6 +20,20 @@ public class CollectAndPlaceBidPhase extends Phase {
     public Phase run() throws TimeoutException {
         ServerConnection<Action> sc = gd.getServerConnection();
         Set<Integer> commIDs = gd.getCommIDSet();
+
+        if (gd.getTime().getSeason() > 1) {
+            broadcastNextRound(gd.getTime().getSeason());
+        } else if (gd.getTime().getYear() > 1) {
+            broadcastNextYear(gd.getTime().getYear());
+            for (int commID : commIDs) {
+                Player p = gd.getPlayerByCommID(commID);
+                for (BidType b : p.getBlockedBids()) {
+                    broadcastBidRetrieved(b, p.getPlayerID());
+                }
+                p.clearBlockedBids();
+            }
+        }
+
 
         gd.drawEntities();
         if (!gd.getCurrAvailableAdventurers().isEmpty()) {

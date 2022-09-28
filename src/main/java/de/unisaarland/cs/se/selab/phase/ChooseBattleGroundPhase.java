@@ -20,6 +20,8 @@ public class ChooseBattleGroundPhase extends Phase {
     public Phase run() throws TimeoutException {
 
         broadcastNextRound(round);
+        gd.getServerConnection().sendSetBattleGround(
+                currPlayer.getCommID()); //send individual event "SetBattleGround"
         gd.getServerConnection().sendActNow(
                 currPlayer.getCommID()); //send individual event "ActNow"
 

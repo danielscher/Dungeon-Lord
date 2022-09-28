@@ -74,6 +74,10 @@ public class Player {
         Arrays.fill(currBids, null);
     }
 
+    public void clearBlockedBids() {
+        Arrays.fill(blockedBids, null);
+    }
+
     /*
     gets a bid of the current bids, by the priority of the bid
      */
