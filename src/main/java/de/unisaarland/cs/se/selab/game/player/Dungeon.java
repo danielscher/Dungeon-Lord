@@ -405,6 +405,10 @@ public class Dungeon {
         hiredMonsters.add(monster);
     }
 
+    public void addTrap(Trap trap) {
+        traps.add(trap);
+    }
+
     /*
     returns a list of all hire monsters
      */
