@@ -19,9 +19,6 @@ public class Dungeon {
     private List<Trap> traps = new ArrayList<Trap>();
     private LinkedList<Adventurer> adventurerQueue = new LinkedList<Adventurer>();
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
-    private Coordinate currAdvPos;
-
-
     private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps;

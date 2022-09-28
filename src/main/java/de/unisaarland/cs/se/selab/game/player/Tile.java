@@ -5,8 +5,6 @@ public class Tile {
     private boolean conquered;
     private boolean hasRoom;
     private int distanceToEntrance;
-    private int numTraps;
-    private int numMonsters;
 
     public Tile() {
         this.distanceToEntrance = -1;
