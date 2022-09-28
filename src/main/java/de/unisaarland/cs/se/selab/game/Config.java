@@ -183,10 +183,10 @@ public class Config {
             //    int target = (Integer) trapObj.get("target");
             int target = 0;
             try {
-            //    String targetValString = trapObj.getString("target");
-            //    target = Integer.valueOf(targetValString);
-                  target = (Integer) trapObj.get("target");
-            //    System.out.println("traget string and value?"+target);
+                //    String targetValString = trapObj.getString("target");
+                //    target = Integer.valueOf(targetValString);
+                target = (Integer) trapObj.get("target");
+                //    System.out.println("traget string and value?"+target);
             } catch (Exception e) {
                 //    System.out.println("not targeted");
             }
@@ -254,7 +254,7 @@ public class Config {
             }
         }
 
-            return parserResult;
+        return parserResult;
     }
 
 
