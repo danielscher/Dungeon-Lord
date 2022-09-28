@@ -13,18 +13,17 @@ import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.BuildRoomAction;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.action.LeaveAction;
+import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 public class EvalRoomPhase extends Phase {
 
-    List<Integer> commIdsToPlaceRoom = new ArrayList<Integer>();
     private boolean endTurn = false;
     ServerConnection<Action> sc = gd.getServerConnection();
     BiddingSquare bs = gd.getBiddingSquare();
@@ -40,9 +39,17 @@ public class EvalRoomPhase extends Phase {
         returnImps();
         getProducedGoods();
 
+        if (gd.getTime().getSeason() == 4) {
+            gd.getTime().nextSeason();
+            for (Player p : gd.getAllPlayerSortedByID()) {
+                //for all players, sorted by player ID, to choose battleground
+                return new ChooseBattleGroundPhase(gd, p);
+            }
+        }
 
+        spreadAdv();
         gd.getTime().nextSeason();
-        return new ChooseBattleGroundPhase(gd);
+        return new CollectAndPlaceBidPhase(gd);
     }
 
     private void eval() throws TimeoutException {
@@ -152,10 +159,9 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void blockAndRetrieveBids() {
-        for (int p : gd.getAllPlayerID()) {
-            Player player = gd.getPlayerByPlayerId(p);
+        for (Player player : gd.getAllPlayerSortedByID()) {
             for (BidType bid : player.getBlockedBids()) {
-                broadcastBidRetrieved(bid, p);
+                broadcastBidRetrieved(bid, player.getPlayerID());
             }
             player.blockBids();
             player.clearCurrBids();
@@ -187,14 +193,12 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void getProducedGoods() {
-        for (int p : gd.getSortedPlayerID()) {
-            Player player = gd.getPlayerByPlayerId(p);
-            if (player == null) {
-                throw new IllegalArgumentException("Player doesn't exist");
-            }
-
+        for (Player player : gd.getAllPlayerSortedByID()) {
             if (!player.getDungeon().getActiveRooms().isEmpty()) {
+                int p = player.getPlayerID();
+
                 //TODO return producing imps method in dungeon class
+
                 for (Room r : player.getDungeon().getActiveRooms()) {
                     if (r.getFoodProduction() > 0) {
                         player.changeFoodBy(r.getFoodProduction());
@@ -218,10 +222,7 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void spreadAdv() {
-        List<Player> playersSortByEvilness = new ArrayList<Player>(){};
-        for (int i : gd.getAllPlayerID()) {
-            playersSortByEvilness.add(gd.getPlayerByPlayerId(i));
-        }
+        List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
 
         /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
             public int compare(Player p1, Player p2) {
@@ -231,9 +232,21 @@ public class EvalRoomPhase extends Phase {
 
         Collections.sort(playersSortByEvilness,
                 Comparator.comparing(Player::getEvilLevel).thenComparing(Player::getPlayerID));
-        //Compare Players by Evil Level then Player IDs
+        //Sort Players by Evil Level then Player IDs
 
+        Collections.sort(gd.getCurrAvailableAdventurers(),
+                Comparator.comparing(Adventurer::getDifficulty)
+                                .thenComparing(Adventurer::getAdventurerID));
+        //Sort Adventurers by difficulty then IDs
 
+        for (int i = 0; i < playersSortByEvilness.size(); i++) {
+            //add an adventurer to the corresponding player's dungeon
+            Player p = playersSortByEvilness.get(i);
+            Adventurer adv = gd.getCurrAvailableAdventurers().get(i);
+            p.getDungeon().insertAdventurer(adv);
+            broadcastAdventurerArrived(adv.getAdventurerID(), p.getPlayerID());
+        }
 
+        gd.clearAdventurers();  //clear the adventurer list
     }
 }

@@ -17,10 +17,6 @@ public class ChooseBattleGroundPhase extends Phase {
         this.currPlayer = currPlayer;
     }
 
-    public ChooseBattleGroundPhase(GameData gd) {
-        super(gd);
-    }
-
 
     public Phase run() throws TimeoutException {
 

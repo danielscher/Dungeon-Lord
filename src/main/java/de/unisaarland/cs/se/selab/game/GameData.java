@@ -38,6 +38,7 @@ public class GameData {
     private List<Monster> currAvailableMonsters = new ArrayList<Monster>();
     private List<Trap> currAvailableTraps = new ArrayList<Trap>();
     private List<Room> currAvailableRooms = new ArrayList<Room>();
+
     private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
             5000, new ActionFactoryImplementation());
     private final Config config = new Config();
@@ -168,9 +169,10 @@ public class GameData {
         return new ArrayList<Integer>(idToPlayerMap.keySet());
     }
 
-    public List<Integer> getSortedPlayerID() {
-        Collections.sort(getAllPlayerID());
-        return getAllPlayerID();
+    public List<Player> getAllPlayerSortedByID() {
+        List<Player> allPlayers = new ArrayList<Player>(idToPlayerMap.values());
+        Collections.sort(allPlayers, Comparator.comparing(Player::getPlayerID));
+        return allPlayers;
     }
 
     public int getMaxPlayers() {
@@ -194,6 +196,10 @@ public class GameData {
     private void addDrawnAdventurers() {
         List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
         currAvailableAdventurers.addAll(drawnAdv);
+    }
+
+    public void clearAdventurers() {
+        currAvailableAdventurers.clear();
     }
 
     public void addDrawnTraps(int amountPlaceTrapBids) { // Adds drawn traps to the curr available.
