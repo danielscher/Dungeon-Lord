@@ -182,8 +182,6 @@ public class EvalUpToTunnelPhase extends Phase {
 
         // now ask for tunnel digging actions until all imps are sent out or player ends turn
         for (; impsToMine > 0; impsToMine--) {
-            // add player's commId to a list of expected action-senders
-            commIdsToDigTunnel.add(commId);
             serverConn.sendDigTunnel(commId); // send DigTunnel once for every possible tile
 
             // if player activated room it might be the case that he hasn't enough imps anymore
@@ -197,11 +195,13 @@ public class EvalUpToTunnelPhase extends Phase {
             if (dungeon.getTunnelDiggingImps() == 3 && dungeon.getRestingImps() < 2) {
                 break;
             }
+            // add player's commId to a list of expected action-senders
+            commIdsToDigTunnel.add(commId);
 
-            while (commIdsToDigTunnel.size() > 1) {
+            serverConn.sendActNow(commId); // TODO check if sending once is sufficient
+            while (commIdsToDigTunnel.size() > 0) {
                 // loop until the player we evaluate has sent an action
                 try {
-                    serverConn.sendActNow(commId);
                     Action action = serverConn.nextAction();
                     action.invoke(this);
                 } catch (Exception e) {
@@ -333,6 +333,10 @@ public class EvalUpToTunnelPhase extends Phase {
 
     @Override
     public void exec(LeaveAction la) {
+        int commId = la.getCommID();
+        if(commIdsToDigTunnel.contains(commId)) {
+            commIdsToDigTunnel.remove(commId);
+        }
         gotEndTurn = true; // to prevent any further tunnel dig asking from this user
         super.exec(la);
     }
