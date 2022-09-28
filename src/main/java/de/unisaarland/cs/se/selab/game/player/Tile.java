@@ -31,4 +31,8 @@ public class Tile {
     public boolean hasRoom() {
         return hasRoom;
     }
+
+    public void addRoom() {
+        hasRoom = true;
+    }
 }

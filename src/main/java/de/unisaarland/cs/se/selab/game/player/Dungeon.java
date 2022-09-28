@@ -160,6 +160,18 @@ public class Dungeon {
         return res;
     }
 
+    public boolean placeRoom(int x, int y, Room room) {
+        Location loc = room.getPlacementLoc();
+        if(canPlaceRoomOn(x,y,loc)) {
+            rooms.add(room);
+            grid[x][y].addRoom();
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+
     /*
     checks if a room can be placed on a given coordinate
      */
