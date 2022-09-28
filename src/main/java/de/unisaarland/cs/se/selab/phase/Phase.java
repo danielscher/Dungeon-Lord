@@ -19,7 +19,6 @@ import de.unisaarland.cs.se.selab.game.action.RegAction;
 import de.unisaarland.cs.se.selab.game.action.StartGameAction;
 import de.unisaarland.cs.se.selab.game.action.TrapAction;
 import java.util.List;
-import java.util.Set;
 
 public abstract class Phase {
 
@@ -100,7 +99,6 @@ public abstract class Phase {
     broadcasts "actNow" to every player
      */
     protected void broadcastActNow() {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendActNow
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -111,7 +109,6 @@ public abstract class Phase {
     broadcasts "adventurerArrived" to every player
      */
     protected void broadcastAdventurerArrived(int adventurer, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerArrived
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -123,7 +120,6 @@ public abstract class Phase {
     broadcasts "adventurerDamaged" to every player
      */
     protected void broadcastAdventurerDamaged(int adventurer, int amount, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerDamaged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -135,7 +131,6 @@ public abstract class Phase {
     broadcasts "adventurerDrawn" to every player
      */
     protected void broadcastAdventurerDrawn(int adventurer) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerDrawn
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -147,7 +142,6 @@ public abstract class Phase {
     broadcasts "adventurerFled" to every player
      */
     protected void broadcastAdventurerFled(int adventurer) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerFled
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -159,7 +153,6 @@ public abstract class Phase {
     broadcasts "adventurerHealed" to every player
      */
     protected void broadcastAdventurerHealed(int amount, int priest, int target) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerHealed
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -171,7 +164,6 @@ public abstract class Phase {
     broadcasts "adventurerImprisoned" to every player
      */
     protected void broadcastAdventurerImprisoned(int adventurer, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendAdventurerImprisoned
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -183,7 +175,6 @@ public abstract class Phase {
     broadcasts "BattleGroundSet" to every player
      */
     protected void broadcastBattleGroundSet(int player, int x, int y) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendBattleGroundSet
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -195,7 +186,6 @@ public abstract class Phase {
     broadcasts "BiddingStarted" to every player
      */
     protected void broadcastBiddingStarted() {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendBiddingStarted
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -207,7 +197,6 @@ public abstract class Phase {
     broadcasts "EvilnessChanged" to every player
      */
     protected void broadcastEvilnessChanged(int amount, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendEvilnessChanged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -219,7 +208,6 @@ public abstract class Phase {
     broadcasts "FoodChanged" to every player
      */
     protected void broadcastFoodChanged(int amount, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendFoodChanged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -231,7 +219,6 @@ public abstract class Phase {
     broadcasts "GoldChanged" to every player
      */
     protected void broadcastGoldChanged(int amount, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendGoldChanged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -243,7 +230,6 @@ public abstract class Phase {
     broadcasts "GameEnd" to every player
      */
     protected void broadcastGameEnd(int player, int points) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendGameEnd
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -255,7 +241,6 @@ public abstract class Phase {
     broadcasts "GameStarted" to every player
      */
     protected void broadcastGameStarted() {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendGameStarted
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -267,7 +252,6 @@ public abstract class Phase {
     broadcasts "ImpsChanged" to every player
      */
     protected void broadcastImpsChanged(int amount, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendImpsChanged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -279,7 +263,6 @@ public abstract class Phase {
     broadcasts "Left" to every player
      */
     protected void broadcastLeft(int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendLeft
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -291,7 +274,6 @@ public abstract class Phase {
     broadcasts "MonsterDrawn" to every player
      */
     protected void broadcastMonsterDrawn(int monster) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendMonsterDrawn
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -303,7 +285,6 @@ public abstract class Phase {
     broadcasts "MonsterHired" to every player
      */
     protected void broadcastMonsterHired(int monster, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendMonsterHired
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -315,7 +296,6 @@ public abstract class Phase {
     broadcasts "MonsterPlaced" to every player
     */
     protected void broadcastMonsterPlaced(int monster, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendMonsterPlaced
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -327,7 +307,6 @@ public abstract class Phase {
     broadcasts "NextRound" to every player
      */
     protected void broadcastNextRound(int round) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendNextRound
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -339,7 +318,6 @@ public abstract class Phase {
     broadcasts "NextYear" to every player
      */
     protected void broadcastNextYear(int year) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendNextYear
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -352,7 +330,6 @@ public abstract class Phase {
     NOTE: this BidType is the provided one, not our BidType!!!
      */
     protected void broadcastBidPlaced(BidType bid, int player, int slot) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendBidPlaced
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -365,7 +342,6 @@ public abstract class Phase {
     NOTE: this BidType is the provided one, not our BidType!!!
      */
     protected void broadcastBidRetrieved(BidType bid, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendBidRetrieved
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -378,7 +354,6 @@ public abstract class Phase {
     NOTE: needs to be called once for every registered playerID
      */
     protected void broadcastPlayer(String name, int player) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendPlayer
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -390,7 +365,6 @@ public abstract class Phase {
     broadcasts "RegistrationAborted" to every player
      */
     protected void broadcastRegistrationAborted() {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendPlayer
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -402,7 +376,6 @@ public abstract class Phase {
     broadcasts "RoomActivated" to every player
     */
     protected void broadcastRoomActivated(int player, int room) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendRoomActivated
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -414,7 +387,6 @@ public abstract class Phase {
     broadcasts "RoomBuilt" to every player
     */
     protected void broadcastRoomBuilt(int player, int room, int x, int y) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendRoomBuilt
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -426,7 +398,6 @@ public abstract class Phase {
     broadcasts "RoomDrawn" to every player
     */
     protected void broadcastRoomDrawn(int room) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendRoomDrawn
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -438,7 +409,6 @@ public abstract class Phase {
     broadcasts "TrapAcquired" to every player
     */
     protected void broadcastTrapAcquired(int player, int trap) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendTrapAcquired
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -450,7 +420,6 @@ public abstract class Phase {
     broadcasts "TrapPlaced" to every player
     */
     protected void broadcastTrapPlaced(int player, int trap) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendTrapPlaced
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -462,7 +431,6 @@ public abstract class Phase {
     broadcasts "TunnelConquered" to every player
     */
     protected void broadcastTunnelConquered(int adventurer, int x, int y) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendTunnelConquered
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -474,7 +442,6 @@ public abstract class Phase {
     broadcasts "TunnelTunnel" to every player
     */
     protected void broadcastTunnelDug(int player, int x, int y) {
-        Set<Integer> commIDs = gd.getCommIDSet();
         // for each playerID, invoke sendTunnelDug
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();

@@ -20,6 +20,8 @@ public class Dungeon {
     private LinkedList<Adventurer> adventurerQueue = new LinkedList<Adventurer>();
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
     private Coordinate currAdvPos;
+
+
     private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
     private int restingImps;
@@ -253,12 +255,12 @@ public class Dungeon {
     }
 
 
-    public boolean isTileConquered(int x, int y) {
-        return grid[x][y].isConquered();
+    public boolean isTileConquered(Coordinate xy) {
+        return grid[xy.getxpos()][xy.getypos()].isConquered();
     }
 
-    public boolean hasTileRoom(int x, int y) {
-        return grid[x][y].hasRoom();
+    public boolean hasTileRoom(Coordinate xy) {
+        return grid[xy.getxpos()][xy.getypos()].hasRoom();
     }
 
 
@@ -432,6 +434,33 @@ public class Dungeon {
         return rooms.size();
     }
 
+    public int getNumMonsters() {
+        return hiredMonsters.size();
+    }
+
+    public int getNumTraps() {
+        return traps.size();
+    }
+
+    public Monster getMonsterByID(int id) {
+        for (Monster monster : hiredMonsters) {
+            if (monster.getMonsterID() == id) {
+                return monster;
+            }
+        }
+        return null;
+    }
+
+
+    public Trap getTrapByID(int id) {
+        for (Trap trap : traps) {
+            if (trap.getTrapID() == id) {
+                return trap;
+            }
+        }
+        return null;
+    }
+
     /*
     returns the number of unconquered tiles
      */
@@ -544,5 +573,10 @@ public class Dungeon {
     public int getTunnelDiggingImps() {
         return tunnelDiggingImps;
     }
+
+    public Coordinate getCurrBattleGround() {
+        return currBattleGround;
+    }
+
 }
 
