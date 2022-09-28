@@ -238,7 +238,7 @@ public class EvalUpToMonsterPhase extends Phase {
             broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
 
             // grand monster to player.
-            player.getDungeon().addMonster(chosenMonster);// FIXME : possible null value exception.
+            player.getDungeon().addMonster(chosenMonster); // FIXME : possible null value exception.
             broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
             handleHireMonsterAction = false; // finish handling action. terminates loop.
         }
