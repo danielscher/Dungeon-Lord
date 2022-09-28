@@ -253,7 +253,6 @@ public class EvalUpToMonsterPhase extends Phase {
     public void exec(EndTurnAction eta) {
 
         ServerConnection<Action> sc = gd.getServerConnection();
-        int commId = eta.getCommID();
         if (eta.getCommID() != currHandledHireMonsterCommId) {
             sc.sendActionFailed(eta.getCommID(), "Illegal Action: not your turn.");
         }
