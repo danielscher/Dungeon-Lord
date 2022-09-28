@@ -28,16 +28,23 @@ public abstract class Phase {
         this.gd = gd;
     }
 
-    public Phase run() throws TimeoutException {
-        return null;
+    public abstract Phase run() throws TimeoutException;
+
+    /*
+    sends action failed to commId
+    to be used in the default implementation of most exec methods
+     */
+    public void sendError(int commId) {
+        ServerConnection<Action> serverConn = gd.getServerConnection();
+        serverConn.sendActionFailed(commId, "this action isn't valid within this phase");
     }
 
     public void exec(RegAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(StartGameAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(LeaveAction la) {
@@ -52,47 +59,47 @@ public abstract class Phase {
     }
 
     public void exec(EndTurnAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(HireMonsterAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(PlaceBidAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(MonsterAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(MonsterTargetedAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(BattleGroundAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(DigTunnelAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(ActivateRoomAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(TrapAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(BuildRoomAction x) {
-
+        sendError(x.getCommID());
     }
 
     public void exec(Action x) {
-
+        sendError(x.getCommID());
     }
 
     /*
@@ -119,7 +126,7 @@ public abstract class Phase {
     /*
     broadcasts "adventurerDamaged" to every player
      */
-    protected void broadcastAdventurerDamaged(int adventurer, int amount, int player) {
+    protected void broadcastAdventurerDamaged(int adventurer, int amount) {
         // for each playerID, invoke sendAdventurerDamaged
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
@@ -163,7 +170,7 @@ public abstract class Phase {
     /*
     broadcasts "adventurerImprisoned" to every player
      */
-    protected void broadcastAdventurerImprisoned(int adventurer, int player) {
+    protected void broadcastAdventurerImprisoned(int adventurer) {
         // for each playerID, invoke sendAdventurerImprisoned
         ServerConnection<Action> sc = gd.getServerConnection();
         List<Integer> playerIDs = gd.getAllPlayerID();
