@@ -87,6 +87,7 @@ public class EvalUpToMonsterPhase extends Phase {
                         //TODO: add behaviour
                     }
                 }
+                break;
             }
             case 3: {
                 if (player.getFood() > 0) {
