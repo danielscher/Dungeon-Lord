@@ -8,16 +8,15 @@ import org.junit.jupiter.api.Test;
 
 public class ConfigTest extends Config {
 
-    private String myPath00 ="C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
+    private String mypath ="C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
     Config cfg= new Config ();
 
     @Test
     public void testParse() {
         cfg.display();
-        cfg.setConfigFilePath(myPath00);
+        cfg.setConfigFilePath(mypath);
         try {
-            assertTrue( cfg.parse(myPath00));
-
+            cfg.parse(mypath);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
