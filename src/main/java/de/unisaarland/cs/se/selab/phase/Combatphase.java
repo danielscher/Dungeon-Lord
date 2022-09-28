@@ -2,11 +2,12 @@ package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.action.Action;
+import de.unisaarland.cs.se.selab.game.TimeStamp;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.action.MonsterAction;
 import de.unisaarland.cs.se.selab.game.action.MonsterTargetedAction;
 import de.unisaarland.cs.se.selab.game.action.TrapAction;
+import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
@@ -19,7 +20,8 @@ import java.util.Map;
 public class Combatphase extends Phase {
 
     private Player currPlayingPlayer;
-    private int round;
+    private TimeStamp timeStamp = gd.getTime();
+
     //selected Trap
     private Trap placedtrap = null;
     //placed monsters and the target position
@@ -30,7 +32,7 @@ public class Combatphase extends Phase {
     public Combatphase(GameData gd, Player player) {
         super(gd);
         this.currPlayingPlayer = player;
-        this.round = 0;
+
 
     }
 
@@ -43,29 +45,68 @@ public class Combatphase extends Phase {
         if (dungeon.hasTileRoom(battleground)) {
             if (dungeon.getNumMonsters() > 1) {
                 for (int i = 0; i < 3; i++) {
-                    Action action = gd.getServerConnection().nextAction();
-                    action.invoke(this);
+                    gd.getServerConnection().nextAction().invoke(this);
                 }
             } else if (dungeon.getNumMonsters() == 1) {
                 for (int i = 0; i < 2; i++) {
-                    Action action = gd.getServerConnection().nextAction();
-                    action.invoke(this);
+                    gd.getServerConnection().nextAction().invoke(this);
                 }
             } else {
-                Action action = gd.getServerConnection().nextAction();
-                action.invoke(this);
+                gd.getServerConnection().nextAction().invoke(this);
             }
             //if the tile is not a room 1 monster and 1 trap in total 2 nextActions
         } else {
             if (dungeon.getNumMonsters() > 0) {
                 for (int i = 0; i < 2; i++) {
-                    Action action = gd.getServerConnection().nextAction();
-                    action.invoke(this);
+                    gd.getServerConnection().nextAction().invoke(this);
                 }
                 //if no HiredMonsters only the trap action is wanted
             } else {
-                Action action = gd.getServerConnection().nextAction();
-                action.invoke(this);
+                gd.getServerConnection().nextAction().invoke(this);
+            }
+
+        }
+        //Fighting
+        Adventurer ad1 = currPlayingPlayer.getDungeon().getAdventurer(0);
+        Adventurer ad2 = currPlayingPlayer.getDungeon().getAdventurer(1);
+        Adventurer ad3 = currPlayingPlayer.getDungeon().getAdventurer(2);
+
+        // get the total defuse value
+        int totalDefuseVal = ad1.getDefuseValue() + ad2.getDefuseValue() + ad3.getDefuseValue();
+        // ask Leo
+        if (placedtrap != null) {
+            if (totalDefuseVal < placedtrap.getDamage()) {
+                switch (placedtrap.getAttack()) {
+                    case TARGETED:
+                        if (dungeon.getAdventurer(placedtrap.getTarget())
+                                .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
+                            dungeon.imprison(dungeon.getAdventurer(placedtrap.getTarget())
+                                    .getAdventurerID());
+                        }
+                    case BASIC:
+                        if (dungeon.getAdventurer(0)
+                                .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
+                            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+                        }
+
+                    case MULTI:
+                        int res1 = dungeon.getAdventurer(0)
+                                .damagehealthby(placedtrap.getDamage() - totalDefuseVal);
+                        if (res1 >= 0) {
+                            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+                            int res2 = dungeon.getAdventurer(1).damagehealthby(res1);
+                            if (res2 >= 0) {
+                                dungeon.imprison(dungeon.getAdventurer(1).getAdventurerID());
+                                if (dungeon.getAdventurer(2).damagehealthby(res2) >= 0) {
+                                    dungeon.imprison(dungeon.getAdventurer(2).getAdventurerID());
+                                }
+
+                            }
+
+                        }
+
+
+                }
             }
 
         }
@@ -224,7 +265,7 @@ public class Combatphase extends Phase {
 
 
     public void exec(EndTurnAction eta) {
-        //TOD
+
     }
 
 
