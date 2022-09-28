@@ -299,22 +299,12 @@ public class EvalUpToTunnelPhase extends Phase {
         }
 
         Dungeon playersDungeon = player.getDungeon();
-        Room roomToActivate = playersDungeon.getRoomById(roomId);
-        if (roomToActivate == null) {
-            // in this case the player doesn't own the room
-            serverConn.sendActionFailed(commId, "you don't seem to own this room");
+        if(playersDungeon.activateRoom(roomId)) {
+            Room activatedRoom = playersDungeon.getRoomById(roomId);
+            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
-            // in case the player own the room...
-            if (roomToActivate.getActivationCost() > playersDungeon.getRestingImps()) {
-                // in this case the player doesn't have enough imps to activate the room
-                serverConn.sendActionFailed(commId, "not enough imps to activate room");
-            } else {
-                // player can activate room
-                roomToActivate.activate();
-                playersDungeon.sendImpsToProduce(roomToActivate.getActivationCost());
-                broadcastImpsChanged(roomToActivate.getActivationCost(), player.getPlayerID());
-                broadcastRoomActivated(player.getPlayerID(), roomId);
-            }
+            serverConn.sendActionFailed(commId, "couldn't activate room");
         }
 
     }
