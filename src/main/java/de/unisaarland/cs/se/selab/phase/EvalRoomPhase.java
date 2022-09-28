@@ -18,6 +18,8 @@ import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class EvalRoomPhase extends Phase {
@@ -35,6 +37,9 @@ public class EvalRoomPhase extends Phase {
     public Phase run() throws TimeoutException {
         eval();
         blockAndRetrieveBids();
+        returnImps();
+        getProducedGoods();
+
 
         gd.getTime().nextSeason();
         return new ChooseBattleGroundPhase(gd);
@@ -167,6 +172,7 @@ public class EvalRoomPhase extends Phase {
                 }
                 Dungeon d = player.getDungeon();
                 int impTunnel = d.getTunnelDiggingImps();
+                //TODO return imps
                 if (impTunnel > 0) {
                     if (impTunnel > 3) {
                         broadcastImpsChanged(impTunnel + 1,
@@ -175,15 +181,59 @@ public class EvalRoomPhase extends Phase {
                         broadcastImpsChanged(impTunnel, p); //return tunnel-digging
                     }
                 }
-                //int impGold = d.getGoldMiningImps(); TODO
+                //int impGold = d.getGoldMiningImps();
             }
         }
     }
 
     public void getProducedGoods() {
         for (int p : gd.getSortedPlayerID()) {
+            Player player = gd.getPlayerByPlayerId(p);
+            if (player == null) {
+                throw new IllegalArgumentException("Player doesn't exist");
+            }
 
+            if (!player.getDungeon().getActiveRooms().isEmpty()) {
+                //TODO return producing imps method in dungeon class
+                for (Room r : player.getDungeon().getActiveRooms()) {
+                    if (r.getFoodProduction() > 0) {
+                        player.changeFoodBy(r.getFoodProduction());
+                        broadcastFoodChanged(r.getFoodProduction(), p);
+                    }
+                    if (r.getNiceness() > 0) {
+                        player.changeEvilnessBy(-r.getNiceness());
+                        broadcastEvilnessChanged(-r.getNiceness(), p);
+                    }
+                    if (r.getGoldProduction() > 0) {
+                        player.changeGoldBy(r.getGoldProduction());
+                        broadcastGoldChanged(r.getGoldProduction(), p);
+                    }
+                    if (r.getImpProduction() > 0) {
+                        player.getDungeon().addImps(r.getImpProduction());
+                        broadcastImpsChanged(r.getImpProduction(), p);
+                    }
+                }
+            }
         }
+    }
+
+    public void spreadAdv() {
+        List<Player> playersSortByEvilness = new ArrayList<Player>(){};
+        for (int i : gd.getAllPlayerID()) {
+            playersSortByEvilness.add(gd.getPlayerByPlayerId(i));
+        }
+
+        /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
+            public int compare(Player p1, Player p2) {
+                return p1.getEvilLevel() - p2.getEvilLevel();
+            }
+        });*/
+
+        Collections.sort(playersSortByEvilness,
+                Comparator.comparing(Player::getEvilLevel).thenComparing(Player::getPlayerID));
+        //Compare Players by Evil Level then Player IDs
+
+
 
     }
 }

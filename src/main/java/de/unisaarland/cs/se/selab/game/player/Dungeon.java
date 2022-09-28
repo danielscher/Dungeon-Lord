@@ -21,6 +21,7 @@ public class Dungeon {
     private Queue<Adventurer> prison = new ArrayDeque<Adventurer>();
     private Coordinate currBattleGround;
     private List<Room> rooms = new ArrayList<Room>();
+    private List<Room> activeRooms = new ArrayList<Room>();
     private int restingImps;
     private int supervisingImps;
     private int tunnelDiggingImps;
@@ -342,11 +343,16 @@ public class Dungeon {
         if (sendImpsToProduce(neededImps)) {
             // if player has enough resting imps, they are transferred to work
             roomToActivate.activate();
+            activeRooms.add(roomToActivate);
             return true;
         } else {
             // not enough imps
             return false;
         }
+    }
+
+    public List<Room> getActiveRooms() {
+        return activeRooms;
     }
 
     /*
