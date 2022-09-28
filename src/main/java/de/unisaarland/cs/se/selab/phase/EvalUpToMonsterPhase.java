@@ -9,6 +9,7 @@ import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.action.HireMonsterAction;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
+import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
@@ -246,7 +247,27 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void exec(ActivateRoomAction ara) {
-        //TODO
+        int commId = ara.getCommID();
+        int roomId = ara.getRoomID();
+        ServerConnection<Action> serverConn = gd.getServerConnection();
+
+        // get the player who requested to activate the room
+        Player player = gd.getPlayerByCommID(commId);
+        // if player doesn't exist, return
+        if (player == null) {
+            serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+            return;
+        }
+
+        Dungeon playersDungeon = player.getDungeon();
+        if (playersDungeon.activateRoom(roomId)) {
+            Room activatedRoom = playersDungeon.getRoomById(roomId);
+            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastRoomActivated(player.getPlayerID(), roomId);
+        } else {
+            serverConn.sendActionFailed(commId, "couldn't activate room");
+        }
+
     }
 
     @Override
