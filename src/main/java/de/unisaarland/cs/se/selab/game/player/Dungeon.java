@@ -329,15 +329,12 @@ public class Dungeon {
         numReturn += tunnelDiggingImps;
         tunnelDiggingImps = 0;
         numReturn += goldMiningImps;
+        goldMiningImps = 0;
         numReturn += supervisingImps;
         supervisingImps = 0;
 
         restingImps += numReturn;
         return numReturn;
-    }
-
-    public void clearGoldMiningImps() {
-        goldMiningImps = 0;
     }
 
     /*
