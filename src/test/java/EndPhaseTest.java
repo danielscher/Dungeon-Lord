@@ -11,12 +11,9 @@ import de.unisaarland.cs.se.selab.game.player.Tile;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
-import java.util.ArrayList;
-import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class EndPhaseTest {
+class EndPhaseTest {
 
     GameData gd = new GameData();
     GameEndPhase gep = new GameEndPhase(gd);
@@ -38,8 +35,8 @@ public class EndPhaseTest {
     //drawn Adventurer
     Adventurer ad1 = new Adventurer(1, 1, 0, 0, 0, false);
 
-    @BeforeEach
-    public void resetData() {
+
+    private void resetData() {
         gd = new GameData();
         gep = new GameEndPhase(gd);
         p1 = new Player("player1", 1, 1);
@@ -48,21 +45,21 @@ public class EndPhaseTest {
         d1 = new Dungeon();
         d2 = new Dungeon();
         d3 = new Dungeon();
-        boolean b1 = gd.registerPlayer("player1", 1);
-        boolean b2 = gd.registerPlayer("player2", 2);
-        boolean b3 = gd.registerPlayer("player3", 3);
+        gd.registerPlayer("player1", 1);
+        gd.registerPlayer("player2", 2);
+        gd.registerPlayer("player3", 3);
         //set data of p1
-        boolean b11 = p1.changeEvilnessBy(11);
-        boolean b12 = p1.changeGoldBy(3);
-        boolean b13 = p1.changeFoodBy(3);
+        p1.changeEvilnessBy(11);
+        p1.changeGoldBy(3);
+        p1.changeFoodBy(3);
         //set data of p2
-        boolean b21 = p2.changeEvilnessBy(6);
-        boolean b22 = p2.changeGoldBy(2);
-        boolean b23 = p2.changeFoodBy(3);
+        p2.changeEvilnessBy(6);
+        p2.changeGoldBy(2);
+        p2.changeFoodBy(3);
         //set data of p3
-        boolean b31 = p3.changeEvilnessBy(3);
-        boolean b32 = p3.changeGoldBy(8);
-        boolean b33 = p3.changeFoodBy(6);
+        p3.changeEvilnessBy(3);
+        p3.changeGoldBy(8);
+        p3.changeFoodBy(6);
         d1 = p1.getDungeon();
         d2 = p2.getDungeon();
         d3 = p3.getDungeon();
@@ -77,7 +74,7 @@ public class EndPhaseTest {
         //set Imps
         d1.addImps(2);
         //set Tiles
-        Tile[][] grid2 = d2.getGrid();
+        final Tile[][] grid2 = d2.getGrid();
         d2.dig(0, 0);
         d2.dig(0, 1);
         grid2[0][0].setConquered();
@@ -93,49 +90,57 @@ public class EndPhaseTest {
     */
 
     @Test
-    public void testSetTunnelTitles() {
+    void testSetTunnelTitles() {
+        resetData();
         gep.setTunnelTitles();
         assertEquals(Title.THE_TUNNEL_LORD, p3.getTitles().get(0));
     }
 
     @Test
-    public void testSetMonsterTitles() {
+    void testSetMonsterTitles() {
+        resetData();
         gep.setMonsterTitles();
         assertEquals(Title.THE_MONSTER_LORD, p1.getTitles().get(0));
     }
 
     @Test
-    public void testSetImpsTitles() {
+    void testSetImpsTitles() {
+        resetData();
         gep.setImpsTitles();
         assertEquals(Title.THE_LORD_OF_IMPS, p1.getTitles().get(0));
     }
 
     @Test
-    public void testSetBattelLordTitles() {
+    void testSetBattelLordTitles() {
+        resetData();
         gep.setHallsTitles();
         assertEquals(Title.THE_BATTLELORD, p1.getTitles().get(0));
     }
 
     @Test
-    public void testSetRichesTitles() {
+    void testSetRichesTitles() {
+        resetData();
         gep.setRichesTitles();
         assertEquals(Title.THE_LORD_OF_RICHES, p3.getTitles().get(0));
     }
 
     @Test
-    public void testSetDarkSeedTitles() {
+    void testSetDarkSeedTitles() {
+        resetData();
         gep.setDarkSeedTitles();
         assertEquals(Title.THE_LORD_OF_DARK_DEEDS, p1.getTitles().get(0));
     }
 
     @Test
-    public void testSetHallsTitles() {
+    void testSetHallsTitles() {
+        resetData();
         gep.setHallsTitles();
         assertEquals(Title.THE_LORD_OF_HALLS, p2.getTitles().get(0));
     }
 
     @Test
-    public void testwinner() {
+    void testwinner() {
+        resetData();
         gep.evaluateScores();
         assertEquals(3, gep.getWinnerPlayerIDList().get(0));
     }

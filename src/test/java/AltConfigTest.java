@@ -4,13 +4,13 @@ import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.Config;
 import org.junit.jupiter.api.Test;
 
-public class AltConfigTest extends Config {
+class AltConfigTest extends Config {
 
     private String mypath = "";
     AltConfig config = new AltConfig(mypath);
 
     @Test
-    public void testParse() {
+    void testParse() {
         try {
             boolean parsedSuccessfully = config.parse();
             assertTrue(parsedSuccessfully, "config validation failed");

@@ -4,7 +4,7 @@ import de.unisaarland.cs.se.selab.game.TimeStamp;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class TimeStampTest {
+class TimeStampTest {
 
     TimeStamp ts = new TimeStamp();
 
@@ -14,23 +14,23 @@ public class TimeStampTest {
     }
 
     @Test
-    public void testGetSeason() {
+    void testGetSeason() {
         assertEquals(1, ts.getSeason());
     }
 
     @Test
-    public void testGetYear() {
+    void testGetYear() {
         assertEquals(1, ts.getYear());
     }
 
     @Test
-    public void testNextSeason() {
+    void testNextSeason() {
         ts.nextSeason();
         assertEquals(2, ts.getSeason());
     }
 
     @Test
-    public void testNextYear() {
+    void testNextYear() {
         ts.nextyear();
         assertEquals(2, ts.getYear());
     }

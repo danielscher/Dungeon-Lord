@@ -8,7 +8,7 @@ import de.unisaarland.cs.se.selab.game.player.Player;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class PlayerTest {
+class PlayerTest {
     Player testDummy = new Player("Testee", 0, 0);
 
     @BeforeEach
@@ -33,7 +33,7 @@ public class PlayerTest {
         testDummy.addBid(BidType.FOOD, 0);
         testDummy.addBid(BidType.GOLD, 1);
         testDummy.addBid(BidType.MONSTER, 2);
-        BidType[] expectedBlockedBids = {BidType.GOLD, BidType.MONSTER};
+        final BidType[] expectedBlockedBids = {BidType.GOLD, BidType.MONSTER};
         testDummy.blockBids();
         assertEquals(2, testDummy.getBlockedBids().length, "Expected 2 blocked bids.");
         assertArrayEquals(expectedBlockedBids, testDummy.getBlockedBids(),
@@ -46,7 +46,7 @@ public class PlayerTest {
     }
 
     @Test
-    void getBid() {
+    void testgetBid() {
         testDummy.addBid(BidType.FOOD, 0);
         testDummy.addBid(BidType.GOLD, 1);
         assertEquals(BidType.FOOD, testDummy.getBid(0));
@@ -80,7 +80,7 @@ public class PlayerTest {
     }
 
     @Test
-    public void testGetNumPlacedBids() {
+    void testGetNumPlacedBids() {
         assertEquals(0, testDummy.getNumPlacedBids());
         testDummy.addBid(BidType.FOOD, 0);
         testDummy.addBid(BidType.GOLD, 1);

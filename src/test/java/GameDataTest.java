@@ -1,67 +1,64 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.TimeStamp;
-import de.unisaarland.cs.se.selab.game.entities.Adventurer;
-import de.unisaarland.cs.se.selab.game.entities.Monster;
-import de.unisaarland.cs.se.selab.game.entities.Room;
-import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Player;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class GameDataTest {
+class GameDataTest {
 
     GameData gd = new GameData();
     Player p1 = new Player("Plyer1", 1, 1);
 
-    @BeforeEach
-    public void resetGameData() {
+
+    private void resetGameData() {
         gd = new GameData();
     }
 
     @Test
-    public void testGetPlayerByCommID() {
+    void testGetPlayerByCommID() {
+        resetGameData();
         gd.registerPlayer("Player1", 1);
         assertEquals(gd.getPlayerByCommID(1), p1);
     }
 
     @Test
-    public void testGetPlayerByPlayerId() {
+    void testGetPlayerByPlayerId() {
+        resetGameData();
         gd.registerPlayer("Player1", 1);
         assertEquals(gd.getPlayerByPlayerId(1), p1);
     }
 
     @Test
-    public void testGetPlayerIdByCommID() {
+    void testGetPlayerIdByCommID() {
+        resetGameData();
         gd.registerPlayer("Player1", 1);
         assertEquals(gd.getPlayerIdByCommID(1), 1);
     }
 
     @Test
-    public void testGetCommIDByPlayerId() {
+    void testGetCommIDByPlayerId() {
+        resetGameData();
         gd.registerPlayer("Player1", 1);
         assertEquals(gd.getCommIDByPlayerId(1), 1);
     }
 
     @Test
-    public void testCheckIfRegistered() {
+    void testCheckIfRegistered() {
+        resetGameData();
         gd.registerPlayer("Player1", 1);
-        assertEquals(true, gd.checkIfRegistered(1));
-        assertEquals(false, gd.checkIfRegistered(2));
+        assertTrue(gd.checkIfRegistered(1));
+        assertFalse(gd.checkIfRegistered(2));
     }
 
     @Test
-    public void testGetCommIDSet() {
+    void testGetCommIDSet() {
         //todo
     }
 
     @Test
-    public void testGetNextStartPlayer() {
+    void testGetNextStartPlayer() {
         //todo
     }
 }
