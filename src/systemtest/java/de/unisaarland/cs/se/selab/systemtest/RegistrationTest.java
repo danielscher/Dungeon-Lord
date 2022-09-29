@@ -27,7 +27,7 @@ public class RegistrationTest extends SystemTest {
 
     @Override
     protected Set<Integer> createSockets() {
-        return Set.of(1, 2,3,4);
+        return Set.of(1, 2, 3, 4);
     }
 
     @Override

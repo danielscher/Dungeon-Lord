@@ -67,43 +67,60 @@ public class CombatPhase extends Phase {
 
         }
         //Fighting
-        Adventurer ad1 = currPlayingPlayer.getDungeon().getAdventurer(0);
-        Adventurer ad2 = currPlayingPlayer.getDungeon().getAdventurer(1);
-        Adventurer ad3 = currPlayingPlayer.getDungeon().getAdventurer(2);
-
-        // get the total defuse value
-        int totalDefuseVal = ad1.getDefuseValue() + ad2.getDefuseValue() + ad3.getDefuseValue();
-        // ask Leo for the traps
+        int totalDefuseVal = 0;
+        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+            totalDefuseVal += dungeon.getAdventurer(i).getDefuseValue();
+        }
+        // trap damages
         if (placedtrap != null) {
             if (totalDefuseVal < placedtrap.getDamage()) {
                 switch (placedtrap.getAttack()) {
                     case TARGETED:
-                        if (dungeon.getAdventurer(placedtrap.getTarget())
-                                .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
-                            dungeon.imprison(dungeon.getAdventurer(placedtrap.getTarget())
-                                    .getAdventurerID());
-                        }
+                        if (dungeon.getAdventurer(placedtrap.getTarget()) != null) {
+                            if (dungeon.getAdventurer(placedtrap.getTarget())
+                                    .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
+                                dungeon.imprison(dungeon.getAdventurer(placedtrap.getTarget())
+                                        .getAdventurerID());
+                                broadcastAdventurerImprisoned(
+                                        dungeon.getAdventurer(placedtrap.getTarget())
+                                                .getAdventurerID());
+                            } else {
+                                broadcastAdventurerDamaged(
+                                        dungeon.getAdventurer(placedtrap.getTarget())
+                                                .getAdventurerID(),
+                                        placedtrap.getDamage() - totalDefuseVal
+                                );
+                            }
+                        } // to Handle if the target Adventurer is not present in the queue
                         break;
                     case BASIC:
                         if (dungeon.getAdventurer(0)
                                 .damagehealthby(placedtrap.getDamage() - totalDefuseVal) >= 0) {
                             dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+                            broadcastAdventurerImprisoned(
+                                    dungeon.getAdventurer(0).getAdventurerID());
+                        } else {
+                            broadcastAdventurerDamaged(
+                                    dungeon.getAdventurer(0).getAdventurerID(),
+                                    placedtrap.getDamage() - totalDefuseVal
+                            );
                         }
                         break;
                     case MULTI:
-                        int res1 = dungeon.getAdventurer(0)
-                                .damagehealthby(placedtrap.getDamage() - totalDefuseVal);
-                        if (res1 >= 0) {
-                            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
-                            int res2 = dungeon.getAdventurer(1).damagehealthby(res1);
-                            if (res2 >= 0) {
-                                dungeon.imprison(dungeon.getAdventurer(1).getAdventurerID());
-                                if (dungeon.getAdventurer(2).damagehealthby(res2) >= 0) {
-                                    dungeon.imprison(dungeon.getAdventurer(2).getAdventurerID());
-                                }
-
+                        int res = placedtrap.getDamage() - totalDefuseVal;
+                        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+                            int current_reduction = res;
+                            res = dungeon.getAdventurerById(i).damagehealthby(res);
+                            if (res >= 0) {
+                                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                                broadcastAdventurerImprisoned(
+                                        dungeon.getAdventurer(i).getAdventurerID());
+                            } else {
+                                broadcastAdventurerDamaged(
+                                        dungeon.getAdventurer(i).getAdventurerID(),
+                                        current_reduction);
+                                break;
                             }
-
                         }
                         break;
 
@@ -113,6 +130,87 @@ public class CombatPhase extends Phase {
             }
 
         }
+
+        //Monster damages
+
+        if (placedMonsters.size() > 0) {
+            for (Monster monster : placedMonsters.keySet()) {
+                switch (monster.getAttack()) {
+                    case TARGETED:
+                        Adventurer adTargeted = dungeon.getAdventurer(placedMonsters.get(monster));
+                        if (adTargeted != null) {
+                            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
+                                dungeon.imprison(adTargeted.getAdventurerID());
+                                broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
+
+                            } else {
+                                broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
+                                        monster.getDamage());
+                            }
+                        }// To handle when the target adventurer is not there in the queue
+                        break;
+
+                    case BASIC:
+                        if (dungeon.getAdventurer(0) != null) {
+                            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
+                                dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+                                broadcastAdventurerImprisoned(
+                                        dungeon.getAdventurer(0).getAdventurerID());
+                            } else {
+                                broadcastAdventurerDamaged(
+                                        dungeon.getAdventurer(0).getAdventurerID(),
+                                        monster.getDamage());
+                            }
+
+                        }
+                        break;
+                    case MULTI:
+                        int res = monster.getDamage();
+
+                        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+                            int current_reduction = res;
+                            res = dungeon.getAdventurerById(i).damagehealthby(res);
+                            if (res >= 0) {
+                                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                                broadcastAdventurerImprisoned(
+                                        dungeon.getAdventurer(i).getAdventurerID());
+
+                            } else {
+                                broadcastAdventurerDamaged(
+                                        dungeon.getAdventurer(i).getAdventurerID(),
+                                        current_reduction);
+                                break;
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+
+
+                }
+
+            }
+
+        }
+
+        //fatigue damage by 2 every round
+
+        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+            if (dungeon.getAdventurer(i).damagehealthby(2) >= 0) {
+                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
+                broadcastAdventurerImprisoned(
+                        dungeon.getAdventurer(i).getAdventurerID());
+
+            } else {
+                broadcastAdventurerDamaged(dungeon.getAdventurer(i).getAdventurerID(),
+                        2);
+
+            }
+        }
+
+        //Conquer
+
+
         return new GameEndPhase(gd);
     }
 

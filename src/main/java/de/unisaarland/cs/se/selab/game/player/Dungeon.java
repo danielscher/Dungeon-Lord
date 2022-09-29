@@ -539,6 +539,10 @@ public class Dungeon {
         return prison.size();
     }
 
+    public int getNumAdventurersInQueue() {
+        return adventurerQueue.size();
+    }
+
     /*
     gets a room by its ID
     might return null if room isn't in this dungeon
