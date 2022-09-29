@@ -336,7 +336,7 @@ public class Dungeon {
         return numReturn;
     }
 
-    public void clearGoldMiningImps(){
+    public void clearGoldMiningImps() {
         goldMiningImps = 0;
     }
 

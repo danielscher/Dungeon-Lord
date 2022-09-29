@@ -310,7 +310,7 @@ public class GameEndPhase extends Phase {
         }
     }
 
-    public List<Integer> getPlayersID(GameData gd){
+    public List<Integer> getPlayersID(GameData gd) {
         return gd.getAllPlayerID();
 
     }
