@@ -315,4 +315,7 @@ public class GameEndPhase extends Phase {
 
     }
 
+    public ArrayList<Integer> getWinnerPlayerIDList() {
+        return winnerPlayerIDList;
+    }
 }

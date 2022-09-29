@@ -456,7 +456,7 @@ public abstract class Phase {
                 sc.sendTunnelDug(gd.getCommIDByPlayerId(n), player, x, y));
     }
 
-    protected void kickPlayer(int PlayerId) {
+    protected void kickPlayer(int playerId) {
     }
 
 
