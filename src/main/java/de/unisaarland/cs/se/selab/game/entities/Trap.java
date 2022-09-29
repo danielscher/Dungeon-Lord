@@ -2,13 +2,13 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Trap {
 
-    private int trapID;
-    private int damage;
-    private int target;
-    private Attack attack;
+    final private int trapID;
+    final private int damage;
+    final private int target;
+    final private Attack attack;
     private boolean availableThisYear;
 
-    public Trap(int trapID, int damage, int target, Attack attack) {
+    public Trap(final int trapID, final int damage, final int target, final Attack attack) {
         this.trapID = trapID;
         this.damage = damage;
         this.target = target;
