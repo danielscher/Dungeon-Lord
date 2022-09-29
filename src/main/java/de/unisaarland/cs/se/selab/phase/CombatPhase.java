@@ -251,7 +251,7 @@ public class CombatPhase extends Phase {
 
         if (dungeon.getAdventurer(0) != null) {
             Coordinate coordinate = dungeon.getCurrBattleGround();
-            dungeon.getGrid()[coordinate.getxpos()][coordinate.getypos()].setConquered();
+            dungeon.setTileConquered(coordinate);
             broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
                     coordinate.getxpos(), coordinate.getypos());
 
