@@ -17,7 +17,6 @@ public class ChooseBattleGroundPhase extends Phase {
         this.currPlayer = currPlayer;
     }
 
-
     public Phase run() throws TimeoutException {
 
         broadcastNextRound(gd.getTime().getSeason());

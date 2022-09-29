@@ -25,15 +25,13 @@ public class CollectAndPlaceBidPhase extends Phase {
             broadcastNextRound(gd.getTime().getSeason());
         } else if (gd.getTime().getYear() > 1) {
             broadcastNextYear(gd.getTime().getYear());
-            for (int id : gd.getAllPlayerID()) {
-                Player p = gd.getPlayerByPlayerId(id);
+            for (Player p : gd.getAllPlayerSortedByID()) {
                 for (BidType b : p.getBlockedBids()) {
                     broadcastBidRetrieved(b, p.getPlayerID());
                 }
                 p.clearBlockedBids();
             }
         }
-
 
         gd.drawEntities();
         if (!gd.getCurrAvailableAdventurers().isEmpty()) {
@@ -50,10 +48,9 @@ public class CollectAndPlaceBidPhase extends Phase {
         }
 
         for (int i = 0; i < 3; i++) {
-            //the sequence of inserting bid on bidding square: go through players
-            // to get their first bids, insert, then 2nd bids of players, insert
-            for (Integer commID : commIDs) {
-                Player p = gd.getPlayerByCommID(commID);
+            //go through players to get their first bids, insert,
+            // then 2nd bids of players, insert
+            for (Player p : gd.getAllPlayerSortedByID()) {
                 boolean inserted = gd.getBiddingSquare().insert(p.getBid(i), p.getPlayerID());
                 if (!inserted) {
                     throw new IllegalStateException("Slot occupied");
@@ -97,11 +94,8 @@ public class CollectAndPlaceBidPhase extends Phase {
         }
     }
 
-
     private boolean checkIfAllBidsChosen() {
-        Set<Integer> commIDs = gd.getCommIDSet();
-        for (Integer commID : commIDs) {
-            Player p = gd.getPlayerByCommID(commID);
+        for (Player p : gd.getAllPlayerSortedByID()) {
             if (p.getNumPlacedBids() != 3) {
                 return false;
             }
