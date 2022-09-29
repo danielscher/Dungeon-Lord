@@ -16,6 +16,7 @@ import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class DungeonTest {
@@ -28,6 +29,11 @@ public class DungeonTest {
     Adventurer ad1 = new Adventurer(1, 1, 1, 2, 0, false);
     Adventurer ad2 = new Adventurer(1, 1, 1, 0, 2, false);
     Adventurer ad3 = new Adventurer(1, 1, 1, 0, 0, true);
+
+    @BeforeEach
+    public void resetDungeon() {
+        dg = new Dungeon();
+    }
 
     private void fillFirstRow(Tile[][] grid) {
         for (int i = 0; i < 3; i++) {
