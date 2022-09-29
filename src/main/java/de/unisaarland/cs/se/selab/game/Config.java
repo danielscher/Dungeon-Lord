@@ -376,6 +376,10 @@ public class Config {
     }
     // i think we still need getter to pass the data to GameData class.
 
+    public  int getMaxYear(){
+        return maxYear;
+    }
+
 
 }
 
