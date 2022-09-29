@@ -23,25 +23,24 @@ import java.util.List;
 
 public class EvalRoomPhase extends Phase {
 
-    private boolean endTurn; // inits to false;
+    private boolean endTurn = false;
     ServerConnection<Action> sc = gd.getServerConnection();
-    final BiddingSquare bs = gd.getBiddingSquare();
+    BiddingSquare bs = gd.getBiddingSquare();
 
 
     public EvalRoomPhase(GameData gd) {
         super(gd);
     }
 
-    @Override
     public Phase run() throws TimeoutException {
         eval();
         blockAndRetrieveBids();
         returnImps();
-        grantRoomProduction();
+        getProducedGoods();
 
         if (gd.getTime().getSeason() == 4) {
             gd.getTime().nextSeason();
-            for (final Player p : gd.getAllPlayerSortedByID()) {
+            for (Player p : gd.getAllPlayerSortedByID()) {
                 //for all players, sorted by player ID, to choose battleground
                 return new ChooseBattleGroundPhase(gd, p);
             }
@@ -52,24 +51,23 @@ public class EvalRoomPhase extends Phase {
         return new CollectAndPlaceBidPhase(gd);
     }
 
-
     private void eval() throws TimeoutException {
-        final BiddingSquare bs = gd.getBiddingSquare();
+        BiddingSquare bs = gd.getBiddingSquare();
 
         for (int i = 0; i < 3; i++) {
-            if (bs.getIDByBidSlot(ROOM, i) == -1) {
-                break;
+            if (bs.getIDByBidSlot(ROOM, i) != -1) {
+                //if there's a valid player id in the square
+                Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(ROOM, i));
+                grantRoom(p, i);
             }
-            //if there's a valid player id in the square
-            final Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(ROOM, i));
-            grantRoom(p, i);
         }
     }
 
-    private void grantRoom(final Player player, final int slot) throws TimeoutException {
+    private void grantRoom(Player player, int slot) throws TimeoutException {
 
         switch (slot) {
-            case 0, 1:
+            case 0:
+            case 1:
                 if (player.changeGoldBy(-1)) {
                     // player can afford bid
                     broadcastGoldChanged(-1, player.getPlayerID());
@@ -94,15 +92,14 @@ public class EvalRoomPhase extends Phase {
         }
     }
 
-    @Override
-    public void exec(final BuildRoomAction bra) {
-        final Player player = gd.getPlayerByCommID(bra.getCommID());
+    public void exec(BuildRoomAction bra) {
+        Player player = gd.getPlayerByCommID(bra.getCommID());
         if (player == null) {
             return;
         }
 
         Room room = null;
-        for (final Room r : gd.getCurrAvailableRooms()) {
+        for (Room r : gd.getCurrAvailableRooms()) {
             //To find the chosen room in the list of available rooms
             if (r.getRoomID() == bra.getRoomID()) {
                 room = r;
@@ -113,8 +110,8 @@ public class EvalRoomPhase extends Phase {
             throw new IllegalArgumentException("Chosen room is not available");
         }
 
-        final Dungeon d = player.getDungeon();
-        final Location loc = room.getPlacementLoc();
+        Dungeon d = player.getDungeon();
+        Location loc = room.getPlacementLoc();
         if (!d.checkForFreeTilesIn(loc)) {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
@@ -129,9 +126,8 @@ public class EvalRoomPhase extends Phase {
         }
     }
 
-    @Override
-    public void exec(final ActivateRoomAction ara) {
-        final Player player = gd.getPlayerByCommID((ara.getCommID()));
+    public void exec(ActivateRoomAction ara) {
+        Player player = gd.getPlayerByCommID((ara.getCommID()));
 
         if (player == null) { //if player's left the game
             return;
@@ -143,27 +139,25 @@ public class EvalRoomPhase extends Phase {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
-                final int cost = player.getDungeon().getRoomById(ara.getRoomID())
-                        .getActivationCost();
+                int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
         }
     }
 
-    @Override
-    public void exec(final EndTurnAction eta) {
+    public void exec(EndTurnAction eta) {
         endTurn = true;
     }
 
     @Override
-    public void exec(final LeaveAction la) {
+    public void exec(LeaveAction la) {
         endTurn = true; // to prevent any further placing room request from this user
         super.exec(la);
     }
 
     public void blockAndRetrieveBids() {
-        for (final Player player : gd.getAllPlayerSortedByID()) {
+        for (Player player : gd.getAllPlayerSortedByID()) {
             for (BidType bid : player.getBlockedBids()) {
                 broadcastBidRetrieved(bid, player.getPlayerID());
             }
@@ -173,9 +167,9 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void returnImps() {
-        for (final Player player : gd.getAllPlayerSortedByID()) {
-            final int p = player.getPlayerID();
-            final int goldMined = player.getDungeon().getGoldMiningImps();
+        for (Player player : gd.getAllPlayerSortedByID()) {
+            int p = player.getPlayerID();
+            int goldMined = player.getDungeon().getGoldMiningImps();
 
             if (player.getDungeon().returnImpsFromDigging() > 0) {
                 broadcastImpsChanged(player.getDungeon().returnImpsFromDigging(), p);
@@ -187,8 +181,7 @@ public class EvalRoomPhase extends Phase {
         }
     }
 
-    //FIXME : Alo please fix this too complex to read.(PMD complexity error)
-    public void grantRoomProduction() {
+    public void getProducedGoods() {
         for (Player player : gd.getAllPlayerSortedByID()) {
             if (!player.getDungeon().getActiveRooms().isEmpty()) {
                 int p = player.getPlayerID();
@@ -220,7 +213,7 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void spreadAdv() {
-        final List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
+        List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
 
         /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
             public int compare(Player p1, Player p2) {
@@ -228,19 +221,18 @@ public class EvalRoomPhase extends Phase {
             }
         });*/
 
-        Collections.sort(playersSortByEvilness,
+        playersSortByEvilness.sort(
                 Comparator.comparing(Player::getEvilLevel).thenComparing(Player::getPlayerID));
         //Sort Players by Evil Level then Player IDs
 
-        Collections.sort(gd.getCurrAvailableAdventurers(),
-                Comparator.comparing(Adventurer::getDifficulty)
-                        .thenComparing(Adventurer::getAdventurerID));
+        gd.getCurrAvailableAdventurers().sort(Comparator.comparing(Adventurer::getDifficulty)
+                .thenComparing(Adventurer::getAdventurerID));
         //Sort Adventurers by difficulty then IDs
 
         for (int i = 0; i < playersSortByEvilness.size(); i++) {
             //add an adventurer to the corresponding player's dungeon
-            final Player p = playersSortByEvilness.get(i);
-            final Adventurer adv = gd.getCurrAvailableAdventurers().get(i);
+            Player p = playersSortByEvilness.get(i);
+            Adventurer adv = gd.getCurrAvailableAdventurers().get(i);
             p.getDungeon().insertAdventurer(adv);
             broadcastAdventurerArrived(adv.getAdventurerID(), p.getPlayerID());
         }

@@ -8,46 +8,46 @@ import java.util.Map;
 public class BiddingSquare {
 
     private final int[][] biddingSlots = new int[3][8];
-    private final Map<BidType, Integer> typeToColumnMap = new HashMap<>();
-    private final Map<Integer, BidType> columnToTypeMap = new HashMap<>();
+    private final Map<BidType, Integer> typeToColumnMap = new HashMap<BidType, Integer>();
+    private final Map<Integer, BidType> columnToTypeMap = new HashMap<Integer, BidType>();
 
     public BiddingSquare() {
         Arrays.fill(this.biddingSlots, -1);
     }
 
-    public boolean insert(final BidType bidType, final int playerID) {
+    public int insert(BidType bidType, int playerID) {
         // get the uppermost free row
-        final int columnId = typeToColumn(bidType);
-        boolean res = false;
+        int slot = -1;
+        int columnId = typeToColumn(bidType);
         for (int row = 0; row < biddingSlots.length; row++) {
             if (biddingSlots[row][columnId] == -1) {
                 biddingSlots[row][columnId] = playerID;
-                res = true;
-                break;
+                slot = row;
+                return slot;
             }
         }
-        return res;
+        return slot;
     }
 
-    public int getIDByBidSlot(final int row, final int column) {
+    public int getIDByBidSlot(int row, int column) {
         return biddingSlots[row][column];
     }
 
-    public int getIDByBidSlot(final BidType bidType, final int row) {
-        final int columnId = typeToColumn(bidType);
+    public int getIDByBidSlot(BidType bidType, int row) {
+        int columnId = typeToColumn(bidType);
         return biddingSlots[row][columnId];
     }
 
-    public int typeToColumn(final BidType bidType) {
+    public int typeToColumn(BidType bidType) {
         return typeToColumnMap.get(bidType);
     }
 
-    public BidType columnToType(final int column) {
+    public BidType columnToType(int column) {
         return columnToTypeMap.get(column);
     }
 
     public int countTrapBids() {
-        final int columnId = typeToColumn(BidType.TRAP);
+        int columnId = typeToColumn(BidType.TRAP);
         int res = 0;
         for (int row = 0; row < biddingSlots.length; row++) {
             if (biddingSlots[row][columnId] != -1) {
