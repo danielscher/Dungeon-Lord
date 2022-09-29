@@ -4,7 +4,7 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public abstract class Action {
 
-    final private int commID;
+    private final int commID;
 
     public Action(final int commID) {
         this.commID = commID;

@@ -8,7 +8,6 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -19,6 +18,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.logging.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 
@@ -47,7 +47,7 @@ public class Config {
     }
 
     public void displayLog() {
-    //  final Logger log = Logger.getLogger(Config.class.getName());
+        //  final Logger log = Logger.getLogger(Config.class.getName());
         log.fine("Help and Log: " + "/n");
         log.fine("error in Monsters: -1,10,11,12 " + "/n");
         log.fine("error in Adventurers: -2,20,21,22 " + "/n");
@@ -80,12 +80,12 @@ public class Config {
     }
 
     public Attack convertStringToAttack(final String s) {
-    //   Attack attackStrategy = Attack.valueOf(s);
+        //   Attack attackStrategy = Attack.valueOf(s);
         return Attack.valueOf(s);
     }
 
     public Location convertStringToLocation(final String s) {
-    //    Location loc = Location.valueOf(s);
+        //    Location loc = Location.valueOf(s);
         return Location.valueOf(s);
     }
 
@@ -103,9 +103,10 @@ public class Config {
     public int parseFromFile(final String configFilePath) throws FileNotFoundException {
         parserResult = 0;
         final StringBuilder builder = new StringBuilder();
-    //    try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
+        //    try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
 
-        try (BufferedReader br = Files.newBufferedReader(Paths.get(configFilePath), StandardCharsets.UTF_8)) {
+        try (BufferedReader br = Files.newBufferedReader(Paths.get(configFilePath),
+                StandardCharsets.UTF_8)) {
             String s;
             while ((s = br.readLine()) != null) {
                 builder.append(s);
@@ -117,7 +118,7 @@ public class Config {
 
         }
         final String allJSONdata = builder.toString();
-          System.out.println(allJSONdata);
+        //  System.out.println(allJSONdata);
         obj = new JSONObject(allJSONdata);
 
         maxYear = obj.getInt("years");
@@ -133,38 +134,39 @@ public class Config {
     public int parserAndcheckMonsterToList(final JSONObject obj) {
         final JSONArray monsterArray = obj.getJSONArray("monsters");
         final int monArrLen = monsterArray.length();
-        monsters = new ArrayList<Monster>();
+        monsters = new ArrayList<>();
         for (int i = 0; i < monArrLen; i++) {
             final JSONObject monsterObj = monsterArray.getJSONObject(i);
             final int id = (Integer) monsterObj.get("id");
-        //  final String name = (String) monsterObj.get("name");
-            int hunger = 0;
+            //  final String name = (String) monsterObj.get("name");
+
+            int hunger;
             try {
                 //  String hungerValString = monsterObj.getString("hunger");
                 //  hunger = Integer.valueOf(hungerValString); //(Integer) monsterObj.get("hunger");
                 hunger = monsterObj.getInt("hunger");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 hunger = 0;
                 //    System.out.println("this monster does not have hunger"); do nothing
             }
 
-            int evilness = 0;
+            int evilness;
             try {
                 //    String evilnessValString = monsterObj.getString("evilness");
                 //    evilness = Integer.valueOf(evilnessValString);
                 evilness = monsterObj.getInt("evilness");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 evilness = 0;
                 //    System.out.println("this monster does not have evilness"); do nothing
             }
 
             //  int evilness = (Integer) monsterObj.get("evilness");
-            int damage = (Integer) monsterObj.get("damage");
+            final int damage = monsterObj.getInt("damage");
             //   Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
-            String attackStrategyString = (String) monsterObj.get("attackStrategy");
+            final String attackStrategyString = (String) monsterObj.get("attackStrategy");
             // Attack attackStrategy = Attack.valueOf(attackStrategyString);
 
-            Attack attackStrategy = convertStringToAttack(attackStrategyString);
+            final Attack attackStrategy = convertStringToAttack(attackStrategyString);
             if (evilness < 0 || hunger < 0) {
                 parserResult = 11;
                 break;
@@ -176,63 +178,59 @@ public class Config {
                 break;
             }
             // valid damage, attack not set
-            final  Monster currMonster = new Monster(id, hunger, evilness, damage, attackStrategy);
+            final Monster currMonster = new Monster(id, hunger, evilness, damage, attackStrategy);
             monsters.add(currMonster);
         } //end of monster for loop+ add to list
         return parserResult;
     }
 
-    public int parserAndcheckAdventurerToList(JSONObject obj) {
-        JSONArray adventurerArray = obj.getJSONArray("adventurers");
-        int advArrLen = adventurerArray.length();
-        adventurers = new ArrayList<Adventurer>();
+    public int parserAndcheckAdventurerToList(final JSONObject obj) {
+        final JSONArray adventurerArray = obj.getJSONArray("adventurers");
+        final int advArrLen = adventurerArray.length();
+        adventurers = new ArrayList<>();
         for (int i = 0; i < advArrLen; i++) {
-            JSONObject adventurerObj = adventurerArray.getJSONObject(i);
-            final int id = (Integer) adventurerObj.get("id");
-        //  String name = (String) adventurerObj.get("name");
+            final JSONObject adventurerObj = adventurerArray.getJSONObject(i);
+            final int id = adventurerObj.getInt("id");
+            //  String name = (String) adventurerObj.get("name");
             //  int healValue = (Integer) adventurerObj.get("healValue");
-            int healValue = 0;
+            int healValue;
             try {
                 healValue = adventurerObj.getInt("healValue");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 healValue = 0;
                 //    System.out.println("not a priest");
             }
 
             //  int defuseValue = (Integer) adventurerObj.get("defuseValue");
-            int defuseValue = 0;
+            int defuseValue;
             try {
                 defuseValue = adventurerObj.getInt("defuseValue");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("not a thief");
                 defuseValue = 0;
             }
 
             //   boolean charge = (Boolean) adventurerObj.get("charge");
-            boolean charge = false;
+            boolean charge;
             try {
                 charge = adventurerObj.getBoolean("charge");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("not in charge");
                 charge = false;
             }
 
-            int difficulty = adventurerObj.getInt("difficulty");
-            int healthPoints = adventurerObj.getInt("healthPoints");
+            final int difficulty = adventurerObj.getInt("difficulty");
+            final int healthPoints = adventurerObj.getInt("healthPoints");
 
-            if (difficulty < 0 || difficulty > 8) {
+            if (difficulty < 0 || difficulty > 8 || healthPoints < 1 || healValue < 0
+                    || defuseValue < 0) {
                 parserResult = 21;
-                break;
-            }
-
-            if (healthPoints < 1 || healValue < 0 || defuseValue < 0) {
-                parserResult = 22;
                 break;
             }
             // invalid value of an adventurer
 
             if (healValue > 0 && defuseValue > 0) {
-                parserResult = 23;
+                parserResult = 22;
                 break;
             }
             // cannot be priest and thief at the same time
@@ -243,27 +241,27 @@ public class Config {
         return parserResult;
     }
 
-    public int parserAndcheckTrapToList(JSONObject obj) {
-        JSONArray trapArray = obj.getJSONArray("traps");
-        int trpArrLen = trapArray.length();
-        traps = new ArrayList<Trap>();
+    public int parserAndcheckTrapToList(final JSONObject obj) {
+        final JSONArray trapArray = obj.getJSONArray("traps");
+        final int trpArrLen = trapArray.length();
+        traps = new ArrayList<>();
         for (int i = 0; i < trpArrLen; i++) {
-            JSONObject trapObj = trapArray.getJSONObject(i);
-            int id = (Integer) trapObj.get("id");
-        //  String name = (String) trapObj.get("name");
-            int damage = (Integer) trapObj.get("damage");
+            final JSONObject trapObj = trapArray.getJSONObject(i);
+            final int id = trapObj.getInt("id");
+            //  String name = (String) trapObj.get("name");
+            final int damage = trapObj.getInt("damage");
             //  Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
-            String attackStrategyString = (String) trapObj.get("attackStrategy");
-            Attack attackStrategy = convertStringToAttack(attackStrategyString);
+            final String attackStrategyString = (String) trapObj.get("attackStrategy");
+            final Attack attackStrategy = convertStringToAttack(attackStrategyString);
 
             //    int target = (Integer) trapObj.get("target");
-            int target = 0;
+            int target;
             try {
                 //    String targetValString = trapObj.getString("target");
                 //    target = Integer.valueOf(targetValString);
                 target = trapObj.getInt("target");
                 //    System.out.println("traget string and value?"+target);
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 target = 0;
             }
 
@@ -283,58 +281,58 @@ public class Config {
         return parserResult;
     }
 
-    public int parserAndcheckRoomToList(JSONObject obj) {
-        JSONArray roomArray = obj.getJSONArray("rooms");
-        int roomArrLen = roomArray.length();
-        rooms = new ArrayList<Room>();
+    public int parserAndcheckRoomToList(final JSONObject obj) {
+        final JSONArray roomArray = obj.getJSONArray("rooms");
+        final int roomArrLen = roomArray.length();
+        rooms = new ArrayList<>();
         for (int i = 0; i < roomArrLen; i++) {
-            JSONObject roomObj = roomArray.getJSONObject(i);
-        //    String name = (String) roomObj.get("name");
+            final JSONObject roomObj = roomArray.getJSONObject(i);
+            //    String name = (String) roomObj.get("name");
             //  int foodProduction = (Integer) roomObj.get("food");
-            int foodProduction = 0;
+            int foodProduction;
             try {
                 foodProduction = roomObj.getInt("food");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("not produce food");
                 foodProduction = 0;
             }
 
             //    int goldProduction = (Integer) roomObj.get("gold");
-            int goldProduction = 0;
+            int goldProduction;
             try {
 
                 goldProduction = roomObj.getInt("gold");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("not produce gold");
                 goldProduction = 0;
             }
             //    int impProduction = (Integer) roomObj.get("imps");
-            int impProduction = 0;
+            int impProduction;
             try {
                 impProduction = roomObj.getInt("imps");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("not produce imps");
                 impProduction = 0;
             }
             //    int niceness = (Integer) roomObj.get("niceness");
-            int niceness = 0;
+            int niceness;
             try {
 
                 niceness = roomObj.getInt("niceness");
-            } catch (Exception e) {
+            } catch (JSONException e) {
                 //    System.out.println("no niceness");
                 niceness = 0;
             }
-            int id = (Integer) roomObj.get("id");
+            final int id = (Integer) roomObj.get("id");
 
             if (id < 0) {
                 parserResult = 41;
                 break;
             }
-            int activationCost = (Integer) roomObj.get("activation");
+            final int activationCost = (Integer) roomObj.get("activation");
             //    Location placementLoc = (Location) roomObj.get("restriction");
-            String locationString = (String) roomObj.get("restriction");
-            Location placementLoc = convertStringToLocation(locationString);
+            final String locationString = (String) roomObj.get("restriction");
+            final Location placementLoc = convertStringToLocation(locationString);
             final Room currRoom = new Room(id, activationCost, foodProduction, goldProduction,
                     impProduction, niceness, placementLoc);
             rooms.add(currRoom);
@@ -373,7 +371,7 @@ public class Config {
             parserResult = -6;
             // dungeon too small or big
         }
-        if (initGold < 0 || initFood < 0 || initImps < 0 || configFilePath==null) {
+        if (initGold < 0 || initFood < 0 || initImps < 0 || configFilePath == null) {
             parserResult = -7;
             // init number invalid
         }
@@ -423,7 +421,8 @@ public class Config {
     }
 
 
-    private void shuffle() {
+    public void shuffle() {
+        // to_do
     }
 
     //below are 4 getters.
@@ -445,40 +444,40 @@ public class Config {
     //maybe setter to give data to gamedata class?
 
     public List<Monster> drawMonsters() {
-        int amount = 3;
-        int tailIndex = monsters.size();
+        final int amount = 3;
+        final int tailIndex = monsters.size();
         // Gets items in range [i,j) "[": including, ")":excluding
         // List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex);
-        List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex)
+        final List<Monster> drawnMonsters = monsters.subList(tailIndex - amount, tailIndex)
                 .stream().toList();  // workaround to get a copy of this list
         monsters.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
         return drawnMonsters;
     }
 
     public List<Room> drawRooms() {
-        int amount = 2;
-        int tailIndex = rooms.size();
+        final int amount = 2;
+        final int tailIndex = rooms.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex)
+        final List<Room> drawnRooms = rooms.subList(tailIndex - amount, tailIndex)
                 .stream().toList();  // workaround to get a copy of this list
         rooms.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
         return drawnRooms;
     }
 
-    public List<Trap> drawTraps(int amountPlaceTrapBids) {
-        int tailIndex = traps.size();
+    public List<Trap> drawTraps(final int amountPlaceTrapBids) {
+        final int tailIndex = traps.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Trap> drawnTraps = traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
+        final List<Trap> drawnTraps = traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
                 .stream().toList();  // workaround to get a copy of this list
         traps.subList(tailIndex - amountPlaceTrapBids, tailIndex)
                 .clear(); // removes this sublist from list.
         return drawnTraps;
     }
 
-    public List<Adventurer> drawAdventurers(int amount) {
-        int tailIndex = adventurers.size();
+    public List<Adventurer> drawAdventurers(final int amount) {
+        final int tailIndex = adventurers.size();
         // Gets items in range [i,j) "[": including, ")":excluding
-        List<Adventurer> drawnAdventurers = adventurers.subList(tailIndex - amount, tailIndex)
+        final List<Adventurer> drawnAdventurers = adventurers.subList(tailIndex - amount, tailIndex)
                 .stream().toList();  // workaround to get a copy of this list
         adventurers.subList(tailIndex - amount, tailIndex)
                 .clear(); // removes this sublist from list.
