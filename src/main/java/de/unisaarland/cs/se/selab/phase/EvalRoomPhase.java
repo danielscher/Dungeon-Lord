@@ -111,7 +111,6 @@ public class EvalRoomPhase extends Phase {
             throw new IllegalArgumentException("Chosen room is not available");
         }
 
-
         Dungeon d = player.getDungeon();
         Location loc = room.getPlacementLoc();
         if (!d.checkForFreeTilesIn(loc)) {
@@ -169,25 +168,15 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void returnImps() {
-        for (int i = 0; i < 3; i++) {
-            int p = bs.getIDByBidSlot(TUNNEL, i);
-            if (p != -1) {
-                Player player = gd.getPlayerByPlayerId(p);
-                if (player == null) {
-                    throw new IllegalArgumentException("Player doesn't exist");
-                }
-                Dungeon d = player.getDungeon();
-                int impTunnel = d.getTunnelDiggingImps();
-                //TODO return imps
-                if (impTunnel > 0) {
-                    if (impTunnel > 3) {
-                        broadcastImpsChanged(impTunnel + 1,
-                                p); //return tunnel-digging imps + supervisor
-                    } else {
-                        broadcastImpsChanged(impTunnel, p); //return tunnel-digging
-                    }
-                }
-                //int impGold = d.getGoldMiningImps();
+        for (Player player : gd.getAllPlayerSortedByID()){
+            int p = player.getPlayerID();
+
+            if (player.getDungeon().returnImpsFromDigging() > 0){
+                broadcastImpsChanged(player.getDungeon().returnImpsFromDigging(), p);
+            }
+            if (player.getDungeon().getGoldMiningImps() > 0){
+                broadcastGoldChanged(player.getDungeon().getGoldMiningImps(), p);
+                player.getDungeon().clearGoldMiningImps();
             }
         }
     }
@@ -197,7 +186,9 @@ public class EvalRoomPhase extends Phase {
             if (!player.getDungeon().getActiveRooms().isEmpty()) {
                 int p = player.getPlayerID();
 
-                //TODO return producing imps method in dungeon class
+                if (player.getDungeon().returnImpsFromRoom() > 0) {
+                    broadcastImpsChanged(player.getDungeon().returnImpsFromRoom(), p);
+                }
 
                 for (Room r : player.getDungeon().getActiveRooms()) {
                     if (r.getFoodProduction() > 0) {

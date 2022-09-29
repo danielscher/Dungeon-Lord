@@ -6,20 +6,20 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
+import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.Set;
 
 public class CollectAndPlaceBidPhase extends Phase {
 
+    ServerConnection<Action> sc = gd.getServerConnection();
 
     public CollectAndPlaceBidPhase(GameData gd) {
         super(gd);
     }
 
     public Phase run() throws TimeoutException {
-        ServerConnection<Action> sc = gd.getServerConnection();
-        Set<Integer> commIDs = gd.getCommIDSet();
 
         if (gd.getTime().getSeason() > 1) {
             broadcastNextRound(gd.getTime().getSeason());
@@ -62,9 +62,7 @@ public class CollectAndPlaceBidPhase extends Phase {
         return new EvalUpToTunnelPhase(gd);
     }
 
-
     public void exec(PlaceBidAction pba) {
-        ServerConnection<Action> sc = gd.getServerConnection();
         Player currPlayer = gd.getPlayerByCommID(pba.getCommID());
         boolean bidAdded = currPlayer.addBid(pba.getBid(), pba.getSlot());
         if (!bidAdded) {
@@ -75,7 +73,6 @@ public class CollectAndPlaceBidPhase extends Phase {
 
     public void exec(ActivateRoomAction ara) {
         Player player = gd.getPlayerByCommID((ara.getCommID()));
-        ServerConnection<Action> sc = gd.getServerConnection();
 
         if (player == null) { //if player's left the game
             return;

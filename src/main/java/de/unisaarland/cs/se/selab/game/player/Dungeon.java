@@ -323,6 +323,23 @@ public class Dungeon {
         }
     }
 
+    public int returnImpsFromDigging() {
+        int numReturn = 0;
+
+        numReturn += tunnelDiggingImps;
+        tunnelDiggingImps = 0;
+        numReturn += goldMiningImps;
+        numReturn += supervisingImps;
+        supervisingImps = 0;
+
+        restingImps += numReturn;
+        return numReturn;
+    }
+
+    public void clearGoldMiningImps(){
+        goldMiningImps = 0;
+    }
+
     /*
     activates a room by its ID
     return == success?
@@ -330,7 +347,7 @@ public class Dungeon {
     public boolean activateRoom(int roomId) {
         Room roomToActivate = getRoomById(roomId);  // get room
         if (roomToActivate == null) {
-            // if player doesnt have room, return false
+            // if player doesn't have room, return false
             return false;
         }
 
@@ -370,6 +387,15 @@ public class Dungeon {
         restingImps -= amount;
         producingImps += amount;
         return true;
+    }
+
+    public int returnImpsFromRoom() {
+        int numReturn = 0;
+        numReturn += producingImps;
+        producingImps = 0;
+        restingImps += numReturn;
+
+        return numReturn;
     }
 
     /*

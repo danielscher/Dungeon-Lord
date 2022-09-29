@@ -18,7 +18,6 @@ public class GameEndPhase extends Phase {
     private ArrayList<Integer> richesPlayerIDList;
     //riches=food+gold
     private ArrayList<Integer> battlePlayerIDList;
-
     private ArrayList<Integer> winnerPlayerIDList;
 
 
