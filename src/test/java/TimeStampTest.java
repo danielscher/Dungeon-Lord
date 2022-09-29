@@ -1,17 +1,16 @@
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.unisaarland.cs.se.selab.game.TimeStamp;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TimeStampTest {
 
     TimeStamp ts = new TimeStamp();
-    private int season;
-    private int year;
 
-    public void timeStamp() {
-        this.season = 1;
-        this.year = 1;
+    @BeforeEach
+    public void resettimeStamp() {
+        ts = new TimeStamp();
     }
 
     @Test

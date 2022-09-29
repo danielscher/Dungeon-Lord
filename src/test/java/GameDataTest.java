@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class GameDataTest {
@@ -18,20 +19,10 @@ public class GameDataTest {
     GameData gd = new GameData();
     Player p1 = new Player("Plyer1", 1, 1);
 
-
-    private Map<Integer, Integer> commIDToPlayerIdMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Integer> playerIdToCommIDMap = new HashMap<Integer, Integer>();
-    private Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
-    private TimeStamp time = new TimeStamp();
-    //bidding square
-    private List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
-    private List<Monster> currAvailableMonsters = new ArrayList<Monster>();
-    private List<Trap> currAvailableTraps = new ArrayList<Trap>();
-    private List<Room> currAvailableRooms = new ArrayList<Room>();
-    //Server connection
-    //config
-    private int lastPlayerToStartBidding;
-    private int idCounter;
+    @BeforeEach
+    public void resetGameData() {
+        gd = new GameData();
+    }
 
     @Test
     public void testGetPlayerByCommID() {

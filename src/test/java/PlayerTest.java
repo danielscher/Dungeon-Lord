@@ -9,8 +9,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class PlayerTest {
-
-
     Player testDummy = new Player("Testee", 0, 0);
 
     @BeforeEach
@@ -20,9 +18,9 @@ public class PlayerTest {
 
     @Test
     void testAddBid() {
-        testDummy.addBid(BidType.FOOD, 1);
+        testDummy.addBid(BidType.FOOD, 0);
         testDummy.addBid(BidType.GOLD, 1);
-        testDummy.addBid(BidType.MONSTER, 1);
+        testDummy.addBid(BidType.MONSTER, 2);
         testDummy.blockBids();
         assertFalse(testDummy.addBid(BidType.MONSTER, 1), "Error: added blocked bid");
         assertFalse(testDummy.addBid(BidType.GOLD, 1), "Error: added blocked bid");
@@ -32,9 +30,9 @@ public class PlayerTest {
 
     @Test
     void blockBids() {
-        testDummy.addBid(BidType.FOOD, 1);
+        testDummy.addBid(BidType.FOOD, 0);
         testDummy.addBid(BidType.GOLD, 1);
-        testDummy.addBid(BidType.MONSTER, 1);
+        testDummy.addBid(BidType.MONSTER, 2);
         BidType[] expectedBlockedBids = {BidType.GOLD, BidType.MONSTER};
         testDummy.blockBids();
         assertEquals(2, testDummy.getBlockedBids().length, "Expected 2 blocked bids.");
