@@ -4,9 +4,9 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class RegAction extends Action {
 
-    private String name;
+    private final String name;
 
-    public RegAction(int commID, String name) {
+    public RegAction(final int commID, final String name) {
         super(commID);
         this.name = name;
     }
@@ -15,7 +15,8 @@ public class RegAction extends Action {
         return name;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

@@ -51,7 +51,7 @@ class DungeonTest {
     @Test
     void testGetPossibleBattleCoords() {
         resetDungeon();
-        final List<int[]> coords = new ArrayList<int[]>();
+        final List<int[]> coords = new ArrayList<>();
         final int[] arr = {0, 2};
         coords.add(arr);
         fillFirstRow(grid);

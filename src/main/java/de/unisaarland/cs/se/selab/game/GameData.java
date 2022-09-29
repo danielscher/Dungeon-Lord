@@ -29,17 +29,17 @@ class NoSuchplayerIdException extends Exception {
 
 public class GameData {
 
-    private final Map<Integer, Integer> commIdToPlayerIdMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Integer> playerIdToCommIDMap = new HashMap<Integer, Integer>();
-    private final Map<Integer, Player> idToPlayerMap = new HashMap<Integer, Player>();
+    private final Map<Integer, Integer> commIdToPlayerIdMap = new HashMap<>();
+    private final Map<Integer, Integer> playerIdToCommIDMap = new HashMap<>();
+    private final Map<Integer, Player> idToPlayerMap = new HashMap<>();
     private final TimeStamp time = new TimeStamp();
     private final BiddingSquare biddingSquare = new BiddingSquare();
-    private List<Adventurer> currAvailableAdventurers = new ArrayList<Adventurer>();
-    private List<Monster> currAvailableMonsters = new ArrayList<Monster>();
-    private List<Trap> currAvailableTraps = new ArrayList<Trap>();
-    private List<Room> currAvailableRooms = new ArrayList<Room>();
+    private final List<Adventurer> currAvailableAdventurers = new ArrayList<>();
+    private final List<Monster> currAvailableMonsters = new ArrayList<>();
+    private final List<Trap> currAvailableTraps = new ArrayList<>();
+    private final List<Room> currAvailableRooms = new ArrayList<>();
 
-    private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
+    private final ServerConnection<Action> serverconnection = new ServerConnection<>(8080,
             5000, new ActionFactoryImplementation());
     private final Config config = new Config();
     private int lastPlayerToStartBidding;
@@ -50,8 +50,8 @@ public class GameData {
         this.idCounter = 0;
     }
 
-    private void addPlayer(Player player, int id) {
-        int commId = player.getCommID();
+    private void addPlayer(final Player player, final int id) {
+        final int commId = player.getCommID();
         idToPlayerMap.put(id, player);
         commIdToPlayerIdMap.put(commId, id);
         playerIdToCommIDMap.put(id, commId);
@@ -61,32 +61,32 @@ public class GameData {
         return time;
     }
 
-    public boolean registerPlayer(String name, int commId) {
-        List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
+    public boolean registerPlayer(final String name, final int commId) {
+        final List<Integer> commList = new ArrayList<>(commIdToPlayerIdMap.keySet());
         if (commList.contains(commId)) {
             return false;
         } else {
-            Player player = new Player(name, idCounter, commId);
+            final Player player = new Player(name, idCounter, commId);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             return true;
         }
     }
 
-    public Player getPlayerByCommID(int commId) {
-        int playerId = commIdToPlayerIdMap.get(commId);
+    public Player getPlayerByCommID(final int commId) {
+        final int playerId = commIdToPlayerIdMap.get(commId);
         return idToPlayerMap.get(playerId);
     }
 
-    public Player getPlayerByPlayerId(int playerId) {
+    public Player getPlayerByPlayerId(final int playerId) {
         return idToPlayerMap.get(playerId);
     }
 
-    public int getPlayerIdByCommID(int commId) {
+    public int getPlayerIdByCommID(final int commId) {
         return commIdToPlayerIdMap.get(commId);
     }
 
-    public int getCommIDByPlayerId(int playerId) {
+    public int getCommIDByPlayerId(final int playerId) {
         return playerIdToCommIDMap.get(playerId);
     }
 
@@ -101,15 +101,15 @@ public class GameData {
         return commIdToPlayerIdMap.keySet();
     }
 
-    public boolean checkIfRegistered(int commId) {
-        List<Integer> commList = new ArrayList<Integer>(commIdToPlayerIdMap.keySet());
+    public boolean checkIfRegistered(final int commId) {
+        final List<Integer> commList = new ArrayList<>(commIdToPlayerIdMap.keySet());
         return commList.contains(commId);
     }
 
     public int getNextStartPlayer() {
-        List<Integer> playerList = new ArrayList<Integer>(playerIdToCommIDMap.keySet());
+        final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
-        int pos = playerList.indexOf(lastPlayerToStartBidding);
+        final int pos = playerList.indexOf(lastPlayerToStartBidding);
         if (pos == playerList.size() - 1) {
             this.lastPlayerToStartBidding = playerList.get(0);
         } else {
@@ -135,9 +135,9 @@ public class GameData {
         return currAvailableAdventurers;
     }
 
-    public Monster getCurrAvailableMonster(int monsterId) {
+    public Monster getCurrAvailableMonster(final int monsterId) {
         Monster chosenMonster;
-        for (Monster mon : currAvailableMonsters) {
+        for (final Monster mon : currAvailableMonsters) {
             if (mon.getMonsterID() == monsterId) {
                 chosenMonster = mon;
                 currAvailableMonsters.remove(mon);
@@ -156,7 +156,7 @@ public class GameData {
     }
 
     public Trap getOneCurrAvailableTrap() {
-        Trap trap = currAvailableTraps.get(0);
+        final Trap trap = currAvailableTraps.get(0);
         currAvailableTraps.remove(0);
         return trap;
     }
@@ -170,7 +170,7 @@ public class GameData {
     }
 
     public List<Player> getAllPlayerSortedByID() {
-        List<Player> allPlayers = new ArrayList<Player>(idToPlayerMap.values());
+        final List<Player> allPlayers = new ArrayList<>(idToPlayerMap.values());
         Collections.sort(allPlayers, Comparator.comparing(Player::getPlayerID));
         return allPlayers;
     }
@@ -198,7 +198,7 @@ public class GameData {
     }
 
     private void addDrawnAdventurers() {
-        List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
+        final List<Adventurer> drawnAdv = config.drawAdventurers(getNumCurrPlayers());
         currAvailableAdventurers.addAll(drawnAdv);
     }
 
@@ -206,23 +206,24 @@ public class GameData {
         currAvailableAdventurers.clear();
     }
 
-    public void addDrawnTraps(int amountPlaceTrapBids) { // Adds drawn traps to the curr available.
-        List<Trap> drawnTraps = config.drawTraps(amountPlaceTrapBids);
+    public void addDrawnTraps(final int amountPlaceTrapBids) {
+        // Adds drawn traps to the curr available.
+        final List<Trap> drawnTraps = config.drawTraps(amountPlaceTrapBids);
         currAvailableTraps.addAll(drawnTraps);
     }
 
     private void addDrawnMonsters() {
-        List<Monster> drawnMonsters = config.drawMonsters();
+        final List<Monster> drawnMonsters = config.drawMonsters();
         currAvailableMonsters.addAll(drawnMonsters);
     }
 
     private void addDrawnRooms() {
-        List<Room> drawnRooms = config.drawRooms();
+        final List<Room> drawnRooms = config.drawRooms();
         currAvailableRooms.addAll(drawnRooms);
     }
 
-    public void removePlayer(int commId) {
-        int playerId = getPlayerIdByCommID(commId);
+    public void removePlayer(final int commId) {
+        final int playerId = getPlayerIdByCommID(commId);
         this.playerIdToCommIDMap.remove(playerId);
         this.idToPlayerMap.remove(playerId);
         this.commIdToPlayerIdMap.remove(commId);

@@ -74,10 +74,10 @@ class EndPhaseTest {
         //set Imps
         d1.addImps(2);
         //set Tiles
-        final Tile[][] grid2 = d2.getGrid();
+        //!!!!!final Tile[][] grid2 = d2.getGrid();
         d2.dig(0, 0);
         d2.dig(0, 1);
-        grid2[0][0].setConquered();
+        //!!!!!grid2[0][0].setConquered();
         d3.dig(0, 0);
         d3.dig(0, 1);
         d3.dig(1, 1);
