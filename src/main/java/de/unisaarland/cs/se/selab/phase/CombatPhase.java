@@ -257,16 +257,14 @@ public class CombatPhase extends Phase {
 
             currPlayingPlayer.changeEvilnessBy(-1);
 
-            if (dungeon.getNumUnconqueredTiles() == 0){
-                if (dungeon.getNumImprisonedAdventurers() != 0){
+            if (dungeon.getNumUnconqueredTiles() == 0) {
+                if (dungeon.getNumImprisonedAdventurers() != 0) {
                     //fly the first adventurer
                     broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
                 }
                 // TODO: 29.09.22
             }
         }
-
-
 
         return new GameEndPhase(gd);
     }
