@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ChooseBattleGroundPhase extends Phase {
 
-    private Player currPlayer;
+    private final Player currPlayer;
 
     public ChooseBattleGroundPhase(GameData gd, Player currPlayer) {
         super(gd);
@@ -18,8 +18,13 @@ public class ChooseBattleGroundPhase extends Phase {
     }
 
     public Phase run() throws TimeoutException {
-
         broadcastNextRound(gd.getTime().getSeason());
+
+        if (currPlayer.getDungeon().getNumUnconqueredTiles() == 0) {
+            //if all tiles are conquered
+            return new CombatPhase(gd, currPlayer);
+        }
+
         gd.getServerConnection().sendSetBattleGround(
                 currPlayer.getCommID()); //send individual event "SetBattleGround"
         gd.getServerConnection().sendActNow(

@@ -132,14 +132,16 @@ public class EvalRoomPhase extends Phase {
         if (player == null) { //if player's left the game
             return;
         }
-        if (player.getDungeon().getRooms().isEmpty()) {
+
+        Dungeon d = player.getDungeon();
+        if (d.getRooms().isEmpty()) {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
-            if (!player.getDungeon().activateRoom(ara.getRoomID())) {
+            if (!d.activateRoom(ara.getRoomID())) {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
-                int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
+                int cost = d.getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
@@ -147,6 +149,10 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void exec(EndTurnAction eta) {
+        Player player = gd.getPlayerByCommID(eta.getCommID());
+        if (player == null) { //if player's left the game
+            return;
+        }
         endTurn = true;
     }
 
@@ -183,14 +189,15 @@ public class EvalRoomPhase extends Phase {
 
     public void getProducedGoods() {
         for (Player player : gd.getAllPlayerSortedByID()) {
-            if (!player.getDungeon().getActiveRooms().isEmpty()) {
+            Dungeon dungeon = player.getDungeon();
+            if (!dungeon.getActiveRooms().isEmpty()) {
                 int p = player.getPlayerID();
 
-                if (player.getDungeon().returnImpsFromRoom() > 0) {
-                    broadcastImpsChanged(player.getDungeon().returnImpsFromRoom(), p);
+                if (dungeon.returnImpsFromRoom() > 0) {
+                    broadcastImpsChanged(dungeon.returnImpsFromRoom(), p);
                 }
 
-                for (Room r : player.getDungeon().getActiveRooms()) {
+                for (Room r : dungeon.getActiveRooms()) {
                     if (r.getFoodProduction() > 0) {
                         player.changeFoodBy(r.getFoodProduction());
                         broadcastFoodChanged(r.getFoodProduction(), p);
@@ -204,7 +211,7 @@ public class EvalRoomPhase extends Phase {
                         broadcastGoldChanged(r.getGoldProduction(), p);
                     }
                     if (r.getImpProduction() > 0) {
-                        player.getDungeon().addImps(r.getImpProduction());
+                        dungeon.addImps(r.getImpProduction());
                         broadcastImpsChanged(r.getImpProduction(), p);
                     }
                 }

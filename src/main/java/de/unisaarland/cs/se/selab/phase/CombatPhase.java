@@ -33,8 +33,6 @@ public class CombatPhase extends Phase {
     public CombatPhase(GameData gd, Player player) {
         super(gd);
         this.currPlayingPlayer = player;
-
-
     }
 
     public Phase run() throws TimeoutException {

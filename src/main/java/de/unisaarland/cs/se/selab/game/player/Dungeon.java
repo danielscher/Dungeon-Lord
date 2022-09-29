@@ -551,21 +551,6 @@ public class Dungeon {
         return currBattleGround;
     }
 
-    /*
-    method to be used to return imps from mining tunnels and gold
-    NOTE: remember to get the amount of gold mining imps first for granting gold
-     */
-    public int returnTunnelAndGoldImps() {
-        int res = 0;
-        res += tunnelDiggingImps;
-        restingImps += tunnelDiggingImps;
-        tunnelDiggingImps = 0;
-        res += goldMiningImps;
-        restingImps += goldMiningImps;
-        goldMiningImps = 0;
-        return res;
-    }
-
     public Adventurer fleeadventureinQueue() {
         return prison.remove();
     }
