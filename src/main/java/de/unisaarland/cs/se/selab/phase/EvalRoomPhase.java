@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import static de.unisaarland.cs.se.selab.comm.BidType.ROOM;
-import static de.unisaarland.cs.se.selab.comm.BidType.TUNNEL;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
@@ -168,13 +167,13 @@ public class EvalRoomPhase extends Phase {
     }
 
     public void returnImps() {
-        for (Player player : gd.getAllPlayerSortedByID()){
+        for (Player player : gd.getAllPlayerSortedByID()) {
             int p = player.getPlayerID();
 
-            if (player.getDungeon().returnImpsFromDigging() > 0){
+            if (player.getDungeon().returnImpsFromDigging() > 0) {
                 broadcastImpsChanged(player.getDungeon().returnImpsFromDigging(), p);
             }
-            if (player.getDungeon().getGoldMiningImps() > 0){
+            if (player.getDungeon().getGoldMiningImps() > 0) {
                 broadcastGoldChanged(player.getDungeon().getGoldMiningImps(), p);
                 player.getDungeon().clearGoldMiningImps();
             }
@@ -237,7 +236,6 @@ public class EvalRoomPhase extends Phase {
             p.getDungeon().insertAdventurer(adv);
             broadcastAdventurerArrived(adv.getAdventurerID(), p.getPlayerID());
         }
-
         gd.clearAdventurers();  //clear the adventurer list
     }
 }
