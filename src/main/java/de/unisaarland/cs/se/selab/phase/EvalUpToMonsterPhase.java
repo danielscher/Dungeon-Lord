@@ -92,7 +92,7 @@ public class EvalUpToMonsterPhase extends Phase {
 
                         } catch (TimeoutException e) {
                             //TODO: add behaviour
-                           kickPlayer(player.getPlayerID());
+                            kickPlayer(player.getPlayerID());
 
                         }
                     }
