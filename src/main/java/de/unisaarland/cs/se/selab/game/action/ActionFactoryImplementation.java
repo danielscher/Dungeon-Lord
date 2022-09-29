@@ -6,57 +6,68 @@ import de.unisaarland.cs.se.selab.comm.BidType;
 
 public class ActionFactoryImplementation implements ActionFactory<Action> {
 
-
-    public Action createActivateRoom(int commID, int roomID) {
+    @Override
+    public Action createActivateRoom(final int commID, final int roomID) {
         return new ActivateRoomAction(commID, roomID);
     }
 
-    public Action createBattleGround(int commID, int x, int y) {
+    @Override
+    public Action createBattleGround(final int commID, final int x, final int y) {
         return new BattleGroundAction(commID, x, y);
     }
 
     @Override
-    public Action createBuildRoom(int commID, int x, int y, int roomID) {
+    public Action createBuildRoom(final int commID, final int x, final int y, final int roomID) {
         return new BuildRoomAction(commID, roomID, x, y);
     }
 
-    public Action createEndTurn(int commID) {
+    @Override
+    public Action createEndTurn(final int commID) {
         return new EndTurnAction(commID);
     }
 
-    public Action createLeave(int commID) {
+    @Override
+    public Action createLeave(final int commID) {
         return new LeaveAction(commID);
     }
 
-    public Action createStartGame(int commID) {
+    @Override
+    public Action createStartGame(final int commID) {
         return new StartGameAction(commID);
     }
 
-    public Action createHireMonster(int commID, int monsterID) {
+    @Override
+    public Action createHireMonster(final int commID, final int monsterID) {
         return new HireMonsterAction(commID, monsterID);
     }
 
-    public Action createMonster(int commID, int monsterID) {
+    @Override
+    public Action createMonster(final int commID, final int monsterID) {
         return new MonsterAction(commID, monsterID);
     }
 
-    public Action createMonsterTargeted(int commID, int monsterID, int position) {
+    @Override
+    public Action createMonsterTargeted(final int commID, final int monsterID, final int position) {
         return new MonsterTargetedAction(commID, monsterID, position);
     }
 
-    public Action createRegister(int commID, String name) {
+    @Override
+    public Action createRegister(final int commID, final String name) {
         return new RegAction(commID, name);
     }
 
-    public Action createPlaceBid(int commID, BidType bid, int slot) {
+    @Override
+    public Action createPlaceBid(final int commID, final BidType bid, final int slot) {
         return new PlaceBidAction(commID, bid, slot);
     }
 
-    public Action createDigTunnel(int commID, int x, int y) {
+    @Override
+    public Action createDigTunnel(final int commID, final int x, final int y) {
         return new DigTunnelAction(commID, x, y);
     }
 
-    public Action createTrap(int commID, int trapID) {
+    @Override
+    public Action createTrap(final int commID, final int trapID) {
         return new TrapAction(commID, trapID);
     }
 }
