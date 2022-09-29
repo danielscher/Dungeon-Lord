@@ -2,17 +2,17 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Adventurer {
 
-    private int adventurerID;
-    private int difficulty;
+    private final int adventurerID;
+    private final int difficulty;
     private int healthPoints;
-    private int maxHealthPoints;
-    private int healValue;
-    private int defuseValue;
-    private boolean charge;
+    private final int maxHealthPoints;
+    private final int healValue;
+    private final int defuseValue;
+    private final boolean charge;
 
 
-    public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue,
-            int defuseValue, boolean charge) {
+    public Adventurer(final int adventurerID, final int difficulty, final int maxHealthPoints,
+            final int healValue, final int defuseValue, final boolean charge) {
         this.adventurerID = adventurerID;
         this.difficulty = difficulty;
         this.maxHealthPoints = maxHealthPoints;
@@ -50,7 +50,7 @@ public class Adventurer {
         return charge;
     }
 
-    public int damagehealthby(int n) {
+    public int damagehealthby(final int n) {
         if ((healthPoints - n) <= 0) {
             healthPoints = 0;
             return (n - healthPoints);

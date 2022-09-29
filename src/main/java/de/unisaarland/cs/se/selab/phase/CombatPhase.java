@@ -27,13 +27,12 @@ public class CombatPhase extends Phase {
     //placed monsters and the target position
     private final Map<Monster, Integer> placedMonsters = new HashMap<Monster, Integer>();
     private Dungeon dungeon = currPlayingPlayer.getDungeon();
+    private boolean actionfailed = false;
 
 
     public CombatPhase(GameData gd, Player player) {
         super(gd);
         this.currPlayingPlayer = player;
-
-
     }
 
     public Phase run() throws TimeoutException {
@@ -43,26 +42,64 @@ public class CombatPhase extends Phase {
         Coordinate battleground = dungeon.getCurrBattleGround();
         //if the tile is a room two monsters can be placed in total 3 nextActions
         if (dungeon.hasTileRoom(battleground)) {
-            if (dungeon.getNumMonsters() > 1) {
+            //in this case the player can place 2 monster and one trap
+            if (dungeon.getNumAvailableMonsters() > 1 && dungeon.getNumAvailableTraps() > 0) {
                 for (int i = 0; i < 3; i++) {
                     gd.getServerConnection().nextAction().invoke(this);
+                    if (actionfailed) {
+                        i -= 1;
+                        actionfailed = false;
+                    }
                 }
-            } else if (dungeon.getNumMonsters() == 1) {
+                //player can place 2 monsters or player can place a monster and a trap
+            } else if (
+                    (dungeon.getNumAvailableMonsters() == 1 && dungeon.getNumAvailableTraps() > 0)
+                            || (
+                            dungeon.getNumAvailableMonsters() > 1
+                                    && dungeon.getNumAvailableTraps() == 0)) {
                 for (int i = 0; i < 2; i++) {
                     gd.getServerConnection().nextAction().invoke(this);
+                    if (actionfailed) {
+                        i -= 1;
+                        actionfailed = false;
+                    }
                 }
-            } else {
-                gd.getServerConnection().nextAction().invoke(this);
+                //player can place 1 monster or a trap
+            } else if (
+                    (dungeon.getNumAvailableMonsters() == 1 && dungeon.getNumAvailableTraps() == 0)
+                            || (
+                            dungeon.getNumAvailableMonsters() == 0
+                                    && dungeon.getNumAvailableTraps() == 1)) {
+                while (true) {
+                    gd.getServerConnection().nextAction().invoke(this);
+                    if (actionfailed = false) {
+                        break;
+                    }
+                }
             }
             //if the tile is not a room 1 monster and 1 trap in total 2 nextActions
         } else {
-            if (dungeon.getNumMonsters() > 0) {
+            //if player has available monster and traps
+            if ((dungeon.getNumAvailableMonsters() > 0) && (dungeon.getNumAvailableTraps() > 0)) {
                 for (int i = 0; i < 2; i++) {
                     gd.getServerConnection().nextAction().invoke(this);
+                    if (actionfailed) {
+                        i -= 1;
+                        actionfailed = false;
+                    }
                 }
-                //if no HiredMonsters only the trap action is wanted
-            } else {
-                gd.getServerConnection().nextAction().invoke(this);
+                //if the player has only one monster or only one trap
+            } else if (
+                    (dungeon.getNumAvailableMonsters() > 0 && dungeon.getNumAvailableTraps() == 0)
+                            || (
+                            dungeon.getNumAvailableMonsters() == 0
+                                    && dungeon.getNumAvailableTraps() > 0)) {
+                while (true) {
+                    gd.getServerConnection().nextAction().invoke(this);
+                    if (actionfailed = false) {
+                        break;
+                    }
+                }
             }
 
         }
@@ -208,8 +245,24 @@ public class CombatPhase extends Phase {
             }
         }
 
-        //Conquer
+        //Conquer if one of the adventurer is alive the tile is conquered
 
+        if (dungeon.getAdventurer(0) != null) {
+            Coordinate coordinate = dungeon.getCurrBattleGround();
+            dungeon.setTileConquered(coordinate);
+            broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
+                    coordinate.getxpos(), coordinate.getypos());
+
+            currPlayingPlayer.changeEvilnessBy(-1);
+
+            if (dungeon.getNumUnconqueredTiles() == 0) {
+                if (dungeon.getNumImprisonedAdventurers() != 0) {
+                    //fly the first adventurer
+                    broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
+                }
+                // TODO: 29.09.22
+            }
+        }
 
         return new GameEndPhase(gd);
     }
@@ -221,38 +274,53 @@ public class CombatPhase extends Phase {
             if (placedtrap != null) {
                 gd.getServerConnection()
                         .sendActionFailed(ta.getCommID(), "Trap has been already placed");
+                actionfailed = true;
+
+
             } else {
                 // check if the trap exists in the Duengeon
                 if (dungeon.getTrapByID(ta.getTrapID()) != null) {
-                    //placing a trap in a room always costs one coin of gold
-                    if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
-                        if (currPlayingPlayer.changeGoldBy(-1)) {
-                            placedtrap = dungeon.getTrapByID(ta.getTrapID());
-                            broadcastGoldChanged(-1, currPlayingPlayer.getCommID());
-                            broadcastTrapPlaced(currPlayingPlayer.getPlayerID(),
-                                    ta.getTrapID());
+                    //check the availability of the trap this year
+                    if (dungeon.getTrapByID(ta.getTrapID()).isAvailableThisYear()) {
+                        //placing a trap in a room always costs one coin of gold
+                        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
+                            if (currPlayingPlayer.changeGoldBy(-1)) {
+                                placedtrap = dungeon.getTrapByID(ta.getTrapID());
+                                broadcastGoldChanged(-1, currPlayingPlayer.getCommID());
+                                broadcastTrapPlaced(currPlayingPlayer.getPlayerID(),
+                                        ta.getTrapID());
+                                dungeon.getTrapByID(ta.getTrapID()).setUnavailable();
+                            } else {
+                                gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                                        "player cannot afford one gold to place trap in the room");
+                                actionfailed = true;
+                            }
+                            //if it is a tile no gold changes
                         } else {
-                            gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                                    "player cannot afford one gold to place trap in the room");
+                            placedtrap = dungeon.getTrapByID(ta.getTrapID());
+                            broadcastTrapPlaced(currPlayingPlayer.getPlayerID(), ta.getTrapID());
+                            dungeon.getTrapByID(ta.getTrapID()).setUnavailable();
+
                         }
-                        //if it is a tile no gold changes
                     } else {
-                        placedtrap = dungeon.getTrapByID(ta.getTrapID());
-                        broadcastTrapPlaced(currPlayingPlayer.getPlayerID(), ta.getTrapID());
-
+                        gd.getServerConnection()
+                                .sendActionFailed(ta.getCommID(),
+                                        "Trap is not available this year");
+                        actionfailed = true;
                     }
-
 
                 } else {
                     gd.getServerConnection()
                             .sendActionFailed(ta.getCommID(),
                                     "No available trap for the requested id");
+                    actionfailed = true;
                 }
             }
 
         } else {
             gd.getServerConnection()
                     .sendActionFailed(ta.getCommID(), "CommId of the current player didn't match");
+            actionfailed = true;
 
         }
 
@@ -265,35 +333,55 @@ public class CombatPhase extends Phase {
             if (placedMonsters.size() >= 2) {
                 gd.getServerConnection()
                         .sendActionFailed(ma.getCommID(), "Two Monsters have been already placed");
+                actionfailed = true;
                 //if one monster is already placed
             } else if (placedMonsters.size() == 1) {
                 if (dungeon.getMonsterByID(ma.getMonster()) != null) {
-                    if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
-                        placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
-                        broadcastMonsterPlaced(ma.getMonster(),
-                                currPlayingPlayer.getPlayerID());
+                    if (dungeon.getMonsterByID(ma.getMonster()).availableThisYear()) {
+                        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
+                            placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
+                            broadcastMonsterPlaced(ma.getMonster(),
+                                    currPlayingPlayer.getPlayerID());
+                            dungeon.getMonsterByID(ma.getMonster()).setUnavailable();
+                        } else {
+                            gd.getServerConnection()
+                                    .sendActionFailed(ma.getCommID(),
+                                            "One Monster is already placed in the Tile");
+                            actionfailed = true;
+
+                        }
                     } else {
                         gd.getServerConnection()
                                 .sendActionFailed(ma.getCommID(),
-                                        "One Monster is already placed in the Tile");
-
+                                        "Monster is not available this year");
+                        actionfailed = true;
                     }
                 } else {
                     gd.getServerConnection()
                             .sendActionFailed(ma.getCommID(),
                                     "No available monster for the requested id");
+                    actionfailed = true;
 
                 }
 
             } else {
                 //the tile and the room can have at least one monster
                 if (dungeon.getMonsterByID(ma.getMonster()) != null) {
-                    placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
-                    broadcastMonsterPlaced(ma.getMonster(), currPlayingPlayer.getPlayerID());
+                    if (dungeon.getMonsterByID(ma.getMonster()).availableThisYear()) {
+                        placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
+                        broadcastMonsterPlaced(ma.getMonster(), currPlayingPlayer.getPlayerID());
+                        dungeon.getMonsterByID(ma.getMonster()).setUnavailable();
+                    } else {
+                        gd.getServerConnection()
+                                .sendActionFailed(ma.getCommID(),
+                                        "Monster is not available this year");
+                        actionfailed = true;
+                    }
                 } else {
                     gd.getServerConnection()
                             .sendActionFailed(ma.getCommID(),
                                     "No available monster for the requested id");
+                    actionfailed = true;
                 }
             }
 
@@ -302,6 +390,7 @@ public class CombatPhase extends Phase {
             gd.getServerConnection()
                     .sendActionFailed(ma.getCommID(),
                             "CommID of the current player did not match");
+            actionfailed = true;
         }
     }
 
@@ -311,48 +400,71 @@ public class CombatPhase extends Phase {
             if (placedMonsters.size() >= 2) {
                 gd.getServerConnection()
                         .sendActionFailed(mta.getCommID(), "Two Monsters have been already placed");
+                actionfailed = true;
 
             } else if (placedMonsters.size() == 1) {
                 if (dungeon.getMonsterByID(mta.getMonster()) != null) {
-                    //check the tile has room to place two monsters
-                    if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
-                        //check the target monster has the TARGETED strategy
-                        if (dungeon.getMonsterByID(mta.getMonster()).getAttack()
-                                == Attack.TARGETED) {
-                            placedMonsters.put(dungeon.getMonsterByID(mta.getMonster()),
-                                    mta.getPosition());
-                            broadcastMonsterPlaced(mta.getMonster(),
-                                    currPlayingPlayer.getPlayerID());
+                    if (dungeon.getMonsterByID(mta.getMonster()).availableThisYear()) {
+                        //check the tile has room to place two monsters
+                        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
+                            //check the target monster has the TARGETED strategy
+                            if (dungeon.getMonsterByID(mta.getMonster()).getAttack()
+                                    == Attack.TARGETED) {
+                                placedMonsters.put(dungeon.getMonsterByID(mta.getMonster()),
+                                        mta.getPosition());
+                                broadcastMonsterPlaced(mta.getMonster(),
+                                        currPlayingPlayer.getPlayerID());
+                                dungeon.getMonsterByID(mta.getMonster()).setUnavailable();
+                            } else {
+                                gd.getServerConnection().sendActionFailed(mta.getCommID(),
+                                        "The Monster Attack strategy is not Targeted");
+                                actionfailed = true;
+                            }
                         } else {
-                            gd.getServerConnection().sendActionFailed(mta.getCommID(),
-                                    "The Monster Attack strategy is not Targeted");
+                            gd.getServerConnection()
+                                    .sendActionFailed(mta.getCommID(),
+                                            "One Monster is already placed in the Tile");
+                            actionfailed = true;
+
                         }
                     } else {
                         gd.getServerConnection()
                                 .sendActionFailed(mta.getCommID(),
-                                        "One Monster is already placed in the Tile");
+                                        "Monster is not available this year");
+                        actionfailed = true;
 
                     }
                 } else {
                     gd.getServerConnection()
                             .sendActionFailed(mta.getCommID(),
                                     "No available monster for the requested id");
+                    actionfailed = true;
 
                 }
 
             } else {
                 if (dungeon.getMonsterByID(mta.getMonster()) != null) {
-                    if (dungeon.getMonsterByID(mta.getMonster()).getAttack() == Attack.TARGETED) {
-                        placedMonsters.put(dungeon.getMonsterByID(mta.getMonster()),
-                                mta.getMonster());
-                        broadcastMonsterPlaced(mta.getMonster(),
-                                currPlayingPlayer.getPlayerID());
+                    if (dungeon.getMonsterByID(mta.getMonster()).availableThisYear()) {
+                        if (dungeon.getMonsterByID(mta.getMonster()).getAttack()
+                                == Attack.TARGETED) {
+                            placedMonsters.put(dungeon.getMonsterByID(mta.getMonster()),
+                                    mta.getMonster());
+                            broadcastMonsterPlaced(mta.getMonster(),
+                                    currPlayingPlayer.getPlayerID());
+                            dungeon.getMonsterByID(mta.getMonster()).setUnavailable();
+                        }
+                    } else {
+                        gd.getServerConnection()
+                                .sendActionFailed(mta.getCommID(),
+                                        "Monster is not available this year");
+                        actionfailed = true;
                     }
 
                 } else {
                     gd.getServerConnection()
                             .sendActionFailed(mta.getCommID(),
                                     "No available monster for the requested id");
+                    actionfailed = true;
                 }
             }
 
@@ -361,11 +473,16 @@ public class CombatPhase extends Phase {
             gd.getServerConnection()
                     .sendActionFailed(mta.getCommID(),
                             "CommID of the current player did not match");
+            actionfailed = true;
         }
     }
 
 
     public void exec(EndTurnAction eta) {
+        if (currPlayingPlayer.getCommID() != eta.getCommID()) {
+            gd.getServerConnection()
+                    .sendActionFailed(eta.getCommID(), "CommID of the player didn't match");
+        }
 
     }
 

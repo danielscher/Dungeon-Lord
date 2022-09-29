@@ -17,13 +17,13 @@ public class Player {
     private Dungeon dungeon;
     private BidType[] currBids = new BidType[3];
     private BidType[] blockedBids = new BidType[3];
-    private List<Title> titles = new ArrayList<Title>();
+    private List<Title> titles = new ArrayList<>();
     private int points;
     private int evilLevel;
     private int gold;
     private int food;
 
-    public Player(String name, int playerID, int commID) {
+    public Player(final String name, final int playerID, final int commID) {
         this.name = name;
         this.playerID = playerID;
         this.commID = commID;
@@ -38,15 +38,11 @@ public class Player {
         // TODO: remove when we have no more dummy methods in other classes (GameData)
     }
 
-    public Player(final int i, final int i1, final int i2, final int i3, final int i4,
-            final boolean b) {
-    }
-
     /*
     tries to add a bid to the currBids array
     return == success??
      */
-    public boolean addBid(BidType type, int priority) {
+    public boolean addBid(final BidType type, final int priority) {
         // priority == 0 means "bid number 1" within the game rules
         if (canAddBid(type, priority)) {
             currBids[priority] = type;
@@ -85,7 +81,7 @@ public class Player {
     /*
     gets a bid of the current bids, by the priority of the bid
      */
-    public BidType getBid(int priority) {
+    public BidType getBid(final int priority) {
         if (priority >= 0 && priority < currBids.length) {
             // only if priority is valid try to return
             return currBids[priority];
@@ -98,9 +94,9 @@ public class Player {
     /*
     checks if bid can be added
      */
-    private boolean canAddBid(BidType type, int priority) {
+    private boolean canAddBid(final BidType type, final int priority) {
         // check if requested BidType is already in currBids
-        for (BidType bid : currBids) {
+        for (final BidType bid : currBids) {
             // for each bid of the currBids array
             if (bid == type) {
                 // if requested bid is in bid set, deny
@@ -109,7 +105,7 @@ public class Player {
         }
 
         // check if requested BidType is in blockedBids array
-        for (BidType bid : blockedBids) {
+        for (final BidType bid : blockedBids) {
             // for each bid of the blocked bids
             if (bid == type) {
                 // if requested bid is in blocked bid set, deny
@@ -136,7 +132,7 @@ public class Player {
     positive amounts may fail because of the limit of 15 (return == false)
     negative amounts always succeed (return == true), but evilness will not go below 0
      */
-    public boolean changeEvilnessBy(int amount) {
+    public boolean changeEvilnessBy(final int amount) {
         if (amount > 0) {
             // if evilness increases, check if it exceeds bounds
             if (evilLevel + amount > 15) {
@@ -160,7 +156,7 @@ public class Player {
     tries to change the amount of gold
     return == success?
      */
-    public boolean changeGoldBy(int amount) {
+    public boolean changeGoldBy(final int amount) {
         if (gold + amount < 0) {
             return false;
         } else {
@@ -173,7 +169,7 @@ public class Player {
     tries to change the amount of food
     return == success?
      */
-    public boolean changeFoodBy(int amount) {
+    public boolean changeFoodBy(final int amount) {
         if (food + amount < 0) {
             return false;
         } else {
@@ -184,7 +180,7 @@ public class Player {
 
     public int getNumPlacedBids() {
         int res = 0;
-        for (BidType bid : currBids) {
+        for (final BidType bid : currBids) {
             if (bid != null) {
                 res++;
             }
@@ -208,11 +204,11 @@ public class Player {
         return points;
     }
 
-    public void setPoints(int points) {
+    public void setPoints(final int points) {
         this.points = points;
     }
 
-    public void addTitle(Title title) {
+    public void addTitle(final Title title) {
         titles.add(title);
     }
 

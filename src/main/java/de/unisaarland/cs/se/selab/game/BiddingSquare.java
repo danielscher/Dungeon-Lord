@@ -15,18 +15,18 @@ public class BiddingSquare {
         Arrays.fill(this.biddingSlots, -1);
     }
 
-    public boolean insert(BidType bidType, int playerID) {
+    public int insert(BidType bidType, int playerID) {
         // get the uppermost free row
+        int slot = -1;
         int columnId = typeToColumn(bidType);
-        boolean res = false;
         for (int row = 0; row < biddingSlots.length; row++) {
             if (biddingSlots[row][columnId] == -1) {
                 biddingSlots[row][columnId] = playerID;
-                res = true;
-                break;
+                slot = row;
+                return slot;
             }
         }
-        return res;
+        return slot;
     }
 
     public int getIDByBidSlot(int row, int column) {

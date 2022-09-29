@@ -4,9 +4,9 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class TrapAction extends Action {
 
-    private int trapID;
+    private final int trapID;
 
-    public TrapAction(int commID, int trapID) {
+    public TrapAction(final int commID, final int trapID) {
         super(commID);
         this.trapID = trapID;
     }
@@ -15,7 +15,8 @@ public class TrapAction extends Action {
         return trapID;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

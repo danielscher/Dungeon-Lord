@@ -4,10 +4,10 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class DigTunnelAction extends Action {
 
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
-    public DigTunnelAction(int commID, int row, int col) {
+    public DigTunnelAction(final int commID, final int row, final int col) {
         super(commID);
         this.row = row;
         this.col = col;
@@ -17,7 +17,8 @@ public class DigTunnelAction extends Action {
         return new int[]{row, col};
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 

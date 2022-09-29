@@ -1,15 +1,14 @@
 package de.unisaarland.cs.se.selab.game.action;
 
-import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class BuildRoomAction extends Action {
 
-    private int roomID;
-    private int row;
-    private int col;
+    private final int roomID;
+    private final int row;
+    private final int col;
 
-    public BuildRoomAction(int commID, int roomID, int row, int col) {
+    public BuildRoomAction(final int commID, final int roomID, final int row, final int col) {
         super(commID);
         this.roomID = roomID;
         this.row = row;
@@ -28,7 +27,8 @@ public class BuildRoomAction extends Action {
         return col;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

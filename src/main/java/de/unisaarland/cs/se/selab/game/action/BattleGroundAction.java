@@ -1,14 +1,13 @@
 package de.unisaarland.cs.se.selab.game.action;
 
-import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class BattleGroundAction extends Action {
 
-    private int row;
-    private int col;
+    private final int row;
+    private final int col;
 
-    public BattleGroundAction(int commID, int x, int y) {
+    public BattleGroundAction(final int commID, final int x, final int y) {
         super(commID);
         this.row = x;
         this.col = y;
@@ -22,7 +21,8 @@ public class BattleGroundAction extends Action {
         return col;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

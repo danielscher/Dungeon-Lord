@@ -4,10 +4,10 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class MonsterTargetedAction extends Action {
 
-    private int monster;
-    private int position;
+    private final int monster;
+    private final int position;
 
-    public MonsterTargetedAction(int commID, int monster, int position) {
+    public MonsterTargetedAction(final int commID, final int monster, final int position) {
         super(commID);
         this.monster = monster;
         this.position = position;
@@ -21,7 +21,8 @@ public class MonsterTargetedAction extends Action {
         return position;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

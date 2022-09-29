@@ -42,11 +42,9 @@ public class GameData {
     private final ServerConnection<Action> serverconnection = new ServerConnection<Action>(8080,
             5000, new ActionFactoryImplementation());
     private final Config config = new Config();
-    private int lastPlayerToStartBidding;
     private int idCounter;
 
     public GameData() {
-        this.lastPlayerToStartBidding = 0;
         this.idCounter = 0;
     }
 
@@ -106,20 +104,6 @@ public class GameData {
         return commList.contains(commId);
     }
 
-    public int getNextStartPlayer() {
-        List<Integer> playerList = new ArrayList<Integer>(playerIdToCommIDMap.keySet());
-        playerList.sort(Comparator.naturalOrder());
-        int pos = playerList.indexOf(lastPlayerToStartBidding);
-        if (pos == playerList.size() - 1) {
-            this.lastPlayerToStartBidding = playerList.get(0);
-        } else {
-            this.lastPlayerToStartBidding = playerList.get(pos + 1);
-        }
-
-        return lastPlayerToStartBidding;
-
-    }
-
     public void drawEntities() {
         discardMonster();   //discard old unsold monsters
         addDrawnMonsters(); //draw 3 new monsters
@@ -171,7 +155,7 @@ public class GameData {
 
     public List<Player> getAllPlayerSortedByID() {
         List<Player> allPlayers = new ArrayList<Player>(idToPlayerMap.values());
-        Collections.sort(allPlayers, Comparator.comparing(Player::getPlayerID));
+        allPlayers.sort(Comparator.comparing(Player::getPlayerID));
         return allPlayers;
     }
 
@@ -187,7 +171,6 @@ public class GameData {
     public void discardMonster() { // removes all monsters from currMonsters list.
         currAvailableMonsters.clear();
     }
-
 
     public void discardRoom() {
         currAvailableRooms.clear();
@@ -223,6 +206,4 @@ public class GameData {
         this.idToPlayerMap.remove(playerId);
         this.commIdToPlayerIdMap.remove(commId);
     }
-
-
 }
