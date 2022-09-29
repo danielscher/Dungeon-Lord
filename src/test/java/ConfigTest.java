@@ -2,13 +2,13 @@ import de.unisaarland.cs.se.selab.game.Config;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
 
-public class ConfigTest extends Config {
+class ConfigTest extends Config {
 
     private String mypath = "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
     Config cfg = new Config();
 
     @Test
-    public void testParse() {
+    void testParse() {
         cfg.display();
         cfg.setConfigFilePath(mypath);
         try {
@@ -20,7 +20,7 @@ public class ConfigTest extends Config {
     }
 
     @Test
-    public void testgetter() {
+    void testgetter() {
         cfg.display();
         cfg.setConfigFilePath(mypath);
         try {

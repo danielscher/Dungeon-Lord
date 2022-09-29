@@ -4,18 +4,18 @@ import de.unisaarland.cs.se.selab.game.util.Location;
 
 public class Room {
 
-    private int roomID;
-    private int activationCost;
-    private int foodProduction;
-    private int goldProduction;
-    private int impProduction;
-    private int niceness;
+    final private int roomID;
+    final private int activationCost;
+    final private int foodProduction;
+    final private int goldProduction;
+    final private int impProduction;
+    final private int niceness;
 
     private boolean activated;
-    private Location placementLoc;
+    final private Location placementLoc;
 
-    public Room(int roomID, int activationCost, int foodProduction, int goldProduction,
-            int impProduction, int niceness, Location placementLoc) {
+    public Room(final int roomID, final int activationCost, final int foodProduction, final int goldProduction,
+            final int impProduction, final int niceness, final Location placementLoc) {
         this.roomID = roomID;
         this.activationCost = activationCost;
         this.foodProduction = foodProduction;
