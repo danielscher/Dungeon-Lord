@@ -38,6 +38,10 @@ public class Player {
         // TODO: remove when we have no more dummy methods in other classes (GameData)
     }
 
+    public Player(final int i, final int i1, final int i2, final int i3, final int i4,
+            final boolean b) {
+    }
+
     /*
     tries to add a bid to the currBids array
     return == success??

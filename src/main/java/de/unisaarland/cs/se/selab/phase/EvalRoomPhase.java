@@ -169,13 +169,14 @@ public class EvalRoomPhase extends Phase {
     public void returnImps() {
         for (Player player : gd.getAllPlayerSortedByID()) {
             int p = player.getPlayerID();
+            int goldMined = player.getDungeon().getGoldMiningImps();
 
             if (player.getDungeon().returnImpsFromDigging() > 0) {
                 broadcastImpsChanged(player.getDungeon().returnImpsFromDigging(), p);
             }
-            if (player.getDungeon().getGoldMiningImps() > 0) {
-                broadcastGoldChanged(player.getDungeon().getGoldMiningImps(), p);
-                player.getDungeon().clearGoldMiningImps();
+            if (goldMined > 0) {
+                player.changeGoldBy(goldMined);
+                broadcastGoldChanged(goldMined, p);
             }
         }
     }
