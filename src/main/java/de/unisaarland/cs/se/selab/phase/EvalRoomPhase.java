@@ -143,7 +143,8 @@ public class EvalRoomPhase extends Phase {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
-                final int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
+                final int cost = player.getDungeon().getRoomById(ara.getRoomID())
+                        .getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
