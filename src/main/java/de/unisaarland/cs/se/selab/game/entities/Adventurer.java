@@ -61,5 +61,28 @@ public class Adventurer {
         }
     }
 
+    /*
+    this method heals the adventurer by the given amount
+    but only until his maximum health points are reached
+    the return indicates the leftover heal value, which wasn't used
+     */
+    public int healBy(final int amount) {
+        if (amount <= 0) {
+            // if the given heal amount is negative or zero, don't heal
+            return 0;
+        } else {
+            if (amount + healthPoints > maxHealthPoints) {
+                // in this case there is leftover heal amount
+                final int healedAmount = maxHealthPoints - healthPoints;
+                healthPoints = maxHealthPoints;
+                return amount - healedAmount;
+            } else {
+                // in this case the amount wasn't sufficient to fully heal the adventurer
+                healthPoints += amount;
+                return 0;
+            }
+        }
+    }
+
 
 }
