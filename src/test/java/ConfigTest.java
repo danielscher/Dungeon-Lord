@@ -4,31 +4,31 @@ import org.junit.jupiter.api.Test;
 
 public class ConfigTest extends Config {
 
-    private String mypath = "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
+    private final String mypath = "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
     Config cfg = new Config();
 
     @Test
     public void testParse() {
-        cfg.display();
+    //    cfg.displayLog();
         cfg.setConfigFilePath(mypath);
         try {
             cfg.parse(mypath);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        cfg.display();
+    //    cfg.displayLog();
     }
 
     @Test
     public void testgetter() {
-        cfg.display();
+    //    cfg.displayLog();
         cfg.setConfigFilePath(mypath);
         try {
             cfg.parse(mypath);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        cfg.display();
+        cfg.displayLog();
     }
 
 
