@@ -137,7 +137,7 @@ public class EndPhaseTest {
     @Test
     public void testwinner() {
         gep.evaluateScores();
-        //assertEquals(3, winnerPlayerIDList.get(0));
+        assertEquals(3, gep.getWinnerPlayerIDList().get(0));
     }
 
 
