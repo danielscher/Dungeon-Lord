@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
+import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
@@ -13,36 +14,41 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
-import java.util.ArrayList;
 
 public class EvalUpToMonsterPhase extends Phase {
 
-    private int currHandledHireMonsterCommId = -1; // commId of the player being handled.
-    private boolean handleHireMonsterAction = true; // flag if hire monster action is being handled.
-    //Evaluation for the Gold, Imp, Trap and monster bids.
+    // commId of the player being handled for which the HireMonster Action
+    // is being currently handled.
+    private int currHandledCommId = -1;
 
-    public EvalUpToMonsterPhase(GameData gd) {
+    // flag if hire monster action is currently being handled.
+    private boolean handleHireMonsterAction = true;
+
+
+    //Evaluation for the Gold, Imp, Trap and monster bids.
+    public EvalUpToMonsterPhase(final GameData gd) {
         super(gd);
     }
 
+    @Override
     public Phase run() {
         eval();
         return new EvalRoomPhase(super.gd);
     }
 
     private void eval() {
-        BiddingSquare bs = gd.getBiddingSquare();
+        final BiddingSquare bs = gd.getBiddingSquare();
         // iterates over slots
         for (int row = 0; row < 3; row++) {
             for (int col = bs.typeToColumn(BidType.GOLD); col <= bs.typeToColumn(BidType.MONSTER);
                     col++) {
-                Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
+                final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
                 grant(player, bs.columnToType(col), row + 1); // slot = row + 1.
             }
         }
     }
 
-    private void grant(Player player, BidType bidtype, int slot) {
+    private void grant(final Player player, final BidType bidtype, final int slot) {
 
         switch (bidtype) {
             case GOLD:
@@ -65,57 +71,61 @@ public class EvalUpToMonsterPhase extends Phase {
         }
     }
 
-    private void grantMonster(Player player, int slot) {
-        ServerConnection<Action> sc = gd.getServerConnection();
+    private void grantMonster(final Player player, final int slot) {
+        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
 
-        int commId = player.getCommID();
+            final int commId = player.getCommID();
 
-        switch (slot) {
-            case 1, 2: {
-                sc.sendSelectMonster(commId); // tells player to select monster.
-                sc.sendActNow(commId);
+            switch (slot) {
+                case 1, 2: {
+                    sc.sendSelectMonster(commId); // tells player to select monster.
+                    sc.sendActNow(commId);
 
-                // will ask for next action until receives End Turn or Hire Monster action.
-                while (handleHireMonsterAction) {
+                    // will ask for next action until receives End Turn or Hire Monster action.
+                    while (handleHireMonsterAction) {
 
-                    currHandledHireMonsterCommId = commId;
+                        currHandledCommId = commId;
 
-                    try { // get action from player.
-                        Action action = sc.nextAction();
-                        action.invoke(this);
+                        try { // get action from player.
+                            final Action action = sc.nextAction();
+                            action.invoke(this);
 
-                    } catch (Exception e) {
-                        //TODO: add behaviour
+                        } catch (TimeoutException e) {
+                            //TODO: add behaviour
+                           kickPlayer(player.getPlayerID());
+
+                        }
                     }
+                    break;
                 }
-                break;
-            }
-            case 3: {
-                if (player.getFood() > 0) {
-                    player.changeFoodBy(-1); // pays for the slot 1 food.
-                    broadcastFoodChanged(-1, player.getPlayerID());
+                case 3: {
+                    if (player.getFood() > 0) {
+                        player.changeFoodBy(-1); // pays for the slot 1 food.
+                        broadcastFoodChanged(-1, player.getPlayerID());
 
-                    try { // get action from player.
-                        Action action = sc.nextAction();
-                        action.invoke(this);
+                        try { // get action from player.
+                            final Action action = sc.nextAction();
+                            action.invoke(this);
 
-                    } catch (Exception e) {
-                        //TODO: add behaviour
+                        } catch (TimeoutException e) {
+                            kickPlayer(player.getPlayerID()); // kicks player (leave).
+                        }
                     }
+                    break;
                 }
-                break;
+                default:
+                    break;
             }
-            default:
-                break;
         }
+
     }
 
 
-    private void grantTrap(Player player, int slot) {
+    private void grantTrap(final Player player, final int slot) {
         if (slot < 1 || slot > 3) { // ensures termination of recursion.
             return;
         }
-        Dungeon d = player.getDungeon();
+        final Dungeon d = player.getDungeon();
 
         // bid rewards per case
         switch (slot) {
@@ -124,7 +134,7 @@ public class EvalUpToMonsterPhase extends Phase {
                 if (player.getGold() > 0) {
                     player.changeGoldBy(-1);
                     broadcastGoldChanged(-1, player.getPlayerID());
-                    Trap trap = gd.getOneCurrAvailableTrap();
+                    final Trap trap = gd.getOneCurrAvailableTrap();
                     d.addTrap(trap); // grants player one Trap
                     broadcastTrapAcquired(player.getPlayerID(), trap.getTrapID());
                     break;
@@ -133,7 +143,7 @@ public class EvalUpToMonsterPhase extends Phase {
             }
             case 2: { // get trap for free.
                 gd.addDrawnTraps(slot); // adds traps to the currently available.
-                Trap trap = gd.getOneCurrAvailableTrap();
+                final Trap trap = gd.getOneCurrAvailableTrap();
                 d.addTrap(trap); // grants player one Trap
                 broadcastTrapAcquired(player.getPlayerID(), trap.getTrapID());
                 break;
@@ -143,8 +153,8 @@ public class EvalUpToMonsterPhase extends Phase {
                     gd.addDrawnTraps(slot); // adds traps to the currently available.
                     player.changeGoldBy(-2);
                     broadcastGoldChanged(-2, player.getPlayerID());
-                    Trap trap1 = gd.getOneCurrAvailableTrap();
-                    Trap trap2 = gd.getOneCurrAvailableTrap();
+                    final Trap trap1 = gd.getOneCurrAvailableTrap();
+                    final Trap trap2 = gd.getOneCurrAvailableTrap();
                     d.addTrap(trap1); // grants player one Trap.
                     d.addTrap(trap2); // grants second Trap.
                     broadcastTrapAcquired(player.getPlayerID(), trap1.getTrapID());
@@ -160,15 +170,16 @@ public class EvalUpToMonsterPhase extends Phase {
 
     // will grant the bid reward corresponding to the slot of the GOLD option.
     // if player can't afford the slot reward will recurse to the lower bid slot.
-    private boolean grantGold(Player player, int slot) {
+    private boolean grantGold(final Player player, final int slot) {
         if (slot < 0 || slot > 3) { // slot 0 is allowed for sending out 1 imp to mine gold.
             return false;
         } // ensures termination of recursion.
-        Dungeon d = player.getDungeon();
-        int numMiningImps = slot + 1; // #imps to be sent mining
+        final Dungeon d = player.getDungeon();
+        final int numMiningImps = slot + 1; // #imps to be sent mining
 
         // checks how many tiles will be worked.
-        int tilesNeeded = slot < 3 ? numMiningImps : numMiningImps - 1; // for supervisor -1 tile.
+        final int tilesNeeded =
+                slot < 3 ? numMiningImps : numMiningImps - 1; // for supervisor -1 tile.
 
         //checks if player can afford i.e. enough tiles/imps
         if (d.getNumGoldMineAbleTiles() == tilesNeeded) {
@@ -180,13 +191,13 @@ public class EvalUpToMonsterPhase extends Phase {
         return grantGold(player, slot - 1); // recurse to next lower slot when can't afford.
     }
 
-    private boolean grantImps(Player player, int slot) { // READ!: first slot := 1.
+    private boolean grantImps(final Player player, final int slot) { // READ!: first slot := 1.
         if (slot < 1 || slot > 3) {
             return false;
         } // ensures termination of recursion.
-        Dungeon d = player.getDungeon();
+        final Dungeon d = player.getDungeon();
         // determines imps to be granted by slot.
-        int numImps = slot == 3 ? slot - 1 : slot;
+        final int numImps = slot == 3 ? slot - 1 : slot;
 
         if (slot == 3) { // for last slot check if player can afford 1 food,gold.
             if ((player.getFood() > 0) && (player.getGold() > 0)) {
@@ -218,76 +229,71 @@ public class EvalUpToMonsterPhase extends Phase {
     }
 
     @Override
-    public void exec(HireMonsterAction hma) {
-        ServerConnection<Action> sc = gd.getServerConnection();
-        Player player = gd.getPlayerByCommID(hma.getCommID());
-        if (hma.getCommID() != currHandledHireMonsterCommId) { // only specific player can hire
-            sc.sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
+    public void exec(final HireMonsterAction hma) {
+        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
+            final Player player = gd.getPlayerByCommID(hma.getCommID());
+            if (hma.getCommID() != currHandledCommId) { // only specific player can hire
+                sc.sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
+            }
+            final Monster chosenMonster = gd.getCurrAvailableMonster(hma.getMonster());
+            final int monsterHunger = chosenMonster.getHunger();
+            final int monsterEvilness = chosenMonster.getEvilness();
+
+            // checks if player can afford the monster food and evilness wise.
+            if (player.getFood() >= monsterHunger
+                    && player.getEvilLevel() + monsterEvilness <= 15) {
+
+                player.changeFoodBy(-monsterHunger);
+                broadcastFoodChanged(-monsterHunger, player.getPlayerID());
+
+                player.changeEvilnessBy(-monsterEvilness);
+                broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
+
+                // grand monster to player.
+                player.getDungeon()
+                        .addMonster(chosenMonster); // FIXME : possible null value exception.
+                broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
+                handleHireMonsterAction = false; // finish handling action. terminates loop.
+            }
         }
-        Monster chosenMonster = gd.getCurrAvailableMonster(hma.getMonster());
-        int monsterHunger = chosenMonster.getHunger();
-        int monsterEvilness = chosenMonster.getEvilness();
 
-        // checks if player can afford the monster food and evilness wise.
-        if (player.getFood() >= monsterHunger
-                && player.getEvilLevel() + monsterEvilness <= 15) {
+    }
 
-            player.changeFoodBy(-monsterHunger);
-            broadcastFoodChanged(-monsterHunger, player.getPlayerID());
+    @Override
+    public void exec(final ActivateRoomAction ara) {
+        try (final ServerConnection<Action> serverConn = gd.getServerConnection()) {
 
-            player.changeEvilnessBy(-monsterEvilness);
-            broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
+            final int commId = ara.getCommID();
+            // get the player who requested to activate the room
+            final Player player = gd.getPlayerByCommID(commId);
+            // if player doesn't exist, return
+            if (player == null) {
+                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+                return;
+            }
 
-            // grand monster to player.
-            player.getDungeon().addMonster(chosenMonster); // FIXME : possible null value exception.
-            broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
+            final int roomId = ara.getRoomID();
+            final Dungeon playersDungeon = player.getDungeon();
+            if (playersDungeon.activateRoom(roomId)) {
+                final Room activatedRoom = playersDungeon.getRoomById(roomId);
+                broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+                broadcastRoomActivated(player.getPlayerID(), roomId);
+            } else {
+                serverConn.sendActionFailed(commId, "couldn't activate room");
+            }
+        }
+    }
+
+    @Override
+    public void exec(final EndTurnAction eta) {
+
+        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
+            if (eta.getCommID() != currHandledCommId) {
+                sc.sendActionFailed(eta.getCommID(), "Illegal Action: not your turn.");
+            }
             handleHireMonsterAction = false; // finish handling action. terminates loop.
         }
-    }
-
-    @Override
-    public void exec(ActivateRoomAction ara) {
-        int commId = ara.getCommID();
-        int roomId = ara.getRoomID();
-        ServerConnection<Action> serverConn = gd.getServerConnection();
-
-        // get the player who requested to activate the room
-        Player player = gd.getPlayerByCommID(commId);
-        // if player doesn't exist, return
-        if (player == null) {
-            serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
-            return;
-        }
-
-        Dungeon playersDungeon = player.getDungeon();
-        if (playersDungeon.activateRoom(roomId)) {
-            Room activatedRoom = playersDungeon.getRoomById(roomId);
-            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
-            broadcastRoomActivated(player.getPlayerID(), roomId);
-        } else {
-            serverConn.sendActionFailed(commId, "couldn't activate room");
-        }
 
     }
 
-    @Override
-    public void exec(EndTurnAction eta) {
-
-        ServerConnection<Action> sc = gd.getServerConnection();
-        if (eta.getCommID() != currHandledHireMonsterCommId) {
-            sc.sendActionFailed(eta.getCommID(), "Illegal Action: not your turn.");
-        }
-        handleHireMonsterAction = false; // finish handling action. terminates loop.
-    }
-
-
-    //returns list of player ids for a specific bid type.
-    private ArrayList<Integer> collectBidWinners(BidType bt) {
-        BiddingSquare bs = gd.getBiddingSquare();
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        for (int i = 0; i < 3; i++) {
-            ids.add(bs.getIDByBidSlot(bt, i));
-        }
-        return ids; //collect the playerID
-    }
 }
