@@ -1,6 +1,7 @@
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.player.Player;
@@ -48,22 +49,44 @@ public class PlayerTest {
 
     @Test
     void getBid() {
-        //TODO: implement this.
+        testDummy.addBid(BidType.FOOD, 0);
+        testDummy.addBid(BidType.GOLD, 1);
+        assertEquals(BidType.FOOD, testDummy.getBid(0));
+        assertEquals(BidType.GOLD, testDummy.getBid(1));
+        assertEquals(null, testDummy.getBid(3));
     }
 
     @Test
     void changeEvilnessBy() {
-        //TODO: implement this.
+        assertTrue(testDummy.changeEvilnessBy(8));
+        assertTrue(testDummy.changeEvilnessBy(-2));
+        assertFalse(testDummy.changeEvilnessBy(11));
+        testDummy.changeEvilnessBy(5);
+        assertEquals(10, testDummy.getEvilLevel());
     }
 
     @Test
     void changeGoldBy() {
-        //TODO: implement this.
+        assertTrue(testDummy.changeGoldBy(1));
+        assertFalse(testDummy.changeGoldBy(-1));
+        testDummy.changeGoldBy(1);
+        assertEquals(1, testDummy.getGold());
     }
 
     @Test
     void changeFoodBy() {
-        //TODO: implement this.
+        assertTrue(testDummy.changeFoodBy(1));
+        assertFalse(testDummy.changeFoodBy(-1));
+        testDummy.changeFoodBy(1);
+        assertEquals(1, testDummy.getFood());
+    }
+
+    @Test
+    public void testGetNumPlacedBids() {
+        assertEquals(0, testDummy.getNumPlacedBids());
+        testDummy.addBid(BidType.FOOD, 0);
+        testDummy.addBid(BidType.GOLD, 1);
+        assertEquals(2, testDummy.getNumPlacedBids());
     }
 
     @Test
