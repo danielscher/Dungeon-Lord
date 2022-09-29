@@ -179,6 +179,10 @@ public class GameData {
         return config.getMaxPlayer();
     }
 
+    public int getMaxYears() {
+        return config.getMaxYear();
+    }
+
     public int getNumCurrPlayers() {
         //TODO: returns the number of currently registered players.
         return 1;

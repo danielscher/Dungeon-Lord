@@ -2,14 +2,15 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Monster {
 
-    final private int monsterID;
-    final private int hunger;
-    final private int evilness;
-    final private int damage;
-    final private Attack attack;
+    private final int monsterID;
+    private final int hunger;
+    private final int evilness;
+    private final int damage;
+    private final Attack attack;
     private boolean availableThisYear;
 
-    public Monster(final int monsterID, final int hunger, final int evilness, final int damage, final Attack attack) {
+    public Monster(final int monsterID, final int hunger, final int evilness,
+            final int damage, final Attack attack) {
         this.monsterID = monsterID;
         this.hunger = hunger;
         this.evilness = evilness;
@@ -42,7 +43,7 @@ public class Monster {
         return availableThisYear;
     }
 
-    public void makeUnavailable() {
+    public void setUnavailable() {
         availableThisYear = false;
     }
 }

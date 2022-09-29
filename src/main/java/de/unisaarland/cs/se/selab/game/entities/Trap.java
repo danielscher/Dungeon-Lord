@@ -2,10 +2,10 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Trap {
 
-    final private int trapID;
-    final private int damage;
-    final private int target;
-    final private Attack attack;
+    private final int trapID;
+    private final int damage;
+    private final int target;
+    private final Attack attack;
     private boolean availableThisYear;
 
     public Trap(final int trapID, final int damage, final int target, final Attack attack) {
