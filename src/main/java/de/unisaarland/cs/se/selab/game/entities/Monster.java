@@ -2,14 +2,14 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Monster {
 
-    private int monsterID;
-    private int hunger;
-    private int evilness;
-    private int damage;
-    private Attack attack;
+    final private int monsterID;
+    final private int hunger;
+    final private int evilness;
+    final private int damage;
+    final private Attack attack;
     private boolean availableThisYear;
 
-    public Monster(int monsterID, int hunger, int evilness, int damage, Attack attack) {
+    public Monster(final int monsterID, final int hunger, final int evilness, final int damage, final Attack attack) {
         this.monsterID = monsterID;
         this.hunger = hunger;
         this.evilness = evilness;
