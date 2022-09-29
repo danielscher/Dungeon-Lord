@@ -23,5 +23,17 @@ public class ConfigTest extends Config {
         cfg.display();
     }
 
+    @Test
+    public void testgetter() {
+        cfg.display();
+        cfg.setConfigFilePath(mypath);
+        try {
+            cfg.parse(mypath);
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+        cfg.display();
+    }
+
 
 }

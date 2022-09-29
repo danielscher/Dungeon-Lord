@@ -32,16 +32,7 @@ public class Config {
     private ArrayList<Trap> traps;
     private ArrayList<Room> rooms;
 
-    /*   public Config(String path){
-           maxPlayer = -1;
-           maxYear = -1;
-           dungeonSidelength = -1;
-           initFood = -1;
-           initGold = -1;
-           initImps = -1;
-           configFilePath =path;
-      }
-    */
+    private JSONObject obj;
     //
     public void setConfigFilePath(String s) {
         this.configFilePath = s;
@@ -50,14 +41,14 @@ public class Config {
     public void display() {
         System.out.println("maxYear =" + maxYear);
         System.out.println("maxPlayer =" + maxPlayer);
+        System.out.println("number of rooms =" + rooms.size());
+        System.out.println("number of traps =" + traps.size());
+        System.out.println("number of adventurers =" + adventurers.size());
+        System.out.println("number of monsters =" + monsters.size());
     }
 
     public boolean parse(String configFilePath) throws FileNotFoundException {
         parserResult = true;
-
-        // FileReader fileReader= (new FileReader(configFilePath));
-        // System.out.println("log filereader ="+fileReader);
-        // JSONObject obj = new JSONObject(fileReader);
         StringBuilder builder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
             String s;
@@ -70,7 +61,7 @@ public class Config {
         }
         String allJSONdata = builder.toString();
         //  System.out.println(allJSONdata);
-        JSONObject obj = new JSONObject(allJSONdata);
+        obj = new JSONObject(allJSONdata);
 
         maxYear = (Integer) obj.get("years");
         maxPlayer = (Integer) obj.get("maxPlayers");
@@ -78,141 +69,152 @@ public class Config {
         initFood = (Integer) obj.get("initialFood");
         initGold = (Integer) obj.get("initialGold");
         initImps = (Integer) obj.get("initialImps");
+// end of parse to json object
+        return parserResult;
+    }
 
-        JSONArray monsterArray = obj.getJSONArray("monsters");
-        int monArrLen = monsterArray.length();
-        for (int i = 0; i < monArrLen; i++) {
-            JSONObject monsterObj = monsterArray.getJSONObject(i);
-            int id = (Integer) monsterObj.get("id");
-            String name = (String) monsterObj.get("name");
-            int hunger = 0;
-            try {
-                String hungerValString = monsterObj.getString("hunger");
-                hunger = Integer.valueOf(hungerValString); //(Integer) monsterObj.get("hunger");
-            } catch (Exception e) {
-                //    System.out.println("this monster does not have hunger");
-            }
+        public Boolean parserAndcheckMonsterToList(JSONObject obj) {
+            JSONArray monsterArray = obj.getJSONArray("monsters");
+            int monArrLen = monsterArray.length();
+            for (int i = 0; i < monArrLen; i++) {
+                JSONObject monsterObj = monsterArray.getJSONObject(i);
+                int id = (Integer) monsterObj.get("id");
+                String name = (String) monsterObj.get("name");
+                int hunger = 0;
+                try {
+                    //  String hungerValString = monsterObj.getString("hunger");
+                    //  hunger = Integer.valueOf(hungerValString); //(Integer) monsterObj.get("hunger");
+                    hunger = monsterObj.getInt("hunger");
+                } catch (Exception e) {
+                    //    System.out.println("this monster does not have hunger"); do nothing
+                }
 
-            int evilness = 0;
-            try {
-                String evilnessValString = monsterObj.getString("evilness");
-                hunger = Integer.valueOf(evilnessValString);
-            } catch (Exception e) {
-                //    System.out.println("this monster does not have evilness");
-            }
+                int evilness = 0;
+                try {
+                    //    String evilnessValString = monsterObj.getString("evilness");
+                    //    evilness = Integer.valueOf(evilnessValString);
+                    evilness = monsterObj.getInt("evilness");
+                } catch (Exception e) {
+                    //    System.out.println("this monster does not have evilness"); do nothing
+                }
 
-            //  int evilness = (Integer) monsterObj.get("evilness");
-            int damage = (Integer) monsterObj.get("damage");
-            //    Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
-            String attackStrategyString = (String) monsterObj.get("attackStrategy");
-            Attack attackStrategy = Attack.valueOf(attackStrategyString);
-            if (evilness < 0 || hunger < 0) {
-                parserResult = false;
-                break;
-            }
-            // invalid evil/hunger
+                //  int evilness = (Integer) monsterObj.get("evilness");
+                int damage = (Integer) monsterObj.get("damage");
+                //    Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
+                String attackStrategyString = (String) monsterObj.get("attackStrategy");
+                Attack attackStrategy = Attack.valueOf(attackStrategyString);
+                if (evilness < 0 || hunger < 0) {
+                    parserResult = false;
+                    break;
+                }
+                // invalid evil/hunger
 
-            if (damage < 1 || attackStrategy == null) {
-                parserResult = false;
-                break;
-            }
-            // valid damage, attack not set
+                if (damage < 1 || attackStrategy == null) {
+                    parserResult = false;
+                    break;
+                }
+                // valid damage, attack not set
+            } //end of monster for loop+ add to list
+            return parserResult;
         }
 
-        JSONArray adventurerArray = obj.getJSONArray("adventurers");
-        int advArrLen = adventurerArray.length();
-        for (int i = 0; i < advArrLen; i++) {
-            JSONObject adventurerObj = adventurerArray.getJSONObject(i);
-            int id = (Integer) adventurerObj.get("id");
-            String name = (String) adventurerObj.get("name");
-            //  int healValue = (Integer) adventurerObj.get("healValue");
-            int healValue = 0;
-            try {
-                String healValueValString = adventurerObj.getString("healValue");
-                healValue = Integer.valueOf(healValueValString);
-            } catch (Exception e) {
-                //    System.out.println("not a priest");
-            }
+        public Boolean parserAndcheckAdventurerToList(JSONObject obj) {
+            JSONArray adventurerArray = obj.getJSONArray("adventurers");
+            int advArrLen = adventurerArray.length();
+            for (int i = 0; i < advArrLen; i++) {
+                JSONObject adventurerObj = adventurerArray.getJSONObject(i);
+                int id = (Integer) adventurerObj.get("id");
+                String name = (String) adventurerObj.get("name");
+                //  int healValue = (Integer) adventurerObj.get("healValue");
+                int healValue = 0;
+                try {
+                    String healValueValString = adventurerObj.getString("healValue");
+                    healValue = Integer.valueOf(healValueValString);
+                } catch (Exception e) {
+                    //    System.out.println("not a priest");
+                }
 
-            //  int defuseValue = (Integer) adventurerObj.get("defuseValue");
-            int defuseValue = 0;
-            try {
-                String defuseValueValString = adventurerObj.getString("defuseValue");
-                defuseValue = Integer.valueOf(defuseValueValString);
-            } catch (Exception e) {
-                //    System.out.println("not a thief");
-            }
+                //  int defuseValue = (Integer) adventurerObj.get("defuseValue");
+                int defuseValue = 0;
+                try {
+                    String defuseValueValString = adventurerObj.getString("defuseValue");
+                    defuseValue = Integer.valueOf(defuseValueValString);
+                } catch (Exception e) {
+                    //    System.out.println("not a thief");
+                }
 
-            //   boolean charge = (Boolean) adventurerObj.get("charge");
-            boolean charge = false;
-            try {
-                String chargeValString = adventurerObj.getString("charge");
-                charge = Boolean.valueOf(chargeValString);
-            } catch (Exception e) {
-                //    System.out.println("not in charge");
-            }
+                //   boolean charge = (Boolean) adventurerObj.get("charge");
+                boolean charge = false;
+                try {
+                    String chargeValString = adventurerObj.getString("charge");
+                    charge = Boolean.valueOf(chargeValString);
+                } catch (Exception e) {
+                    //    System.out.println("not in charge");
+                }
 
-            int difficulty = (Integer) adventurerObj.get("difficulty");
-            int healthPoints = (Integer) adventurerObj.get("healthPoints");
+                int difficulty = (Integer) adventurerObj.get("difficulty");
+                int healthPoints = (Integer) adventurerObj.get("healthPoints");
 
-            if (difficulty < 0 || healthPoints < 1 || healValue < 0 || defuseValue < 0
-                    || difficulty > 8) {
-                parserResult = false;
-                break;
-            }
-            // invalid value of an adventurer
+                if (difficulty < 0 || healthPoints < 1 || healValue < 0 || defuseValue < 0
+                        || difficulty > 8) {
+                    parserResult = false;
+                    break;
+                }
+                // invalid value of an adventurer
 
-            if (healValue > 0 && defuseValue > 0) {
-                parserResult = false;
-                break;
-            }
-            // cannot be priest and thief at the same time
+                if (healValue > 0 && defuseValue > 0) {
+                    parserResult = false;
+                    break;
+                }
+                // cannot be priest and thief at the same time
+
+            } //end of the adventurer forloop +++ add to list
+            return parserResult;
         }
 
-        JSONArray trapArray = obj.getJSONArray("traps");
-        int trpArrLen = trapArray.length();
-        for (int i = 0; i < trpArrLen; i++) {
-            JSONObject trapObj = trapArray.getJSONObject(i);
-            int id = (Integer) trapObj.get("id");
-            String name = (String) trapObj.get("name");
-            int damage = (Integer) trapObj.get("damage");
-            //  Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
-            String attackStrategyString = (String) trapObj.get("attackStrategy");
-            Attack attackStrategy = Attack.valueOf(attackStrategyString);
+        public Boolean parserAndcheckTrapToList(JSONObject obj) {
+            JSONArray trapArray = obj.getJSONArray("traps");
+            int trpArrLen = trapArray.length();
+            for (int i = 0; i < trpArrLen; i++) {
+                JSONObject trapObj = trapArray.getJSONObject(i);
+                int id = (Integer) trapObj.get("id");
+                String name = (String) trapObj.get("name");
+                int damage = (Integer) trapObj.get("damage");
+                //  Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
+                String attackStrategyString = (String) trapObj.get("attackStrategy");
+                Attack attackStrategy = Attack.valueOf(attackStrategyString);
 
-            //    int target = (Integer) trapObj.get("target");
-            int target = 0;
-            try {
-                //    String targetValString = trapObj.getString("target");
-                //    target = Integer.valueOf(targetValString);
-                target = (Integer) trapObj.get("target");
-                //    System.out.println("traget string and value?"+target);
-            } catch (Exception e) {
-                //    System.out.println("not targeted");
-            }
+                //    int target = (Integer) trapObj.get("target");
+                int target = 0;
+                try {
+                    //    String targetValString = trapObj.getString("target");
+                    //    target = Integer.valueOf(targetValString);
+                    target = (Integer) trapObj.get("target");
+                    //    System.out.println("traget string and value?"+target);
+                } catch (Exception e) {
+                    //    System.out.println("not targeted");
+                }
 
-            if (id < 0 || damage < 1) {
-                parserResult = false;
-                break;
-            }
-            //traps should have valid damage and id
-            if (attackStrategy == Attack.TARGETED && (target < 1 || target > 3)) {
-                parserResult = false;
-                break;
-            }
-            //target traps should have 1,2,3 as goals.
+                if (id < 0 || damage < 1) {
+                    parserResult = false;
+                    break;
+                }
+                //traps should have valid damage and id
+                if (attackStrategy == Attack.TARGETED && (target < 1 || target > 3)) {
+                    parserResult = false;
+                    break;
+                }
+                //target traps should have 1,2,3 as goals.
+            } // end of traps forloop
+            return parserResult;
         }
 
+        public Boolean parserAndcheckRoomToList(JSONObject obj){
         JSONArray roomArray = obj.getJSONArray("rooms");
         int roomArrLen = roomArray.length();
         for (int i = 0; i < roomArrLen; i++) {
             JSONObject roomObj = roomArray.getJSONObject(i);
             String name = (String) roomObj.get("name");
-            int activationCost = (Integer) roomObj.get("activation");
-            //    Location placementLoc = (Location) roomObj.get("restriction");
-            String locationString = (String) roomObj.get("restriction");
-            Location placementLoc = Location.valueOf(locationString);
-
             //  int foodProduction = (Integer) roomObj.get("food");
             int foodProduction = 0;
             try {
@@ -252,7 +254,14 @@ public class Config {
                 parserResult = false;
                 break;
             }
-        }
+            int activationCost = (Integer) roomObj.get("activation");
+            //    Location placementLoc = (Location) roomObj.get("restriction");
+            String locationString = (String) roomObj.get("restriction");
+            Location placementLoc = Location.valueOf(locationString);
+            Room currRoom = new Room(id, activationCost, foodProduction, goldProduction,
+                    impProduction, niceness, placementLoc);
+            rooms.add(currRoom);
+        } // end of rooms
 
         return parserResult;
     }

@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameEndPhase extends Phase {
@@ -310,5 +311,9 @@ public class GameEndPhase extends Phase {
         }
     }
 
+    public List<Integer> getPlayersID(GameData gd){
+        return gd.getAllPlayerID();
+
+    }
 
 }
