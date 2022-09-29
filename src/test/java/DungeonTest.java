@@ -168,12 +168,14 @@ public class DungeonTest {
 
     @Test
     public void testaddMonster() {
-        //todo
+        dg.addMonster(m1);
+        assertEquals(m1, dg.getHiredMonsters().get(0));
     }
 
     @Test
-    public void testaddTrap() {
-        //todo
+    public void testTrap() {
+        dg.addTrap(t1);
+        assertEquals(t1, dg.getTrapByID(1));
     }
 
     @Test
@@ -200,7 +202,8 @@ public class DungeonTest {
 
     @Test
     public void testgetNumGoldMineAbleTiles() {
-        //todo
+        fillFirstRow(grid);
+        assertEquals(1, dg.getNumGoldMineAbleTiles());
     }
 
     @Test
