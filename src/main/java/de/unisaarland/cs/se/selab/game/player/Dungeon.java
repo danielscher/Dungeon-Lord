@@ -370,12 +370,31 @@ public class Dungeon {
         return rooms.size();
     }
 
-    public int getNumMonsters() {
-        return hiredMonsters.size();
+    public int getNumAvailableMonsters() {
+        int res = 0;
+        for (Monster monster : hiredMonsters) {
+            if (monster.availableThisYear()) {
+                res += 1;
+
+            }
+
+        }
+
+        return res;
     }
 
-    public int getNumTraps() {
-        return traps.size();
+    public int getNumAvailableTraps() {
+
+        int res = 0;
+        for (Trap trap : traps) {
+            if (trap.isAvailableThisYear()) {
+                res += 1;
+
+            }
+
+        }
+
+        return res;
     }
 
     public Monster getMonsterByID(int id) {
@@ -539,6 +558,10 @@ public class Dungeon {
         restingImps += goldMiningImps;
         goldMiningImps = 0;
         return res;
+    }
+
+    public Adventurer fleeadventureinQueue(){
+        return prison.remove();
     }
 }
 

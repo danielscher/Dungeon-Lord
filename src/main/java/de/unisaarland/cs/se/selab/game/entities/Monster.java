@@ -43,7 +43,7 @@ public class Monster {
         return availableThisYear;
     }
 
-    public void makeUnavailable() {
+    public void setUnavailable() {
         availableThisYear = false;
     }
 }
