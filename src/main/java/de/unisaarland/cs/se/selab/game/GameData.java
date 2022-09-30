@@ -120,6 +120,19 @@ public class GameData {
 
     }
 
+
+    public int getNextCombatPlayer(int lastplayerid) {
+        final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
+        playerList.sort(Comparator.naturalOrder());
+        final int pos = playerList.indexOf(lastplayerid);
+        if (pos == playerList.size() - 1) {
+            return -1;
+        } else {
+            return (playerList.get(pos + 1));
+        }
+    }
+
+
     public void drawEntities() {
         discardMonster();   //discard old unsold monsters
         addDrawnMonsters(); //draw 3 new monsters

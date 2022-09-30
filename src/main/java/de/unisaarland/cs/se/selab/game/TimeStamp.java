@@ -23,7 +23,12 @@ public class TimeStamp {
     }
 
     public void nextyear() {
+        this.season = 1;
         this.year = year + 1;
+    }
+
+    public void timeTravel(){
+        this.season = 5;
     }
 
 }

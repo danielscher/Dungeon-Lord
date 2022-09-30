@@ -26,7 +26,7 @@ public class CombatPhase extends Phase {
     private Trap placedtrap = null;
     //placed monsters and the target position
     private final Map<Monster, Integer> placedMonsters = new HashMap<Monster, Integer>();
-    private Dungeon dungeon = currPlayingPlayer.getDungeon();
+    private final Dungeon dungeon = currPlayingPlayer.getDungeon();
     private boolean actionfailed = false;
 
 
@@ -146,7 +146,7 @@ public class CombatPhase extends Phase {
                     case MULTI:
                         int res = placedtrap.getDamage() - totalDefuseVal;
                         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            int current_reduction = res;
+                            int currentReduction = res;
                             res = dungeon.getAdventurerById(i).damagehealthby(res);
                             if (res >= 0) {
                                 dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
@@ -155,7 +155,7 @@ public class CombatPhase extends Phase {
                             } else {
                                 broadcastAdventurerDamaged(
                                         dungeon.getAdventurer(i).getAdventurerID(),
-                                        current_reduction);
+                                        currentReduction);
                                 break;
                             }
                         }
@@ -184,7 +184,7 @@ public class CombatPhase extends Phase {
                                 broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
                                         monster.getDamage());
                             }
-                        }// To handle when the target adventurer is not there in the queue
+                        } // To handle when the target adventurer is not there in the queue
                         break;
 
                     case BASIC:
@@ -205,7 +205,7 @@ public class CombatPhase extends Phase {
                         int res = monster.getDamage();
 
                         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            int current_reduction = res;
+                            int currentReduction = res;
                             res = dungeon.getAdventurerById(i).damagehealthby(res);
                             if (res >= 0) {
                                 dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
@@ -215,7 +215,7 @@ public class CombatPhase extends Phase {
                             } else {
                                 broadcastAdventurerDamaged(
                                         dungeon.getAdventurer(i).getAdventurerID(),
-                                        current_reduction);
+                                        currentReduction);
                                 break;
                             }
                         }
@@ -259,12 +259,57 @@ public class CombatPhase extends Phase {
                 if (dungeon.getNumImprisonedAdventurers() != 0) {
                     //fly the first adventurer
                     broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
+                    currPlayingPlayer.changeEvilnessBy(-1);
                 }
-                // TODO: 29.09.22
+
             }
         }
 
-        return new GameEndPhase(gd);
+        //healing
+
+        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+            if (dungeon.getAdventurer(i).getHealValue() > 0) {
+                int res = dungeon.getAdventurer(i).getHealValue();
+                for (int j = 0; j < dungeon.getNumAdventurersInQueue(); i++) {
+                    int currentRes = res;
+                    res = dungeon.getAdventurer(j).healBy(res);
+                    if (res > 0) {
+                        broadcastAdventurerHealed(currentRes - res,
+                                dungeon.getAdventurer(i).getAdventurerID(),
+                                dungeon.getAdventurer(j).getAdventurerID());
+                    } else {
+                        broadcastAdventurerHealed(currentRes,
+                                dungeon.getAdventurer(i).getAdventurerID(),
+                                dungeon.getAdventurer(j).getAdventurerID());
+                        break;
+                    }
+
+
+                }
+
+            }
+        }
+        // if player has combat rounds left
+        if (timeStamp.getSeason() < 8) {
+            timeStamp.nextSeason();
+            return new ChooseBattleGroundPhase(gd, currPlayingPlayer);
+        } else {
+            //if we have players left to combat
+            if (gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID()) >= 0) {
+                timeStamp.timeTravel();
+                return new ChooseBattleGroundPhase(gd, gd.getPlayerByPlayerId(
+                        gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID())));
+                // passing to next year or ending the game
+            } else {
+                if (timeStamp.getYear() == gd.getMaxYears()) {
+                    return new GameEndPhase(gd);
+                } else {
+                    timeStamp.nextyear();
+                    return new CollectAndPlaceBidPhase(gd);
+
+                }
+            }
+        }
     }
 
 
