@@ -17,7 +17,7 @@ public class Player {
     private Dungeon dungeon;
     private BidType[] currBids = new BidType[3];
     private BidType[] blockedBids = new BidType[3];
-    private List<Title> titles = new ArrayList<>();
+    private final List<Title> titles = new ArrayList<>();
     private int points;
     private int evilLevel;
     private int gold;
@@ -56,7 +56,7 @@ public class Player {
     needed for the Event of the bids that are available again
      */
     public BidType[] getBlockedBids() {
-        return blockedBids;
+        return blockedBids.clone();
     }
 
     /*
@@ -119,12 +119,13 @@ public class Player {
         }
 
         // check if there already is a bid with this priority
-        if (currBids[priority] != null) {
+        /* if (currBids[priority] != null) {
             return false;
         }
-
+        */
         // if it didn't return until now, every requirement is fulfilled, bid can be added
-        return true;
+        // return true;
+        return (currBids[priority] == null); // improvement suggested by pmd
     }
 
     /*
