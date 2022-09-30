@@ -93,7 +93,7 @@ public class EvalRoomPhase extends Phase {
         }
     }
 
-@Override
+    @Override
     public void exec(final BuildRoomAction bra) {
         final Player player = gd.getPlayerByCommID(bra.getCommID());
         if (player == null) {
@@ -209,7 +209,7 @@ public class EvalRoomPhase extends Phase {
     }
 
 
-    public void evalRoomProduction(final Room r, final Player player){
+    public void evalRoomProduction(final Room r, final Player player) {
         final int p = player.getPlayerID();
         final Dungeon dungeon = player.getDungeon();
 
@@ -230,7 +230,7 @@ public class EvalRoomPhase extends Phase {
             broadcastImpsChanged(r.getImpProduction(), p);
         }
     }
-    public void spreadAdv() {
+        public void spreadAdv() {
         final List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
 
         /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
