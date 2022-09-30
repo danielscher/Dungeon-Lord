@@ -30,7 +30,7 @@ public class Dungeon {
     private int producingImps;
 
     public Dungeon() {
-        restingImps = 3;
+        restingImps = 3;  // TODO: add parameters restingImps, gridSideLength
     }
 
     public List<Room> getRooms() {
@@ -153,8 +153,13 @@ public class Dungeon {
             return false;
         }
 
-        return (grid[x][y] == null);
+        if (grid[x][y] == null) {
+            return !TileFinder.wouldCreateSquare(x, y, grid);
+        } else {
+            return false;
+        }
     }
+
 
     /*
     tries to dig a tile at a given location
