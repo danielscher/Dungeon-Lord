@@ -1,3 +1,5 @@
+package tests;
+
 import de.unisaarland.cs.se.selab.game.Config;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;

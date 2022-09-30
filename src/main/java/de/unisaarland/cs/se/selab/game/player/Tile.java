@@ -14,7 +14,7 @@ public class Tile {
         return distanceToEntrance;
     }
 
-    protected void setDistanceToEntrance(int distanceToEntrance) {
+    protected void setDistanceToEntrance(final int distanceToEntrance) {
         this.distanceToEntrance = distanceToEntrance;
     }
 

@@ -12,11 +12,12 @@ public class ChooseBattleGroundPhase extends Phase {
 
     private final Player currPlayer;
 
-    public ChooseBattleGroundPhase(GameData gd, Player currPlayer) {
+    public ChooseBattleGroundPhase(final GameData gd, final Player currPlayer) {
         super(gd);
         this.currPlayer = currPlayer;
     }
 
+    @Override
     public Phase run() throws TimeoutException {
         broadcastNextRound(gd.getTime().getSeason());
 
@@ -30,16 +31,17 @@ public class ChooseBattleGroundPhase extends Phase {
         gd.getServerConnection().sendActNow(
                 currPlayer.getCommID()); //send individual event "ActNow"
 
-        Action action = gd.getServerConnection().nextAction();
+        final Action action = gd.getServerConnection().nextAction();
         if (action.getCommID() == currPlayer.getCommID()) {
             action.invoke(this);
         }
         return new CombatPhase(gd, currPlayer);
     }
 
-    public void exec(BattleGroundAction bga) {
-        List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
-        Coordinate chosenCoords = new Coordinate(bga.getRow(), bga.getCol());
+    @Override
+    public void exec(final BattleGroundAction bga) {
+        final List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
+        final Coordinate chosenCoords = new Coordinate(bga.getRow(), bga.getCol());
         if (!possibleCoords.contains(
                 chosenCoords)) { //invalid coordinates
             gd.getServerConnection().sendActionFailed(currPlayer.getCommID(),

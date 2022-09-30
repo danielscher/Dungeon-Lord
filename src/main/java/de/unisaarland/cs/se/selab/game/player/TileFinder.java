@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.game.player;
 
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /*
@@ -46,7 +47,7 @@ public final class TileFinder {
      * inspects a tile, and updates the list of the closest tiles accordingly
      * return value is newest smallest distance found
      */
-    private static int inspectTile(final Tile tile, final List<Coordinate> collection,
+    private static int inspectTile(final Tile tile, final Collection<Coordinate> coordinates,
             final int distance, final int x, final int y) {
         int res = distance;
         if (!tile.isConquered()) {
@@ -55,16 +56,16 @@ public final class TileFinder {
                 // if no unconquered tile found yet
                 // take this
                 res = tile.getDistanceToEntrance();
-                collection.add(new Coordinate(x, y));
+                coordinates.add(new Coordinate(x, y));
             } else if (distance == tile.getDistanceToEntrance()) {
                 // if this tile has same distance
                 // as previous closest tiles, add to list
-                collection.add(new Coordinate(x, y));
+                coordinates.add(new Coordinate(x, y));
             } else if (distance > tile.getDistanceToEntrance()) {
                 // if tile is closer than previous, clear list and add this
                 res = tile.getDistanceToEntrance();
-                collection.clear();
-                collection.add(new Coordinate(x, y));
+                coordinates.clear();
+                coordinates.add(new Coordinate(x, y));
             }
         }
         return res;
@@ -119,5 +120,64 @@ public final class TileFinder {
         if (y < grid[0].length - 1) {
             calcDistToEntrance(x, y + 1, n + 1, grid);
         }
+    }
+
+    /*
+    this method check if digging at a given location would create a square
+    NOTE: relies on valid coordinates
+    X = given tiles, 0 = tiles to check
+    a square happens when at least one of the "0" tiles are
+     */
+    public static boolean wouldCreateSquare(final int x, final int y, final Tile[][] grid) {
+        boolean foundSquare = false; // this variable hold if at least one square would be created
+        if (x > 0 && y > 0) {
+            // check square to the upper left direction
+            /*
+            ----- x axis -----> (y axis goes from top to bottom)
+            00
+            0X
+             */
+            boolean squareHasNullTile = grid[x - 1][y] == null; // this variable holds if the
+            // theoretical square has at least one null tile, which means it isn't a real square
+            // to avoid
+
+            squareHasNullTile |= grid[x - 1][y - 1] == null;
+            squareHasNullTile |= grid[x][y - 1] == null;
+            foundSquare |= !squareHasNullTile;
+        }
+        if (x < grid.length - 1 && y < grid[0].length - 1) {
+            // check square to lower right direction
+            /*
+            X0
+            00
+             */
+            boolean squareHasNullTile = grid[x + 1][y] == null;
+            squareHasNullTile |= grid[x + 1][y + 1] == null;
+            squareHasNullTile |= grid[x][y + 1] == null;
+            foundSquare |= !squareHasNullTile;
+        }
+        if (x > 0 && y < grid[0].length - 1) {
+            // check square to lower left direction
+            /*
+            0X
+            00
+             */
+            boolean squareHasNullTile = grid[x - 1][y] == null;
+            squareHasNullTile |= grid[x - 1][y + 1] == null;
+            squareHasNullTile |= grid[x][y + 1] == null;
+            foundSquare |= !squareHasNullTile;
+        }
+        if (x < grid.length - 1 && y < 0) {
+            // checks square to upper right direction
+            /*
+            00
+            x0
+             */
+            boolean squareHasNullTile = grid[x][y - 1] == null;
+            squareHasNullTile |= grid[x + 1][y - 1] == null;
+            squareHasNullTile |= grid[x + 1][y] == null;
+            foundSquare |= !squareHasNullTile;
+        }
+        return foundSquare;
     }
 }
