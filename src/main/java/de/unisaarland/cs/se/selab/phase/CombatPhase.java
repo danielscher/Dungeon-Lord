@@ -174,7 +174,8 @@ public class CombatPhase extends Phase {
             for (final Monster monster : placedMonsters.keySet()) {
                 switch (monster.getAttack()) {
                     case TARGETED:
-                        final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters.get(monster));
+                        final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
+                                .get(monster));
                         if (adTargeted != null) {
                             if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
                                 dungeon.imprison(adTargeted.getAdventurerID());
