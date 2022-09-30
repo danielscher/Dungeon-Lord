@@ -140,9 +140,9 @@ public final class TileFinder {
             boolean squareHasNullTile = grid[x - 1][y] == null; // this variable holds if the
             // theoretical square has at least one null tile, which means it isn't a real square
             // to avoid
-
-            squareHasNullTile |= grid[x - 1][y - 1] == null;
-            squareHasNullTile |= grid[x][y - 1] == null;
+            // above check is left
+            squareHasNullTile |= grid[x - 1][y - 1] == null; // upper-left
+            squareHasNullTile |= grid[x][y - 1] == null; // above
             foundSquare |= !squareHasNullTile;
         }
         if (x < grid.length - 1 && y < grid[0].length - 1) {
@@ -151,9 +151,9 @@ public final class TileFinder {
             X0
             00
              */
-            boolean squareHasNullTile = grid[x + 1][y] == null;
-            squareHasNullTile |= grid[x + 1][y + 1] == null;
-            squareHasNullTile |= grid[x][y + 1] == null;
+            boolean squareHasNullTile = grid[x + 1][y] == null; // right
+            squareHasNullTile |= grid[x + 1][y + 1] == null; // lower-right
+            squareHasNullTile |= grid[x][y + 1] == null; // below
             foundSquare |= !squareHasNullTile;
         }
         if (x > 0 && y < grid[0].length - 1) {
@@ -162,9 +162,9 @@ public final class TileFinder {
             0X
             00
              */
-            boolean squareHasNullTile = grid[x - 1][y] == null;
-            squareHasNullTile |= grid[x - 1][y + 1] == null;
-            squareHasNullTile |= grid[x][y + 1] == null;
+            boolean squareHasNullTile = grid[x - 1][y] == null; // left
+            squareHasNullTile |= grid[x - 1][y + 1] == null; // lower-left
+            squareHasNullTile |= grid[x][y + 1] == null; // below
             foundSquare |= !squareHasNullTile;
         }
         if (x < grid.length - 1 && y < 0) {
@@ -173,9 +173,9 @@ public final class TileFinder {
             00
             x0
              */
-            boolean squareHasNullTile = grid[x][y - 1] == null;
-            squareHasNullTile |= grid[x + 1][y - 1] == null;
-            squareHasNullTile |= grid[x + 1][y] == null;
+            boolean squareHasNullTile = grid[x][y - 1] == null; // above
+            squareHasNullTile |= grid[x + 1][y - 1] == null; // upper-right
+            squareHasNullTile |= grid[x + 1][y] == null; // right
             foundSquare |= !squareHasNullTile;
         }
         return foundSquare;

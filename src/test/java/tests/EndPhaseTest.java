@@ -143,8 +143,13 @@ class EndPhaseTest {
     @Test
     void testwinner() {
         resetData();
+<<<<<<< HEAD:src/test/java/EndPhaseTest.java
+        gep.evaluateScores();
+        assertEquals(3, gep.getWinnerPlayerIdList().get(0));
+=======
         gep.evaluateScoresNoTitle();
         assertEquals(3, gep.getWinnerPlayerIDList().get(0));
+>>>>>>> e7f10e485058642e5382008356bdf4b06ee1026a:src/test/java/tests/EndPhaseTest.java
     }
 
 }

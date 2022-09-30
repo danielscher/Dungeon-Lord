@@ -3,6 +3,10 @@ package tests;
 import de.unisaarland.cs.se.selab.game.Config;
 import java.io.FileNotFoundException;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ConfigTest extends Config {
 
@@ -19,7 +23,8 @@ public class ConfigTest extends Config {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        //    cfg.displayLog();
+        int res = getParserResult();
+        assertEquals( 0,res );
     }
 
     public void testParseNotOk() {
@@ -30,7 +35,8 @@ public class ConfigTest extends Config {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        //    cfg.displayLog();
+        int res = getParserResult();
+        assertNotEquals( 0,res );
     }
 
     public void testParseNotOkAa() {
@@ -46,14 +52,12 @@ public class ConfigTest extends Config {
 
     @Test
     public void testGetter() {
-        //    cfg.displayLog();
         cfg.setConfigFilePath(myPath);
         try {
             cfg.parse(myPath);
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-        cfg.displayLog();
     }
 
     @Test
