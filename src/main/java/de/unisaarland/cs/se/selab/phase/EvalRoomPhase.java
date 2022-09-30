@@ -38,12 +38,6 @@ public class EvalRoomPhase extends Phase {
 
         if (gd.getTime().getSeason() == 4) {
             gd.getTime().nextSeason();
-            /* TODO for-loop can't continue with return
-            for (final Player p : gd.getAllPlayerSortedByID()) {
-                //for all players, sorted by player ID, to choose battleground
-                return new ChooseBattleGroundPhase(gd, p);
-            }*/
-
             return new ChooseBattleGroundPhase(gd, gd.getAllPlayerSortedByID().get(0));
         }
 
