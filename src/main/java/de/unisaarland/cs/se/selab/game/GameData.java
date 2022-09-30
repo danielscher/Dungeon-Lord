@@ -66,7 +66,8 @@ public class GameData {
         if (commList.contains(commId)) {
             return false;
         } else {
-            final Player player = new Player(name, idCounter, commId);
+            final Player player = new Player(name, idCounter, commId, 3, 15);
+            // TODO replace 3 and 15 here and use values provided by the config
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             return true;

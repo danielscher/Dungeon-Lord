@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class GameDataTest {
 
     GameData gd = new GameData();
-    Player p1 = new Player("Plyer1", 1, 1);
+    Player p1 = new Player("Plyer1", 1, 1, 3, 15);
 
 
     private void resetGameData() {

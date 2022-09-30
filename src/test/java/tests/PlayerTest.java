@@ -11,11 +11,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class PlayerTest {
-    Player testDummy = new Player("Testee", 0, 0);
+    Player testDummy = new Player("Testee", 0, 0, 3, 15);
 
     @BeforeEach
     public void resetPlayer() {
-        testDummy = new Player("Testee", 0, 0);
+        testDummy = new Player("Testee", 0, 0, 3, 15);
     }
 
     @Test

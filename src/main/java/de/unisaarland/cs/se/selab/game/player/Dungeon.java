@@ -15,7 +15,7 @@ import java.util.Queue;
 
 public class Dungeon {
 
-    private Tile[][] grid = new Tile[15][15];
+    private Tile[][] grid;
     private final List<Monster> hiredMonsters = new ArrayList<>();
     private final List<Trap> traps = new ArrayList<>();
     private final Deque<Adventurer> adventurerQueue = new LinkedList<>();
@@ -29,8 +29,10 @@ public class Dungeon {
     private int goldMiningImps;
     private int producingImps;
 
-    public Dungeon() {
-        restingImps = 3;  // TODO: add parameters restingImps, gridSideLength
+
+    public Dungeon(final int restingImps, final int gridSideLength) {
+        this.restingImps = restingImps;
+        this.grid = new Tile[gridSideLength][gridSideLength];
     }
 
     public List<Room> getRooms() {

@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 class DungeonTest {
 
-    Dungeon dg = new Dungeon();
+    Dungeon dg = new Dungeon(3, 15);
     private final Tile[][] grid = new Tile[15][15];
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
     Trap t1 = new Trap(1, 1, 1, Attack.BASIC);
@@ -31,7 +31,7 @@ class DungeonTest {
 
 
     private void resetDungeon() {
-        dg = new Dungeon();
+        dg = new Dungeon(3, 15);
     }
 
     private void fillFirstRow(Tile[][] grid) {

@@ -11,10 +11,10 @@ import java.util.List;
 public class Player {
 
 
-    private String name;
-    private int playerID;
-    private int commID;
-    private Dungeon dungeon;
+    private final String name;
+    private final int playerID;
+    private final int commID;
+    private final Dungeon dungeon;
     private BidType[] currBids = new BidType[3];
     private BidType[] blockedBids = new BidType[3];
     private final List<Title> titles = new ArrayList<>();
@@ -23,19 +23,16 @@ public class Player {
     private int gold;
     private int food;
 
-    public Player(final String name, final int playerID, final int commID) {
+    public Player(final String name, final int playerID, final int commID, final int imps,
+            final int gridSideLength) {
         this.name = name;
         this.playerID = playerID;
         this.commID = commID;
-        this.dungeon = new Dungeon();
+        this.dungeon = new Dungeon(imps, gridSideLength);
         this.points = 0;
         this.evilLevel = 5;  // 5 is standard level (see specification)
         this.gold = 0;
         this.food = 0;
-    }
-
-    public Player() {
-        // TODO: remove when we have no more dummy methods in other classes (GameData)
     }
 
     /*
