@@ -484,11 +484,14 @@ public class Config {
         return drawnAdventurers;
     }
 
-    public int getMaxPlayer() {
+    public int getMaxPlayers() {
         return maxPlayer;
     }
     // i think we still need getter to pass the data to GameData class.
 
+    public int getMaxYear() {
+        return maxYear;
+    }
 
 }
 

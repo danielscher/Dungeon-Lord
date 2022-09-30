@@ -31,7 +31,7 @@ public class ConfigTest extends Config {
         //    cfg.displayLog();
     }
 
-    public void testParseNotOkM1() {
+    public void testParseNotOkAa() {
         //    cfg.displayLog();
         cfg.setConfigFilePath(myPath);
         try {
@@ -43,7 +43,7 @@ public class ConfigTest extends Config {
     }
 
     @Test
-    public void testgetter() {
+    public void testGetter() {
         //    cfg.displayLog();
         cfg.setConfigFilePath(myPath);
         try {

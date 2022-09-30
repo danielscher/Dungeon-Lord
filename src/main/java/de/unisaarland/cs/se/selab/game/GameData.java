@@ -176,7 +176,7 @@ public class GameData {
     }
 
     public int getMaxPlayers() {
-        return config.getMaxPlayer();
+        return config.getMaxPlayers();
     }
 
     public int getMaxYears() {
