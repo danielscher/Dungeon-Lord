@@ -14,7 +14,6 @@ import java.util.List;
 public class CollectAndPlaceBidPhase extends Phase {
 
     ServerConnection<Action> sc = gd.getServerConnection();
-    Player firstBidder = gd.getAllPlayerSortedByID().get(0);
 
     public CollectAndPlaceBidPhase(final GameData gd) {
         super(gd);
@@ -108,7 +107,7 @@ public class CollectAndPlaceBidPhase extends Phase {
         final List<Player> players = gd.getAllPlayerSortedByID();
 
         for (final Player p : players) {
-            if (p.getPlayerID() >= firstBidder.getPlayerID()) {
+            if (p.getPlayerID() >= gd.getFirstBidder()) {
                 //loop through the bidders right of the curr firstbidder
                 final BidType bid = p.getBid(priority);
                 final int slot = bs.insert(bid, p.getPlayerID());
@@ -118,7 +117,7 @@ public class CollectAndPlaceBidPhase extends Phase {
             }
         }
         for (final Player p : players) {
-            if (p.getPlayerID() < firstBidder.getPlayerID()) {
+            if (p.getPlayerID() < gd.getFirstBidder()) {
                 //loop through the bidders left of the curr firstbidder
                 final BidType bid = p.getBid(priority);
                 final int slot = bs.insert(bid, p.getPlayerID());
@@ -127,22 +126,7 @@ public class CollectAndPlaceBidPhase extends Phase {
                 }
             }
         }
-        firstBidder = nextFirstBidder();
-    }
-
-    public Player nextFirstBidder() {
-        final List<Player> players = gd.getAllPlayerSortedByID();
-        final int pos = players.indexOf(firstBidder);
-        //get the position of the current first bidder
-        if (pos == players.size() - 1) {
-            //if current first bidder if the last one of the player list
-            firstBidder = players.get(0);
-            //set the first bidder to the first of list
-        } else {
-            firstBidder = players.get(pos + 1);
-            //set the first bidder to the next of list
-        }
-        return firstBidder;
+        gd.setFirstBidder();
     }
 }
 
