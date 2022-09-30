@@ -5,203 +5,256 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class GameEndPhase extends Phase {
 
-    private ArrayList<Integer> darkSeedPlayerIDList;
-    private ArrayList<Integer> hallsPlayerIDList;
-    private ArrayList<Integer> tunnelPlayerIDList;
-    private ArrayList<Integer> monsterPlayerIDList;
-    private ArrayList<Integer> impsPlayerIDList;
-    private ArrayList<Integer> richesPlayerIDList;
+    private final List<Integer> darkSeedPlayerIdList = new ArrayList<>();
+    private final List<Integer> hallsPlayerIdList = new ArrayList<>();
+    private final List<Integer> tunnelPlayerIdList = new ArrayList<>();
+    private final List<Integer> monsterPlayerIdList = new ArrayList<>();
+    private final List<Integer> impsPlayerIdList = new ArrayList<>();
+    private final List<Integer> richesPlayerIdList = new ArrayList<>();
     //riches=food+gold
-    private ArrayList<Integer> battlePlayerIDList;
-
-    private ArrayList<Integer> winnerPlayerIDList;
+    private final List<Integer> battlePlayerIdList = new ArrayList<>();
+    private final List<Integer> winnerPlayerIdList = new ArrayList<>();
 
 
     public GameEndPhase(final GameData gd) {
         super(gd);
     }
 
+    @Override
     public Phase run() throws TimeoutException {
         //TODO
+        setAllTitle();
+        setAllPoints();
         return null;
     }
 
-    public void evaluateScores() {
+    public void setAllTitle() {
         // use this to calculate the final points and give titles
         this.calculateFoodPoint();
         this.calculateGoldPoint();
-        this.setRichesTitles();
         // the above order is important
+        this.setRichesTitles();
         this.setDarkSeedTitles();
         this.setHallsTitles();
         this.setTunnelTitles();
         this.setMonsterTitles();
         this.setImpsTitles();
-        this.setBattlelordTitles();
+        this.setBattleLordTitles();
         // give all titles to corresponding players, and now evaluate scores.
+    }
+    public void setAllPoints(){
+        initializeAllPoints();
+        evaluateScoresNoTitle();
+        evaluateScoresWithTitleMonster();
+        evaluateScoresWithTitleDarkSeed();
+        evaluateScoresWithTitleBattle();
+        evaluateScoresWithTitleImps();
+        evaluateScoresWithTitleRiches();
+        evaluateScoresWithTitleTunnel();
+        evaluateScoresWithTitleHalls();
+        evaluateWinner();
+    }
+
+    public void initializeAllPoints(){
+        for(int i = 0; i < gd.getAllPlayerID().size();i++){
+            gd.getPlayerByPlayerId(i).setPoints(0);
+        }
+    }
+    // evaluate methods below just calculate the points 1 by 1.
+    public void evaluateScoresNoTitle() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int hiredMonsterPoints = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters()
+            final int hiredMonsterPoints = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters()
                     .size();
-            int roomsPoints = 2 * gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
-            int conqueredTilePoints =
+            final int roomsPoints = 2 * gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int conqueredTilePoints =
                     (-2) * gd.getPlayerByPlayerId(i).getDungeon().getNumConqueredTiles();
-            int imprisonedAdventurerPoints =
+            final int imprisonedAdvPoints =
                     2 * gd.getPlayerByPlayerId(i).getDungeon().getNumImprisonedAdventurers();
             gd.getPlayerByPlayerId(i).setPoints(0);
-            int tempPoints = hiredMonsterPoints + roomsPoints + conqueredTilePoints
-                    + imprisonedAdventurerPoints;
+            final int tempPoints = hiredMonsterPoints + roomsPoints + conqueredTilePoints
+                    + imprisonedAdvPoints;
             // points without titles
             gd.getPlayerByPlayerId(i).setPoints(tempPoints);
+        } // set points with no title
+    }
 
-            // below use a for loop to eval the title point of each player
-            for (Title t : gd.getPlayerByPlayerId(i).getTitles()) {
-                if (t == Title.THE_BATTLELORD && battlePlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_BATTLELORD && battlePlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleDarkSeed() {
+        if (darkSeedPlayerIdList.size() == 1) {
+            final int currPlayerId = darkSeedPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : darkSeedPlayerIdList) {
+                final int currPlayerId = darkSeedPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_LORD_OF_DARK_DEEDS && darkSeedPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_LORD_OF_DARK_DEEDS && darkSeedPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleRiches() {
+        if (richesPlayerIdList.size() == 1) {
+            final int currPlayerId = richesPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : richesPlayerIdList) {
+                final int currPlayerId = richesPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_LORD_OF_HALLS && hallsPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_LORD_OF_HALLS && hallsPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleImps() {
+        if (impsPlayerIdList.size() == 1) {
+            final int currPlayerId = impsPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : impsPlayerIdList) {
+                final int currPlayerId = impsPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_TUNNEL_LORD && tunnelPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_TUNNEL_LORD && tunnelPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleHalls() {
+        if (hallsPlayerIdList.size() == 1) {
+            final int currPlayerId = hallsPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : hallsPlayerIdList) {
+                final int currPlayerId = hallsPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_MONSTER_LORD && monsterPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_MONSTER_LORD && monsterPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleBattle() {
+        if (battlePlayerIdList.size() == 1) {
+            final int currPlayerId = battlePlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : battlePlayerIdList) {
+                final int currPlayerId = battlePlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_LORD_OF_IMPS && impsPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_LORD_OF_IMPS && impsPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
+    public void evaluateScoresWithTitleTunnel() {
+        if (tunnelPlayerIdList.size() == 1) {
+            final int currPlayerId = tunnelPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : tunnelPlayerIdList) {
+                final int currPlayerId = tunnelPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
 
-                if (t == Title.THE_LORD_OF_RICHES && richesPlayerIDList.size() == 1) {
-                    int p = gd.getPlayerByPlayerId(i).getPoints();
-                    p = p + 3;
-                    gd.getPlayerByPlayerId(i).setPoints(p);
-                } else if (t == Title.THE_LORD_OF_RICHES && richesPlayerIDList.size() > 1) {
-                    int ptie = gd.getPlayerByPlayerId(i).getPoints();
-                    ptie = ptie + 2;
-                    gd.getPlayerByPlayerId(i).setPoints(ptie);
-                }
-            } // end of each player
-        } // end of all players
-        // set the winner to the list:
+    public void evaluateScoresWithTitleMonster() {
+        if (monsterPlayerIdList.size() == 1) {
+            final int currPlayerId = monsterPlayerIdList.get(0);
+            final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+            gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
+        } else {
+            for (final int i : monsterPlayerIdList) {
+                final int currPlayerId = monsterPlayerIdList.get(i);
+                final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
+                gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
+            }
+        }
+    }
+
+    public void evaluateWinner() {  // set the winner to the list:
         int maxScores = gd.getPlayerByPlayerId(0).getPoints();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currScores = gd.getPlayerByPlayerId(i).getPoints();
+            final int currScores = gd.getPlayerByPlayerId(i).getPoints();
             if (currScores > maxScores) {
                 maxScores = currScores;
             }
         } //find the player with most rooms
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int scores = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int scores = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (scores == maxScores) {
-                this.winnerPlayerIDList.add(i);
+                this.winnerPlayerIdList.add(i);
                 // add player to the winner list
             }
         }
 
-        for (int i = 0; i < winnerPlayerIDList.size(); i++) {
-            int winnerId = winnerPlayerIDList.get(i);
-            int winnerPoints = gd.getPlayerByPlayerId(winnerId).getPoints();
+        for (final int i : winnerPlayerIdList) {
+            final int winnerId = winnerPlayerIdList.get(i);
+            final int winnerPoints = gd.getPlayerByPlayerId(winnerId).getPoints();
             broadcastGameEnd(winnerId, winnerPoints);
         }
 
     }
 
+    // riches need gold+foods, and i use points field to store the value, which need to be clear
+
     private void calculateFoodPoint() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currFood = gd.getPlayerByPlayerId(i).getFood();
+            final int currFood = gd.getPlayerByPlayerId(i).getFood();
             gd.getPlayerByPlayerId(i).setPoints(currFood);
         }
     }
 
     private void calculateGoldPoint() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int beforePoint = gd.getPlayerByPlayerId(i).getPoints();
-            int currGold = gd.getPlayerByPlayerId(i).getGold();
+            final int beforePoint = gd.getPlayerByPlayerId(i).getPoints();
+            final int currGold = gd.getPlayerByPlayerId(i).getGold();
             gd.getPlayerByPlayerId(i).setPoints(currGold + beforePoint);
         }
     }
 
     public void setRichesTitles() {
-        int maxriches = gd.getPlayerByPlayerId(0).getPoints();
+        int maxRiches = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currRiches = gd.getPlayerByPlayerId(i).getPoints();
-            if (currRiches > maxriches) {
-                maxriches = currRiches;
+            final int currRiches = gd.getPlayerByPlayerId(i).getPoints();
+            if (currRiches > maxRiches) {
+                maxRiches = currRiches;
             }
         }
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int riches = gd.getPlayerByPlayerId(i).getPoints();
-            if (riches == maxriches) {
+            final int riches = gd.getPlayerByPlayerId(i).getPoints();
+            if (riches == maxRiches) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_RICHES);
-                richesPlayerIDList.add(i);
+                richesPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
-            gd.getPlayerByPlayerId(i).setPoints(0);
+            // gd.getPlayerByPlayerId(i).setPoints(0);
             //clear the food and gold points since they are no longer needed
         }
     }
 
     public void setDarkSeedTitles() {
-        int maxEvilMeter = gd.getPlayerByPlayerId(0).getEvilLevel();
+        int maxEvilMeter = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currEvil = gd.getPlayerByPlayerId(i).getEvilLevel();
+            final int currEvil = gd.getPlayerByPlayerId(i).getEvilLevel();
             if (currEvil > maxEvilMeter) {
                 maxEvilMeter = currEvil;
             }
         } //find the player with max evil level
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int evil = gd.getPlayerByPlayerId(i).getEvilLevel();
+            final int evil = gd.getPlayerByPlayerId(i).getEvilLevel();
             if (evil == maxEvilMeter) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_DARK_DEEDS);
-                richesPlayerIDList.add(i);
+                richesPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -209,18 +262,18 @@ public class GameEndPhase extends Phase {
 
     public void setHallsTitles() {
         // get the number of the rooms for player0
-        int maxRooms = gd.getPlayerByPlayerId(0).getDungeon().getNumRooms();
+        int maxRooms = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currRooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int currRooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (currRooms > maxRooms) {
                 maxRooms = currRooms;
             }
         } //find the player with most rooms
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int rooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int rooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (rooms == maxRooms) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_HALLS);
-                hallsPlayerIDList.add(i);
+                hallsPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -228,27 +281,28 @@ public class GameEndPhase extends Phase {
 
     public void setTunnelTitles() {
         // get the number of the rooms for player0
-        int mroom = gd.getPlayerByPlayerId(0).getDungeon().getNumRooms();
-        int muncontile = gd.getPlayerByPlayerId(0).getDungeon().getNumUnconqueredTiles();
-        int mcontile = gd.getPlayerByPlayerId(0).getDungeon().getNumConqueredTiles();
+        final int mroom = gd.getPlayerByPlayerId(0).getDungeon().getNumRooms();
+        final int muncontile = gd.getPlayerByPlayerId(0).getDungeon().getNumUnconqueredTiles();
+        final int mcontile = gd.getPlayerByPlayerId(0).getDungeon().getNumConqueredTiles();
         int maxTiles = mcontile + muncontile - mroom;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currRoom = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
-            int currUncontile = gd.getPlayerByPlayerId(i).getDungeon().getNumUnconqueredTiles();
-            int currContile = gd.getPlayerByPlayerId(i).getDungeon().getNumConqueredTiles();
-            int currTileNum = currContile + currUncontile - currRoom;
+            final int currRoom = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int currUncontile = gd.getPlayerByPlayerId(i).getDungeon()
+                    .getNumUnconqueredTiles();
+            final int currContile = gd.getPlayerByPlayerId(i).getDungeon().getNumConqueredTiles();
+            final int currTileNum = currContile + currUncontile - currRoom;
             if (currTileNum > maxTiles) {
                 maxTiles = currTileNum;
             }
         } //find the player with most rooms
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int room = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
-            int uncontile = gd.getPlayerByPlayerId(i).getDungeon().getNumUnconqueredTiles();
-            int contile = gd.getPlayerByPlayerId(i).getDungeon().getNumConqueredTiles();
-            int tileNum = contile + uncontile - room;
+            final int room = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+            final int uncontile = gd.getPlayerByPlayerId(i).getDungeon().getNumUnconqueredTiles();
+            final int contile = gd.getPlayerByPlayerId(i).getDungeon().getNumConqueredTiles();
+            final int tileNum = contile + uncontile - room;
             if (tileNum == maxTiles) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_TUNNEL_LORD);
-                tunnelPlayerIDList.add(i);
+                tunnelPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -257,16 +311,17 @@ public class GameEndPhase extends Phase {
     public void setMonsterTitles() {
         int maxHiredMonsters = gd.getPlayerByPlayerId(0).getDungeon().getHiredMonsters().size();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currMonsterNum = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters().size();
+            final int currMonsterNum = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters()
+                    .size();
             if (currMonsterNum > maxHiredMonsters) {
                 maxHiredMonsters = currMonsterNum;
             }
         } //find the player with most monsters
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int monsterNum = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters().size();
+            final int monsterNum = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters().size();
             if (monsterNum == maxHiredMonsters) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_MONSTER_LORD);
-                monsterPlayerIDList.add(i);
+                monsterPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -275,40 +330,46 @@ public class GameEndPhase extends Phase {
     public void setImpsTitles() {
         int maxImps = gd.getPlayerByPlayerId(0).getDungeon().getNumImps();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currImpsNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
+            final int currImpsNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
             if (currImpsNum > maxImps) {
                 maxImps = currImpsNum;
             }
         } //find the player with most imps
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int impsNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
+            final int impsNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
             if (impsNum == maxImps) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_IMPS);
-                impsPlayerIDList.add(i);
+                impsPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
     }
 
-    public void setBattlelordTitles() {
+    public void setBattleLordTitles() {
         int maxUnconqueredTilesNum = gd.getPlayerByPlayerId(0).getDungeon()
                 .getNumUnconqueredTiles();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int currUnconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon()
+            final int currUnconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon()
                     .getNumUnconqueredTiles();
             if (currUnconqueredTileNum > maxUnconqueredTilesNum) {
                 maxUnconqueredTilesNum = currUnconqueredTileNum;
             }
         } //find the player with most imps
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
+            final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
             if (unconqueredTileNum == maxUnconqueredTilesNum) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_BATTLELORD);
-                battlePlayerIDList.add(i);
+                battlePlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
     }
 
+    public List<Integer> getPlayersId(final GameData gd) {
+        return gd.getAllPlayerID();
+    }
 
+    public List<Integer> getWinnerPlayerIdList() {
+        return winnerPlayerIdList;
+    }
 }

@@ -4,9 +4,9 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class MonsterAction extends Action {
 
-    private int monster;
+    private final int monster;
 
-    public MonsterAction(int commID, int monster) {
+    public MonsterAction(final int commID, final int monster) {
         super(commID);
         this.monster = monster;
     }
@@ -15,7 +15,8 @@ public class MonsterAction extends Action {
         return monster;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

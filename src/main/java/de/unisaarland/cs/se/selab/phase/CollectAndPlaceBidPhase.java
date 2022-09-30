@@ -3,37 +3,36 @@ package de.unisaarland.cs.se.selab.phase;
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
-import java.util.Set;
+import java.util.List;
 
 public class CollectAndPlaceBidPhase extends Phase {
 
+    ServerConnection<Action> sc = gd.getServerConnection();
 
-    public CollectAndPlaceBidPhase(GameData gd) {
+    public CollectAndPlaceBidPhase(final GameData gd) {
         super(gd);
     }
 
+    @Override
     public Phase run() throws TimeoutException {
-        ServerConnection<Action> sc = gd.getServerConnection();
-        Set<Integer> commIDs = gd.getCommIDSet();
 
         if (gd.getTime().getSeason() > 1) {
             broadcastNextRound(gd.getTime().getSeason());
         } else if (gd.getTime().getYear() > 1) {
             broadcastNextYear(gd.getTime().getYear());
-            for (int id : gd.getAllPlayerID()) {
-                Player p = gd.getPlayerByPlayerId(id);
-                for (BidType b : p.getBlockedBids()) {
+            for (final Player p : gd.getAllPlayerSortedByID()) {
+                for (final BidType b : p.getBlockedBids()) {
                     broadcastBidRetrieved(b, p.getPlayerID());
                 }
                 p.clearBlockedBids();
             }
         }
-
 
         gd.drawEntities();
         if (!gd.getCurrAvailableAdventurers().isEmpty()) {
@@ -49,36 +48,30 @@ public class CollectAndPlaceBidPhase extends Phase {
             sc.nextAction().invoke(this);
         }
 
-        for (int i = 0; i < 3; i++) {
-            //the sequence of inserting bid on bidding square: go through players
-            // to get their first bids, insert, then 2nd bids of players, insert
-            for (Integer commID : commIDs) {
-                Player p = gd.getPlayerByCommID(commID);
-                boolean inserted = gd.getBiddingSquare().insert(p.getBid(i), p.getPlayerID());
-                if (!inserted) {
-                    throw new IllegalStateException("Slot occupied");
-                } else {
-                    broadcastBidPlaced(p.getBid(i), p.getPlayerID(), i);
-                }
-            }
+        for (int i = 0; i < 3; i++) {   //go through priorities to insert bids into biddingsquare
+            goThruPlayers(i);
         }
+
         return new EvalUpToTunnelPhase(gd);
     }
 
+    @Override
+    public void exec(final PlaceBidAction pba) {
+        final Player player = gd.getPlayerByCommID(pba.getCommID());
 
-    public void exec(PlaceBidAction pba) {
-        ServerConnection<Action> sc = gd.getServerConnection();
-        Player currPlayer = gd.getPlayerByCommID(pba.getCommID());
-        boolean bidAdded = currPlayer.addBid(pba.getBid(), pba.getSlot());
+        if (player == null) { //if player's left the game
+            return;
+        }
+        final boolean bidAdded = player.addBid(pba.getBid(), pba.getSlot());
         if (!bidAdded) {
             sc.sendActionFailed(pba.getCommID(),
                                     "can't choose bid " + pba.getBid().toString());
         }
     }
 
-    public void exec(ActivateRoomAction ara) {
-        Player player = gd.getPlayerByCommID((ara.getCommID()));
-        ServerConnection<Action> sc = gd.getServerConnection();
+    @Override
+    public void exec(final ActivateRoomAction ara) {
+        final Player player = gd.getPlayerByCommID((ara.getCommID()));
 
         if (player == null) { //if player's left the game
             return;
@@ -90,22 +83,51 @@ public class CollectAndPlaceBidPhase extends Phase {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
-                int cost = player.getDungeon().getRoomById(ara.getRoomID()).getActivationCost();
+                final int cost = player.getDungeon()
+                        .getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
         }
     }
 
-
     private boolean checkIfAllBidsChosen() {
-        Set<Integer> commIDs = gd.getCommIDSet();
-        for (Integer commID : commIDs) {
-            Player p = gd.getPlayerByCommID(commID);
+        for (final Player p : gd.getAllPlayerSortedByID()) {
             if (p.getNumPlacedBids() != 3) {
                 return false;
             }
         }
         return true;
     }
+
+    //go through players to get their 1st priority, insert
+    //then 2nd, insert
+    private void goThruPlayers(final int priority) {
+        final BiddingSquare bs = gd.getBiddingSquare();
+        final List<Player> players = gd.getAllPlayerSortedByID();
+
+        for (final Player p : players) {
+            if (p.getPlayerID() >= gd.getFirstBidder()) {
+                //loop through the bidders right of the curr firstbidder
+                final BidType bid = p.getBid(priority);
+                final int slot = bs.insert(bid, p.getPlayerID());
+                if (slot >= 0) {
+                    broadcastBidPlaced(bid, p.getPlayerID(), slot);
+                }
+            }
+        }
+        for (final Player p : players) {
+            if (p.getPlayerID() < gd.getFirstBidder()) {
+                //loop through the bidders left of the curr firstbidder
+                final BidType bid = p.getBid(priority);
+                final int slot = bs.insert(bid, p.getPlayerID());
+                if (slot >= 0) {
+                    broadcastBidPlaced(bid, p.getPlayerID(), slot);
+                }
+            }
+        }
+        gd.setFirstBidder();
+    }
 }
+
+

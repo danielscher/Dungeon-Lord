@@ -4,11 +4,12 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class LeaveAction extends Action {
 
-    public LeaveAction(int commID) {
+    public LeaveAction(final int commID) {
         super(commID);
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

@@ -5,10 +5,10 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class PlaceBidAction extends Action {
 
-    private BidType bid;
-    private int slot;
+    private final BidType bid;
+    private final int slot;
 
-    public PlaceBidAction(int commID, BidType bid, int slot) {
+    public PlaceBidAction(final int commID, final BidType bid, final int slot) {
         super(commID);
         this.bid = bid;
         this.slot = slot;
@@ -22,7 +22,8 @@ public class PlaceBidAction extends Action {
         return slot;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }

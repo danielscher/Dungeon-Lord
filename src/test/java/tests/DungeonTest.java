@@ -1,3 +1,5 @@
+package tests;
+
 import static de.unisaarland.cs.se.selab.game.util.Location.LOWER_HALF;
 import static de.unisaarland.cs.se.selab.game.util.Location.UPPER_HALF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,22 +14,25 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Tile;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
-import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 
-public class DungeonTest {
+class DungeonTest {
 
-    Dungeon dg = new Dungeon();
-    private Tile[][] grid = new Tile[15][15];
+    Dungeon dg = new Dungeon(3, 15);
+    private final Tile[][] grid = new Tile[15][15];
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
     Trap t1 = new Trap(1, 1, 1, Attack.BASIC);
-    Room r1 = new Room(1, 4, 1, 1, 1, 1, Location.LOWER_HALF);
+    Room r1 = new Room(1, 4, 1, 1, 1, 1, LOWER_HALF);
     Adventurer ad1 = new Adventurer(1, 1, 1, 2, 0, false);
     Adventurer ad2 = new Adventurer(1, 1, 1, 0, 2, false);
     Adventurer ad3 = new Adventurer(1, 1, 1, 0, 0, true);
+
+
+    private void resetDungeon() {
+        dg = new Dungeon(3, 15);
+    }
 
     private void fillFirstRow(Tile[][] grid) {
         for (int i = 0; i < 3; i++) {
@@ -45,30 +50,34 @@ public class DungeonTest {
     }
 
     @Test
-    public void testGetPossibleBattleCoords() {
-        List<int[]> coords = new ArrayList<int[]>();
-        int[] arr = {0, 2};
+    void testGetPossibleBattleCoords() {
+        resetDungeon();
+        final List<int[]> coords = new ArrayList<>();
+        final int[] arr = {0, 2};
         coords.add(arr);
         fillFirstRow(grid);
         dg.setGrid(grid);
-        List<Coordinate> actualCoords = dg.getPossibleBattleCoords();
+        final List<Coordinate> actualCoords = dg.getPossibleBattleCoords();
         assertTrue(coords.contains(actualCoords));
     }
 
     @Test
-    void getTotalHealVal() {
+    void testgetTotalHealVal() {
+        resetDungeon();
         addAdventurer();
         assertEquals(2, dg.getTotalHealVal());
     }
 
     @Test
-    void getTotalDefuseVal() {
+    void testgetTotalDefuseVal() {
+        resetDungeon();
         addAdventurer();
         assertEquals(2, dg.getTotalDefuseVal());
     }
 
     @Test
-    void canPlaceRoomOn() {
+    void testcanPlaceRoomOn() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertTrue(dg.canPlaceRoomOn(0, 2, UPPER_HALF));
@@ -77,7 +86,8 @@ public class DungeonTest {
     }
 
     @Test
-    public void testplaceRoom() {
+    void testplaceRoom() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertTrue(dg.placeRoom(0, 2, r1));
@@ -85,7 +95,8 @@ public class DungeonTest {
     }
 
     @Test
-    public void testcheckForFreeTilesIn() {
+    void testcheckForFreeTilesIn() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertTrue(dg.checkForFreeTilesIn(UPPER_HALF));
@@ -93,7 +104,8 @@ public class DungeonTest {
     }
 
     @Test
-    public void testdig() {
+    void testdig() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertTrue(dg.dig(1, 2));
@@ -101,7 +113,8 @@ public class DungeonTest {
     }
 
     @Test
-    public void testisTileConquered() {
+    void testisTileConquered() {
+        resetDungeon();
         final Coordinate coords1 = new Coordinate(0, 2);
         final Coordinate coords2 = new Coordinate(0, 0);
         assertFalse(dg.isTileConquered(coords1));
@@ -109,18 +122,20 @@ public class DungeonTest {
     }
 
     @Test
-    public void testhasTileRoom() {
+    void testhasTileRoom() {
+        resetDungeon();
         final Coordinate coords1 = new Coordinate(0, 2);
         final Coordinate coords2 = new Coordinate(0, 0);
         fillFirstRow(grid);
         dg.setGrid(grid);
-        boolean b1 = dg.placeRoom(0, 2, r1);
+        dg.placeRoom(0, 2, r1);
         assertFalse(dg.hasTileRoom(coords2));
         assertTrue(dg.hasTileRoom(coords1));
     }
 
     @Test
-    public void testImps() {
+    void testImps() {
+        resetDungeon();
         dg.addImps(3);
         assertEquals(6, dg.getNumImps());
         assertTrue(dg.sendImpsToProduce(1));
@@ -129,7 +144,7 @@ public class DungeonTest {
         assertFalse(dg.sendImpsToDigTunnel(7));
         assertTrue(dg.sendImpsToMineGold(1));
         assertFalse(dg.sendImpsToMineGold(7));
-        boolean b1 = dg.sendImpsToDigTunnel(1);
+        dg.sendImpsToDigTunnel(1);
         assertEquals(5, dg.getRestingImps());
         /*
         dg.returnImps();
@@ -139,7 +154,8 @@ public class DungeonTest {
     }
 
     @Test
-    public void testactivateRoom() {
+    void testactivateRoom() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         dg.placeRoom(0, 2, r1);
@@ -151,54 +167,65 @@ public class DungeonTest {
     }
 
     @Test
-    public void testAdventurer() {
+    void testAdventurer() {
+        resetDungeon();
         dg.insertAdventurer(ad1);
         dg.insertAdventurer(ad3);
-        assertTrue(ad3 == dg.getAdventurer(0));
-        assertTrue(ad1 == dg.getAdventurer(1));
-        assertTrue(null == dg.getAdventurer(2));
+        assertEquals(ad3, dg.getAdventurer(0));
+        assertEquals(ad1, dg.getAdventurer(1));
+        assertEquals(null, dg.getAdventurer(2));
         assertEquals(ad1, dg.getAdventurerById(1));
     }
 
     @Test
-    public void testaddMonster() {
-        //todo
+    void testaddMonster() {
+        resetDungeon();
+        dg.addMonster(m1);
+        assertEquals(m1, dg.getHiredMonsters().get(0));
     }
 
     @Test
-    public void testaddTrap() {
-        //todo
+    void testTrap() {
+        resetDungeon();
+        dg.addTrap(t1);
+        assertEquals(t1, dg.getTrapByID(1));
     }
 
     @Test
-    public void testgetNumRooms() {
+    void testgetNumRooms() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
-        boolean b1 = dg.placeRoom(0, 2, r1);
+        dg.placeRoom(0, 2, r1);
         assertEquals(1, dg.getNumRooms());
     }
 
     @Test
-    public void testgetNumUnconqueredTiles() {
+    void testgetNumUnconqueredTiles() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertEquals(1, dg.getNumUnconqueredTiles());
     }
 
     @Test
-    public void testgetNumConqueredTiles() {
+    void testgetNumConqueredTiles() {
+        resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertEquals(2, dg.getNumConqueredTiles());
     }
 
     @Test
-    public void testgetNumGoldMineAbleTiles() {
-        //todo
+    void testgetNumGoldMineAbleTiles() {
+        resetDungeon();
+        fillFirstRow(grid);
+        assertEquals(1, dg.getNumGoldMineAbleTiles());
     }
 
     @Test
-    public void testImprisonedAdventurers() {
+    void testImprisonedAdventurers() {
+        resetDungeon();
         dg.insertAdventurer(ad1);
         dg.insertAdventurer(ad2);
         dg.insertAdventurer(ad3);

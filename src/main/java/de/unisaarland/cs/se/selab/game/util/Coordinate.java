@@ -5,7 +5,7 @@ public class Coordinate {
     private final int xpos;
     private final int ypos;
 
-    public Coordinate(int xpos, int ypos) {
+    public Coordinate(final int xpos, final int ypos) {
         this.xpos = xpos;
         this.ypos = ypos;
     }
@@ -19,11 +19,11 @@ public class Coordinate {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (!(obj instanceof Coordinate)) {
             return false;
         } else {
-            Coordinate coordinate = (Coordinate) obj;
+            final Coordinate coordinate = (Coordinate) obj;
             // only return true if x and y are the same
             return (coordinate.xpos == this.xpos && coordinate.ypos == this.ypos);
         }

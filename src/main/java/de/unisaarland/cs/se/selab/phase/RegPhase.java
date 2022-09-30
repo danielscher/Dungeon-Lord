@@ -15,52 +15,48 @@ public class RegPhase extends Phase {
     /*
     whenever we get the startGame action this is set to true
      */
-    private boolean isStarted = false;
+    private boolean isStarted; // init to false.
 
-    public RegPhase(GameData gd) {
+    public RegPhase(final GameData gd) {
         super(gd);
     }
 
     /*
     loop over the maximum players and ask the nextAction from the serverconnection
      */
-
+    @Override
     public Phase run() throws TimeoutException {
         for (int i = 0; i < maxPlayers; i++) {
             if (isStarted) {
                 break;
             }
-            Action action = gd.getServerConnection().nextAction();
+            final Action action = gd.getServerConnection().nextAction();
             action.invoke(this);
         }
-        Set<Integer> commIDs = gd.getCommIDSet();
+        final Set<Integer> commIDs = gd.getCommIDSet();
         //send the registered players for all players
-        for (Integer commID : commIDs) {
+        for (final Integer commID : commIDs) {
             this.broadcastPlayer(gd.getPlayerByCommID(commID).getName(),
                     gd.getPlayerIdByCommID(commID));
         }
         return new CollectAndPlaceBidPhase(gd);
     }
 
-    public void exec(RegAction ra) {
+    @Override
+    public void exec(final RegAction ra) {
         if (gd.checkIfRegistered(ra.getCommID())) {
             gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
         } else {
-            boolean res = gd.registerPlayer(ra.getName(), ra.getCommID());
+            final boolean res = gd.registerPlayer(ra.getName(), ra.getCommID());
             if (!res) {
                 gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
             }
         }
     }
 
-    public void exec(StartGameAction sga) {
+    @Override
+    public void exec(final StartGameAction sga) {
         this.isStarted = true;
         this.broadcastGameStarted();
     }
-
-
-    private boolean checkForStartAction() {
-        return this.isStarted;
-    }
-
 }

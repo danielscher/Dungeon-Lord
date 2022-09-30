@@ -1,6 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
+import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
@@ -17,32 +18,34 @@ import java.util.List;
 
 public class EvalUpToTunnelPhase extends Phase {
 
-    List<Integer> commIdsToDigTunnel = new ArrayList<Integer>();
-    private boolean gotEndTurn = false;
-    private boolean handledTunnelAction = false;
-    private Coordinate lastDugTile = null;
+    private final List<Integer> commIdsToDigTunnel = new ArrayList<>();
+    private boolean gotEndTurn;
+    private boolean handledTunnelAction;
+    private Coordinate lastDugTile;
 
-    public EvalUpToTunnelPhase(GameData gd) {
+    public EvalUpToTunnelPhase(final GameData gd) {
         super(gd);
     }
 
+    @Override
     public Phase run() {
         eval();
-        return new EvalUpToTunnelPhase(gd);
+        return new EvalUpToMonsterPhase(gd);
     }
 
     /*
     iterates over bidding square and grants the bids
      */
     private void eval() {
-        BiddingSquare biddingSquare = gd.getBiddingSquare();
+        final BiddingSquare biddingSquare = gd.getBiddingSquare();
         for (int i = 0; i < 3; i++) {
             // for BidTypes from FOOD to TUNNEL
             for (int j = 0; j < 3; j++) {
                 // for slots 1 to 3 (0 to 2)
                 if (biddingSquare.getIDByBidSlot(i, j) != -1) {
                     // if there is a valid player id in the square
-                    Player player = gd.getPlayerByPlayerId(biddingSquare.getIDByBidSlot(i, j));
+                    final Player player = gd.getPlayerByPlayerId(
+                            biddingSquare.getIDByBidSlot(i, j));
                     grant(player, i, j);
                 }
             }
@@ -53,7 +56,7 @@ public class EvalUpToTunnelPhase extends Phase {
     this method is used to switch over BidTypes and call the specific
     granting method
      */
-    private void grant(Player player, int bidType, int slot) {
+    private void grant(final Player player, final int bidType, final int slot) {
         if (player == null) {
             // if player isn't in the game anymore, do not try to grant
             return;  // exists this method
@@ -81,7 +84,7 @@ public class EvalUpToTunnelPhase extends Phase {
     /*
     this method grants food bids
      */
-    private void grantFood(Player player, int slot) {
+    private void grantFood(final Player player, final int slot) {
         // TODO change
         switch (slot) {
             case 0:
@@ -122,7 +125,8 @@ public class EvalUpToTunnelPhase extends Phase {
     /*
     this method grants niceness bids
      */
-    private void grantNiceness(Player player, int slot) {
+    private void grantNiceness(final Player player, final int slot) {
+        // TODO change events because maybe the full amount wasnt granted
         switch (slot) {
             case 0:
                 // first niceness slot
@@ -152,28 +156,12 @@ public class EvalUpToTunnelPhase extends Phase {
     /*
     this method grants tunnel bids
      */
-    private void grantTunnel(Player player, int slot) {
-        Dungeon dungeon = player.getDungeon();
-        ServerConnection<Action> serverConn = gd.getServerConnection();
-        int commId = player.getCommID();
+    private void grantTunnel(final Player player, final int slot) {
+        final Dungeon dungeon = player.getDungeon();
+        final int commId = player.getCommID();
         boolean maxImpUsage = false;
 
-        int impsToMine = slot + 2;  // this follows from the bidding square specification
-
-        // special check if enough imps for 3rd option
-        if (impsToMine == 4 && dungeon.getRestingImps() < 5) {
-            impsToMine--;
-        }
-
-        // reduce impsToMine until player has enough
-        while (impsToMine > dungeon.getRestingImps()) {
-            impsToMine--;
-        }
-
-        // if player has no imps at all, cancel granting
-        if (impsToMine == 0) {
-            return;
-        }
+        int impsToMine = calcMaxImpUsage(dungeon.getNumImps(), slot);
 
         // if player can do the 3rd option, set flag so last tunnel digging will deduct two imps
         if (impsToMine == 4) {
@@ -181,93 +169,142 @@ public class EvalUpToTunnelPhase extends Phase {
         }
 
         // now ask for tunnel digging actions until all imps are sent out or player ends turn
-        for (; impsToMine > 0; impsToMine--) {
+        while (impsToMine > 0) {
+            impsToMine = getInputs(impsToMine, commId, player, dungeon, maxImpUsage);
+        }
+    }
+
+    /*
+    helper method for grantTunnel to calculate the maximum imp usage the player
+    is capable of
+     */
+    private int calcMaxImpUsage(final int availImps, final int slot) {
+        int res = slot + 2; // this follows from the bidding square specification
+
+        // special check if enough imps for 3rd option
+        if (res == 4 && availImps < 5) {
+            res--;
+        }
+
+        // reduce impsToMine until player has enough
+        while (res > availImps) {
+            res--;
+        }
+        return res;
+    }
+
+    /*
+    helper method which handles the getting and further processing of user inputs
+    return -1 means "break" loop
+    return == impsToMine means "continue"
+     */
+    private int getInputs(final int impsToMine, final int commId, final Player player,
+            final Dungeon dungeon, final boolean maxImpUsage) {
+        try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
             serverConn.sendDigTunnel(commId); // send DigTunnel once for every possible tile
+        }
+        // if player activated room it might be the case that he hasn't enough imps anymore
+        if (impsToMine > dungeon.getRestingImps()) {
+            return impsToMine; // go to next iteration to reduce impsToMine
+        }
 
-            // if player activated room it might be the case that he hasn't enough imps anymore
-            if (impsToMine > dungeon.getRestingImps()) {
-                continue; // go to next iteration to reduce impsToMine
-            }
+        // this if statement prevents getting the next tunnel action when the
+        // player hasn't enough imps anymore for the 4th mining imp
+        // due to activating rooms or something else
+        if (dungeon.getTunnelDiggingImps() == 3 && dungeon.getRestingImps() < 2) {
+            return -1;
+        }
 
-            // this if statement prevents getting the next tunnel action when the
-            // player hasn't enough imps anymore for the 4th mining imp
-            // due to activating rooms or something else
-            if (dungeon.getTunnelDiggingImps() == 3 && dungeon.getRestingImps() < 2) {
-                break;
-            }
-            // add player's commId to a list of expected action-senders
-            commIdsToDigTunnel.add(commId);
+        // get a new action from this player
+        requestActionFrom(commId);
 
-            serverConn.sendActNow(commId); // TODO check if sending once is sufficient
-            while (commIdsToDigTunnel.size() > 0) {
-                // loop until the player we evaluate has sent an action
-                try {
-                    Action action = serverConn.nextAction();
-                    action.invoke(this);
-                } catch (Exception e) {
-                    // TODO implement behaviour???
-                }
-            }
+        // if player has sent endTurn, do not ask for further tunnel actions
+        if (gotEndTurn) {
+            gotEndTurn = false;
+            return -1;
+        }
 
-            // if player has sent endTurn, do not ask for further tunnel actions
-            if (gotEndTurn) {
-                gotEndTurn = false;
-                break;  // breaks loop of asking for inputs
-            }
+        // if we successfully handled the TunnelAction, change imp amount
+        if (handledTunnelAction) {
+            handledTunnelAction = false; // reset flag for next iteration
 
-            // if we successfully handled the TunnelAction, change imp amount
-            if (handledTunnelAction) {
-                handledTunnelAction = false; // reset flag for next iteration
-
-                if (maxImpUsage && impsToMine == 2) {
-                    // this is the case of the last tile to mine on the 3rd bid slot
-                    dungeon.sendImpsToDigTunnel(2); // deduct imps
-                    broadcastImpsChanged(-2, player.getPlayerID()); // broadcast imp change
-                    int xpos = lastDugTile.getxpos();
-                    int ypos = lastDugTile.getypos();
-                    broadcastTunnelDug(player.getPlayerID(), xpos, ypos); // broadcast tunnel dug
-                    lastDugTile = null;
-                    break;  // don't continue with impsToMine == 1
-                } else {
-                    // in this case it is either not the last tunnel tile or not the 3rd slot
-                    dungeon.sendImpsToDigTunnel(1);
-                    broadcastImpsChanged(-1, player.getPlayerID());
-                    int xpos = lastDugTile.getxpos();
-                    int ypos = lastDugTile.getypos();
-                    broadcastTunnelDug(player.getPlayerID(), xpos, ypos);
-                    lastDugTile = null;
-                }
+            if (maxImpUsage && impsToMine == 2) {
+                // this is the case of the last tile to mine on the 3rd bid slot
+                dungeon.sendImpsToDigTunnel(2); // deduct imps
+                broadcastImpsChanged(-2, player.getPlayerID()); // broadcast imp change
+                final int xpos = lastDugTile.getxpos();
+                final int ypos = lastDugTile.getypos();
+                broadcastTunnelDug(player.getPlayerID(), xpos, ypos); // broadcast tunnel dug
+                lastDugTile = null;
+                return -1;  // don't continue with impsToMine == 1
             } else {
-                // if the received action was something else, repeat this for loop
-                impsToMine++;  // this makes the loop to repeat with same index
+                // in this case it is either not the last tunnel tile or not the 3rd slot
+                dungeon.sendImpsToDigTunnel(1);
+                broadcastImpsChanged(-1, player.getPlayerID());
+                final int xpos = lastDugTile.getxpos();
+                final int ypos = lastDugTile.getypos();
+                broadcastTunnelDug(player.getPlayerID(), xpos, ypos);
+                lastDugTile = null;
+            }
+        } else {
+            // if the received action was something else, repeat this for loop
+            return impsToMine;  // this makes the loop to repeat with same index
+        }
+        return impsToMine - 1;
+    }
+
+    /*
+    helper method to ask for an Action object from a player of a given commID
+     */
+    private void requestActionFrom(final int commId) {
+        // add player's commId to a list of expected action-senders
+        commIdsToDigTunnel.add(commId);
+
+        try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+            serverConn.sendActNow(commId); // TODO check if sending once is sufficient
+        }
+
+        while (!commIdsToDigTunnel.isEmpty()) {
+            // loop until the player we evaluate has sent an action
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                final Action action = serverConn.nextAction();
+                action.invoke(this);
+            } catch (TimeoutException e) {
+                // TODO implement behaviour???
+                kickPlayer(gd.getPlayerIdByCommID(commIdsToDigTunnel.get(0)));
+                commIdsToDigTunnel.clear();
             }
         }
     }
 
     /*
-    this methods handles the receiving of a tunnel digging action
+    this method handles the receiving of a tunnel digging action
      */
-    public void exec(DigTunnelAction dta) {
-        ServerConnection<Action> serverConn = gd.getServerConnection();
+    @Override
+    public void exec(final DigTunnelAction dta) {
         // get all information from Action object
-        int commId = dta.getCommID();
-        int[] coordsArr = dta.getCoords();
-        Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
+        final int commId = dta.getCommID();
 
         // get the player who requested to activate the room
-        Player player = gd.getPlayerByCommID(commId);
+        final Player player = gd.getPlayerByCommID(commId);
         // if player doesn't exist, return
         if (player == null) {
-            serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+            }
             return;
         }
 
-        Dungeon playersDungeon = player.getDungeon();
+        final Dungeon playersDungeon = player.getDungeon();
 
         if (!commIdsToDigTunnel.contains(commId)) {
             // wrong player sent the event
-            serverConn.sendActionFailed(commId, "it's not you're turn to dig tunnels");
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(commId, "it's not your turn to dig tunnels");
+            }
         } else {
+            final int[] coordsArr = dta.getCoords();
+            final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
             // the right player has sent the event
             commIdsToDigTunnel.remove(commId); // remove this player from the list
             if (playersDungeon.dig(requestedPos.getxpos(), requestedPos.getypos())) {
@@ -276,7 +313,9 @@ public class EvalUpToTunnelPhase extends Phase {
                 lastDugTile = requestedPos; // tell eval what tile was dug
             } else {
                 // in this case the tunnel couldn't be dug
-                serverConn.sendActionFailed(commId, "cannot dig here");
+                try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                    serverConn.sendActionFailed(commId, "cannot dig here");
+                }
             }
         }
 
@@ -285,45 +324,51 @@ public class EvalUpToTunnelPhase extends Phase {
     /*
     this method handles room activations
      */
-    public void exec(ActivateRoomAction ara) {
-        int commId = ara.getCommID();
-        int roomId = ara.getRoomID();
-        ServerConnection<Action> serverConn = gd.getServerConnection();
+    @Override
+    public void exec(final ActivateRoomAction ara) {
+        final int commId = ara.getCommID();
 
         // get the player who requested to activate the room
-        Player player = gd.getPlayerByCommID(commId);
+        final Player player = gd.getPlayerByCommID(commId);
         // if player doesn't exist, return
         if (player == null) {
-            serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
+            }
             return;
         }
 
-        Dungeon playersDungeon = player.getDungeon();
+        final Dungeon playersDungeon = player.getDungeon();
+        final int roomId = ara.getRoomID();
         if (playersDungeon.activateRoom(roomId)) {
-            Room activatedRoom = playersDungeon.getRoomById(roomId);
+            final Room activatedRoom = playersDungeon.getRoomById(roomId);
             broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
-            serverConn.sendActionFailed(commId, "couldn't activate room");
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(commId, "couldn't activate room");
+            }
         }
 
     }
 
-    public void exec(EndTurnAction eta) {
-        ServerConnection<Action> serverConn = gd.getServerConnection();
-        int commId = eta.getCommID();
+    @Override
+    public void exec(final EndTurnAction eta) {
+        final int commId = eta.getCommID();
         if (commIdsToDigTunnel.contains(commId)) {
             // in this case the player to dig tunnel ends his turn
             gotEndTurn = true;
             commIdsToDigTunnel.remove(commId);
         } else {
-            serverConn.sendActionFailed(commId, "cannot end turn, it's not your turn");
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(commId, "cannot end turn, it's not your turn");
+            }
         }
     }
 
     @Override
-    public void exec(LeaveAction la) {
-        int commId = la.getCommID();
+    public void exec(final LeaveAction la) {
+        final int commId = la.getCommID();
         if (commIdsToDigTunnel.contains(commId)) {
             commIdsToDigTunnel.remove(commId);
         }

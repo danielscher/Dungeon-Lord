@@ -4,9 +4,9 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public abstract class Action {
 
-    private int commID;
+    private final int commID;
 
-    public Action(int commID) {
+    public Action(final int commID) {
         this.commID = commID;
     }
 
@@ -14,7 +14,7 @@ public abstract class Action {
         return commID;
     }
 
-    public void invoke(Phase phase) {
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 

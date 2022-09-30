@@ -2,17 +2,17 @@ package de.unisaarland.cs.se.selab.game.entities;
 
 public class Adventurer {
 
-    private int adventurerID;
-    private int difficulty;
+    private final int adventurerID;
+    private final int difficulty;
     private int healthPoints;
-    private int maxHealthPoints;
-    private int healValue;
-    private int defuseValue;
-    private boolean charge;
+    private final int maxHealthPoints;
+    private final int healValue;
+    private final int defuseValue;
+    private final boolean charge;
 
 
-    public Adventurer(int adventurerID, int difficulty, int maxHealthPoints, int healValue,
-            int defuseValue, boolean charge) {
+    public Adventurer(final int adventurerID, final int difficulty, final int maxHealthPoints,
+            final int healValue, final int defuseValue, final boolean charge) {
         this.adventurerID = adventurerID;
         this.difficulty = difficulty;
         this.maxHealthPoints = maxHealthPoints;
@@ -50,7 +50,7 @@ public class Adventurer {
         return charge;
     }
 
-    public int damagehealthby(int n) {
+    public int damagehealthby(final int n) {
         if ((healthPoints - n) <= 0) {
             healthPoints = 0;
             return (n - healthPoints);
@@ -58,6 +58,29 @@ public class Adventurer {
         } else {
             healthPoints = healthPoints - n;
             return -1;
+        }
+    }
+
+    /*
+    this method heals the adventurer by the given amount
+    but only until his maximum health points are reached
+    the return indicates the leftover heal value, which wasn't used
+     */
+    public int healBy(final int amount) {
+        if (amount <= 0) {
+            // if the given heal amount is negative or zero, don't heal
+            return 0;
+        } else {
+            if (amount + healthPoints > maxHealthPoints) {
+                // in this case there is leftover heal amount
+                final int healedAmount = maxHealthPoints - healthPoints;
+                healthPoints = maxHealthPoints;
+                return amount - healedAmount;
+            } else {
+                // in this case the amount wasn't sufficient to fully heal the adventurer
+                healthPoints += amount;
+                return 0;
+            }
         }
     }
 

@@ -4,9 +4,9 @@ import de.unisaarland.cs.se.selab.phase.Phase;
 
 public class ActivateRoomAction extends Action {
 
-    private int roomID;
+    private final int roomID;
 
-    public ActivateRoomAction(int commID, int roomID) {
+    public ActivateRoomAction(final int commID, final int roomID) {
         super(commID);
         this.roomID = roomID;
     }
@@ -16,7 +16,8 @@ public class ActivateRoomAction extends Action {
         return roomID;
     }
 
-    public void invoke(Phase phase) {
+    @Override
+    public void invoke(final Phase phase) {
         phase.exec(this);
     }
 }
