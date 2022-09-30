@@ -156,7 +156,8 @@ public class Dungeon {
         }
 
         if (grid[x][y] == null) {
-            return !TileFinder.wouldCreateSquare(x, y, grid);
+            return (!TileFinder.wouldCreateSquare(x, y, grid) && TileFinder.hasNeighbor(x, y,
+                    grid));
         } else {
             return false;
         }
