@@ -224,7 +224,8 @@ public class EvalRoomPhase extends Phase {
             broadcastImpsChanged(r.getImpProduction(), p);
         }
     }
-        public void spreadAdv() {
+
+    public void spreadAdv() {
         final List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
 
         /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
