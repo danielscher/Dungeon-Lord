@@ -42,11 +42,11 @@ public class GameData {
     private final ServerConnection<Action> serverconnection = new ServerConnection<>(8080,
             5000, new ActionFactoryImplementation());
     private final Config config = new Config();
-    private int lastPlayerToStartBidding;
+    private int firstBidder;
     private int idCounter;
 
     public GameData() {
-        this.lastPlayerToStartBidding = 0;
+        this.firstBidder = 0;
         this.idCounter = 0;
     }
 
@@ -107,20 +107,27 @@ public class GameData {
         return commList.contains(commId);
     }
 
-    public int getNextStartPlayer() {
+    public int nextFirstBidder() {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
-        final int pos = playerList.indexOf(lastPlayerToStartBidding);
+        final int pos = playerList.indexOf(firstBidder);
         if (pos == playerList.size() - 1) {
-            this.lastPlayerToStartBidding = playerList.get(0);
+            firstBidder = playerList.get(0);
         } else {
-            this.lastPlayerToStartBidding = playerList.get(pos + 1);
+            firstBidder = playerList.get(pos + 1);
         }
 
-        return lastPlayerToStartBidding;
+        return firstBidder;
 
     }
 
+    public int getFirstBidder() {
+        return firstBidder;
+    }
+
+    public void setFirstBidder() {
+        firstBidder = nextFirstBidder();
+    }
 
     public int getNextCombatPlayer(int lastplayerid) {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
