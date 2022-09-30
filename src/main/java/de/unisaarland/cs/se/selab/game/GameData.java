@@ -118,7 +118,6 @@ public class GameData {
         }
 
         return firstBidder;
-
     }
 
     public int getFirstBidder() {
@@ -129,7 +128,7 @@ public class GameData {
         firstBidder = nextFirstBidder();
     }
 
-    public int getNextCombatPlayer(int lastplayerid) {
+    public int getNextCombatPlayer(final int lastplayerid) {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
         final int pos = playerList.indexOf(lastplayerid);

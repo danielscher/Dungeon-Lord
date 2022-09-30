@@ -25,19 +25,20 @@ public class CombatPhase extends Phase {
     private final TimeStamp timeStamp = gd.getTime();
 
     //selected Trap
-    private Trap placedTrap = null;
+    private Trap placedTrap;
     //placed monsters and the target position
-    private final Map<Monster, Integer> placedMonsters = new HashMap<Monster, Integer>();
+    private final Map<Monster, Integer> placedMonsters = new HashMap<>();
     private final Dungeon dungeon;
-    private boolean actionfailed = false;
+    private boolean actionfailed;
 
 
-    public CombatPhase(GameData gd, Player player) {
+    public CombatPhase(final GameData gd, final Player player) {
         super(gd);
         this.currPlayingPlayer = player;
         this.dungeon = currPlayingPlayer.getDungeon();
     }
 
+    @Override
     public Phase run() throws TimeoutException {
         //send defend yourself
         try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
@@ -145,7 +146,7 @@ public class CombatPhase extends Phase {
                     case MULTI:
                         int res = placedTrap.getDamage() - totalDefuseVal;
                         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            int currentReduction = res;
+                            final int currentReduction = res;
                             res = dungeon.getAdventurerById(i).damagehealthby(res);
                             if (res >= 0) {
                                 dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
@@ -169,11 +170,11 @@ public class CombatPhase extends Phase {
 
         //Monster damages
 
-        if (placedMonsters.size() > 0) {
+        if (!placedMonsters.isEmpty()) {
             for (final Monster monster : placedMonsters.keySet()) {
                 switch (monster.getAttack()) {
                     case TARGETED:
-                        Adventurer adTargeted = dungeon.getAdventurer(placedMonsters.get(monster));
+                        final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters.get(monster));
                         if (adTargeted != null) {
                             if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
                                 dungeon.imprison(adTargeted.getAdventurerID());
@@ -204,7 +205,7 @@ public class CombatPhase extends Phase {
                         int res = monster.getDamage();
 
                         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            int currentReduction = res;
+                            final int currentReduction = res;
                             res = dungeon.getAdventurerById(i).damagehealthby(res);
                             if (res >= 0) {
                                 dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
@@ -245,7 +246,7 @@ public class CombatPhase extends Phase {
         //Conquer if one of the adventurer is alive the tile is conquered
 
         if (dungeon.getAdventurer(0) != null) {
-            Coordinate coordinate = dungeon.getCurrBattleGround();
+            final Coordinate coordinate = dungeon.getCurrBattleGround();
             dungeon.setTileConquered(coordinate);
             broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
                     coordinate.getxpos(), coordinate.getypos());
@@ -267,8 +268,8 @@ public class CombatPhase extends Phase {
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             if (dungeon.getAdventurer(i).getHealValue() > 0) {
                 int res = dungeon.getAdventurer(i).getHealValue();
-                for (int j = 0; j < dungeon.getNumAdventurersInQueue(); i++) {
-                    int currentRes = res;
+                for (int j = 0; j < dungeon.getNumAdventurersInQueue(); j++) {
+                    final int currentRes = res;
                     res = dungeon.getAdventurer(j).healBy(res);
                     if (res > 0) {
                         broadcastAdventurerHealed(currentRes - res,
@@ -368,7 +369,8 @@ public class CombatPhase extends Phase {
 
     }
 
-    public void exec(MonsterAction ma) {
+    @Override
+    public void exec(final MonsterAction ma) {
 
         if (ma.getCommID() == currPlayingPlayer.getCommID()) {
             // check if 2 monsters are already placed
@@ -432,8 +434,8 @@ public class CombatPhase extends Phase {
         }
     }
 
-
-    public void exec(MonsterTargetedAction mta) {
+    @Override
+    public void exec(final MonsterTargetedAction mta) {
         if (mta.getCommID() == currPlayingPlayer.getCommID()) {
             if (placedMonsters.size() >= 2) {
                 gd.getServerConnection()
@@ -530,8 +532,8 @@ public class CombatPhase extends Phase {
         }
     }
 
-
-    public void exec(EndTurnAction eta) {
+    @Override
+    public void exec(final EndTurnAction eta) {
         if (currPlayingPlayer.getCommID() != eta.getCommID()) {
             try (ServerConnection<Action> serverConn =
                     gd.getServerConnection()) {
