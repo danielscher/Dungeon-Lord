@@ -1,3 +1,5 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.unisaarland.cs.se.selab.game.TimeStamp;

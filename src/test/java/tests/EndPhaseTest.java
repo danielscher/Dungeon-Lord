@@ -1,3 +1,5 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import de.unisaarland.cs.se.selab.game.GameData;
@@ -7,7 +9,6 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
-import de.unisaarland.cs.se.selab.game.player.Tile;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
@@ -89,7 +90,7 @@ class EndPhaseTest {
           p3    3      8     6      0       0       0            3        0             3    9
     */
 
-    /*
+
     @Test
     void testSetTunnelTitles() {
         resetData();
@@ -142,10 +143,8 @@ class EndPhaseTest {
     @Test
     void testwinner() {
         resetData();
-        gep.evaluateScores();
+        gep.evaluateScoresNoTitle();
         assertEquals(3, gep.getWinnerPlayerIDList().get(0));
     }
-    */
-
 
 }

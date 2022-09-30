@@ -1,3 +1,5 @@
+package tests;
+
 import static de.unisaarland.cs.se.selab.game.util.Location.LOWER_HALF;
 import static de.unisaarland.cs.se.selab.game.util.Location.UPPER_HALF;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,7 +14,6 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Tile;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
-import de.unisaarland.cs.se.selab.game.util.Location;
 import java.util.ArrayList;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,10 @@ import org.junit.jupiter.api.Test;
 class DungeonTest {
 
     Dungeon dg = new Dungeon();
-    private Tile[][] grid = new Tile[15][15];
+    private final Tile[][] grid = new Tile[15][15];
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
     Trap t1 = new Trap(1, 1, 1, Attack.BASIC);
-    Room r1 = new Room(1, 4, 1, 1, 1, 1, Location.LOWER_HALF);
+    Room r1 = new Room(1, 4, 1, 1, 1, 1, LOWER_HALF);
     Adventurer ad1 = new Adventurer(1, 1, 1, 2, 0, false);
     Adventurer ad2 = new Adventurer(1, 1, 1, 0, 2, false);
     Adventurer ad3 = new Adventurer(1, 1, 1, 0, 0, true);

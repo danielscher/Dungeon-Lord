@@ -1,6 +1,6 @@
+package tests;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
@@ -22,12 +22,11 @@ class BiddingsquareTest {
         //                  [4,-1,-1,-1,-1,-1,-1,-1]}
     }
 
-    /*
     @Test
     void testInsert() {
         resetBiddingSquare();
-        assertFalse(bs.insert(BidType.FOOD, 3));
-        assertTrue(bs.insert(BidType.GOLD, 3));
+        assertEquals(-1, bs.insert(BidType.FOOD, 3));
+        assertEquals(1, bs.insert(BidType.GOLD, 3));
     }
 
     @Test
@@ -54,5 +53,4 @@ class BiddingsquareTest {
         resetBiddingSquare();
         assertEquals(2, bs.countTrapBids());
     }
-    */
 }

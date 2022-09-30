@@ -19,7 +19,7 @@ public class BiddingSquare {
         // get the uppermost free row
         int slot = -1;
         final int columnId = typeToColumn(bidType);
-        for (int row = 0; row < biddingSlots.length; row++) {
+        for (int row = 0; row < 3; row++) {
             if (biddingSlots[row][columnId] == -1) {
                 biddingSlots[row][columnId] = playerID;
                 slot = row;
@@ -49,7 +49,7 @@ public class BiddingSquare {
     public int countTrapBids() {
         final int columnId = typeToColumn(BidType.TRAP);
         int res = 0;
-        for (int row = 0; row < biddingSlots.length; row++) {
+        for (int row = 0; row < 3; row++) {
             if (biddingSlots[row][columnId] != -1) {
                 res = res + 1;
             }
