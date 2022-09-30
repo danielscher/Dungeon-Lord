@@ -207,7 +207,6 @@ public class GameEndPhase extends Phase {
 
     // riches need gold+foods, and i use points field to store the value, which need to be clear
 
-
     private void calculateFoodPoint() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currFood = gd.getPlayerByPlayerId(i).getFood();
@@ -366,7 +365,7 @@ public class GameEndPhase extends Phase {
         }
     }
 
-    public List<Integer> getPlayersID(final GameData gd) {
+    public List<Integer> getPlayersId(final GameData gd) {
         return gd.getAllPlayerID();
     }
 
