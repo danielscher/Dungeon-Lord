@@ -22,6 +22,7 @@ class BiddingsquareTest {
         //                  [4,-1,-1,-1,-1,-1,-1,-1]}
     }
 
+    /*
     @Test
     void testInsert() {
         resetBiddingSquare();
@@ -53,4 +54,5 @@ class BiddingsquareTest {
         resetBiddingSquare();
         assertEquals(2, bs.countTrapBids());
     }
+    */
 }

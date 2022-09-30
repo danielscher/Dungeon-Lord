@@ -89,6 +89,7 @@ class EndPhaseTest {
           p3    3      8     6      0       0       0            3        0             3    9
     */
 
+    /*
     @Test
     void testSetTunnelTitles() {
         resetData();
@@ -144,6 +145,7 @@ class EndPhaseTest {
         gep.evaluateScores();
         assertEquals(3, gep.getWinnerPlayerIDList().get(0));
     }
+    */
 
 
 }
