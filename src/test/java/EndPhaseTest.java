@@ -142,7 +142,7 @@ class EndPhaseTest {
     void testwinner() {
         resetData();
         gep.evaluateScores();
-        assertEquals(3, gep.getWinnerPlayerIDList().get(0));
+        assertEquals(3, gep.getWinnerPlayerIdList().get(0));
     }
 
 

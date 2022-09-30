@@ -10,15 +10,15 @@ import java.util.List;
 
 public class GameEndPhase extends Phase {
 
-    private final List<Integer> darkSeedPlayerIDList = new ArrayList<>();
-    private final List<Integer> hallsPlayerIDList = new ArrayList<>();
-    private final List<Integer> tunnelPlayerIDList = new ArrayList<>();
-    private final List<Integer> monsterPlayerIDList = new ArrayList<>();
-    private final List<Integer> impsPlayerIDList = new ArrayList<>();
-    private final List<Integer> richesPlayerIDList = new ArrayList<>();
+    private final List<Integer> darkSeedPlayerIdList = new ArrayList<>();
+    private final List<Integer> hallsPlayerIdList = new ArrayList<>();
+    private final List<Integer> tunnelPlayerIdList = new ArrayList<>();
+    private final List<Integer> monsterPlayerIdList = new ArrayList<>();
+    private final List<Integer> impsPlayerIdList = new ArrayList<>();
+    private final List<Integer> richesPlayerIdList = new ArrayList<>();
     //riches=food+gold
-    private final List<Integer> battlePlayerIDList = new ArrayList<>();
-    private final List<Integer> winnerPlayerIDList = new ArrayList<>();
+    private final List<Integer> battlePlayerIdList = new ArrayList<>();
+    private final List<Integer> winnerPlayerIdList = new ArrayList<>();
 
 
     public GameEndPhase(final GameData gd) {
@@ -28,6 +28,8 @@ public class GameEndPhase extends Phase {
     @Override
     public Phase run() throws TimeoutException {
         //TODO
+        setAllTitle();
+        setAllPoints();
         return null;
     }
 
@@ -35,17 +37,35 @@ public class GameEndPhase extends Phase {
         // use this to calculate the final points and give titles
         this.calculateFoodPoint();
         this.calculateGoldPoint();
-        this.setRichesTitles();
         // the above order is important
+        this.setRichesTitles();
         this.setDarkSeedTitles();
         this.setHallsTitles();
         this.setTunnelTitles();
         this.setMonsterTitles();
         this.setImpsTitles();
-        this.setBattlelordTitles();
+        this.setBattleLordTitles();
         // give all titles to corresponding players, and now evaluate scores.
     }
+    public void setAllPoints(){
+        initializeAllPoints();
+        evaluateScoresNoTitle();
+        evaluateScoresWithTitleMonster();
+        evaluateScoresWithTitleDarkSeed();
+        evaluateScoresWithTitleBattle();
+        evaluateScoresWithTitleImps();
+        evaluateScoresWithTitleRiches();
+        evaluateScoresWithTitleTunnel();
+        evaluateScoresWithTitleHalls();
+        evaluateWinner();
+    }
 
+    public void initializeAllPoints(){
+        for(int i = 0; i < gd.getAllPlayerID().size();i++){
+            gd.getPlayerByPlayerId(i).setPoints(0);
+        }
+    }
+    // evaluate methods below just calculate the points 1 by 1.
     public void evaluateScoresNoTitle() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int hiredMonsterPoints = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters()
@@ -64,13 +84,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleDarkSeed() {
-        if (darkSeedPlayerIDList.size() == 1) {
-            final int currPlayerId = darkSeedPlayerIDList.get(0);
+        if (darkSeedPlayerIdList.size() == 1) {
+            final int currPlayerId = darkSeedPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : darkSeedPlayerIDList) {
-                final int currPlayerId = darkSeedPlayerIDList.get(i);
+            for (final int i : darkSeedPlayerIdList) {
+                final int currPlayerId = darkSeedPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -78,13 +98,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleRiches() {
-        if (richesPlayerIDList.size() == 1) {
-            final int currPlayerId = richesPlayerIDList.get(0);
+        if (richesPlayerIdList.size() == 1) {
+            final int currPlayerId = richesPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : richesPlayerIDList) {
-                final int currPlayerId = richesPlayerIDList.get(i);
+            for (final int i : richesPlayerIdList) {
+                final int currPlayerId = richesPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -92,13 +112,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleImps() {
-        if (impsPlayerIDList.size() == 1) {
-            final int currPlayerId = impsPlayerIDList.get(0);
+        if (impsPlayerIdList.size() == 1) {
+            final int currPlayerId = impsPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : impsPlayerIDList) {
-                final int currPlayerId = impsPlayerIDList.get(i);
+            for (final int i : impsPlayerIdList) {
+                final int currPlayerId = impsPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -106,13 +126,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleHalls() {
-        if (hallsPlayerIDList.size() == 1) {
-            final int currPlayerId = hallsPlayerIDList.get(0);
+        if (hallsPlayerIdList.size() == 1) {
+            final int currPlayerId = hallsPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : hallsPlayerIDList) {
-                final int currPlayerId = hallsPlayerIDList.get(i);
+            for (final int i : hallsPlayerIdList) {
+                final int currPlayerId = hallsPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -120,13 +140,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleBattle() {
-        if (battlePlayerIDList.size() == 1) {
-            final int currPlayerId = battlePlayerIDList.get(0);
+        if (battlePlayerIdList.size() == 1) {
+            final int currPlayerId = battlePlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : battlePlayerIDList) {
-                final int currPlayerId = battlePlayerIDList.get(i);
+            for (final int i : battlePlayerIdList) {
+                final int currPlayerId = battlePlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -134,13 +154,13 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleTunnel() {
-        if (tunnelPlayerIDList.size() == 1) {
-            final int currPlayerId = tunnelPlayerIDList.get(0);
+        if (tunnelPlayerIdList.size() == 1) {
+            final int currPlayerId = tunnelPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : tunnelPlayerIDList) {
-                final int currPlayerId = tunnelPlayerIDList.get(i);
+            for (final int i : tunnelPlayerIdList) {
+                final int currPlayerId = tunnelPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -148,20 +168,20 @@ public class GameEndPhase extends Phase {
     }
 
     public void evaluateScoresWithTitleMonster() {
-        if (monsterPlayerIDList.size() == 1) {
-            final int currPlayerId = monsterPlayerIDList.get(0);
+        if (monsterPlayerIdList.size() == 1) {
+            final int currPlayerId = monsterPlayerIdList.get(0);
             final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
-            for (final int i : monsterPlayerIDList) {
-                final int currPlayerId = monsterPlayerIDList.get(i);
+            for (final int i : monsterPlayerIdList) {
+                final int currPlayerId = monsterPlayerIdList.get(i);
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
         }
     }
 
-    public void calculateWinner() {  // set the winner to the list:
+    public void evaluateWinner() {  // set the winner to the list:
         int maxScores = gd.getPlayerByPlayerId(0).getPoints();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currScores = gd.getPlayerByPlayerId(i).getPoints();
@@ -172,18 +192,21 @@ public class GameEndPhase extends Phase {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int scores = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (scores == maxScores) {
-                this.winnerPlayerIDList.add(i);
+                this.winnerPlayerIdList.add(i);
                 // add player to the winner list
             }
         }
 
-        for (final int i : winnerPlayerIDList) {
-            final int winnerId = winnerPlayerIDList.get(i);
+        for (final int i : winnerPlayerIdList) {
+            final int winnerId = winnerPlayerIdList.get(i);
             final int winnerPoints = gd.getPlayerByPlayerId(winnerId).getPoints();
             broadcastGameEnd(winnerId, winnerPoints);
         }
 
     }
+
+    // riches need gold+foods, and i use points field to store the value, which need to be clear
+
 
     private void calculateFoodPoint() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
@@ -201,27 +224,27 @@ public class GameEndPhase extends Phase {
     }
 
     public void setRichesTitles() {
-        int maxriches = gd.getPlayerByPlayerId(0).getPoints();
+        int maxRiches = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currRiches = gd.getPlayerByPlayerId(i).getPoints();
-            if (currRiches > maxriches) {
-                maxriches = currRiches;
+            if (currRiches > maxRiches) {
+                maxRiches = currRiches;
             }
         }
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int riches = gd.getPlayerByPlayerId(i).getPoints();
-            if (riches == maxriches) {
+            if (riches == maxRiches) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_RICHES);
-                richesPlayerIDList.add(i);
+                richesPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
-            gd.getPlayerByPlayerId(i).setPoints(0);
+            // gd.getPlayerByPlayerId(i).setPoints(0);
             //clear the food and gold points since they are no longer needed
         }
     }
 
     public void setDarkSeedTitles() {
-        int maxEvilMeter = gd.getPlayerByPlayerId(0).getEvilLevel();
+        int maxEvilMeter = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currEvil = gd.getPlayerByPlayerId(i).getEvilLevel();
             if (currEvil > maxEvilMeter) {
@@ -232,7 +255,7 @@ public class GameEndPhase extends Phase {
             final int evil = gd.getPlayerByPlayerId(i).getEvilLevel();
             if (evil == maxEvilMeter) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_DARK_DEEDS);
-                richesPlayerIDList.add(i);
+                richesPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -240,7 +263,7 @@ public class GameEndPhase extends Phase {
 
     public void setHallsTitles() {
         // get the number of the rooms for player0
-        int maxRooms = gd.getPlayerByPlayerId(0).getDungeon().getNumRooms();
+        int maxRooms = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currRooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (currRooms > maxRooms) {
@@ -251,7 +274,7 @@ public class GameEndPhase extends Phase {
             final int rooms = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
             if (rooms == maxRooms) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_HALLS);
-                hallsPlayerIDList.add(i);
+                hallsPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -280,7 +303,7 @@ public class GameEndPhase extends Phase {
             final int tileNum = contile + uncontile - room;
             if (tileNum == maxTiles) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_TUNNEL_LORD);
-                tunnelPlayerIDList.add(i);
+                tunnelPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -299,7 +322,7 @@ public class GameEndPhase extends Phase {
             final int monsterNum = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters().size();
             if (monsterNum == maxHiredMonsters) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_MONSTER_LORD);
-                monsterPlayerIDList.add(i);
+                monsterPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -317,13 +340,13 @@ public class GameEndPhase extends Phase {
             final int impsNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
             if (impsNum == maxImps) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_LORD_OF_IMPS);
-                impsPlayerIDList.add(i);
+                impsPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
     }
 
-    public void setBattlelordTitles() {
+    public void setBattleLordTitles() {
         int maxUnconqueredTilesNum = gd.getPlayerByPlayerId(0).getDungeon()
                 .getNumUnconqueredTiles();
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
@@ -337,7 +360,7 @@ public class GameEndPhase extends Phase {
             final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
             if (unconqueredTileNum == maxUnconqueredTilesNum) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_BATTLELORD);
-                battlePlayerIDList.add(i);
+                battlePlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
         }
@@ -345,10 +368,9 @@ public class GameEndPhase extends Phase {
 
     public List<Integer> getPlayersID(final GameData gd) {
         return gd.getAllPlayerID();
-
     }
 
-    public List<Integer> getWinnerPlayerIDList() {
-        return winnerPlayerIDList;
+    public List<Integer> getWinnerPlayerIdList() {
+        return winnerPlayerIdList;
     }
 }

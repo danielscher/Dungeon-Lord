@@ -53,28 +53,28 @@ public class Config {
         log.fine("error in Adventurers: -2,20,21,22 " + "/n");
         log.fine("error in Traps: -3,30,31,32 " + "/n");
         log.fine("error in Rooms: -4,40,41,42 " + "/n");
-        log.fine("error in general Informations: -5,-6 " + "/n");
+        log.fine("error in general information: -5,-6 " + "/n");
         log.fine("maxYear =" + maxYear + "/n");
         log.fine("maxPlayer =" + maxPlayer + "/n");
         log.fine("number of rooms =" + rooms.size() + "/n");
         log.fine("number of traps =" + traps.size() + "/n");
         log.fine("number of adventurers =" + adventurers.size() + "/n");
         log.fine("number of monsters =" + monsters.size() + "/n");
-        log.fine("invalid infomation in =" + parserResult + "/n");
+        log.fine("invalid information in =" + parserResult + "/n");
         /*
         System.out.println("Help and Log: " + "/n");
         System.out.println("error in Monsters: -1,10,11,12 " + "/n");
         System.out.println("error in Adventurers: -2,20,21,22 " + "/n");
         System.out.println("error in Traps: -3,30,31,32 " + "/n");
         System.out.println("error in Rooms: -4,40,41,42 " + "/n");
-        System.out.println("error in general Informations: -5,-6 " + "/n");
+        System.out.println("error in general information: -5,-6 " + "/n");
         System.out.println("maxYear =" + maxYear + "/n");
         System.out.println("maxPlayer =" + maxPlayer + "/n");
         System.out.println("number of rooms =" + rooms.size() + "/n");
         System.out.println("number of traps =" + traps.size() + "/n");
         System.out.println("number of adventurers =" + adventurers.size() + "/n");
         System.out.println("number of monsters =" + monsters.size() + "/n");
-        System.out.println("invalid infomation in =" + parserResult + "/n");
+        System.out.println("invalid information in =" + parserResult + "/n");
         */
 
     }
@@ -91,16 +91,16 @@ public class Config {
 
     public void parse(final String configFilePath) throws FileNotFoundException {
         this.parseFromFile(configFilePath);
-        parserAndcheckMonsterToList(obj);
-        parserAndcheckAdventurerToList(obj);
-        parserAndcheckTrapToList(obj);
-        parserAndcheckRoomToList(obj);
+        parserAndCheckMonsterToList(obj);
+        parserAndCheckAdventurerToList(obj);
+        parserAndCheckTrapToList(obj);
+        parserAndCheckRoomToList(obj);
         checkGeneralInfoValid();
         checkUniqueId();
         displayLog();
     }
 
-    public int parseFromFile(final String configFilePath) throws FileNotFoundException {
+    public void parseFromFile(final String configFilePath) throws FileNotFoundException {
         parserResult = 0;
         final StringBuilder builder = new StringBuilder();
         //    try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
@@ -128,10 +128,10 @@ public class Config {
         initGold = obj.getInt("initialGold");
         initImps = obj.getInt("initialImps");
         // end of parse to json object
-        return parserResult;
+        // return parserResult;
     }
 
-    public int parserAndcheckMonsterToList(final JSONObject obj) {
+    public void parserAndCheckMonsterToList(final JSONObject obj) {
         final JSONArray monsterArray = obj.getJSONArray("monsters");
         final int monArrLen = monsterArray.length();
         monsters = new ArrayList<>();
@@ -181,10 +181,10 @@ public class Config {
             final Monster currMonster = new Monster(id, hunger, evilness, damage, attackStrategy);
             monsters.add(currMonster);
         } //end of monster for loop+ add to list
-        return parserResult;
+        // return parserResult;
     }
 
-    public int parserAndcheckAdventurerToList(final JSONObject obj) {
+    public void parserAndCheckAdventurerToList(final JSONObject obj) {
         final JSONArray adventurerArray = obj.getJSONArray("adventurers");
         final int advArrLen = adventurerArray.length();
         adventurers = new ArrayList<>();
@@ -238,10 +238,10 @@ public class Config {
                     healValue, defuseValue, charge);
             adventurers.add(currAdventurer);
         } //end of the adventurer forloop +++ add to list
-        return parserResult;
+        // return parserResult;
     }
 
-    public int parserAndcheckTrapToList(final JSONObject obj) {
+    public void parserAndCheckTrapToList(final JSONObject obj) {
         final JSONArray trapArray = obj.getJSONArray("traps");
         final int trpArrLen = trapArray.length();
         traps = new ArrayList<>();
@@ -278,10 +278,10 @@ public class Config {
             final Trap currTrap = new Trap(id, damage, target, attackStrategy);
             traps.add(currTrap);
         } // end of traps forloop
-        return parserResult;
+        // return parserResult;
     }
 
-    public int parserAndcheckRoomToList(final JSONObject obj) {
+    public void parserAndCheckRoomToList(final JSONObject obj) {
         final JSONArray roomArray = obj.getJSONArray("rooms");
         final int roomArrLen = roomArray.length();
         rooms = new ArrayList<>();
@@ -338,11 +338,11 @@ public class Config {
             rooms.add(currRoom);
         } // end of rooms
 
-        return parserResult;
+        // return parserResult;
     }
 
 
-    public int checkGeneralInfoValid() {
+    public void checkGeneralInfoValid() {
         //not enough years/player
         if (maxYear < 1 && maxPlayer < 1) {
             parserResult = -5;
@@ -378,11 +378,10 @@ public class Config {
 
         // !!! try to check the duplicate elements, but get error...
         //   HashSet<Trap> checkTraps = new HashSet<>(Arrays.asList(traps));
-
-        return parserResult;
+        // return parserResult;
     }
 
-    public int checkUniqueId() {
+    public void checkUniqueId() {
         final Set<Integer> monsterIds = new HashSet<>(
                 monsters.size()); // setting maxCapacity a priori increases performance
         for (final Monster m : monsters) {
@@ -417,12 +416,16 @@ public class Config {
         if (roomIds.size() != rooms.size()) {
             parserResult = 40;
         }
-        return parserResult;
+        // return parserResult;
     }
 
 
     public void shuffle() {
-        // to_do
+        // TODO
+    }
+
+    public int getParserResult(){
+        return parserResult;
     }
 
     //below are 4 getters.
@@ -483,7 +486,7 @@ public class Config {
                 .clear(); // removes this sublist from list.
         return drawnAdventurers;
     }
-
+    // get general information from Config files
     public int getMaxPlayers() {
         return maxPlayer;
     }
@@ -491,6 +494,22 @@ public class Config {
 
     public int getMaxYear() {
         return maxYear;
+    }
+
+    public int getDungeonSidelength() {
+        return dungeonSidelength;
+    }
+
+    public int getInitFood() {
+        return initFood;
+    }
+
+    public int getInitImps() {
+        return initImps;
+    }
+
+    public int getInitGold() {
+        return initGold;
     }
 
 }
