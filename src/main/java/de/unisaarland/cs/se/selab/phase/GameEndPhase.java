@@ -47,7 +47,8 @@ public class GameEndPhase extends Phase {
         this.setBattleLordTitles();
         // give all titles to corresponding players, and now evaluate scores.
     }
-    public void setAllPoints(){
+
+    public void setAllPoints() {
         initializeAllPoints();
         evaluateScoresNoTitle();
         evaluateScoresWithTitleMonster();
@@ -60,11 +61,12 @@ public class GameEndPhase extends Phase {
         evaluateWinner();
     }
 
-    public void initializeAllPoints(){
-        for(int i = 0; i < gd.getAllPlayerID().size();i++){
+    public void initializeAllPoints() {
+        for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             gd.getPlayerByPlayerId(i).setPoints(0);
         }
     }
+
     // evaluate methods below just calculate the points 1 by 1.
     public void evaluateScoresNoTitle() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
