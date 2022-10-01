@@ -424,7 +424,7 @@ public class Config {
         // TODO
     }
 
-    public int getParserResult(){
+    public int getParserResult() {
         return parserResult;
     }
 
@@ -487,6 +487,7 @@ public class Config {
         return drawnAdventurers;
     }
     // get general information from Config files
+
     public int getMaxPlayers() {
         return maxPlayer;
     }
