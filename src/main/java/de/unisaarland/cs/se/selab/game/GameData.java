@@ -204,8 +204,7 @@ public class GameData {
     }
 
     public int getNumCurrPlayers() {
-        //TODO: returns the number of currently registered players.
-        return 1;
+        return getAllPlayerID().size();
     }
 
     public void discardMonster() { // removes all monsters from currMonsters list.

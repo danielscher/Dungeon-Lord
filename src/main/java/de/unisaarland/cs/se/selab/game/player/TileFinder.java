@@ -187,7 +187,6 @@ public final class TileFinder {
     NOTE: relies on coordinate to be valid
      */
     public static boolean hasNeighbor(final int x, final int y, final Tile[][] grid) {
-        // TODO implement
         // if-statements prevent array accesses out of bounds
         boolean foundNeighbor = false;
         if (x > 0) {
