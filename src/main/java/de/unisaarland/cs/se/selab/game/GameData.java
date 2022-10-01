@@ -41,13 +41,15 @@ public class GameData {
 
     private final ServerConnection<Action> serverconnection = new ServerConnection<>(8080,
             5000, new ActionFactoryImplementation());
-    private final Config config = new Config();
+    // private final Config config;
+    private final AltConfig config;
     private int firstBidder;
     private int idCounter;
 
-    public GameData() {
+    public GameData(AltConfig config) {
         this.firstBidder = 0;
         this.idCounter = 0;
+        this.config = config;
     }
 
     private void addPlayer(final Player player, final int id) {
@@ -200,7 +202,8 @@ public class GameData {
     }
 
     public int getMaxYears() {
-        return config.getMaxYear();
+        // return config.getMaxYear(); // for Can's config
+        return config.getYears(); // for Henry's config
     }
 
     public int getNumCurrPlayers() {

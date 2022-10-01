@@ -66,11 +66,13 @@ public class Main {
         try (ServerConnection<Action> sc = new ServerConnection<Action>(port, timeout,
                 new ActionFactoryImplementation())) {
             //TODO : Initialize Game wirth the objects above + path.
-            game = new Game(sc);
+            game = new Game(sc, path);
         }
 
-        while (isRunning) {
-            isRunning = game.runGame();
+        if(game.runGame()) {
+            System.exit(0);
+        } else {
+            System.exit(1);
         }
 
 

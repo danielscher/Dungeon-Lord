@@ -19,7 +19,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/*
+/**
 GENERAL EXPLANATION:
 after creating an instance of this class, the method parse() is to be called
 
@@ -51,11 +51,11 @@ public class AltConfig {
     }
 
 
-    /*
+    /**
     ---------- parsing methods ----------
      */
 
-    /*
+    /**
     this method parses the config and stores all the collected data in this object
     return == success?
      */
@@ -101,7 +101,7 @@ public class AltConfig {
         return checkIfValid();
     }
 
-    /*
+    /**
      * this method parses general game variables
      * @throws JSONException
      */
@@ -138,7 +138,7 @@ public class AltConfig {
         }
     }
 
-    /*
+    /**
      * this method parses all monster objects
      * @throws JSONException
      */
@@ -152,7 +152,7 @@ public class AltConfig {
         }
     }
 
-    /*
+    /**
      * this method is used to create a single instance of a monster with the parameters provided by
      * one array entry
      * @throws JSONException
@@ -188,7 +188,7 @@ public class AltConfig {
         monsters.add(monster);  // add created monster to the list of all monsters
     }
 
-    /*
+    /**
      * this method parses all adventurer objects
      * @throws JSONException
      */
@@ -202,7 +202,7 @@ public class AltConfig {
         }
     }
 
-    /*
+    /**
      * this method is used to create a single instance of an
      * adventurer with the parameters provided by
      * one array entry
@@ -248,7 +248,7 @@ public class AltConfig {
         adventurers.add(adventurer);  // add created adventurer to the list of all adventurers
     }
 
-    /*
+    /**
      * this method parses all trap objects
      * @throws JSONException
      */
@@ -262,7 +262,7 @@ public class AltConfig {
         }
     }
 
-    /*
+    /**
      * this method is used to create a single instance of a trap with the parameters provided by
      * one array entry
      * @throws JSONException
@@ -283,7 +283,7 @@ public class AltConfig {
         traps.add(trap);
     }
 
-    /*
+    /**
      * this method parses all room objects
      * @throws JSONException
      */
@@ -297,7 +297,7 @@ public class AltConfig {
         }
     }
 
-    /*
+    /**
      * this method is used to create a single instance of a room with the parameters provided by
      * one array entry
      * @throws JSONException
@@ -347,12 +347,12 @@ public class AltConfig {
         rooms.add(room);
     }
 
-    /*
+    /**
     ---------- config validation methods ----------
      */
 
 
-    /*
+    /**
     this method is used to create a single instance of a room with the parameters provided by
     one array entry
      */
@@ -374,7 +374,7 @@ public class AltConfig {
         // if none of the checks above failed, the config is correct
     }
 
-    /*
+    /**
     this method is used to validate the correctness of all provided values for the
     general game data
      */
@@ -396,7 +396,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method is used to validate the correctness of all provided values for the
     monsters
      */
@@ -410,7 +410,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method validates the parameters of one monster
      */
     private boolean validateMonster(final Monster monster) {
@@ -423,7 +423,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method checks if all monster IDs are unique
      */
     private boolean allMonsterIdsUnique() {
@@ -435,7 +435,7 @@ public class AltConfig {
         return (monsterIds.size() == monsters.size());
     }
 
-    /*
+    /**
     this method is used to validate the correctness of all provided values for the
     adventurers
      */
@@ -449,7 +449,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method validates the parameters of one adventurer
      */
     private boolean validateAdventurer(final Adventurer adventurer) {
@@ -461,7 +461,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method checks if all adventurer IDs are unique
      */
     private boolean allAdventurerIdsUnique() {
@@ -473,7 +473,7 @@ public class AltConfig {
         return (adventurerIds.size() == adventurers.size());
     }
 
-    /*
+    /**
     this method is used to validate the correctness of all provided values for the
     traps
      */
@@ -487,7 +487,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method validates the parameters of one trap
      */
     private boolean validateTrap(final Trap trap) {
@@ -500,7 +500,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method checks if all trap IDs are unique
      */
     private boolean allTrapIdsUnique() {
@@ -512,7 +512,7 @@ public class AltConfig {
         return (traps.size() == trapIds.size());
     }
 
-    /*
+    /**
     this method is used to validate the correctness of all provided values for the
     rooms
      */
@@ -526,7 +526,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method validates the parameters of one room
      */
     private boolean validateRoom(final Room room) {
@@ -540,7 +540,7 @@ public class AltConfig {
         return res;
     }
 
-    /*
+    /**
     this method checks if all room IDs are unique
      */
     private boolean allRoomIdsUnique() {
@@ -552,7 +552,7 @@ public class AltConfig {
         return (rooms.size() == roomIds.size());
     }
 
-    /*
+    /**
     ----------  getters / draw methods ----------
      */
 
@@ -589,7 +589,7 @@ public class AltConfig {
         return configJSONString;
     }
 
-    /*
+    /**
     standard amount of 3
      */
     public List<Monster> drawMonsters() {
@@ -606,7 +606,7 @@ public class AltConfig {
         return drawnMonsters;
     }
 
-    /*
+    /**
     standard amount of 2
      */
     public List<Room> drawRooms() {

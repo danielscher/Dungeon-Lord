@@ -5,23 +5,29 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.phase.Phase;
 import de.unisaarland.cs.se.selab.phase.RegPhase;
+import java.io.FileNotFoundException;
 
 public class Game {
 
-    private final GameData gameData = new GameData();
-    private Phase currPhase = new RegPhase(gameData);
+    private GameData gameData;
+    private Phase currPhase;
     private final ServerConnection<Action> sc;
+    private final String configPath;
 
 
-    public Game(final ServerConnection<Action> sc) {
+    public Game(final ServerConnection<Action> sc, String configPath) {
         this.sc = sc;
+        this.configPath = configPath;
     }
 
     public boolean runGame() {
-        try {
-            currPhase = currPhase.run();
-        } catch (TimeoutException e) {
+        final AltConfig config = new AltConfig(configPath);
+        if(!config.parse()) {
             return false;
+        }
+        gameData = new GameData(config);
+        tryfor(currPhase = new RegPhase(gameData); currPhase != null; currPhase = currPhase.run()) {
+            // TODO try catch
         }
         return true;
     }
