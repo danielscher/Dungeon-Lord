@@ -180,4 +180,28 @@ public final class TileFinder {
         }
         return foundSquare;
     }
+
+    /*
+    this method determines if a tile of a given location has a neighboring tile
+    (which is a requirement to be able to dig in this location)
+    NOTE: relies on coordinate to be valid
+     */
+    public static boolean hasNeighbor(final int x, final int y, final Tile[][] grid) {
+        // TODO implement
+        // if-statements prevent array accesses out of bounds
+        boolean foundNeighbor = false;
+        if (x > 0) {
+            foundNeighbor |= (grid[x - 1][y] != null); // check potential left neighbor
+        }
+        if (x < grid.length - 1) {
+            foundNeighbor |= (grid[x + 1][y] != null); // check potential right neighbor
+        }
+        if (y > 0) {
+            foundNeighbor |= (grid[x][y - 1] != null); // check potential bottom neighbor
+        }
+        if (y < grid[0].length - 1) {
+            foundNeighbor |= (grid[x][y + 1] != null); // check potential upper neighbor
+        }
+        return foundNeighbor;
+    }
 }
