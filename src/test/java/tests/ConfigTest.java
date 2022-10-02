@@ -8,22 +8,28 @@ import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.ParserMessage;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.io.IOException;
+import java.util.Random;
 import org.json.JSONException;
 import org.junit.jupiter.api.Test;
 
 class ConfigTest extends Config {
 
-    private static final String MYPATH = "";
+    private static final String MYPATH = "src\\test\\resources\\configuration.json";
+
     // "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
     private static final String MYPATHFAIL = "";
     // "C:\\Users\\forgo\\group35\\src\\main\\resources\\config_broken.json";
+    private static final Random R = new Random(42);
+
+
     Config cfg = new Config();
+
 
     @Test
     void testParseOk() {
         cfg.setConfigFilePath(MYPATH);
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -36,7 +42,7 @@ class ConfigTest extends Config {
     void testParseNotOk() {
         cfg.setConfigFilePath(MYPATHFAIL);
         try {
-            cfg.parse(MYPATHFAIL);
+            cfg.parse(MYPATHFAIL, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -47,7 +53,7 @@ class ConfigTest extends Config {
     @Test
     void testGetter() {
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -103,7 +109,7 @@ class ConfigTest extends Config {
     @Test
     void testDeleteMonsters() {
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -117,7 +123,7 @@ class ConfigTest extends Config {
     @Test
     void testDeleteAdventurers() {
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -131,7 +137,7 @@ class ConfigTest extends Config {
     @Test
     void testDeleteTraps() {
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);
@@ -145,7 +151,7 @@ class ConfigTest extends Config {
     @Test
     void testDeleteRooms() {
         try {
-            cfg.parse(MYPATH);
+            cfg.parse(MYPATH, R);
         } catch (IOException | JSONException e) {
             final ParserMessage res = cfg.getParserResult();
             assertNotEquals(ParserMessage.SUCCESSD, res);

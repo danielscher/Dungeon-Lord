@@ -11,6 +11,8 @@ import org.junit.jupiter.api.Test;
 
 class AltConfigTest extends Config {
 
+
+
     // use this test with a valid config
 
     /**
