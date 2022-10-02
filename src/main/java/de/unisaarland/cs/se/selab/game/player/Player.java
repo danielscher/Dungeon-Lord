@@ -35,9 +35,9 @@ public class Player {
         this.food = 0;
     }
 
-    /*
+    /**
     tries to add a bid to the currBids array
-    return == success??
+    @return success?
      */
     public boolean addBid(final BidType type, final int priority) {
         // priority == 0 means "bid number 1" within the game rules
@@ -49,22 +49,22 @@ public class Player {
         }
     }
 
-    /*
+    /**
     needed for the Event of the bids that are available again
      */
     public BidType[] getBlockedBids() {
         return blockedBids.clone();
     }
 
-    /*
-        blocks bids according to rules
-         */
+    /**
+    blocks bids according to rules
+     */
     public void blockBids() {
         blockedBids[0] = currBids[1];
         blockedBids[1] = currBids[2];
     }
 
-    /*
+    /**
     clears array of current bids
      */
     public void clearCurrBids() {
@@ -75,7 +75,7 @@ public class Player {
         Arrays.fill(blockedBids, null);
     }
 
-    /*
+    /**
     gets a bid of the current bids, by the priority of the bid
      */
     public BidType getBid(final int priority) {
@@ -88,7 +88,7 @@ public class Player {
         }
     }
 
-    /*
+    /**
     checks if bid can be added
      */
     private boolean canAddBid(final BidType type, final int priority) {
@@ -116,7 +116,7 @@ public class Player {
         }
 
         // check if there already is a bid with this priority
-        /* if (currBids[priority] != null) {
+        /** if (currBids[priority] != null) {
             return false;
         }
         */
@@ -125,7 +125,7 @@ public class Player {
         return (currBids[priority] == null); // improvement suggested by pmd
     }
 
-    /*
+    /**
     tries to change evilness
     positive amounts may fail because of the limit of 15 (return == false)
     negative amounts always succeed (return == true), but evilness will not go below 0
@@ -150,9 +150,9 @@ public class Player {
         }
     }
 
-    /*
+    /**
     tries to change the amount of gold
-    return == success?
+    @return success
      */
     public boolean changeGoldBy(final int amount) {
         if (gold + amount < 0) {
@@ -163,9 +163,9 @@ public class Player {
         }
     }
 
-    /*
+    /**
     tries to change the amount of food
-    return == success?
+    @return success
      */
     public boolean changeFoodBy(final int amount) {
         if (food + amount < 0) {
