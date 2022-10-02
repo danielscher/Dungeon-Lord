@@ -15,7 +15,7 @@ public final class TileFinder {
         // do not instantiate this class
     }
 
-    /*
+    /**
      * this method returns a List of tile coordinates
      * which have the smallest distance to the entrance
      */
@@ -26,7 +26,7 @@ public final class TileFinder {
     }
 
 
-    /*
+    /**
      * finds the tiles which have the smallest distance value
      * NOTE: requires distance calculation to be done first
      */
@@ -43,7 +43,7 @@ public final class TileFinder {
         return res; // return collection of the closest tiles
     }
 
-    /*
+    /**
      * inspects a tile, and updates the list of the closest tiles accordingly
      * return value is newest smallest distance found
      */
@@ -71,7 +71,7 @@ public final class TileFinder {
         return res;
     }
 
-    /*
+    /**
      * clears distance values of all tiles
      */
     private static void clearDistances(final Tile[][] grid) {
@@ -82,7 +82,7 @@ public final class TileFinder {
         }
     }
 
-    /*
+    /**
     calculates the distances to the entrance
     call this method with entrance coordinates and n = 0
     requires all distance values to be -1 before execution
@@ -103,7 +103,7 @@ public final class TileFinder {
         }
     }
 
-    /*
+    /**
     calls calcDistToEntrance again on all adjacent tiles
      */
     private static void visitNeighbors(final int x, final int y, final int n, final Tile[][] grid) {
@@ -122,10 +122,10 @@ public final class TileFinder {
         }
     }
 
-    /*
-    this method check if digging at a given location would create a square
+    /**
+    this method check if digging at a given location would create a 2x2 square
     NOTE: relies on valid coordinates
-    X = given tiles, 0 = tiles to check
+    X = given tile, 0 = tiles to check
     a square happens when at least one of the "0" tiles are
      */
     public static boolean wouldCreateSquare(final int x, final int y, final Tile[][] grid) {
@@ -181,7 +181,7 @@ public final class TileFinder {
         return foundSquare;
     }
 
-    /*
+    /**
     this method determines if a tile of a given location has a neighboring tile
     (which is a requirement to be able to dig in this location)
     NOTE: relies on coordinate to be valid
