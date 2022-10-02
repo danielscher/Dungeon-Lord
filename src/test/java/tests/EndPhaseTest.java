@@ -2,7 +2,11 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import de.unisaarland.cs.se.selab.comm.ServerConnection;
+import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.Action;
+import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
@@ -16,7 +20,7 @@ import org.junit.jupiter.api.Test;
 
 class EndPhaseTest {
 
-    GameData gd = new GameData();
+    GameData gd;
     GameEndPhase gep = new GameEndPhase(gd);
 
     //drawn Monsters
@@ -38,7 +42,9 @@ class EndPhaseTest {
 
 
     private void resetData() {
-        gd = new GameData();
+        final AltConfig altConfig = new AltConfig("", 123);
+        gd = new GameData(altConfig,
+                new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation()));
         gep = new GameEndPhase(gd);
         p1 = new Player("player1", 1, 1, 3, 15);
         p2 = new Player("player2", 2, 2, 3, 15);

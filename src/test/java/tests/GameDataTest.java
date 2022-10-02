@@ -4,18 +4,23 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import de.unisaarland.cs.se.selab.comm.ServerConnection;
+import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import org.junit.jupiter.api.Test;
 
 class GameDataTest {
 
-    GameData gd = new GameData();
+    GameData gd = new GameData(new AltConfig("", 123),
+            new ServerConnection<>(8080, 5000, new ActionFactoryImplementation()));
     Player p1 = new Player("Plyer1", 1, 1, 3, 15);
 
 
     private void resetGameData() {
-        gd = new GameData();
+        gd = new GameData(new AltConfig("", 123),
+                new ServerConnection<>(8080, 5000, new ActionFactoryImplementation()));
     }
 
     @Test
