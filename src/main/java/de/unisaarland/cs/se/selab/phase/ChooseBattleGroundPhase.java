@@ -1,11 +1,13 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.BattleGroundAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
+import java.sql.Time;
 import java.util.List;
 
 public class ChooseBattleGroundPhase extends Phase {
@@ -18,7 +20,7 @@ public class ChooseBattleGroundPhase extends Phase {
     }
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
         broadcastNextRound(gd.getTime().getSeason());
 
         if (currPlayer.getDungeon().getNumUnconqueredTiles() == 0) {
@@ -31,10 +33,16 @@ public class ChooseBattleGroundPhase extends Phase {
         gd.getServerConnection().sendActNow(
                 currPlayer.getCommID()); //send individual event "ActNow"
 
-        final Action action = gd.getServerConnection().nextAction();
-        if (action.getCommID() == currPlayer.getCommID()) {
-            action.invoke(this);
+        try (ServerConnection<Action> sc = gd.getServerConnection()) {
+            final Action action = sc.nextAction();
+            if (action.getCommID() == currPlayer.getCommID()) { // FIXME move if to exec(...)
+                action.invoke(this);
+            }
+        } catch (TimeoutException e) {
+            kickPlayer(currPlayer.getPlayerID());
         }
+
+        // FIXME this code doesn't check if it received the correct type of action
         return new CombatPhase(gd, currPlayer);
     }
 

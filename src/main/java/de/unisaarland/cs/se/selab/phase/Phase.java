@@ -28,7 +28,7 @@ public abstract class Phase {
         this.gd = gd;
     }
 
-    public abstract Phase run() throws TimeoutException;
+    public abstract Phase run();
 
     /*
     sends action failed to commId

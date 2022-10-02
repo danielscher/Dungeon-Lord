@@ -26,9 +26,11 @@ public class Game {
             return false;
         }
         gameData = new GameData(config);
-        tryfor(currPhase = new RegPhase(gameData); currPhase != null; currPhase = currPhase.run()) {
-            // TODO try catch
-        }
+        try  {
+            for(currPhase = new RegPhase(gameData); currPhase != null; currPhase = currPhase.run()) {
+                // TODO try catch
+            }
+        } catch ()
         return true;
     }
 

@@ -20,7 +20,7 @@ public class CollectAndPlaceBidPhase extends Phase {
     }
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
 
         if (gd.getTime().getSeason() > 1) {
             broadcastNextRound(gd.getTime().getSeason());
@@ -45,7 +45,11 @@ public class CollectAndPlaceBidPhase extends Phase {
         broadcastActNow();
 
         while (!checkIfAllBidsChosen()) {
-            sc.nextAction().invoke(this);
+            try(ServerConnection<Action> sc = gd.getServerConnection())  {
+                sc.nextAction().invoke(this);
+            } catch (TimeoutException e) {
+                return null; // aborts the game like stated in the specification
+            }
         }
 
         for (int i = 0; i < 3; i++) {   //go through priorities to insert bids into biddingsquare
