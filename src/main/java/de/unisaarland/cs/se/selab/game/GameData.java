@@ -66,8 +66,7 @@ public class GameData {
         if (commList.contains(commId)) {
             return false;
         } else {
-            final Player player = new Player(name, idCounter, commId, 3, 15);
-            // TODO replace 3 and 15 here and use values provided by the config
+            final Player player = new Player(name, idCounter, commId, 0, 15);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             return true;
@@ -112,23 +111,17 @@ public class GameData {
         playerList.sort(Comparator.naturalOrder());
         final int pos = playerList.indexOf(firstBidder);
         if (pos == playerList.size() - 1) {
-            firstBidder = playerList.get(0);
+            this.firstBidder = playerList.get(0);
         } else {
-            firstBidder = playerList.get(pos + 1);
+            this.firstBidder = playerList.get(pos + 1);
         }
 
         return firstBidder;
+
     }
 
-    public int getFirstBidder() {
-        return firstBidder;
-    }
 
-    public void setFirstBidder() {
-        firstBidder = nextFirstBidder();
-    }
-
-    public int getNextCombatPlayer(final int lastplayerid) {
+    public int getNextCombatPlayer(int lastplayerid) {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
         final int pos = playerList.indexOf(lastplayerid);
@@ -137,6 +130,15 @@ public class GameData {
         } else {
             return (playerList.get(pos + 1));
         }
+    }
+
+
+    public int getFirstBidder() {
+        return firstBidder;
+    }
+
+    public void setFirstBidder() {
+        firstBidder = nextFirstBidder();
     }
 
 
