@@ -13,10 +13,10 @@ import org.junit.jupiter.api.Test;
 
 class ConfigTest extends Config {
 
-    private static final String MYPATH =
-            "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
-    private static final String MYPATHFAIL =
-            "C:\\Users\\forgo\\group35\\src\\main\\resources\\config_broken.json";
+    private static final String MYPATH = "";
+    // "C:\\Users\\forgo\\group35\\src\\main\\resources\\configuration.json";
+    private static final String MYPATHFAIL = "";
+    // "C:\\Users\\forgo\\group35\\src\\main\\resources\\config_broken.json";
     Config cfg = new Config();
 
     @Test

@@ -8,9 +8,7 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -32,7 +30,7 @@ import org.json.JSONObject;
 
 public class AltConfig {
 
-    private final String path;
+    private final Path path;
     private int maxPlayers;
     private int years;
     private int dungeonSideLength;
@@ -50,7 +48,7 @@ public class AltConfig {
 
     private final Random random;
 
-    public AltConfig(final String path, final long seed) {
+    public AltConfig(final Path path, final long seed) {
         this.path = path;
         this.random = new Random(seed);
     }
@@ -64,18 +62,11 @@ public class AltConfig {
      * success?
      */
     public boolean parse() {
-        // try to find file path
-        Path filePath;
-        try {
-            filePath = Paths.get(path);
-        } catch (InvalidPathException e) {
-            return false;
-        }
 
         // try to read file as string
         String fileContent;
         try {
-            fileContent = Files.readString(filePath);
+            fileContent = Files.readString(path);
             configJSONString = fileContent;
         } catch (IOException e) {
             return false;

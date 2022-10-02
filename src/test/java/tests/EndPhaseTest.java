@@ -7,7 +7,6 @@ import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
-import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
@@ -16,12 +15,14 @@ import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
+import java.nio.file.Path;
+import java.util.Objects;
 import org.junit.jupiter.api.Test;
 
 class EndPhaseTest {
 
     GameData gd;
-    GameEndPhase gep = new GameEndPhase(gd);
+    GameEndPhase gep;
 
     //drawn Monsters
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
@@ -38,11 +39,11 @@ class EndPhaseTest {
     Dungeon d2 = new Dungeon(3, 15);
     Dungeon d3 = new Dungeon(3, 15);
     //drawn Adventurer
-    Adventurer ad1 = new Adventurer(1, 1, 0, 0, 0, false);
 
 
     private void resetData() {
-        final AltConfig altConfig = new AltConfig("", 123);
+        final Path configPath = readFile("configuration.json");
+        final AltConfig altConfig = new AltConfig(configPath, 123);
         gd = new GameData(altConfig,
                 new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation()));
         gep = new GameEndPhase(gd);
@@ -159,4 +160,8 @@ class EndPhaseTest {
 
     }
     */
+
+    private Path readFile(final String fileName) {
+        return Path.of(Objects.requireNonNull(getClass().getResource(fileName)).getPath());
+    }
 }

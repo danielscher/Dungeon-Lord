@@ -4,6 +4,9 @@ import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.Game;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -55,20 +58,24 @@ public class Main {
             System.exit(1);
         }
 
-        Game game;
-        try (ServerConnection<Action> sc = new ServerConnection<Action>(port, timeout,
-                new ActionFactoryImplementation())) {
-            //TODO : Initialize Game wirth the objects above + path.
-            game = new Game(sc, path, seed);
-        }
+        Path pathToConfig;
+        try {
+            pathToConfig = Paths.get(path);
+            Game game;
+            try (ServerConnection<Action> sc = new ServerConnection<Action>(port, timeout,
+                    new ActionFactoryImplementation())) {
+                //TODO : Initialize Game wirth the objects above + path.
+                game = new Game(sc, pathToConfig, seed);
+            }
 
-        if (game.runGame()) {
-            System.exit(0);
-        } else {
+            if (game.runGame()) {
+                System.exit(0);
+            } else {
+                System.exit(1);
+            }
+        } catch (InvalidPathException e) {
             System.exit(1);
         }
-
-
     }
 
 }
