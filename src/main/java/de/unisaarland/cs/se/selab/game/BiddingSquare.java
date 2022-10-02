@@ -17,16 +17,14 @@ public class BiddingSquare {
 
     public int insert(final BidType bidType, final int playerID) {
         // get the uppermost free row
-        int slot = -1;
         final int columnId = typeToColumn(bidType);
         for (int row = 0; row < 3; row++) {
             if (biddingSlots[row][columnId] == -1) {
                 biddingSlots[row][columnId] = playerID;
-                slot = row;
-                return slot;
+                return row;
             }
         }
-        return slot;
+        return -1;
     }
 
     public int getIDByBidSlot(final int row, final int column) {

@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
-import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
@@ -28,7 +27,7 @@ public abstract class Phase {
         this.gd = gd;
     }
 
-    public abstract Phase run() throws TimeoutException;
+    public abstract Phase run();
 
     /*
     sends action failed to commId

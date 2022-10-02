@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.game;
 
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.action.Action;
-import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
@@ -39,15 +38,17 @@ public class GameData {
     private final List<Trap> currAvailableTraps = new ArrayList<>();
     private final List<Room> currAvailableRooms = new ArrayList<>();
 
-    private final ServerConnection<Action> serverconnection = new ServerConnection<>(8080,
-            5000, new ActionFactoryImplementation());
-    private final Config config = new Config();
-    private int lastPlayerToStartBidding;
+    private final ServerConnection<Action> serverConnection;
+    // private final Config config;
+    private final AltConfig config;
+    private int firstBidder;
     private int idCounter;
 
-    public GameData() {
-        this.lastPlayerToStartBidding = 0;
+    public GameData(final AltConfig config, final ServerConnection<Action> serverConnection) {
+        this.firstBidder = 0;
         this.idCounter = 0;
+        this.config = config;
+        this.serverConnection = serverConnection;
     }
 
     private void addPlayer(final Player player, final int id) {
@@ -66,8 +67,7 @@ public class GameData {
         if (commList.contains(commId)) {
             return false;
         } else {
-            final Player player = new Player(name, idCounter, commId, 3, 15);
-            // TODO replace 3 and 15 here and use values provided by the config
+            final Player player = new Player(name, idCounter, commId, 0, 15);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             return true;
@@ -92,7 +92,7 @@ public class GameData {
     }
 
     public ServerConnection<Action> getServerConnection() {
-        return this.serverconnection;
+        return this.serverConnection;
     }
 
     /*
@@ -107,22 +107,22 @@ public class GameData {
         return commList.contains(commId);
     }
 
-    public int getNextStartPlayer() {
+    public int nextFirstBidder() {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
-        final int pos = playerList.indexOf(lastPlayerToStartBidding);
+        final int pos = playerList.indexOf(firstBidder);
         if (pos == playerList.size() - 1) {
-            this.lastPlayerToStartBidding = playerList.get(0);
+            this.firstBidder = playerList.get(0);
         } else {
-            this.lastPlayerToStartBidding = playerList.get(pos + 1);
+            this.firstBidder = playerList.get(pos + 1);
         }
 
-        return lastPlayerToStartBidding;
+        return firstBidder;
 
     }
 
 
-    public int getNextCombatPlayer(int lastplayerid) {
+    public int getNextCombatPlayer(final int lastplayerid) {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
         final int pos = playerList.indexOf(lastplayerid);
@@ -131,6 +131,15 @@ public class GameData {
         } else {
             return (playerList.get(pos + 1));
         }
+    }
+
+
+    public int getFirstBidder() {
+        return firstBidder;
+    }
+
+    public void setFirstBidder() {
+        firstBidder = nextFirstBidder();
     }
 
 
@@ -194,7 +203,8 @@ public class GameData {
     }
 
     public int getMaxYears() {
-        return config.getMaxYear();
+        // return config.getMaxYear(); // for Can's config
+        return config.getYears(); // for Henry's config
     }
 
     public int getNumCurrPlayers() {

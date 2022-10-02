@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
 
-import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class GameEndPhase extends Phase {
     }
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
         //TODO
         setAllTitle();
         setAllPoints();
@@ -47,7 +46,8 @@ public class GameEndPhase extends Phase {
         this.setBattleLordTitles();
         // give all titles to corresponding players, and now evaluate scores.
     }
-    public void setAllPoints(){
+
+    public void setAllPoints() {
         initializeAllPoints();
         evaluateScoresNoTitle();
         evaluateScoresWithTitleMonster();
@@ -60,11 +60,12 @@ public class GameEndPhase extends Phase {
         evaluateWinner();
     }
 
-    public void initializeAllPoints(){
-        for(int i = 0; i < gd.getAllPlayerID().size();i++){
+    public void initializeAllPoints() {
+        for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             gd.getPlayerByPlayerId(i).setPoints(0);
         }
     }
+
     // evaluate methods below just calculate the points 1 by 1.
     public void evaluateScoresNoTitle() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {

@@ -39,8 +39,8 @@ public class Dungeon {
         return rooms;
     }
 
-    /*
-    recalculates distances to entrance and returns closest tiles
+    /**
+     * recalculates distances to entrance and returns closest tiles
      */
     public List<Coordinate> getPossibleBattleCoords() {
         return TileFinder.getClosestTiles(grid);
@@ -51,8 +51,8 @@ public class Dungeon {
         this.grid = grid;
     }
 
-    /*
-    sums all heal values of all adventurers and returns the sum
+    /**
+     * sums all heal values of all adventurers and returns the sum
      */
     public int getTotalHealVal() {
         int res = 0;
@@ -62,8 +62,8 @@ public class Dungeon {
         return res;
     }
 
-    /*
-    sums all defuse values of all adventurers and returns the sum
+    /**
+     * sums all defuse values of all adventurers and returns the sum
      */
     public int getTotalDefuseVal() {
         int res = 0;
@@ -84,15 +84,15 @@ public class Dungeon {
         }
     }
 
-    /*
-    overloading of below method to adapt to usage of coordinate class
+    /**
+     * overloading of below method to adapt to usage of coordinate class
      */
     public boolean canPlaceRoomOn(final Coordinate coordinate, final Location location) {
         return canPlaceRoomOn(coordinate.getxpos(), coordinate.getypos(), location);
     }
 
-    /*
-    checks if a room can be placed on a given coordinate
+    /**
+     * checks if a room can be placed on a given coordinate
      */
     public boolean canPlaceRoomOn(final int x, final int y, final Location location) {
 
@@ -133,8 +133,8 @@ public class Dungeon {
         }
     }
 
-    /*
-    checks if a player has at least one free tile in a given location for placing rooms
+    /**
+     * checks if a player has at least one free tile in a given location for placing rooms
      */
     public boolean checkForFreeTilesIn(final Location location) {
         for (int i = 0; i < grid.length; i++) {
@@ -147,8 +147,8 @@ public class Dungeon {
         return false;
     }
 
-    /*
-    checks if a tile can be dug at the given coordinates
+    /**
+     * checks if a tile can be dug at the given coordinates
      */
     private boolean canDig(final int x, final int y) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
@@ -156,16 +156,18 @@ public class Dungeon {
         }
 
         if (grid[x][y] == null) {
-            return !TileFinder.wouldCreateSquare(x, y, grid);
+            return (!TileFinder.wouldCreateSquare(x, y, grid) && TileFinder.hasNeighbor(x, y,
+                    grid));
         } else {
             return false;
         }
     }
 
 
-    /*
-    tries to dig a tile at a given location
-    return == success
+    /**
+     * tries to dig a tile at a given location
+     *
+     * @return success
      */
     public boolean dig(final int x, final int y) {
         if (canDig(x, y)) {
@@ -176,8 +178,8 @@ public class Dungeon {
         }
     }
 
-    /*
-    sets a tile of the grid to conquered, if it exists
+    /**
+     * sets a tile of the grid to conquered, if it exists
      */
     public void setTileConquered(final Coordinate xy) {
         final int x = xy.getxpos();
@@ -199,9 +201,10 @@ public class Dungeon {
     }
 
 
-    /*
-    tries to send imps to mine gold
-    return == possible (enough resting imps available)
+    /**
+     * tries to send imps to mine gold
+     *
+     * @return success (enough resting imps available)
      */
     public boolean sendImpsToMineGold(final int amount) {
         if (amount < 0) {
@@ -226,9 +229,10 @@ public class Dungeon {
         }
     }
 
-    /*
-    tries to send imps to dig the tunnel
-    return == possible (enough resting imps available)
+    /**
+     * tries to send imps to dig the tunnel
+     *
+     * @return success (enough resting imps available)
      */
     public boolean sendImpsToDigTunnel(final int amount) {
         if (amount < 0) {
@@ -268,9 +272,10 @@ public class Dungeon {
         return numReturn;
     }
 
-    /*
-    activates a room by its ID
-    return == success?
+    /**
+     * activates a room by its ID
+     *
+     * @return success
      */
     public boolean activateRoom(final int roomId) {
         final Room roomToActivate = getRoomById(roomId);  // get room
@@ -300,10 +305,11 @@ public class Dungeon {
         return activeRooms;
     }
 
-    /*
-    tries to send imps to dig the tunnel
-    return == possible (enough resting imps available)
-    NOTE: should never be used without activating a room, therefore private
+    /**
+     * tries to send imps to dig the tunnel NOTE: should never be used without activating a room,
+     * therefore private
+     *
+     * @return if possible (enough resting imps available)
      */
     public boolean sendImpsToProduce(final int amount) {
         if (amount < 0) {
@@ -326,8 +332,8 @@ public class Dungeon {
         return numReturn;
     }
 
-    /*
-    inserts an adventurer to the queue (with respect to the game rules)
+    /**
+     * inserts an adventurer to the queue (with respect to the game rules)
      */
     public void insertAdventurer(final Adventurer adv) {
         if (adv.getCharge()) {
@@ -339,9 +345,8 @@ public class Dungeon {
         }
     }
 
-    /*
-    gets the adventurer of the corresponding queue position
-    NOTE: returns null if position empty
+    /**
+     * gets the adventurer of the corresponding queue position NOTE: returns null if position empty
      */
     public Adventurer getAdventurer(final int index) {
         if (index >= 0 && index < adventurerQueue.size()) {
@@ -351,8 +356,8 @@ public class Dungeon {
         }
     }
 
-    /*
-    adds a monster to the dungeon
+    /**
+     * adds a monster to the dungeon
      */
     public void addMonster(final Monster monster) {
         hiredMonsters.add(monster);
@@ -362,8 +367,8 @@ public class Dungeon {
         traps.add(trap);
     }
 
-    /*
-    returns a list of all hire monsters
+    /**
+     * returns a list of all hire monsters
      */
     public List<Monster> getHiredMonsters() {
         return hiredMonsters;
@@ -429,8 +434,8 @@ public class Dungeon {
         return null;
     }
 
-    /*
-    returns the number of unconquered tiles
+    /**
+     * returns the number of unconquered tiles
      */
     public int getNumUnconqueredTiles() {
         int res = 0;
@@ -446,8 +451,8 @@ public class Dungeon {
         return res;
     }
 
-    /*
-    returns the number of conquered tiles
+    /**
+     * returns the number of conquered tiles
      */
     public int getNumConqueredTiles() {
         int res = 0;
@@ -463,8 +468,8 @@ public class Dungeon {
         return res;
     }
 
-    /*
-    returns the number of tiles you can mine gold on
+    /**
+     * returns the number of tiles you can mine gold on
      */
     public int getNumGoldMineAbleTiles() {
         int res = 0;
@@ -488,9 +493,8 @@ public class Dungeon {
         return adventurerQueue.size();
     }
 
-    /*
-    gets a room by its ID
-    might return null if room isn't in this dungeon
+    /**
+     * gets a room by its ID might return null if room isn't in this dungeon
      */
     public Room getRoomById(final int id) {
         for (final Room room : rooms) {
@@ -505,10 +509,9 @@ public class Dungeon {
         return restingImps;
     }
 
-    /*
-    this method is used to imprison an adventurer of the queue by its id
-    return == successfully imprisoned
-    NOTE: fails if the adventurer isn't in this player's queue
+    /**
+     * this method is used to imprison an adventurer of the queue by its id return == successfully
+     * imprisoned NOTE: fails if the adventurer isn't in this player's queue
      */
     public boolean imprison(final int adventurerID) {
         final Adventurer adv = getAdventurerById(adventurerID);
@@ -520,9 +523,9 @@ public class Dungeon {
         return true;
     }
 
-    /*
-    this method is used to get an adventurer of the queue by its id
-    NOTE: if adv isn't in the queue, this method returns NULL
+    /**
+     * this method is used to get an adventurer of the queue by its id NOTE: if adv isn't in the
+     * queue, this method returns NULL
      */
     public Adventurer getAdventurerById(final int advID) {
         for (final Adventurer adv : adventurerQueue) {

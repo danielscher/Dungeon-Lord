@@ -1,7 +1,5 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import static de.unisaarland.cs.se.selab.comm.BidType.ROOM;
-
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
@@ -22,15 +20,15 @@ import java.util.List;
 
 public class EvalRoomPhase extends Phase {
 
-    private boolean endTurn;
     ServerConnection<Action> sc = gd.getServerConnection();
+    private boolean endTurn;
 
     public EvalRoomPhase(final GameData gd) {
         super(gd);
     }
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
         eval();
         blockAndRetrieveBids();
         returnImps();
@@ -46,44 +44,50 @@ public class EvalRoomPhase extends Phase {
         return new CollectAndPlaceBidPhase(gd);
     }
 
-    private void eval() throws TimeoutException {
+    private void eval() {
         final BiddingSquare bs = gd.getBiddingSquare();
 
         for (int i = 0; i < 3; i++) {
-            if (bs.getIDByBidSlot(ROOM, i) != -1) {
+            if (bs.getIDByBidSlot(BidType.ROOM, i) != -1) {
                 //if there's a valid player id in the square
-                final Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(ROOM, i));
+                final Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(BidType.ROOM, i));
                 grantRoom(p, i);
             }
         }
     }
 
-    private void grantRoom(final Player player, final int slot) throws TimeoutException {
+    private void grantRoom(final Player player, final int slot) {
 
         switch (slot) {
-            case 0:
-            case 1:
+            case 0, 1:
                 if (player.changeGoldBy(-1)) {
                     // player can afford bid
                     broadcastGoldChanged(-1, player.getPlayerID());
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
-                    while (!endTurn) {
-                        sc.nextAction().invoke(this);
-                    }
+                    requestNextAction(player);
                 }
                 break;
             case 2:
                 if (!gd.getCurrAvailableRooms().isEmpty()) {
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
-                    while (!endTurn) {
-                        sc.nextAction().invoke(this);
-                    }
+                    requestNextAction(player);
                 }
                 break;
             default:
                 throw new IllegalArgumentException("Invalid Slot Number");
+        }
+    }
+
+    private void requestNextAction(final Player player) {
+        while (!endTurn) {
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.nextAction().invoke(this);
+            } catch (TimeoutException e) {
+                kickPlayer(player.getPlayerID()); /* TODO lookup in spec if this is
+                            right */
+            }
         }
     }
 
@@ -112,11 +116,10 @@ public class EvalRoomPhase extends Phase {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
         } else if (!d.placeRoom(bra.getRow(), bra.getCol(), room)) {
-            sc.sendActionFailed(bra.getCommID(),
-                    "Invalid coordinates to place this room.");
+            sc.sendActionFailed(bra.getCommID(), "Invalid coordinates to place this room.");
         } else {
-            broadcastRoomBuilt(player.getPlayerID(),
-                    bra.getRoomID(), bra.getRow(), bra.getCol()); //broadcast room built
+            broadcastRoomBuilt(player.getPlayerID(), bra.getRoomID(), bra.getRow(),
+                    bra.getCol()); //broadcast room built
             gd.getCurrAvailableRooms().remove(room);    //remove room from options list
             endTurn = true;
         }
@@ -135,8 +138,7 @@ public class EvalRoomPhase extends Phase {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
             if (!d.activateRoom(ara.getRoomID())) {
-                sc.sendActionFailed(ara.getCommID(),
-                        "The chosen room can't be activated.");
+                sc.sendActionFailed(ara.getCommID(), "The chosen room can't be activated.");
             } else {
                 final int cost = d.getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(cost, player.getPlayerID());
@@ -242,13 +244,11 @@ public class EvalRoomPhase extends Phase {
                 .thenComparing(Adventurer::getAdventurerID));
         //Sort Adventurers by difficulty then IDs
 
-        for (int i = 0; i < playersSortByEvilness.size(); i++) {
+        for (final Player p : playersSortByEvilness) {
             //add an adventurer to the corresponding player's dungeon
-            final Player p = playersSortByEvilness.get(i);
-            final Adventurer adv = gd.getCurrAvailableAdventurers().get(i);
+            final Adventurer adv = gd.getCurrAvailableAdventurers().remove(0);
             p.getDungeon().insertAdventurer(adv);
             broadcastAdventurerArrived(adv.getAdventurerID(), p.getPlayerID());
         }
-        gd.clearAdventurers();  //clear the adventurer list
     }
 }

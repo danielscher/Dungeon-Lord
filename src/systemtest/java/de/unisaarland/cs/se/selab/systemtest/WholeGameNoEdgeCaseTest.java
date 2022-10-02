@@ -35,9 +35,9 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
     NOTE: requires socketNum == playerId
      */
 
-    protected void assertPlayerHelper(int[] ids) throws TimeoutException {
-        for (int id : ids) {
-            for (int id2 : ids) {
+    protected void assertPlayerHelper(final int[] ids) throws TimeoutException {
+        for (final int id : ids) {
+            for (final int id2 : ids) {
                 assertPlayer(id2, String.valueOf(id), id);
             }
         }

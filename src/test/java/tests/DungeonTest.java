@@ -52,13 +52,13 @@ class DungeonTest {
     @Test
     void testGetPossibleBattleCoords() {
         resetDungeon();
-        final List<int[]> coords = new ArrayList<>();
-        final int[] arr = {0, 2};
-        coords.add(arr);
+        final List<Coordinate> coords = new ArrayList<>();
+        final Coordinate coord = new Coordinate(0, 2);
+        coords.add(coord);
         fillFirstRow(grid);
         dg.setGrid(grid);
         final List<Coordinate> actualCoords = dg.getPossibleBattleCoords();
-        assertTrue(coords.contains(actualCoords));
+        assertEquals(coords, actualCoords);
     }
 
     @Test

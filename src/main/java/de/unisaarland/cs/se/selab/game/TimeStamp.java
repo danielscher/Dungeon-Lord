@@ -27,7 +27,7 @@ public class TimeStamp {
         this.year = year + 1;
     }
 
-    public void timeTravel(){
+    public void timeTravel() {
         this.season = 5;
     }
 
