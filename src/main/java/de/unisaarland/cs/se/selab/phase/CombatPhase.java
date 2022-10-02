@@ -40,6 +40,7 @@ public class CombatPhase extends Phase {
 
     }
 
+
     @Override
     public Phase run() throws TimeoutException {
         //send defend yourself
@@ -49,7 +50,7 @@ public class CombatPhase extends Phase {
         //coordinate of the current battleground
         final Coordinate battleground = dungeon.getCurrBattleGround();
 
-        while (endTurn = false) {
+        while (!endTurn) {
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.sendActNow(currPlayingPlayer.getCommID());
                 sc.nextAction().invoke(this);
@@ -65,113 +66,76 @@ public class CombatPhase extends Phase {
                 }
             }
         }
-        //Fighting
 
+        // calculate damage.
         trapDamage();
         monsterDamage();
         fatigueDamage();
 
-        //Conquer if one of the adventurer is alive the tile is conquered
-
-        if (dungeon.getAdventurer(0) != null) {
-            final Coordinate coordinate = dungeon.getCurrBattleGround();
-            dungeon.setTileConquered(coordinate);
-            broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
-                    coordinate.getxpos(), coordinate.getypos());
-
-            currPlayingPlayer.changeEvilnessBy(-1);
-
-            if (dungeon.getNumUnconqueredTiles() == 0) {
-                if (dungeon.getNumImprisonedAdventurers() != 0) {
-                    //fly the first adventurer
-                    broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
-                    currPlayingPlayer.changeEvilnessBy(-1);
-                }
-
-            }
-        }
+        // if at least one adventurer is  alive conquer tile
+        // and let adventurer escape if now unconquered tiles left.
+        conquerTile();
 
         //healing
-        healAdventurers();
-        // TODO: 01.10.22 if all adventurers have been defeated during combat
-        // if player has combat rounds left
-        if (timeStamp.getSeason() < 8) {
-            timeStamp.nextSeason();
-            broadcastNextRound(timeStamp.getSeason() - 4);
-            return new ChooseBattleGroundPhase(gd, currPlayingPlayer);
-        } else {
-            //if we have players left to combat
-            if (gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID()) >= 0) {
-                timeStamp.timeTravel();
-                return new ChooseBattleGroundPhase(gd, gd.getPlayerByPlayerId(
-                        gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID())));
-                // passing to next year or ending the game
-            } else {
-                if (timeStamp.getYear() == gd.getMaxYears()) {
-                    return new GameEndPhase(gd);
-                } else {
-                    timeStamp.nextyear();
-                    broadcastNextYear(timeStamp.getYear());
-                    return new CollectAndPlaceBidPhase(gd);
+        healAdventurers(); // TODO: 01.10.22 if all adventurers have been defeated during combat
 
-                }
-            }
-        }
+        // checks what should be the next phase.
+        return goToNextPhase();
     }
 
 
     @Override
     public void exec(final TrapAction ta) {
-        if (ta.getCommID() == currPlayingPlayer.getCommID()) {
-            // check whether trap is already placed
-            if (placedTrap != null) {
-                try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                    serverConn.sendActionFailed(ta.getCommID(), "Trap has been already placed");
-                }
-
-
-            } else {
-                // check if the trap exists in the Duengeon
-                if (dungeon.getTrapByID(ta.getTrapID()) != null) {
-                    //check the availability of the trap this year
-                    if (dungeon.getTrapByID(ta.getTrapID()).isAvailableThisYear()) {
-                        //placing a trap in a room always costs one coin of gold
-                        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
-                            if (currPlayingPlayer.changeGoldBy(-1)) {
-                                placedTrap = dungeon.getTrapByID(ta.getTrapID());
-                                broadcastGoldChanged(-1, currPlayingPlayer.getCommID());
-                                broadcastTrapPlaced(currPlayingPlayer.getPlayerID(),
-                                        ta.getTrapID());
-                                dungeon.getTrapByID(ta.getTrapID()).setUnavailable();
-                            } else {
-                                gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                                        "player cannot afford one gold to place trap in the room");
-                            }
-                            //if it is a tile no gold changes
-                        } else {
-                            placedTrap = dungeon.getTrapByID(ta.getTrapID());
-                            broadcastTrapPlaced(currPlayingPlayer.getPlayerID(), ta.getTrapID());
-                            dungeon.getTrapByID(ta.getTrapID()).setUnavailable();
-
-                        }
-                    } else {
-                        gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                                "Trap is not available this year");
-                    }
-
-                } else {
-                    gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                            "No available trap for the requested id");
-                }
-            }
-
-        } else {
+        // check if action is of the expected commID.
+        if (ta.getCommID() != currPlayingPlayer.getCommID()) {
             gd.getServerConnection()
                     .sendActionFailed(ta.getCommID(), "CommId of the current player didn't match");
-
         }
 
+        // check whether trap is already placed
+        if (placedTrap != null) {
+            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
+                serverConn.sendActionFailed(ta.getCommID(), "Trap has been already placed");
+            }
+        }
+
+        // check if the trap exists in the Dungeon.
+        if (dungeon.getTrapByID(ta.getTrapID()) == null) {
+            gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                    "No available trap for the requested id");
+        }
+
+        // check if the trap is available this year.
+        if (!dungeon.getTrapByID(ta.getTrapID()).isAvailableThisYear()) {
+            gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                    "Trap is not available this year");
+        }
+
+        // placing a trap in a room always costs one coin of gold (cost = 1 gold.)
+        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
+
+            // check if player can afford placing a trap in a room.
+            if (!currPlayingPlayer.changeGoldBy(-1)) {
+                gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                        "player cannot afford one gold to place trap in the room");
+            }
+
+            // broadcasts gold change.
+            placedTrap = dungeon.getTrapByID(ta.getTrapID());
+            broadcastGoldChanged(-1, currPlayingPlayer.getCommID());
+
+        // placing a trap on a regular tile.
+        } else {
+            placedTrap = dungeon.getTrapByID(ta.getTrapID());
+        }
+
+        // broadcast that a trap has been placed
+        // and sets the trap to be unavailable for the next year.
+        broadcastTrapPlaced(currPlayingPlayer.getPlayerID(),
+                ta.getTrapID());
+        dungeon.getTrapByID(ta.getTrapID()).setUnavailable();
     }
+
 
     @Override
     public void exec(final MonsterAction ma) {
@@ -223,7 +187,6 @@ public class CombatPhase extends Phase {
                             "No available monster for the requested id");
                 }
             }
-
 
         } else {
             gd.getServerConnection()
@@ -310,7 +273,6 @@ public class CombatPhase extends Phase {
                 }
             }
 
-
         } else {
             try (ServerConnection<Action> serverConn =
                     gd.getServerConnection()) {
@@ -352,7 +314,6 @@ public class CombatPhase extends Phase {
                         break;
                     }
 
-
                 }
 
             }
@@ -372,62 +333,65 @@ public class CombatPhase extends Phase {
         }
     }
 
+    private void calcMonsterTargetedDamage(Monster monster) {
+        final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
+                .get(monster));
+        if (adTargeted != null) {
+            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
+                dungeon.imprison(adTargeted.getAdventurerID());
+                broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
+
+            } else {
+                broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
+                        monster.getDamage());
+            }
+        } // TODO handle when the target adventurer is not there in the queue
+    }
+
+    private void calcMonsterBasicDamage(Monster monster) {
+        if (dungeon.getAdventurer(0) != null) {
+            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
+                dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+                broadcastAdventurerImprisoned(
+                        dungeon.getAdventurer(0).getAdventurerID());
+            } else {
+                broadcastAdventurerDamaged(
+                        dungeon.getAdventurer(0).getAdventurerID(),
+                        monster.getDamage());
+            }
+
+        }
+    }
+
+    private void calcMonsterMultiDamage(Monster monster) {
+        int res = monster.getDamage();
+
+        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+            final int currentReduction = res;
+            res = dungeon.getAdventurerById(i).damagehealthby(res);
+            if (res >= 0) {
+                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                broadcastAdventurerImprisoned(
+                        dungeon.getAdventurer(i).getAdventurerID());
+
+            } else {
+                broadcastAdventurerDamaged(
+                        dungeon.getAdventurer(i).getAdventurerID(),
+                        currentReduction);
+                break;
+            }
+        }
+    }
+
     private void monsterDamage() {
         if (!placedMonsters.isEmpty()) {
             for (final Monster monster : placedMonsters.keySet()) {
                 switch (monster.getAttack()) {
-                    case TARGETED:
-                        final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
-                                .get(monster));
-                        if (adTargeted != null) {
-                            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
-                                dungeon.imprison(adTargeted.getAdventurerID());
-                                broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
-
-                            } else {
-                                broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
-                                        monster.getDamage());
-                            }
-                        } // To handle when the target adventurer is not there in the queue
-                        break;
-
-                    case BASIC:
-                        if (dungeon.getAdventurer(0) != null) {
-                            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
-                                dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
-                                broadcastAdventurerImprisoned(
-                                        dungeon.getAdventurer(0).getAdventurerID());
-                            } else {
-                                broadcastAdventurerDamaged(
-                                        dungeon.getAdventurer(0).getAdventurerID(),
-                                        monster.getDamage());
-                            }
-
-                        }
-                        break;
-                    case MULTI:
-                        int res = monster.getDamage();
-
-                        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            final int currentReduction = res;
-                            res = dungeon.getAdventurerById(i).damagehealthby(res);
-                            if (res >= 0) {
-                                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
-                                broadcastAdventurerImprisoned(
-                                        dungeon.getAdventurer(i).getAdventurerID());
-
-                            } else {
-                                broadcastAdventurerDamaged(
-                                        dungeon.getAdventurer(i).getAdventurerID(),
-                                        currentReduction);
-                                break;
-                            }
-                        }
-                        break;
-                    default:
-                        break;
-
-
+                    case TARGETED -> calcMonsterTargetedDamage(monster);
+                    case BASIC -> calcMonsterBasicDamage(monster);
+                    case MULTI -> calcMonsterMultiDamage(monster);
+                    default -> {
+                    }
                 }
 
             }
@@ -435,65 +399,127 @@ public class CombatPhase extends Phase {
         }
     }
 
+    private void calcTrapTargetedDamage(int totalDefuseVal) {
+        if (dungeon.getAdventurer(placedTrap.getTarget()) != null) {
+            if (dungeon.getAdventurer(placedTrap.getTarget())
+                    .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
+                dungeon.imprison(dungeon.getAdventurer(placedTrap.getTarget())
+                        .getAdventurerID());
+                broadcastAdventurerImprisoned(
+                        dungeon.getAdventurer(placedTrap.getTarget())
+                                .getAdventurerID());
+            } else {
+                broadcastAdventurerDamaged(
+                        dungeon.getAdventurer(placedTrap.getTarget())
+                                .getAdventurerID(),
+                        placedTrap.getDamage() - totalDefuseVal);
+            }
+        } // TODO Handle if the target Adventurer is not present in the queue
+    }
+
+    private void calcTrapBasicDamage(int totalDefuseVal) {
+        if (dungeon.getAdventurer(0)
+                .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
+            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
+            broadcastAdventurerImprisoned(
+                    dungeon.getAdventurer(0).getAdventurerID());
+        } else {
+            broadcastAdventurerDamaged(dungeon.getAdventurer(0).getAdventurerID(),
+                    placedTrap.getDamage() - totalDefuseVal);
+        }
+    }
+
+    private void calcTrapMultiDamage(int totalDefuseVal) {
+        int res = placedTrap.getDamage() - totalDefuseVal;
+        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
+            final int currentReduction = res;
+            res = dungeon.getAdventurerById(i).damagehealthby(res);
+            if (res >= 0) {
+                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                broadcastAdventurerImprisoned(
+                        dungeon.getAdventurer(i).getAdventurerID());
+            } else {
+                broadcastAdventurerDamaged(
+                        dungeon.getAdventurer(i).getAdventurerID(),
+                        currentReduction);
+                break;
+            }
+        }
+    }
+
     private void trapDamage() {
         int totalDefuseVal = 0;
+        // get all defuse values from adventurers.
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             totalDefuseVal += dungeon.getAdventurer(i).getDefuseValue();
         }
         if (placedTrap != null) {
             if (totalDefuseVal < placedTrap.getDamage()) {
                 switch (placedTrap.getAttack()) {
-                    case TARGETED:
-                        if (dungeon.getAdventurer(placedTrap.getTarget()) != null) {
-                            if (dungeon.getAdventurer(placedTrap.getTarget())
-                                    .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
-                                dungeon.imprison(dungeon.getAdventurer(placedTrap.getTarget())
-                                        .getAdventurerID());
-                                broadcastAdventurerImprisoned(
-                                        dungeon.getAdventurer(placedTrap.getTarget())
-                                                .getAdventurerID());
-                            } else {
-                                broadcastAdventurerDamaged(
-                                        dungeon.getAdventurer(placedTrap.getTarget())
-                                                .getAdventurerID(),
-                                        placedTrap.getDamage() - totalDefuseVal);
-                            }
-                        } // to Handle if the target Adventurer is not present in the queue
-                        break;
-                    case BASIC:
-                        if (dungeon.getAdventurer(0)
-                                .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
-                            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
-                            broadcastAdventurerImprisoned(
-                                    dungeon.getAdventurer(0).getAdventurerID());
-                        } else {
-                            broadcastAdventurerDamaged(dungeon.getAdventurer(0).getAdventurerID(),
-                                    placedTrap.getDamage() - totalDefuseVal);
-                        }
-                        break;
-                    case MULTI:
-                        int res = placedTrap.getDamage() - totalDefuseVal;
-                        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-                            final int currentReduction = res;
-                            res = dungeon.getAdventurerById(i).damagehealthby(res);
-                            if (res >= 0) {
-                                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
-                                broadcastAdventurerImprisoned(
-                                        dungeon.getAdventurer(i).getAdventurerID());
-                            } else {
-                                broadcastAdventurerDamaged(
-                                        dungeon.getAdventurer(i).getAdventurerID(),
-                                        currentReduction);
-                                break;
-                            }
-                        }
-                        break;
-
-                    default:
-                        break;
+                    case TARGETED -> calcTrapTargetedDamage(totalDefuseVal);
+                    case BASIC -> calcTrapBasicDamage(totalDefuseVal);
+                    case MULTI -> calcTrapMultiDamage(totalDefuseVal);
+                    default -> {
+                    }
                 }
             }
 
+        }
+    }
+
+    /**
+     * checks what should be the next phase returns ChooseBattleGroundPhase for same player if
+     * season < 8 returns ChooseBattleGroundPhase for next player if season = 8 returns
+     * CollectAndPlaceBidPhase when all player finished combat phase.
+     */
+    private Phase goToNextPhase() {
+        if (timeStamp.getSeason() < 8) {
+            timeStamp.nextSeason();
+            broadcastNextRound(timeStamp.getSeason() - 4);
+            return new ChooseBattleGroundPhase(gd, currPlayingPlayer); // same player next round.
+        } else {
+            //if we have players left to combat
+            if (gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID()) >= 0) {
+                timeStamp.timeTravel();
+                return new ChooseBattleGroundPhase(gd, gd.getPlayerByPlayerId(
+                        gd.getNextCombatPlayer(currPlayingPlayer.getPlayerID())));
+                // passing to next year or ending the game
+            } else {
+                if (timeStamp.getYear() == gd.getMaxYears()) {
+                    return new GameEndPhase(gd);
+                } else {
+                    timeStamp.nextyear();
+                    broadcastNextYear(timeStamp.getYear());
+                    return new CollectAndPlaceBidPhase(gd);
+
+                }
+            }
+        }
+    }
+
+    /**
+     * checks if the battleground to be conquered and adventurer flees
+     */
+    private void conquerTile() {
+        // if at least 1 adventurer is alive conquer.
+        if (dungeon.getAdventurer(0) != null) {
+            final Coordinate coordinate = dungeon.getCurrBattleGround();
+            dungeon.setTileConquered(coordinate);
+            broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
+                    coordinate.getxpos(), coordinate.getypos());
+
+            currPlayingPlayer.changeEvilnessBy(-1);
+
+            // check if adventurer can escape.
+            if (dungeon.getNumUnconqueredTiles() == 0) {
+                if (dungeon.getNumImprisonedAdventurers() != 0) {
+
+                    // free an imprisoned adventurer.
+                    broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
+                    currPlayingPlayer.changeEvilnessBy(-1);
+                }
+
+            }
         }
     }
 
