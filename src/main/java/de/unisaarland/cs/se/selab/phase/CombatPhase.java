@@ -227,8 +227,8 @@ public class CombatPhase extends Phase {
             // in this case the received Action Object wasn't sent from the right player
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.sendActionFailed(ma.getCommID(), "it's not your turn to place monsters");
+                return false;
             }
-            return false;
         }
 
         final int monsterId = ma.getMonster();
@@ -238,8 +238,8 @@ public class CombatPhase extends Phase {
             // in this case the player doesn't own the monster
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.sendActionFailed(ma.getCommID(), "you don't seem to own this monster");
+                return false;
             }
-            return false;
         }
 
         final Monster selectedMonster = dungeon.getMonsterByID(monsterId);
@@ -249,8 +249,8 @@ public class CombatPhase extends Phase {
             // in this case the monster is not available
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.sendActionFailed(ma.getCommID(), "monster not available in this year");
+                return false;
             }
-            return false;
         }
 
         // calculate the amount of monsters that can be placed on this tile
@@ -267,8 +267,8 @@ public class CombatPhase extends Phase {
                 sc.sendActionFailed(ma.getCommID(),
                         "you already placed the max. amount (" + placeableMonsters
                                 + ") of monsters");
+                return false;
             }
-            return false;
         }
 
         // if none of the above checks failed, the player can place the monster
