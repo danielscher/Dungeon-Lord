@@ -124,7 +124,7 @@ public class CombatPhase extends Phase {
             placedTrap = dungeon.getTrapByID(ta.getTrapID());
             broadcastGoldChanged(-1, currPlayingPlayer.getCommID());
 
-        // placing a trap on a regular tile.
+            // placing a trap on a regular tile.
         } else {
             placedTrap = dungeon.getTrapByID(ta.getTrapID());
         }
@@ -140,58 +140,16 @@ public class CombatPhase extends Phase {
     @Override
     public void exec(final MonsterAction ma) {
 
-        if (ma.getCommID() == currPlayingPlayer.getCommID()) {
-            // check if 2 monsters are already placed
-            if (placedMonsters.size() >= 2) {
-                try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                    serverConn.sendActionFailed(ma.getCommID(),
-                            "Two Monsters have been already placed");
-                }
-                //if one monster is already placed
-            } else if (placedMonsters.size() == 1) {
-                if (dungeon.getMonsterByID(ma.getMonster()) != null) {
-                    if (dungeon.getMonsterByID(ma.getMonster()).availableThisYear()) {
-                        if (dungeon.hasTileRoom(dungeon.getCurrBattleGround())) {
-                            placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
-                            broadcastMonsterPlaced(ma.getMonster(),
-                                    currPlayingPlayer.getPlayerID());
-                            dungeon.getMonsterByID(ma.getMonster()).setUnavailable();
-                        } else {
-                            gd.getServerConnection().sendActionFailed(ma.getCommID(),
-                                    "One Monster is already placed in the Tile");
-
-                        }
-                    } else {
-                        gd.getServerConnection().sendActionFailed(ma.getCommID(),
-                                "Monster is not available this year");
-                    }
-                } else {
-                    gd.getServerConnection().sendActionFailed(ma.getCommID(),
-                            "No available monster for the requested id");
-
-                }
-
-            } else {
-                //the tile and the room can have at least one monster
-                if (dungeon.getMonsterByID(ma.getMonster()) != null) {
-                    if (dungeon.getMonsterByID(ma.getMonster()).availableThisYear()) {
-                        placedMonsters.put(dungeon.getMonsterByID(ma.getMonster()), -1);
-                        broadcastMonsterPlaced(ma.getMonster(), currPlayingPlayer.getPlayerID());
-                        dungeon.getMonsterByID(ma.getMonster()).setUnavailable();
-                    } else {
-                        gd.getServerConnection().sendActionFailed(ma.getCommID(),
-                                "Monster is not available this year");
-                    }
-                } else {
-                    gd.getServerConnection().sendActionFailed(ma.getCommID(),
-                            "No available monster for the requested id");
-                }
-            }
-
-        } else {
-            gd.getServerConnection()
-                    .sendActionFailed(ma.getCommID(), "CommID of the current player did not match");
+        // check if the monster action is valid
+        if (!canPlaceMonster(ma)) {
+            return;
         }
+
+        final int monsterId = ma.getMonster();
+        final Monster selectedMonster = dungeon.getMonsterByID(monsterId);
+        placedMonsters.put(selectedMonster, -1); // add monster to target map (with target -1)
+        broadcastMonsterPlaced(monsterId, currPlayingPlayer.getPlayerID()); // broadcast Event
+        selectedMonster.setUnavailable(); // make this monster unavailable until next year
     }
 
     @Override
@@ -294,6 +252,63 @@ public class CombatPhase extends Phase {
             endTurn = true;
         }
 
+    }
+
+    /**
+     * this method checks if a monster action is valid right now and the monster can be placed
+     */
+    private boolean canPlaceMonster(final MonsterAction ma) {
+        // check if the Action came from the right player
+        if (ma.getCommID() != currPlayingPlayer.getCommID()) {
+            // in this case the received Action Object wasn't sent from the right player
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ma.getCommID(), "it's not your turn to place monsters");
+            }
+            return false;
+        }
+
+        final int monsterId = ma.getMonster();
+
+        // check if player owns monster
+        if (dungeon.getMonsterByID(monsterId) == null) {
+            // in this case the player doesn't own the monster
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ma.getCommID(), "you don't seem to own this monster");
+            }
+            return false;
+        }
+
+        final Monster selectedMonster = dungeon.getMonsterByID(monsterId);
+
+        // check if monster is available in this year
+        if (!selectedMonster.availableThisYear()) {
+            // in this case the monster is not available
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ma.getCommID(), "monster not available in this year");
+            }
+            return false;
+        }
+
+        // calculate the amount of monsters that can be placed on this tile
+        int placeableMonsters = 1;
+        final Coordinate battleGround = dungeon.getCurrBattleGround();
+        if (dungeon.hasTileRoom(battleGround)) {
+            // in case the selected battleground has a room, increment placeable Monsters
+            placeableMonsters++;
+        }
+
+        if (placedMonsters.size() >= placeableMonsters) {
+            // in this case the player doesn't own the monster
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ma.getCommID(),
+                        "you already placed the max. amount (" + placeableMonsters
+                                + ") of monsters");
+            }
+            return false;
+        }
+
+        // if none of the above checks failed, the player can place the monster
+        return true;
     }
 
     private void healAdventurers() {
