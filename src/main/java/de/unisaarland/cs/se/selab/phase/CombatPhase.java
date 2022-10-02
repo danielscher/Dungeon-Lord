@@ -23,13 +23,11 @@ public class CombatPhase extends Phase {
 
     private final Player currPlayingPlayer;
     private final TimeStamp timeStamp = gd.getTime();
-
-    //selected Trap
-    private Trap placedTrap;
     //placed monsters and the target position
     private final Map<Monster, Integer> placedMonsters = new HashMap<>();
     private final Dungeon dungeon;
-
+    //selected Trap
+    private Trap placedTrap;
     private boolean endTurn;
 
 
@@ -42,7 +40,7 @@ public class CombatPhase extends Phase {
 
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
         //send defend yourself
         try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
             serverConn.sendDefendYourself(currPlayingPlayer.getCommID());
@@ -54,6 +52,10 @@ public class CombatPhase extends Phase {
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.sendActNow(currPlayingPlayer.getCommID());
                 sc.nextAction().invoke(this);
+            } catch (TimeoutException e) {
+                kickPlayer(currPlayingPlayer.getPlayerID());
+                // TODO add logic to skip to next phase (next players combat or bidding or endgame)
+                return null;
             }
             // check if the battleground is full
             if (dungeon.hasTileRoom(battleground)) {
@@ -80,7 +82,7 @@ public class CombatPhase extends Phase {
         healAdventurers(); // TODO: 01.10.22 if all adventurers have been defeated during combat
 
         // checks what should be the next phase.
-        return goToNextPhase();
+        return goToNextPhase(); // TODO check if this method can handle leaving of a player
     }
 
 

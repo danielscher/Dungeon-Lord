@@ -15,7 +15,7 @@ class AltConfigTest extends Config {
     @Test
     void testParseCorrectConfig() {
         final String configPath = "INSERT PATH HERE"; // TODO insert path
-        final AltConfig config = new AltConfig(configPath);
+        final AltConfig config = new AltConfig(configPath, 42);
         try {
             final boolean parsedSuccessfully = config.parse();
             assertTrue(parsedSuccessfully, "config validation failed");
@@ -28,7 +28,7 @@ class AltConfigTest extends Config {
     @Test
     void testParseIncorrectConfig() {
         final String configPath = "INSERT PATH HERE"; // TODO insert path
-        final AltConfig config = new AltConfig(configPath);
+        final AltConfig config = new AltConfig(configPath, 42);
         try {
             final boolean parsedSuccessfully = config.parse();
             assertTrue(parsedSuccessfully, "config validation failed");

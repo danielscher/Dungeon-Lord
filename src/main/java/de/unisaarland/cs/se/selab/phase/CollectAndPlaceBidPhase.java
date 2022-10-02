@@ -45,7 +45,7 @@ public class CollectAndPlaceBidPhase extends Phase {
         broadcastActNow();
 
         while (!checkIfAllBidsChosen()) {
-            try(ServerConnection<Action> sc = gd.getServerConnection())  {
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.nextAction().invoke(this);
             } catch (TimeoutException e) {
                 return null; // aborts the game like stated in the specification
@@ -69,7 +69,7 @@ public class CollectAndPlaceBidPhase extends Phase {
         final boolean bidAdded = player.addBid(pba.getBid(), pba.getSlot());
         if (!bidAdded) {
             sc.sendActionFailed(pba.getCommID(),
-                                    "can't choose bid " + pba.getBid().toString());
+                    "can't choose bid " + pba.getBid().toString());
         }
     }
 

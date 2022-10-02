@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
 
-import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import java.util.ArrayList;
@@ -26,7 +25,7 @@ public class GameEndPhase extends Phase {
     }
 
     @Override
-    public Phase run() throws TimeoutException {
+    public Phase run() {
         //TODO
         setAllTitle();
         setAllPoints();

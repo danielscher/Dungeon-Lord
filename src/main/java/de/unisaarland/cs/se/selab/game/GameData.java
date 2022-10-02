@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.game;
 
 import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.action.Action;
-import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
@@ -39,17 +38,17 @@ public class GameData {
     private final List<Trap> currAvailableTraps = new ArrayList<>();
     private final List<Room> currAvailableRooms = new ArrayList<>();
 
-    private final ServerConnection<Action> serverconnection = new ServerConnection<>(8080,
-            5000, new ActionFactoryImplementation());
+    private final ServerConnection<Action> serverConnection;
     // private final Config config;
     private final AltConfig config;
     private int firstBidder;
     private int idCounter;
 
-    public GameData(AltConfig config) {
+    public GameData(final AltConfig config, final ServerConnection<Action> serverConnection) {
         this.firstBidder = 0;
         this.idCounter = 0;
         this.config = config;
+        this.serverConnection = serverConnection;
     }
 
     private void addPlayer(final Player player, final int id) {
@@ -93,7 +92,7 @@ public class GameData {
     }
 
     public ServerConnection<Action> getServerConnection() {
-        return this.serverconnection;
+        return this.serverConnection;
     }
 
     /*
@@ -123,7 +122,7 @@ public class GameData {
     }
 
 
-    public int getNextCombatPlayer(int lastplayerid) {
+    public int getNextCombatPlayer(final int lastplayerid) {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
         final int pos = playerList.indexOf(lastplayerid);

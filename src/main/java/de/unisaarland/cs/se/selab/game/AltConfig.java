@@ -12,20 +12,22 @@ import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
-GENERAL EXPLANATION:
-after creating an instance of this class, the method parse() is to be called
-
-parse() calls smaller parse methods (like parseMonsters(...)) which deal with parsing
-the corresponding part of the config file
-after everything's parsed, the validity of the parsed data is checked
+ * GENERAL EXPLANATION: after creating an instance of this class, the method parse() is to be
+ * called
+ * <p>
+ * parse() calls smaller parse methods (like parseMonsters(...)) which deal with parsing the
+ * corresponding part of the config file after everything's parsed, the validity of the parsed data
+ * is checked
  */
 
 public class AltConfig {
@@ -46,18 +48,20 @@ public class AltConfig {
 
     private String configJSONString;
 
-    public AltConfig(final String path) {
+    private final Random random;
+
+    public AltConfig(final String path, final long seed) {
         this.path = path;
+        this.random = new Random(seed);
     }
 
-
-    /**
-    ---------- parsing methods ----------
+    /*
+     ---------- parsing methods ----------
      */
 
     /**
-    this method parses the config and stores all the collected data in this object
-    return == success?
+     * this method parses the config and stores all the collected data in this object return ==
+     * success?
      */
     public boolean parse() {
         // try to find file path
@@ -97,13 +101,16 @@ public class AltConfig {
             return false;
         }
 
+        shuffleLists();
+
         // now check if the read values are valid
         return checkIfValid();
     }
 
     /**
      * this method parses general game variables
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void parseGeneralInfo(final JSONObject jsonObject) {
         maxPlayers = jsonObject.getInt("maxPlayers");
@@ -140,7 +147,8 @@ public class AltConfig {
 
     /**
      * this method parses all monster objects
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void parseMonsters(final JSONObject jsonObject) {
         // get array of monsters
@@ -155,7 +163,8 @@ public class AltConfig {
     /**
      * this method is used to create a single instance of a monster with the parameters provided by
      * one array entry
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void createMonster(final JSONObject monsterJSONObj) {
         // optional values...
@@ -190,7 +199,8 @@ public class AltConfig {
 
     /**
      * this method parses all adventurer objects
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void parseAdventurers(final JSONObject jsonObject) {
         // get array of adventurers
@@ -203,10 +213,10 @@ public class AltConfig {
     }
 
     /**
-     * this method is used to create a single instance of an
-     * adventurer with the parameters provided by
-     * one array entry
-     * @throws JSONException
+     * this method is used to create a single instance of an adventurer with the parameters provided
+     * by one array entry
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void createAdventurer(final JSONObject adventurerJSONObj) {
         // optional values...
@@ -250,7 +260,8 @@ public class AltConfig {
 
     /**
      * this method parses all trap objects
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void parseTraps(final JSONObject jsonObject) {
         // get array of traps
@@ -263,9 +274,10 @@ public class AltConfig {
     }
 
     /**
-     * this method is used to create a single instance of a trap with the parameters provided by
-     * one array entry
-     * @throws JSONException
+     * this method is used to create a single instance of a trap with the parameters provided by one
+     * array entry
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void createTrap(final JSONObject trapJSONObj) {
         final int trapId = trapJSONObj.getInt("id");
@@ -285,7 +297,8 @@ public class AltConfig {
 
     /**
      * this method parses all room objects
-     * @throws JSONException
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void parseRooms(final JSONObject jsonObject) {
         // get array of rooms
@@ -298,9 +311,10 @@ public class AltConfig {
     }
 
     /**
-     * this method is used to create a single instance of a room with the parameters provided by
-     * one array entry
-     * @throws JSONException
+     * this method is used to create a single instance of a room with the parameters provided by one
+     * array entry
+     *
+     * @throws JSONException when the JSON parser fails to read the fields
      */
     private void createRoom(final JSONObject roomJSONObj) {
 
@@ -347,14 +361,14 @@ public class AltConfig {
         rooms.add(room);
     }
 
-    /**
-    ---------- config validation methods ----------
+    /*
+     ---------- config validation methods ----------
      */
 
 
     /**
-    this method is used to create a single instance of a room with the parameters provided by
-    one array entry
+     * this method is used to create a single instance of a room with the parameters provided by one
+     * array entry
      */
     private boolean checkIfValid() {
         // if any of the validations fail, return false
@@ -375,8 +389,8 @@ public class AltConfig {
     }
 
     /**
-    this method is used to validate the correctness of all provided values for the
-    general game data
+     * this method is used to validate the correctness of all provided values for the general game
+     * data
      */
     private boolean validateGeneral() {
         // NOTE: "x &= a" is the same as "x = x & a" which (because we have boolean operands)
@@ -397,8 +411,7 @@ public class AltConfig {
     }
 
     /**
-    this method is used to validate the correctness of all provided values for the
-    monsters
+     * this method is used to validate the correctness of all provided values for the monsters
      */
     private boolean validateMonsters() {
         boolean res = true;
@@ -411,7 +424,7 @@ public class AltConfig {
     }
 
     /**
-    this method validates the parameters of one monster
+     * this method validates the parameters of one monster
      */
     private boolean validateMonster(final Monster monster) {
         boolean res = (monster.getMonsterID() >= 0);
@@ -424,7 +437,7 @@ public class AltConfig {
     }
 
     /**
-    this method checks if all monster IDs are unique
+     * this method checks if all monster IDs are unique
      */
     private boolean allMonsterIdsUnique() {
         final Set<Integer> monsterIds = new HashSet<>(
@@ -436,8 +449,7 @@ public class AltConfig {
     }
 
     /**
-    this method is used to validate the correctness of all provided values for the
-    adventurers
+     * this method is used to validate the correctness of all provided values for the adventurers
      */
     private boolean validateAdventurers() {
         boolean res = true;
@@ -450,7 +462,7 @@ public class AltConfig {
     }
 
     /**
-    this method validates the parameters of one adventurer
+     * this method validates the parameters of one adventurer
      */
     private boolean validateAdventurer(final Adventurer adventurer) {
         boolean res = (adventurer.getAdventurerID() >= 0);
@@ -462,7 +474,7 @@ public class AltConfig {
     }
 
     /**
-    this method checks if all adventurer IDs are unique
+     * this method checks if all adventurer IDs are unique
      */
     private boolean allAdventurerIdsUnique() {
         final Set<Integer> adventurerIds = new HashSet<>(
@@ -474,8 +486,7 @@ public class AltConfig {
     }
 
     /**
-    this method is used to validate the correctness of all provided values for the
-    traps
+     * this method is used to validate the correctness of all provided values for the traps
      */
     private boolean validateTraps() {
         boolean res = true;
@@ -488,7 +499,7 @@ public class AltConfig {
     }
 
     /**
-    this method validates the parameters of one trap
+     * this method validates the parameters of one trap
      */
     private boolean validateTrap(final Trap trap) {
         boolean res = (trap.getTrapID() >= 0);
@@ -501,7 +512,7 @@ public class AltConfig {
     }
 
     /**
-    this method checks if all trap IDs are unique
+     * this method checks if all trap IDs are unique
      */
     private boolean allTrapIdsUnique() {
         final Set<Integer> trapIds = new HashSet<>(
@@ -513,8 +524,7 @@ public class AltConfig {
     }
 
     /**
-    this method is used to validate the correctness of all provided values for the
-    rooms
+     * this method is used to validate the correctness of all provided values for the rooms
      */
     private boolean validateRooms() {
         boolean res = true;
@@ -527,7 +537,7 @@ public class AltConfig {
     }
 
     /**
-    this method validates the parameters of one room
+     * this method validates the parameters of one room
      */
     private boolean validateRoom(final Room room) {
         boolean res = (room.getRoomID() >= 0);
@@ -541,7 +551,7 @@ public class AltConfig {
     }
 
     /**
-    this method checks if all room IDs are unique
+     * this method checks if all room IDs are unique
      */
     private boolean allRoomIdsUnique() {
         final Set<Integer> roomIds = new HashSet<>(
@@ -553,7 +563,7 @@ public class AltConfig {
     }
 
     /**
-    ----------  getters / draw methods ----------
+     * ----------  getters / draw methods ----------
      */
 
     public int getMaxPlayers() {
@@ -590,7 +600,7 @@ public class AltConfig {
     }
 
     /**
-    standard amount of 3
+     * standard amount of 3
      */
     public List<Monster> drawMonsters() {
         return drawMonsters(3);
@@ -607,7 +617,7 @@ public class AltConfig {
     }
 
     /**
-    standard amount of 2
+     * standard amount of 2
      */
     public List<Room> drawRooms() {
         return drawRooms(2);
@@ -644,5 +654,12 @@ public class AltConfig {
         adventurers.subList(tailIndex - amount, tailIndex)
                 .clear(); // removes this sublist from list.
         return drawnAdventurers;
+    }
+
+    private void shuffleLists() {
+        Collections.shuffle(adventurers, random);
+        Collections.shuffle(monsters, random);
+        Collections.shuffle(traps, random);
+        Collections.shuffle(rooms, random);
     }
 }

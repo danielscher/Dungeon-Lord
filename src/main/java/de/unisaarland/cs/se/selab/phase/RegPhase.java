@@ -1,5 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
+import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
@@ -25,13 +26,17 @@ public class RegPhase extends Phase {
     loop over the maximum players and ask the nextAction from the serverconnection
      */
     @Override
-    public Phase run() throws TimeoutException {
-        for (int i = 0; i < maxPlayers; i++) {
+    public Phase run() {
+        while (gd.getNumCurrPlayers() < maxPlayers) {
             if (isStarted) {
                 break;
             }
-            final Action action = gd.getServerConnection().nextAction();
-            action.invoke(this);
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.nextAction().invoke(this);
+            } catch (TimeoutException e) {
+                broadcastRegistrationAborted();
+                return null;
+            }
         }
         final Set<Integer> commIDs = gd.getCommIDSet();
         //send the registered players for all players
