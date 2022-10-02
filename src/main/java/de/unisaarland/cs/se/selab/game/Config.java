@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.game;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
+import de.unisaarland.cs.se.selab.game.entities.ParserMessage;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
@@ -31,7 +32,7 @@ public class Config {
     private int initFood = -1;
     private int initGold = -1;
     private int initImps = -1;
-    private int parserResult;
+    private ParserMessage parserResult = ParserMessage.DEFAULT;
 
     private List<Monster> monsters;
     private List<Adventurer> adventurers;
@@ -101,7 +102,7 @@ public class Config {
     }
 
     public void parseFromFile(final String configFilePath) throws FileNotFoundException {
-        parserResult = 0;
+        parserResult = ParserMessage.DEFAULT;
         final StringBuilder builder = new StringBuilder();
         //    try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
 
@@ -127,11 +128,12 @@ public class Config {
         initFood = obj.getInt("initialFood");
         initGold = obj.getInt("initialGold");
         initImps = obj.getInt("initialImps");
-        // end of parse to json object
-        // return parserResult;
     }
 
     public void parserAndCheckMonsterToList(final JSONObject obj) {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         final JSONArray monsterArray = obj.getJSONArray("monsters");
         final int monArrLen = monsterArray.length();
         monsters = new ArrayList<>();
@@ -152,8 +154,6 @@ public class Config {
 
             int evilness;
             try {
-                //    String evilnessValString = monsterObj.getString("evilness");
-                //    evilness = Integer.valueOf(evilnessValString);
                 evilness = monsterObj.getInt("evilness");
             } catch (JSONException e) {
                 evilness = 0;
@@ -162,19 +162,17 @@ public class Config {
 
             //  int evilness = (Integer) monsterObj.get("evilness");
             final int damage = monsterObj.getInt("damage");
-            //   Attack attackStrategy = (Attack) monsterObj.get("attackStrategy");
             final String attackStrategyString = (String) monsterObj.get("attackStrategy");
-            // Attack attackStrategy = Attack.valueOf(attackStrategyString);
 
             final Attack attackStrategy = convertStringToAttack(attackStrategyString);
             if (evilness < 0 || hunger < 0) {
-                parserResult = 11;
+                parserResult = ParserMessage.INVALIDMONSTER;
                 break;
             }
             // invalid evil/hunger
 
             if (damage < 1 || attackStrategy == null) {
-                parserResult = 12;
+                parserResult = ParserMessage.INVALIDMONSTER;
                 break;
             }
             // valid damage, attack not set
@@ -185,6 +183,9 @@ public class Config {
     }
 
     public void parserAndCheckAdventurerToList(final JSONObject obj) {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         final JSONArray adventurerArray = obj.getJSONArray("adventurers");
         final int advArrLen = adventurerArray.length();
         adventurers = new ArrayList<>();
@@ -224,15 +225,15 @@ public class Config {
 
             if (difficulty < 0 || difficulty > 8 || healthPoints < 1 || healValue < 0
                     || defuseValue < 0) {
-                parserResult = 21;
+                parserResult = ParserMessage.INVALIDADVENTURER;
                 break;
             }
             // invalid value of an adventurer
 
-            if (healValue > 0 && defuseValue > 0) {
-                parserResult = 22;
-                break;
-            }
+            //  if (healValue > 0 && defuseValue > 0) {
+            //  parserResult = ParserMessage.INVALIDADVENTURER;
+            //  break;
+            // }
             // cannot be priest and thief at the same time
             final Adventurer currAdventurer = new Adventurer(id, difficulty, healthPoints,
                     healValue, defuseValue, charge);
@@ -242,6 +243,9 @@ public class Config {
     }
 
     public void parserAndCheckTrapToList(final JSONObject obj) {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         final JSONArray trapArray = obj.getJSONArray("traps");
         final int trpArrLen = trapArray.length();
         traps = new ArrayList<>();
@@ -266,12 +270,12 @@ public class Config {
             }
 
             if (id < 0 || damage < 1) {
-                parserResult = 31;
+                parserResult = ParserMessage.INVALIDTRAP;
                 break;
             }
             //traps should have valid damage and id
             if (attackStrategy == Attack.TARGETED && (target < 1 || target > 3)) {
-                parserResult = 32;
+                parserResult = ParserMessage.INVALIDTRAP;
                 break;
             }
             //target traps should have 1,2,3 as goals.
@@ -282,6 +286,9 @@ public class Config {
     }
 
     public void parserAndCheckRoomToList(final JSONObject obj) {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         final JSONArray roomArray = obj.getJSONArray("rooms");
         final int roomArrLen = roomArray.length();
         rooms = new ArrayList<>();
@@ -326,7 +333,7 @@ public class Config {
             final int id = (Integer) roomObj.get("id");
 
             if (id < 0) {
-                parserResult = 41;
+                parserResult = ParserMessage.INVALIDROOM;
                 break;
             }
             final int activationCost = (Integer) roomObj.get("activation");
@@ -343,52 +350,55 @@ public class Config {
 
 
     public void checkGeneralInfoValid() {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         //not enough years/player
         if (maxYear < 1 && maxPlayer < 1) {
-            parserResult = -5;
+            parserResult = ParserMessage.INVALIDMAXYEARORPLAYER;
         }
 
         if (traps.size() < 4 * 4 * maxYear) {
-            parserResult = -3;
+            parserResult = ParserMessage.NOTENOUGHTRAPS;
             //not enough traps
         }
 
         if (rooms.size() < 2 * 4 * maxYear) {
-            parserResult = -4;
+            parserResult = ParserMessage.NOTENOUGHROOMS;
             //not enough rooms
         }
 
         if (monsters.size() < 3 * 4 * maxYear) {
-            parserResult = -1;
+            parserResult = ParserMessage.NOTENOUGHMONSTERS;
             //not enough monsters
         }
-        if (adventurers.size() < 3 * 3 * maxPlayer) {
-            parserResult = -2;
-            //not enough rooms
+        if (adventurers.size() < 3 * maxYear * maxPlayer) {
+            parserResult = ParserMessage.NOTENOUGHADVENTURERS;
+            //not enough adventurers
         }
 
         if (dungeonSidelength < 1 || dungeonSidelength > 15) {
-            parserResult = -6;
+            parserResult = ParserMessage.INVALIDDUNGEON;
             // dungeon too small or big
         }
         if (initGold < 0 || initFood < 0 || initImps < 0 || configFilePath == null) {
-            parserResult = -7;
+            parserResult = ParserMessage.INVALIDINITALVALUE;
             // init number invalid
         }
-
-        // !!! try to check the duplicate elements, but get error...
-        //   HashSet<Trap> checkTraps = new HashSet<>(Arrays.asList(traps));
-        // return parserResult;
     }
 
     public void checkUniqueId() {
+        if (parserResult != ParserMessage.DEFAULT) {
+            return;
+        }
         final Set<Integer> monsterIds = new HashSet<>(
-                monsters.size()); // setting maxCapacity a priori increases performance
+                monsters.size()); // check repeat ID.
         for (final Monster m : monsters) {
             monsterIds.add(m.getMonsterID());
         }
         if (monsterIds.size() != monsters.size()) {
-            parserResult = 10;
+            parserResult = ParserMessage.IDDUPLICATIONMONSTER;
+            return;
         }
         final Set<Integer> adventurerIds = new HashSet<>(
                 adventurers.size());
@@ -396,7 +406,8 @@ public class Config {
             adventurerIds.add(a.getAdventurerID());
         }
         if (adventurerIds.size() != adventurers.size()) {
-            parserResult = 20;
+            parserResult = ParserMessage.IDDUPLICATIONADVENTURER;
+            return;
         }
 
         final Set<Integer> trapIds = new HashSet<>(
@@ -405,7 +416,8 @@ public class Config {
             trapIds.add(t.getTrapID());
         }
         if (trapIds.size() != traps.size()) {
-            parserResult = 30;
+            parserResult = ParserMessage.IDDUPLICATIONTRAPS;
+            return;
         }
 
         final Set<Integer> roomIds = new HashSet<>(
@@ -414,9 +426,11 @@ public class Config {
             roomIds.add(r.getRoomID());
         }
         if (roomIds.size() != rooms.size()) {
-            parserResult = 40;
+            parserResult = ParserMessage.IDDUPLICATIONROOMS;
+            return;
         }
         // return parserResult;
+        parserResult = ParserMessage.SUCCESSD;
     }
 
 
@@ -424,7 +438,7 @@ public class Config {
         // TODO
     }
 
-    public int getParserResult() {
+    public ParserMessage getParserResult() {
         return parserResult;
     }
 
