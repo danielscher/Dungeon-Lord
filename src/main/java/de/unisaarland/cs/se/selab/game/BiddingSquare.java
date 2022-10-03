@@ -16,7 +16,7 @@ public class BiddingSquare {
     private final List<BidType> bidTypes = new ArrayList<>(EnumSet.allOf(BidType.class));
 
     public BiddingSquare() {
-        for (int[] row : biddingSlots) {
+        for (final int[] row : biddingSlots) {
             Arrays.fill(row, -1);
         }
         initTypeToColumnMap(typeToColumnMap);
@@ -25,18 +25,18 @@ public class BiddingSquare {
     }
 
     // map initialization.
-    private void initColumnToBidTypeMap(Map<Integer, BidType> map) {
+    private void initColumnToBidTypeMap(final Map<Integer, BidType> map) {
         int i = 0;
-        for (BidType bt : bidTypes) {
+        for (final BidType bt : bidTypes) {
             map.put(i, bt);
             i++;
         }
     }
 
     // map initialization.
-    private void initTypeToColumnMap(Map<BidType, Integer> map) {
+    private void initTypeToColumnMap(final Map<BidType, Integer> map) {
         int i = 0;
-        for (BidType bt : bidTypes) {
+        for (final BidType bt : bidTypes) {
             map.put(bt, i);
             i++;
         }
