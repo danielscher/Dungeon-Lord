@@ -1,8 +1,11 @@
 package de.unisaarland.cs.se.selab.game;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.EnumSet;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BiddingSquare {
@@ -10,9 +13,33 @@ public class BiddingSquare {
     private final int[][] biddingSlots = new int[3][8];
     private final Map<BidType, Integer> typeToColumnMap = new HashMap<>();
     private final Map<Integer, BidType> columnToTypeMap = new HashMap<>();
+    private final List<BidType> bidTypes = new ArrayList<>(EnumSet.allOf(BidType.class));
 
     public BiddingSquare() {
-        Arrays.fill(this.biddingSlots, -1);
+        for (int[] row : biddingSlots) {
+            Arrays.fill(row, -1);
+        }
+        initTypeToColumnMap(typeToColumnMap);
+        initColumnToBidTypeMap(columnToTypeMap);
+
+    }
+
+    // map initialization.
+    private void initColumnToBidTypeMap(Map<Integer, BidType> map) {
+        int i = 0;
+        for (BidType bt : bidTypes) {
+            map.put(i, bt);
+            i++;
+        }
+    }
+
+    // map initialization.
+    private void initTypeToColumnMap(Map<BidType, Integer> map) {
+        int i = 0;
+        for (BidType bt : bidTypes) {
+            map.put(bt, i);
+            i++;
+        }
     }
 
     public int insert(final BidType bidType, final int playerID) {
