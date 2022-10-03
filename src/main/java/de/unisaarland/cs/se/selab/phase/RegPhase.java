@@ -50,11 +50,15 @@ public class RegPhase extends Phase {
     @Override
     public void exec(final RegAction ra) {
         if (gd.checkIfRegistered(ra.getCommID())) {
-            gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
+            gd.getServerConnection().sendRegistrationAborted(ra.getCommID()); // FIXME action failed
         } else {
             final boolean res = gd.registerPlayer(ra.getName(), ra.getCommID());
             if (!res) {
                 gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
+            }
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                final String configString = gd.getConfigString();
+                sc.sendConfig(ra.getCommID(), configString);
             }
         }
     }

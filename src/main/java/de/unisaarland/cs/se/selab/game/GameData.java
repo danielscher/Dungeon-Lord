@@ -241,5 +241,9 @@ public class GameData {
         this.commIdToPlayerIdMap.remove(commId);
     }
 
+    public String getConfigString() {
+        return config.getConfigJSONString();
+    }
+
 
 }
