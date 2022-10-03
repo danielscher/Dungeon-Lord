@@ -11,5 +11,7 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
+        manager.registerTest(new RegistrationTest());
+        manager.registerTest(new EmptyConfigTest());
     }
 }

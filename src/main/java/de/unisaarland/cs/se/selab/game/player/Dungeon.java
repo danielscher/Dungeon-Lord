@@ -107,11 +107,18 @@ public class Dungeon {
             return false;
         }
 
+        // check if tile is conquered
         if (grid[x][y].isConquered()) {
             return false;
         }
 
+        // check if tile already has a room
         if (grid[x][y].hasRoom()) {
+            return false;
+        }
+
+        // check if the room would be adjacent to an already existing room
+        if (TileFinder.coordinateHasAdjacentRooms(x, y, grid)) {
             return false;
         }
 

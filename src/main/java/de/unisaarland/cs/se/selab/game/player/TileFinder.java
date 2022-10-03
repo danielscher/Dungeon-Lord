@@ -204,4 +204,36 @@ public final class TileFinder {
         }
         return foundNeighbor;
     }
+
+    /**
+     * checks if neighboring tiles of a given location on the grid have rooms placed on them
+     *
+     * @return if at least one neighboring tile has a room
+     */
+    public static boolean coordinateHasAdjacentRooms(final int x, final int y,
+            final Tile[][] grid) {
+        boolean foundAdjacentRooms = false;
+        // if statements prevent exceeding array bounds
+        if (x > 0) {
+            if (grid[x - 1][y] != null) {
+                foundAdjacentRooms |= grid[x - 1][y].hasRoom(); // left
+            }
+        }
+        if (x < grid.length - 1) {
+            if (grid[x + 1][y] != null) {
+                foundAdjacentRooms |= grid[x + 1][y].hasRoom(); // right
+            }
+        }
+        if (y > 0) {
+            if (grid[x][y - 1] != null) {
+                foundAdjacentRooms |= grid[x][y - 1].hasRoom(); // above
+            }
+        }
+        if (y < grid[0].length - 1) {
+            if (grid[x][y + 1] != null) {
+                foundAdjacentRooms |= grid[x][y + 1].hasRoom(); // below
+            }
+        }
+        return foundAdjacentRooms;
+    }
 }
