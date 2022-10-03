@@ -17,6 +17,7 @@ class AltConfigTest {
     /**
      * @throws JSONException when parsing fails
      */
+
     @Test
     void testParseCorrectConfig() {
         final Path configPath = Path.of("src\\main\\resources\\configuration.json");
