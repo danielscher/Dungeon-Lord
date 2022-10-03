@@ -16,8 +16,8 @@ public final class TileFinder {
     }
 
     /**
-     * this method returns a List of tile coordinates
-     * which have the smallest distance to the entrance
+     * this method returns a List of tile coordinates which have the smallest distance to the
+     * entrance
      */
     public static List<Coordinate> getClosestTiles(final Tile[][] grid) {
         clearDistances(grid);
@@ -27,8 +27,8 @@ public final class TileFinder {
 
 
     /**
-     * finds the tiles which have the smallest distance value
-     * NOTE: requires distance calculation to be done first
+     * finds the tiles which have the smallest distance value NOTE: requires distance calculation to
+     * be done first
      */
     private static List<Coordinate> findClosestUnconqueredTiles(final Tile[][] grid) {
         int shortestDist = -1;
@@ -37,15 +37,17 @@ public final class TileFinder {
         // iterate over grid...
         for (int i = 0; i < grid.length; i++) {
             for (int j = 0; j < grid[0].length; j++) {
-                shortestDist = inspectTile(grid[i][j], res, shortestDist, i, j);
+                if (grid[i][j] != null) {
+                    shortestDist = inspectTile(grid[i][j], res, shortestDist, i, j);
+                }
             }
         }
         return res; // return collection of the closest tiles
     }
 
     /**
-     * inspects a tile, and updates the list of the closest tiles accordingly
-     * return value is newest smallest distance found
+     * inspects a tile, and updates the list of the closest tiles accordingly return value is newest
+     * smallest distance found
      */
     private static int inspectTile(final Tile tile, final Collection<Coordinate> coordinates,
             final int distance, final int x, final int y) {
@@ -77,15 +79,16 @@ public final class TileFinder {
     private static void clearDistances(final Tile[][] grid) {
         for (final Tile[] tileRow : grid) {
             for (final Tile tile : tileRow) {
-                tile.setDistanceToEntrance(-1);
+                if (tile != null) {
+                    tile.setDistanceToEntrance(-1);
+                }
             }
         }
     }
 
     /**
-    calculates the distances to the entrance
-    call this method with entrance coordinates and n = 0
-    requires all distance values to be -1 before execution
+     * calculates the distances to the entrance call this method with entrance coordinates and n = 0
+     * requires all distance values to be -1 before execution
      */
     private static void calcDistToEntrance(final int x, final int y, final int n,
             final Tile[][] grid) {
@@ -104,7 +107,7 @@ public final class TileFinder {
     }
 
     /**
-    calls calcDistToEntrance again on all adjacent tiles
+     * calls calcDistToEntrance again on all adjacent tiles
      */
     private static void visitNeighbors(final int x, final int y, final int n, final Tile[][] grid) {
         // if-statements prevent exceeding the array bounds
@@ -123,10 +126,9 @@ public final class TileFinder {
     }
 
     /**
-    this method check if digging at a given location would create a 2x2 square
-    NOTE: relies on valid coordinates
-    X = given tile, 0 = tiles to check
-    a square happens when at least one of the "0" tiles are
+     * this method check if digging at a given location would create a 2x2 square NOTE: relies on
+     * valid coordinates X = given tile, 0 = tiles to check a square happens when at least one of
+     * the "0" tiles are
      */
     public static boolean wouldCreateSquare(final int x, final int y, final Tile[][] grid) {
         boolean foundSquare = false; // this variable hold if at least one square would be created
@@ -182,9 +184,8 @@ public final class TileFinder {
     }
 
     /**
-    this method determines if a tile of a given location has a neighboring tile
-    (which is a requirement to be able to dig in this location)
-    NOTE: relies on coordinate to be valid
+     * this method determines if a tile of a given location has a neighboring tile (which is a
+     * requirement to be able to dig in this location) NOTE: relies on coordinate to be valid
      */
     public static boolean hasNeighbor(final int x, final int y, final Tile[][] grid) {
         // if-statements prevent array accesses out of bounds
