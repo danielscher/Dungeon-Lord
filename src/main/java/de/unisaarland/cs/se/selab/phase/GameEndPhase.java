@@ -357,7 +357,8 @@ public class GameEndPhase extends Phase {
             }
         } //find the player with most imps
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
+            final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon()
+                    .getNumUnconqueredTiles();
             if (unconqueredTileNum == maxUnconqueredTilesNum) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_BATTLELORD);
                 battlePlayerIdList.add(i);
