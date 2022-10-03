@@ -43,6 +43,12 @@ public class Main {
         }
         if (cmd.hasOption("timeout")) {
             timeout = Integer.parseInt(cmd.getOptionValue("timeout"));
+            if (timeout < 0) {
+                timeout = -1;
+            } else {
+                timeout *= 1000; // conversion of s to ms
+            }
+
         }
         return true;
     }
