@@ -50,15 +50,14 @@ public class Adventurer {
         return charge;
     }
 
-    public int damagehealthby(final int n) {
-        if ((healthPoints - n) <= 0) {
+    public int damagehealthby(final int damage) {
+        if (healthPoints <= damage) {
             healthPoints = 0;
-            return (n - healthPoints);
 
         } else {
-            healthPoints = healthPoints - n;
-            return -1;
+            healthPoints = healthPoints - damage;
         }
+        return (healthPoints);
     }
 
     /*
