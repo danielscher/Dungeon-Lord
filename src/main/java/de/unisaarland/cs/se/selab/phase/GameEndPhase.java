@@ -63,10 +63,11 @@ public class GameEndPhase extends Phase {
     public void initializeAllPoints() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             gd.getPlayerByPlayerId(i).setPoints(0);
+            // clear all the points, only use it before the eval points.
         }
     }
 
-    // evaluate methods below just calculate the points 1 by 1.
+    // evaluate methods below just calculate the points one by one.
     public void evaluateScoresNoTitle() {
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int hiredMonsterPoints = gd.getPlayerByPlayerId(i).getDungeon().getHiredMonsters()
@@ -357,7 +358,8 @@ public class GameEndPhase extends Phase {
             }
         } //find the player with most imps
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon().getNumImps();
+            final int unconqueredTileNum = gd.getPlayerByPlayerId(i).getDungeon()
+                    .getNumUnconqueredTiles();
             if (unconqueredTileNum == maxUnconqueredTilesNum) {
                 gd.getPlayerByPlayerId(i).addTitle(Title.THE_BATTLELORD);
                 battlePlayerIdList.add(i);

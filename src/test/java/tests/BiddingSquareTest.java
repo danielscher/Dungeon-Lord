@@ -6,7 +6,8 @@ import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import org.junit.jupiter.api.Test;
 
-class BiddingsquareTest {
+class BiddingSquareTest {
+
     BiddingSquare bs = new BiddingSquare();
 
     private void resetBiddingSquare() {
@@ -32,8 +33,8 @@ class BiddingsquareTest {
     @Test
     void testGetIDByBidSlot() {
         resetBiddingSquare();
-        assertEquals('2', bs.getIDByBidSlot(0, 0));
-        assertEquals('2', bs.getIDByBidSlot(BidType.FOOD, 0));
+        assertEquals(2, bs.getIDByBidSlot(0, 0));
+        assertEquals(2, bs.getIDByBidSlot(BidType.FOOD, 0));
     }
 
     @Test

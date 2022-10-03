@@ -24,10 +24,11 @@ class DungeonTest {
     private final Tile[][] grid = new Tile[15][15];
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
     Trap t1 = new Trap(1, 1, 1, Attack.BASIC);
-    Room r1 = new Room(1, 4, 1, 1, 1, 1, LOWER_HALF);
+    Room r2 = new Room(2, 4, 1, 1, 1, 1, UPPER_HALF);
+
     Adventurer ad1 = new Adventurer(1, 1, 1, 2, 0, false);
-    Adventurer ad2 = new Adventurer(1, 1, 1, 0, 2, false);
-    Adventurer ad3 = new Adventurer(1, 1, 1, 0, 0, true);
+    Adventurer ad2 = new Adventurer(2, 1, 1, 0, 2, false);
+    Adventurer ad3 = new Adventurer(3, 1, 1, 0, 0, true);
 
 
     private void resetDungeon() {
@@ -90,8 +91,8 @@ class DungeonTest {
         resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
-        assertTrue(dg.placeRoom(0, 2, r1));
-        assertFalse(dg.placeRoom(0, 0, r1));
+        assertTrue(dg.placeRoom(0, 2, r2));
+        assertFalse(dg.placeRoom(0, 0, r2));
     }
 
     @Test
@@ -109,7 +110,7 @@ class DungeonTest {
         fillFirstRow(grid);
         dg.setGrid(grid);
         assertTrue(dg.dig(1, 2));
-        assertFalse(dg.dig(1, 0));
+        assertTrue(dg.dig(1, 0));
     }
 
     @Test
@@ -117,6 +118,8 @@ class DungeonTest {
         resetDungeon();
         final Coordinate coords1 = new Coordinate(0, 2);
         final Coordinate coords2 = new Coordinate(0, 0);
+        fillFirstRow(grid);
+        dg.setGrid(grid);
         assertFalse(dg.isTileConquered(coords1));
         assertTrue(dg.isTileConquered(coords2));
     }
@@ -128,7 +131,7 @@ class DungeonTest {
         final Coordinate coords2 = new Coordinate(0, 0);
         fillFirstRow(grid);
         dg.setGrid(grid);
-        dg.placeRoom(0, 2, r1);
+        dg.placeRoom(0, 2, r2); // replaced r1 by r2
         assertFalse(dg.hasTileRoom(coords2));
         assertTrue(dg.hasTileRoom(coords1));
     }
@@ -137,6 +140,7 @@ class DungeonTest {
     void testImps() {
         resetDungeon();
         dg.addImps(3);
+        // asserting success/failure of sending imps to do something
         assertEquals(6, dg.getNumImps());
         assertTrue(dg.sendImpsToProduce(1));
         assertFalse(dg.sendImpsToProduce(7));
@@ -144,6 +148,11 @@ class DungeonTest {
         assertFalse(dg.sendImpsToDigTunnel(7));
         assertTrue(dg.sendImpsToMineGold(1));
         assertFalse(dg.sendImpsToMineGold(7));
+
+        // return previously sent imps
+        dg.returnImpsFromDigging();
+        dg.returnImpsFromRoom();
+
         dg.sendImpsToDigTunnel(1);
         assertEquals(5, dg.getRestingImps());
         /*
@@ -158,12 +167,13 @@ class DungeonTest {
         resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
-        dg.placeRoom(0, 2, r1);
-        assertFalse(dg.activateRoom(1));
-        assertFalse(dg.activateRoom(2));
+        dg.placeRoom(0, 2, r2);
+        // swapped r1 to r2, since r1 has restriction LOWER_HALF but coordinates are UPPER_HALF
+        assertFalse(dg.activateRoom(1)); // expect false because room not present
+        assertFalse(dg.activateRoom(2)); // expect false because of lack of imps
         dg.addImps(3);
-        assertTrue(dg.activateRoom(1));
-        assertEquals(r1, dg.getRoomById(1));
+        assertTrue(dg.activateRoom(2)); // swapped 1 to 2
+        assertEquals(r2, dg.getRoomById(2)); // swapped 1 to 2
     }
 
     @Test
@@ -196,7 +206,7 @@ class DungeonTest {
         resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
-        dg.placeRoom(0, 2, r1);
+        dg.placeRoom(0, 2, r2); // swapped r1 to r2 because of placement restriction
         assertEquals(1, dg.getNumRooms());
     }
 
@@ -220,6 +230,7 @@ class DungeonTest {
     void testgetNumGoldMineAbleTiles() {
         resetDungeon();
         fillFirstRow(grid);
+        dg.setGrid(grid); // now dungeon has 2 conquered tiles, 1 unconquered tile
         assertEquals(1, dg.getNumGoldMineAbleTiles());
     }
 

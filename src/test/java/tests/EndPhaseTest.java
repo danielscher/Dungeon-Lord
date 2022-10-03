@@ -16,7 +16,7 @@ import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
 import java.nio.file.Path;
-import java.util.Objects;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class EndPhaseTest {
@@ -31,33 +31,26 @@ class EndPhaseTest {
     Room r1 = new Room(1, 1, 1, 1, 1, 1, Location.LOWER_HALF);
     Room r2 = new Room(2, 1, 1, 1, 1, 1, Location.LOWER_HALF);
     //drawn Players
-    Player p1 = new Player("player1", 1, 1, 3, 15);
-    Player p2 = new Player("player2", 2, 2, 3, 15);
-    Player p3 = new Player("player3", 3, 3, 3, 15);
-    //drawn Dungeon
-    Dungeon d1 = new Dungeon(3, 15);
-    Dungeon d2 = new Dungeon(3, 15);
-    Dungeon d3 = new Dungeon(3, 15);
+    Player p1;
+    Player p2;
+    Player p3;
     //drawn Adventurer
 
 
     private void resetData() {
-        final Path configPath = readFile("configuration.json");
+        final Path configPath = Path.of("src\\main\\resources\\configuration.json");
         final AltConfig altConfig = new AltConfig(configPath, 123);
         gd = new GameData(altConfig,
                 new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation()));
         gep = new GameEndPhase(gd);
-        p1 = new Player("player1", 1, 1, 3, 15);
-        p2 = new Player("player2", 2, 2, 3, 15);
-        p3 = new Player("player3", 3, 3, 3, 15);
-        d1 = new Dungeon(3, 15);
-        d2 = new Dungeon(3, 15);
-        d3 = new Dungeon(3, 15);
         gd.registerPlayer("player1", 1);
         gd.registerPlayer("player2", 2);
         gd.registerPlayer("player3", 3);
+        p1 = gd.getPlayerByCommID(1);
+        p2 = gd.getPlayerByCommID(2);
+        p3 = gd.getPlayerByCommID(3);
         //set data of p1
-        p1.changeEvilnessBy(11);
+        p1.changeEvilnessBy(8);
         p1.changeGoldBy(3);
         p1.changeFoodBy(3);
         //set data of p2
@@ -68,9 +61,9 @@ class EndPhaseTest {
         p3.changeEvilnessBy(3);
         p3.changeGoldBy(8);
         p3.changeFoodBy(6);
-        d1 = p1.getDungeon();
-        d2 = p2.getDungeon();
-        d3 = p3.getDungeon();
+        final Dungeon d1 = p1.getDungeon();
+        final Dungeon d2 = p2.getDungeon();
+        final Dungeon d3 = p3.getDungeon();
         //imprisonAdv
         d1.imprison(1);
         //set Monster
@@ -83,12 +76,11 @@ class EndPhaseTest {
         d1.addImps(2);
         //set Tiles
         //!!!!!final Tile[][] grid2 = d2.getGrid();
-        d2.dig(0, 0);
         d2.dig(0, 1);
         //!!!!!grid2[0][0].setConquered();
-        d3.dig(0, 0);
         d3.dig(0, 1);
-        d3.dig(1, 1);
+        d3.dig(0, 2);
+        d3.dig(0, 3);
     }
     /*after all data
                Evil   Gold  Food  Monster  Room  ConquredTiles  Tiles  ImprisonedAdv  Imps  Score
@@ -97,6 +89,11 @@ class EndPhaseTest {
           p3    3      8     6      0       0       0            3        0             3    9
     */
 
+
+    @AfterEach
+    public void closeServerConnection() {
+        gd.getServerConnection().close();
+    }
 
     @Test
     void testSetTunnelTitles() {
@@ -122,8 +119,8 @@ class EndPhaseTest {
     @Test
     void testSetBattelLordTitles() {
         resetData();
-        gep.setHallsTitles();
-        assertEquals(Title.THE_BATTLELORD, p1.getTitles().get(0));
+        gep.setBattleLordTitles();
+        assertEquals(Title.THE_BATTLELORD, p3.getTitles().get(0));
     }
 
     @Test
@@ -145,23 +142,5 @@ class EndPhaseTest {
         resetData();
         gep.setHallsTitles();
         assertEquals(Title.THE_LORD_OF_HALLS, p2.getTitles().get(0));
-    }
-
-    // commented out because used methods are missing in GameData
-    /*
-    @Test
-    void testwinner() {
-        resetData();
-        gep.evaluateScores();
-        assertEquals(3, gep.getWinnerPlayerIdList().get(0));
-
-        gep.evaluateScoresNoTitle();
-        assertEquals(3, gep.getWinnerPlayerIDList().get(0));
-
-    }
-    */
-
-    private Path readFile(final String fileName) {
-        return Path.of(Objects.requireNonNull(getClass().getResource(fileName)).getPath());
     }
 }

@@ -33,6 +33,7 @@ public class Dungeon {
     public Dungeon(final int restingImps, final int gridSideLength) {
         this.restingImps = restingImps;
         this.grid = new Tile[gridSideLength][gridSideLength];
+        this.grid[0][0] = new Tile();
     }
 
     public List<Room> getRooms() {
@@ -149,6 +150,10 @@ public class Dungeon {
 
     /**
      * checks if a tile can be dug at the given coordinates
+     *
+     * @param x row
+     * @param y column
+     * @return if you can dig here
      */
     private boolean canDig(final int x, final int y) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
@@ -167,6 +172,8 @@ public class Dungeon {
     /**
      * tries to dig a tile at a given location
      *
+     * @param x row
+     * @param y column
      * @return success
      */
     public boolean dig(final int x, final int y) {
@@ -193,11 +200,23 @@ public class Dungeon {
 
 
     public boolean isTileConquered(final Coordinate xy) {
-        return grid[xy.getxpos()][xy.getypos()].isConquered();
+        final int x = xy.getxpos();
+        final int y = xy.getypos();
+        if (grid[x][y] != null) {
+            return grid[xy.getxpos()][xy.getypos()].isConquered();
+        } else {
+            return false;
+        }
     }
 
     public boolean hasTileRoom(final Coordinate xy) {
-        return grid[xy.getxpos()][xy.getypos()].hasRoom();
+        final int x = xy.getxpos();
+        final int y = xy.getypos();
+        if (grid[x][y] != null) {
+            return grid[xy.getxpos()][xy.getypos()].hasRoom();
+        } else {
+            return false;
+        }
     }
 
 

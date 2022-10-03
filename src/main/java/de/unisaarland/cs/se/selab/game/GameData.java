@@ -14,17 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-/*
-class NoSuchCommIDException extends Exception {
-    public NoSuchCommIDException() {
-    }
-}
-
-class NoSuchplayerIdException extends Exception {
-    public NoSuchplayerIdException() {
-    }
-}
-*/
 
 public class GameData {
 
@@ -208,8 +197,7 @@ public class GameData {
     }
 
     public int getNumCurrPlayers() {
-        //TODO: returns the number of currently registered players.
-        return 1;
+        return getAllPlayerID().size();
     }
 
     public void discardMonster() { // removes all monsters from currMonsters list.

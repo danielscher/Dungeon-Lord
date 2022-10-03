@@ -62,13 +62,13 @@ class PlayerTest {
         assertTrue(testDummy.changeEvilnessBy(-2));
         assertFalse(testDummy.changeEvilnessBy(11));
         testDummy.changeEvilnessBy(5);
-        assertEquals(10, testDummy.getEvilLevel());
+        assertEquals(11, testDummy.getEvilLevel());
     }
 
     @Test
     void changeGoldBy() {
         assertTrue(testDummy.changeGoldBy(1));
-        assertFalse(testDummy.changeGoldBy(-1));
+        assertTrue(testDummy.changeGoldBy(-1));
         testDummy.changeGoldBy(1);
         assertEquals(1, testDummy.getGold());
     }
@@ -76,7 +76,7 @@ class PlayerTest {
     @Test
     void changeFoodBy() {
         assertTrue(testDummy.changeFoodBy(1));
-        assertFalse(testDummy.changeFoodBy(-1));
+        assertTrue(testDummy.changeFoodBy(-1));
         testDummy.changeFoodBy(1);
         assertEquals(1, testDummy.getFood());
     }

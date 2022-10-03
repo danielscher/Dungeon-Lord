@@ -14,8 +14,10 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.logging.Logger;
 import org.json.JSONArray;
@@ -43,8 +45,15 @@ public class Config {
 
     final Logger log = Logger.getLogger(Config.class.getName());
 
+    private Random random;
+
+
     public void setConfigFilePath(final String s) {
         this.configFilePath = s;
+    }
+
+    public void setRandom(final Random x) {
+        this.random = x;
     }
 
     public void displayLog() {
@@ -62,50 +71,32 @@ public class Config {
         log.fine("number of adventurers =" + adventurers.size() + "/n");
         log.fine("number of monsters =" + monsters.size() + "/n");
         log.fine("invalid information in =" + parserResult + "/n");
-        /*
-        System.out.println("Help and Log: " + "/n");
-        System.out.println("error in Monsters: -1,10,11,12 " + "/n");
-        System.out.println("error in Adventurers: -2,20,21,22 " + "/n");
-        System.out.println("error in Traps: -3,30,31,32 " + "/n");
-        System.out.println("error in Rooms: -4,40,41,42 " + "/n");
-        System.out.println("error in general information: -5,-6 " + "/n");
-        System.out.println("maxYear =" + maxYear + "/n");
-        System.out.println("maxPlayer =" + maxPlayer + "/n");
-        System.out.println("number of rooms =" + rooms.size() + "/n");
-        System.out.println("number of traps =" + traps.size() + "/n");
-        System.out.println("number of adventurers =" + adventurers.size() + "/n");
-        System.out.println("number of monsters =" + monsters.size() + "/n");
-        System.out.println("invalid information in =" + parserResult + "/n");
-        */
-
     }
 
     public Attack convertStringToAttack(final String s) {
-        //   Attack attackStrategy = Attack.valueOf(s);
         return Attack.valueOf(s);
     }
 
     public Location convertStringToLocation(final String s) {
-        //    Location loc = Location.valueOf(s);
         return Location.valueOf(s);
     }
 
-    public void parse(final String configFilePath) throws FileNotFoundException {
-        this.parseFromFile(configFilePath);
+    public void parse(final String configFilePath, final Random r) throws FileNotFoundException {
+        parseFromFile(configFilePath);
+        setRandom(r);
         parserAndCheckMonsterToList(obj);
         parserAndCheckAdventurerToList(obj);
         parserAndCheckTrapToList(obj);
         parserAndCheckRoomToList(obj);
         checkGeneralInfoValid();
         checkUniqueId();
+        shuffle();
         displayLog();
     }
 
     public void parseFromFile(final String configFilePath) throws FileNotFoundException {
         parserResult = ParserMessage.DEFAULT;
         final StringBuilder builder = new StringBuilder();
-        //    try (BufferedReader br = new BufferedReader(new FileReader(configFilePath))) {
-
         try (BufferedReader br = Files.newBufferedReader(Paths.get(configFilePath),
                 StandardCharsets.UTF_8)) {
             String s;
@@ -119,7 +110,6 @@ public class Config {
 
         }
         final String allJSONdata = builder.toString();
-        //  System.out.println(allJSONdata);
         obj = new JSONObject(allJSONdata);
 
         maxYear = obj.getInt("years");
@@ -144,12 +134,10 @@ public class Config {
 
             int hunger;
             try {
-                //  String hungerValString = monsterObj.getString("hunger");
-                //  hunger = Integer.valueOf(hungerValString); //(Integer) monsterObj.get("hunger");
                 hunger = monsterObj.getInt("hunger");
             } catch (JSONException e) {
                 hunger = 0;
-                //    System.out.println("this monster does not have hunger"); do nothing
+                // do nothing
             }
 
             int evilness;
@@ -157,10 +145,9 @@ public class Config {
                 evilness = monsterObj.getInt("evilness");
             } catch (JSONException e) {
                 evilness = 0;
-                //    System.out.println("this monster does not have evilness"); do nothing
+                // do nothing
             }
 
-            //  int evilness = (Integer) monsterObj.get("evilness");
             final int damage = monsterObj.getInt("damage");
             final String attackStrategyString = (String) monsterObj.get("attackStrategy");
 
@@ -178,7 +165,7 @@ public class Config {
             // valid damage, attack not set
             final Monster currMonster = new Monster(id, hunger, evilness, damage, attackStrategy);
             monsters.add(currMonster);
-        } //end of monster for loop+ add to list
+        } // end of monster for loop+ add to list
         // return parserResult;
     }
 
@@ -192,22 +179,19 @@ public class Config {
         for (int i = 0; i < advArrLen; i++) {
             final JSONObject adventurerObj = adventurerArray.getJSONObject(i);
             final int id = adventurerObj.getInt("id");
-            //  String name = (String) adventurerObj.get("name");
-            //  int healValue = (Integer) adventurerObj.get("healValue");
             int healValue;
             try {
                 healValue = adventurerObj.getInt("healValue");
             } catch (JSONException e) {
                 healValue = 0;
-                //    System.out.println("not a priest");
+                //  not a priest
             }
 
-            //  int defuseValue = (Integer) adventurerObj.get("defuseValue");
             int defuseValue;
             try {
                 defuseValue = adventurerObj.getInt("defuseValue");
             } catch (JSONException e) {
-                //    System.out.println("not a thief");
+                //    not a thief
                 defuseValue = 0;
             }
 
@@ -216,7 +200,7 @@ public class Config {
             try {
                 charge = adventurerObj.getBoolean("charge");
             } catch (JSONException e) {
-                //    System.out.println("not in charge");
+                //   not in charge
                 charge = false;
             }
 
@@ -252,19 +236,13 @@ public class Config {
         for (int i = 0; i < trpArrLen; i++) {
             final JSONObject trapObj = trapArray.getJSONObject(i);
             final int id = trapObj.getInt("id");
-            //  String name = (String) trapObj.get("name");
             final int damage = trapObj.getInt("damage");
-            //  Attack attackStrategy = (Attack) trapObj.get("attackStrategy");
             final String attackStrategyString = (String) trapObj.get("attackStrategy");
             final Attack attackStrategy = convertStringToAttack(attackStrategyString);
 
-            //    int target = (Integer) trapObj.get("target");
             int target;
             try {
-                //    String targetValString = trapObj.getString("target");
-                //    target = Integer.valueOf(targetValString);
                 target = trapObj.getInt("target");
-                //    System.out.println("traget string and value?"+target);
             } catch (JSONException e) {
                 target = 0;
             }
@@ -281,7 +259,7 @@ public class Config {
             //target traps should have 1,2,3 as goals.
             final Trap currTrap = new Trap(id, damage, target, attackStrategy);
             traps.add(currTrap);
-        } // end of traps forloop
+        } // end of traps for loop
         // return parserResult;
     }
 
@@ -294,40 +272,34 @@ public class Config {
         rooms = new ArrayList<>();
         for (int i = 0; i < roomArrLen; i++) {
             final JSONObject roomObj = roomArray.getJSONObject(i);
-            //    String name = (String) roomObj.get("name");
-            //  int foodProduction = (Integer) roomObj.get("food");
             int foodProduction;
             try {
                 foodProduction = roomObj.getInt("food");
             } catch (JSONException e) {
-                //    System.out.println("not produce food");
+                //    not produce food
                 foodProduction = 0;
             }
-
-            //    int goldProduction = (Integer) roomObj.get("gold");
             int goldProduction;
             try {
 
                 goldProduction = roomObj.getInt("gold");
             } catch (JSONException e) {
-                //    System.out.println("not produce gold");
+                //   not produce gold
                 goldProduction = 0;
             }
-            //    int impProduction = (Integer) roomObj.get("imps");
             int impProduction;
             try {
                 impProduction = roomObj.getInt("imps");
             } catch (JSONException e) {
-                //    System.out.println("not produce imps");
+                //    not produce imps
                 impProduction = 0;
             }
-            //    int niceness = (Integer) roomObj.get("niceness");
             int niceness;
             try {
 
                 niceness = roomObj.getInt("niceness");
             } catch (JSONException e) {
-                //    System.out.println("no niceness");
+                //    no niceness
                 niceness = 0;
             }
             final int id = (Integer) roomObj.get("id");
@@ -337,14 +309,12 @@ public class Config {
                 break;
             }
             final int activationCost = (Integer) roomObj.get("activation");
-            //    Location placementLoc = (Location) roomObj.get("restriction");
             final String locationString = (String) roomObj.get("restriction");
             final Location placementLoc = convertStringToLocation(locationString);
             final Room currRoom = new Room(id, activationCost, foodProduction, goldProduction,
                     impProduction, niceness, placementLoc);
             rooms.add(currRoom);
         } // end of rooms
-
         // return parserResult;
     }
 
@@ -400,6 +370,7 @@ public class Config {
             parserResult = ParserMessage.IDDUPLICATIONMONSTER;
             return;
         }
+
         final Set<Integer> adventurerIds = new HashSet<>(
                 adventurers.size());
         for (final Adventurer a : adventurers) {
@@ -435,7 +406,10 @@ public class Config {
 
 
     public void shuffle() {
-        // TODO
+        Collections.shuffle(monsters, random);
+        Collections.shuffle(adventurers, random);
+        Collections.shuffle(traps, random);
+        Collections.shuffle(rooms, random);
     }
 
     public ParserMessage getParserResult() {
@@ -502,7 +476,6 @@ public class Config {
     }
 
     // get general information from Config files
-
     public int getMaxPlayers() {
         return maxPlayer;
     }
