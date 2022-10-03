@@ -208,6 +208,10 @@ public class Player {
         this.points = points;
     }
 
+    public void changePointsBy(final int amount) {
+        points += amount;
+    }
+
     public void addTitle(final Title title) {
         titles.add(title);
     }
