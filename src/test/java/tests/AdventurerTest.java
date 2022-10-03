@@ -17,13 +17,13 @@ class AdventurerTest {
 
     @Test
     void testDamageHealthByLethalDamage() {
-        assertEquals(0, a1.damagehealthby(3));
+        assertEquals(1, a1.damagehealthby(3));
         assertEquals(0, a1.getHealthPoints());
     }
 
     @Test
     void testDamageHealthByNonLethalDamage() {
-        assertEquals(1, a1.damagehealthby(1));
+        assertEquals(-1, a1.damagehealthby(1));
         assertEquals(1, a1.getHealthPoints());
     }
 
