@@ -6,18 +6,28 @@ import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.util.Location;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
+import org.everit.json.schema.Schema;
+import org.everit.json.schema.ValidationException;
+import org.everit.json.schema.loader.SchemaClient;
+import org.everit.json.schema.loader.SchemaLoader;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.slf4j.LoggerFactory;
 
 /**
  * GENERAL EXPLANATION: after creating an instance of this class, the method parse() is to be
@@ -77,6 +87,13 @@ public class AltConfig {
         try {
             jsonObject = new JSONObject(fileContent);
         } catch (JSONException e) {
+            return false;
+        }
+
+        // copied from the forum
+        try {
+            getSchema(AltConfig.class, "main.schema").validate(jsonObject);
+        } catch (ValidationException e) {
             return false;
         }
 
@@ -652,5 +669,34 @@ public class AltConfig {
         Collections.shuffle(monsters, random);
         Collections.shuffle(traps, random);
         Collections.shuffle(rooms, random);
+    }
+
+    /**
+     * method provided in the forum
+     */
+    static Schema getSchema(final Class<?> subclass, final String name) {
+        return SchemaLoader.builder()
+                .schemaClient(SchemaClient.classPathAwareClient()).schemaJson(new JSONObject(
+                        Objects.requireNonNull(
+                                loadResource(subclass, "schema/" + name))))
+                .resolutionScope("classpath://schema/").build().load().build();
+    }
+
+    /**
+     * method provided in the forum
+     */
+    public static String loadResource(final Class<?> subclass, final String name) {
+        LoggerFactory.getLogger(subclass)
+                .trace("loading {}", subclass.getClassLoader().getResource(name));
+        try (final var input = new InputStreamReader(
+                Objects.requireNonNull(subclass.getClassLoader().getResourceAsStream(name)),
+                StandardCharsets.UTF_8)) {
+            try (final BufferedReader reader = new BufferedReader(input)) {
+                return reader.lines().collect(Collectors.joining("\n"));
+            }
+        } catch (final IOException e) {
+            LoggerFactory.getLogger(subclass).error("{}", e.getMessage(), e);
+            return null;
+        }
     }
 }
