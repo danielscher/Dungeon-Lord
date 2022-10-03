@@ -16,7 +16,7 @@ public class Player {
     private final int commID;
     private final Dungeon dungeon;
     private BidType[] currBids = new BidType[3];
-    private BidType[] blockedBids = new BidType[3];
+    private BidType[] blockedBids = new BidType[2];
     private final List<Title> titles = new ArrayList<>();
     private int points;
     private int evilLevel;
@@ -133,7 +133,7 @@ public class Player {
     public boolean changeEvilnessBy(final int amount) {
         if (amount > 0) {
             // if evilness increases, check if it exceeds bounds
-            if (evilLevel + amount > 15) {
+            if (evilLevel + amount <= 15) {
                 evilLevel += amount;
                 return true;
             } else {
