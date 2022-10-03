@@ -327,7 +327,7 @@ public class CombatPhase extends Phase {
         final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
                 .get(monster));
         if (adTargeted != null) {
-            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
+            if (adTargeted.damagehealthby(monster.getDamage()) == 0) {
                 dungeon.imprison(adTargeted.getAdventurerID());
                 broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
 
@@ -340,7 +340,7 @@ public class CombatPhase extends Phase {
 
     private void calcMonsterBasicDamage(final Monster monster) {
         if (dungeon.getAdventurer(0) != null) {
-            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
+            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) == 0) {
                 dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
                 broadcastAdventurerImprisoned(
                         dungeon.getAdventurer(0).getAdventurerID());
