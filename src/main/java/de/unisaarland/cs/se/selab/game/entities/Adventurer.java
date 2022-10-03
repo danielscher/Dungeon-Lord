@@ -56,7 +56,7 @@ public class Adventurer {
      */
     public int damagehealthby(final int damage) {
         if (healthPoints <= damage) {
-            int restDamage = damage - healthPoints;
+            final int restDamage = damage - healthPoints;
             healthPoints = 0;
             return restDamage;
 

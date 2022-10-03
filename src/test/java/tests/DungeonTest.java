@@ -24,7 +24,6 @@ class DungeonTest {
     private final Tile[][] grid = new Tile[15][15];
     Monster m1 = new Monster(1, 1, 1, 1, Attack.BASIC);
     Trap t1 = new Trap(1, 1, 1, Attack.BASIC);
-    Room r1 = new Room(1, 4, 1, 1, 1, 1, LOWER_HALF);
     Room r2 = new Room(2, 4, 1, 1, 1, 1, UPPER_HALF);
 
     Adventurer ad1 = new Adventurer(1, 1, 1, 2, 0, false);
@@ -92,8 +91,8 @@ class DungeonTest {
         resetDungeon();
         fillFirstRow(grid);
         dg.setGrid(grid);
-        assertTrue(dg.placeRoom(0, 2, r1));
-        assertFalse(dg.placeRoom(0, 0, r1));
+        assertTrue(dg.placeRoom(0, 2, r2));
+        assertFalse(dg.placeRoom(0, 0, r2));
     }
 
     @Test
