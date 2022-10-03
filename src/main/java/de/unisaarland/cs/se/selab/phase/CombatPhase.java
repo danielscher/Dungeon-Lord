@@ -90,27 +90,35 @@ public class CombatPhase extends Phase {
     public void exec(final TrapAction ta) {
         // check if action is of the expected commID.
         if (ta.getCommID() != currPlayingPlayer.getCommID()) {
-            gd.getServerConnection()
-                    .sendActionFailed(ta.getCommID(), "CommId of the current player didn't match");
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ta.getCommID(),
+                        "CommId of the current player didn't match");
+            }
+            return;
         }
 
         // check whether trap is already placed
         if (placedTrap != null) {
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(ta.getCommID(), "Trap has been already placed");
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ta.getCommID(), "Trap has been already placed");
             }
+            return;
         }
 
         // check if the trap exists in the Dungeon.
         if (dungeon.getTrapByID(ta.getTrapID()) == null) {
-            gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                    "No available trap for the requested id");
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ta.getCommID(), "No available trap for the requested id");
+            }
+            return;
         }
 
         // check if the trap is available this year.
         if (!dungeon.getTrapByID(ta.getTrapID()).isAvailableThisYear()) {
-            gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                    "Trap is not available this year");
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.sendActionFailed(ta.getCommID(), "Trap is not available this year");
+            }
+            return;
         }
 
         // placing a trap in a room always costs one coin of gold (cost = 1 gold.)
@@ -118,8 +126,11 @@ public class CombatPhase extends Phase {
 
             // check if player can afford placing a trap in a room.
             if (!currPlayingPlayer.changeGoldBy(-1)) {
-                gd.getServerConnection().sendActionFailed(ta.getCommID(),
-                        "player cannot afford one gold to place trap in the room");
+                try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                    sc.sendActionFailed(ta.getCommID(),
+                            "player cannot afford one gold to place trap in the room");
+                }
+                return;
             }
 
             // broadcasts gold change.
@@ -287,6 +298,9 @@ public class CombatPhase extends Phase {
     }
 
     private void healAdventurers() {
+        if (dungeon.getNumAdventurersInQueue() == 0) {
+            return;
+        }
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             if (dungeon.getAdventurer(i).getHealValue() > 0) {
                 int res = dungeon.getAdventurer(i).getHealValue();
@@ -327,7 +341,7 @@ public class CombatPhase extends Phase {
         final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
                 .get(monster));
         if (adTargeted != null) {
-            if (adTargeted.damagehealthby(monster.getDamage()) == 0) {
+            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
                 dungeon.imprison(adTargeted.getAdventurerID());
                 broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
 
@@ -340,7 +354,7 @@ public class CombatPhase extends Phase {
 
     private void calcMonsterBasicDamage(final Monster monster) {
         if (dungeon.getAdventurer(0) != null) {
-            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) == 0) {
+            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
                 dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
                 broadcastAdventurerImprisoned(
                         dungeon.getAdventurer(0).getAdventurerID());

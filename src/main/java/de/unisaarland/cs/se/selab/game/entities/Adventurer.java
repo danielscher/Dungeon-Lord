@@ -50,14 +50,23 @@ public class Adventurer {
         return charge;
     }
 
+    /*
+     *this method damage the adventurer and return the rest damage.
+     *it returns -1 when there is no rest damage that can be applied to next adventurers
+     */
     public int damagehealthby(final int damage) {
         if (healthPoints <= damage) {
+            int restDamage = damage - healthPoints;
             healthPoints = 0;
+            return restDamage;
+
 
         } else {
             healthPoints = healthPoints - damage;
+            return -1;
+
         }
-        return (healthPoints);
+
     }
 
     /*
