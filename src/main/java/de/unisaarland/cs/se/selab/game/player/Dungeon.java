@@ -33,6 +33,7 @@ public class Dungeon {
     public Dungeon(final int restingImps, final int gridSideLength) {
         this.restingImps = restingImps;
         this.grid = new Tile[gridSideLength][gridSideLength];
+        this.grid[0][0] = new Tile();
     }
 
     public List<Room> getRooms() {
