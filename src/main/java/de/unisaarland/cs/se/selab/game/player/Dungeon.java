@@ -150,6 +150,10 @@ public class Dungeon {
 
     /**
      * checks if a tile can be dug at the given coordinates
+     *
+     * @param x row
+     * @param y column
+     * @return if you can dig here
      */
     private boolean canDig(final int x, final int y) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[0].length) {
@@ -168,6 +172,8 @@ public class Dungeon {
     /**
      * tries to dig a tile at a given location
      *
+     * @param x row
+     * @param y column
      * @return success
      */
     public boolean dig(final int x, final int y) {
