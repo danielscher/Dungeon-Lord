@@ -15,6 +15,7 @@ class AdventurerTest {
         a1 = new Adventurer(1, 1, 2, 1, 1, true);
     }
 
+
     @Test
     void testDamageHealthByLethalDamage() {
         assertEquals(1, a1.damagehealthby(3));
