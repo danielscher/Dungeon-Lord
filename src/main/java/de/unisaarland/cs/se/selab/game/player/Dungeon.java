@@ -193,11 +193,23 @@ public class Dungeon {
 
 
     public boolean isTileConquered(final Coordinate xy) {
-        return grid[xy.getxpos()][xy.getypos()].isConquered();
+        final int x = xy.getxpos();
+        final int y = xy.getypos();
+        if (grid[x][y] != null) {
+            return grid[xy.getxpos()][xy.getypos()].isConquered();
+        } else {
+            return false;
+        }
     }
 
     public boolean hasTileRoom(final Coordinate xy) {
-        return grid[xy.getxpos()][xy.getypos()].hasRoom();
+        final int x = xy.getxpos();
+        final int y = xy.getypos();
+        if (grid[x][y] != null) {
+            return grid[xy.getxpos()][xy.getypos()].hasRoom();
+        } else {
+            return false;
+        }
     }
 
 
