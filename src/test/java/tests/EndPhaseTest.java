@@ -50,7 +50,7 @@ class EndPhaseTest {
         p2 = gd.getPlayerByCommID(2);
         p3 = gd.getPlayerByCommID(3);
         //set data of p1
-        p1.changeEvilnessBy(11);
+        p1.changeEvilnessBy(8);
         p1.changeGoldBy(3);
         p1.changeFoodBy(3);
         //set data of p2
