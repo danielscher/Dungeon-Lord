@@ -55,6 +55,7 @@ public class RegPhase extends Phase {
             final boolean res = gd.registerPlayer(ra.getName(), ra.getCommID());
             if (!res) {
                 gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
+                gd.getServerConnection().sendActionFailed(ra.getCommID(), "already registered!");
             }
             final String configString = gd.getConfigString();
             gd.getServerConnection().sendConfig(ra.getCommID(), configString);
@@ -63,6 +64,10 @@ public class RegPhase extends Phase {
 
     @Override
     public void exec(final StartGameAction sga) {
-        this.isStarted = true;
+        if (this.isStarted) {
+            gd.getServerConnection().sendActionFailed(sga.getCommID(), "already started!");
+        } else {
+            this.isStarted = true;
+        }
     }
 }
