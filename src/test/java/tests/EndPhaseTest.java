@@ -2,11 +2,8 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.action.Action;
-import de.unisaarland.cs.se.selab.game.action.ActionFactoryImplementation;
 import de.unisaarland.cs.se.selab.game.entities.Attack;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
@@ -16,7 +13,6 @@ import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
 import java.nio.file.Path;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 class EndPhaseTest {
