@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
+import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.List;
 
@@ -28,7 +29,9 @@ public class CollectAndPlaceBidPhase extends Phase {
 
         gd.drawEntities();
         if (!gd.getCurrAvailableAdventurers().isEmpty()) {
-            broadcastAdventurerDrawn(gd.getCurrAvailableAdventurers().size());
+            for (final Adventurer adventurer : gd.getCurrAvailableAdventurers()) {
+                broadcastAdventurerDrawn(adventurer.getAdventurerID());
+            }
         }
         broadcastMonsterDrawn(3);
         broadcastRoomDrawn(2);
