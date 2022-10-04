@@ -85,8 +85,7 @@ public class EvalRoomPhase extends Phase {
             try (ServerConnection<Action> sc = gd.getServerConnection()) {
                 sc.nextAction().invoke(this);
             } catch (TimeoutException e) {
-                kickPlayer(player.getPlayerID()); /* TODO lookup in spec if this is
-                            right */
+                kickPlayer(player.getPlayerID());
             }
         }
     }
@@ -229,12 +228,6 @@ public class EvalRoomPhase extends Phase {
 
     public void spreadAdv() {
         final List<Player> playersSortByEvilness = gd.getAllPlayerSortedByID();
-
-        /*Collections.sort(playersSortByEvilness, new Comparator<Player>() {
-            public int compare(Player p1, Player p2) {
-                return p1.getEvilLevel() - p2.getEvilLevel();
-            }
-        });*/
 
         playersSortByEvilness.sort(
                 Comparator.comparing(Player::getEvilLevel).thenComparing(Player::getPlayerID));
