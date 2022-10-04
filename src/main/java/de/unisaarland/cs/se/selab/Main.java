@@ -21,6 +21,9 @@ public class Main {
     private static int timeout = 5000;
 
     private static boolean parseCommandLineArgs(final String[] args) throws ParseException {
+        if (args.length != 8) {
+            throw new UnsupportedOperationException();
+        }
         final Options options = new Options();
         options.addOption("c", "config", true, "config path");
         options.addOption("p", "port", true, "port for the server connection");
@@ -29,9 +32,7 @@ public class Main {
 
         final CommandLineParser clParser = new DefaultParser();
         final CommandLine cmd = clParser.parse(options, args);
-        if (args.length != 8) {
-            throw new UnsupportedOperationException();
-        }
+
         if (cmd.hasOption("config")) {
             path = cmd.getOptionValue("config");
         }
