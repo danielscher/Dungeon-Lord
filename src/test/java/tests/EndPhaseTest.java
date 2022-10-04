@@ -1,6 +1,8 @@
 package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
@@ -12,6 +14,8 @@ import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
 import de.unisaarland.cs.se.selab.game.util.Title;
 import de.unisaarland.cs.se.selab.phase.GameEndPhase;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
@@ -34,8 +38,20 @@ class EndPhaseTest {
 
 
     private void resetData() {
-        final Path configPath = Path.of("src\\main\\resources\\configuration.json");
+        URI fileIdentifier;
+        try {
+            fileIdentifier = getClass().getClassLoader().getResource("configuration.json")
+                    .toURI();
+        } catch (URISyntaxException e) {
+            assertNull(e,
+                    "the exception isn't really supposed to be null,"
+                            + " but it should also not be thrown here");
+            return;
+        }
+
+        final Path configPath = Path.of(fileIdentifier);
         final AltConfig altConfig = new AltConfig(configPath, 123);
+        assertTrue(altConfig.parse(), "parsing the config failed");
         gd = new GameData(altConfig,
                 null);
         gep = new GameEndPhase(gd);
