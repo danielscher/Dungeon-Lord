@@ -48,6 +48,9 @@ public class CollectAndPlaceBidPhase extends Phase {
             broadcastNextYear(gd.getTime().getYear());
         }
         broadcastNextRound(gd.getTime().getSeason());
+        if (gd.getTime().getSeason() > 1) {
+            gd.setFirstBidder();
+        }
 
         gd.drawEntities();
 
@@ -142,7 +145,7 @@ public class CollectAndPlaceBidPhase extends Phase {
                 broadcastBidPlaced(bid, p.getPlayerID(), priority + 1);
             }
         }
-        gd.setFirstBidder();
+        // REMOVED the setFirstBidder method from here. only set when we're in the next season.
     }
 }
 
