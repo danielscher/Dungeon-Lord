@@ -49,8 +49,8 @@ class PlayerTest {
 
     @Test
     void testgetBid() {
-        testDummy.addBid(BidType.FOOD, 0);
-        testDummy.addBid(BidType.GOLD, 1);
+        testDummy.addBid(BidType.FOOD, 1);
+        testDummy.addBid(BidType.GOLD, 2);
         assertEquals(BidType.FOOD, testDummy.getBid(0));
         assertEquals(BidType.GOLD, testDummy.getBid(1));
         assertEquals(null, testDummy.getBid(3));
@@ -84,8 +84,8 @@ class PlayerTest {
     @Test
     void testGetNumPlacedBids() {
         assertEquals(0, testDummy.getNumPlacedBids());
-        testDummy.addBid(BidType.FOOD, 0);
-        testDummy.addBid(BidType.GOLD, 1);
+        testDummy.addBid(BidType.FOOD, 1);
+        testDummy.addBid(BidType.GOLD, 2);
         assertEquals(2, testDummy.getNumPlacedBids());
     }
 
