@@ -41,7 +41,7 @@ class EndPhaseTest {
         final Path configPath = Path.of("src\\main\\resources\\configuration.json");
         final AltConfig altConfig = new AltConfig(configPath, 123);
         gd = new GameData(altConfig,
-                new ServerConnection<Action>(8080, 5000, new ActionFactoryImplementation()));
+                null);
         gep = new GameEndPhase(gd);
         gd.registerPlayer("player1", 1);
         gd.registerPlayer("player2", 2);
@@ -90,10 +90,6 @@ class EndPhaseTest {
     */
 
 
-    @AfterEach
-    public void closeServerConnection() {
-        gd.getServerConnection().close();
-    }
 
     @Test
     void testSetTunnelTitles() {
