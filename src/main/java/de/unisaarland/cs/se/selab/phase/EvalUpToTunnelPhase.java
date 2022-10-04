@@ -41,15 +41,15 @@ public class EvalUpToTunnelPhase extends Phase {
      */
     private void eval() {
         final BiddingSquare biddingSquare = gd.getBiddingSquare();
-        for (int i = 0; i < 3; i++) {
+        for (int column = 0; column < 3; column++) {
             // for BidTypes from FOOD to TUNNEL
-            for (int j = 0; j < 3; j++) {
+            for (int slot = 0; slot < 3; slot++) {
                 // for slots 1 to 3 (0 to 2)
-                if (biddingSquare.getIDByBidSlot(i, j) != -1) {
+                if (biddingSquare.getIDByBidSlot(slot, column) != -1) {
                     // if there is a valid player id in the square
                     final Player player = gd.getPlayerByPlayerId(
-                            biddingSquare.getIDByBidSlot(i, j));
-                    grant(player, i, j);
+                            biddingSquare.getIDByBidSlot(slot, column));
+                    grant(player, column, slot);
                 }
             }
         }

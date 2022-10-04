@@ -54,6 +54,13 @@ public class BiddingSquare {
         return -1;
     }
 
+    /**
+     * this method return the entry of the bidding square of a given location
+     *
+     * @param row slot/row on the square
+     * @param column column/BidType or category
+     * @return the number that is contained in this slot
+     */
     public int getIDByBidSlot(final int row, final int column) {
         return biddingSlots[row][column];
     }

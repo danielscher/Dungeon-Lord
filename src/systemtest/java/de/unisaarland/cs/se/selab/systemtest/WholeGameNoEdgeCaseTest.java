@@ -123,13 +123,28 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         bidPlacedAsserter(BidType.IMPS, 3, 3);
 
         goldChangedAsserter(-1, 0);
+        foodChangedAsserter(2, 0);
+        evilnessChangedAsserter(1, 1);
+        foodChangedAsserter(3, 1);
+        evilnessChangedAsserter(2, 2);
+        foodChangedAsserter(3, 2);
+        goldChangedAsserter(1, 2);
 
         // assert next year, next round , draw monster, etc..
         // can ignore
         this.sendLeave(0);
+        assertLeft(0, 0); // this line makes the debugger stay alive
         this.sendLeave(1);
         this.sendLeave(2);
         this.sendLeave(3);
+    }
+
+    private void foodChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+        assertFoodChanged(0, amount, playerId);
+        assertFoodChanged(1, amount, playerId);
+        assertFoodChanged(2, amount, playerId);
+        assertFoodChanged(3, amount, playerId);
+
     }
 
     private void regPhaseAssertions(final String config) throws TimeoutException {
@@ -199,5 +214,13 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         assertGoldChanged(1, amount, playerId);
         assertGoldChanged(2, amount, playerId);
         assertGoldChanged(3, amount, playerId);
+    }
+
+    private void evilnessChangedAsserter(final int amount, final int palyerId)
+            throws TimeoutException {
+        assertEvilnessChanged(0, amount, palyerId);
+        assertEvilnessChanged(1, amount, palyerId);
+        assertEvilnessChanged(2, amount, palyerId);
+        assertEvilnessChanged(3, amount, palyerId);
     }
 }
