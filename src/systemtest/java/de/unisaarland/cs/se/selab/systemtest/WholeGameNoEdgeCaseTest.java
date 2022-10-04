@@ -112,6 +112,15 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         bidPlacedAsserter(BidType.FOOD, 2, 1);
         bidPlacedAsserter(BidType.FOOD, 3, 1);
 
+        bidPlacedAsserter(BidType.NICENESS, 0, 2);
+        bidPlacedAsserter(BidType.NICENESS, 1, 2);
+        bidPlacedAsserter(BidType.NICENESS, 2, 2);
+        bidPlacedAsserter(BidType.NICENESS, 3, 2);
+
+        bidPlacedAsserter(BidType.IMPS, 0, 3);
+        bidPlacedAsserter(BidType.IMPS, 1, 3);
+        bidPlacedAsserter(BidType.IMPS, 2, 3);
+        bidPlacedAsserter(BidType.IMPS, 3, 3);
 
         // assert next year, next round , draw monster, etc..
         // can ignore
