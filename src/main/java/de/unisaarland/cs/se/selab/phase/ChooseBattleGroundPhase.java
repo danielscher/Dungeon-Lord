@@ -12,6 +12,7 @@ import java.util.List;
 public class ChooseBattleGroundPhase extends Phase {
 
     private final Player currPlayer;
+    private boolean battleGroundChosen;
 
     public ChooseBattleGroundPhase(final GameData gd, final Player currPlayer) {
         super(gd);
@@ -32,21 +33,25 @@ public class ChooseBattleGroundPhase extends Phase {
         gd.getServerConnection().sendActNow(
                 currPlayer.getCommID()); //send individual event "ActNow"
 
-        try (ServerConnection<Action> sc = gd.getServerConnection()) {
-            final Action action = sc.nextAction();
-            if (action.getCommID() == currPlayer.getCommID()) { // FIXME move if to exec(...)
-                action.invoke(this);
+        if (!battleGroundChosen) {
+            //loop ask for the next action until get the bga from the current player
+            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+                sc.nextAction().invoke(this);
+            } catch (TimeoutException e) {
+                kickPlayer(currPlayer.getPlayerID());
             }
-        } catch (TimeoutException e) {
-            kickPlayer(currPlayer.getPlayerID());
         }
-
-        // FIXME this code doesn't check if it received the correct type of action
         return new CombatPhase(gd, currPlayer);
     }
 
     @Override
     public void exec(final BattleGroundAction bga) {
+
+        if (bga.getCommID() != currPlayer.getCommID()) {
+            gd.getServerConnection().sendActionFailed(bga.getCommID(),
+                    "It's not your turn to choose a battle ground yet");
+            return;
+        }
         final List<Coordinate> possibleCoords = currPlayer.getDungeon().getPossibleBattleCoords();
         final Coordinate chosenCoords = new Coordinate(bga.getRow(), bga.getCol());
         if (!possibleCoords.contains(
@@ -57,5 +62,6 @@ public class ChooseBattleGroundPhase extends Phase {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
             broadcastBattleGroundSet(currPlayer.getPlayerID(), bga.getRow(), bga.getCol());
         }
+        battleGroundChosen = true;
     }
 }
