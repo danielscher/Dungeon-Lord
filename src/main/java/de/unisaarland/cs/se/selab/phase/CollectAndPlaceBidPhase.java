@@ -9,6 +9,8 @@ import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
+import de.unisaarland.cs.se.selab.game.entities.Monster;
+import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.List;
 
@@ -20,6 +22,26 @@ public class CollectAndPlaceBidPhase extends Phase {
         super(gd);
     }
 
+    private void broadcastAdventurersMonstersAndRooms() {
+        if (!gd.getCurrAvailableAdventurers().isEmpty()) {
+            for (final Adventurer adventurer : gd.getCurrAvailableAdventurers()) {
+                broadcastAdventurerDrawn(adventurer.getAdventurerID());
+            }
+        }
+
+        if (!gd.getCurrAvailableMonsters().isEmpty()) {
+            for (final Monster monster : gd.getCurrAvailableMonsters()) {
+                broadcastMonsterDrawn(monster.getMonsterID());
+            }
+        }
+
+        if (!gd.getCurrAvailableRooms().isEmpty()) {
+            for (final Room room : gd.getCurrAvailableRooms()) {
+                broadcastRoomDrawn(room.getRoomID());
+            }
+        }
+    }
+
     @Override
     public Phase run() {
         if (gd.getTime().getSeason() == 1) {
@@ -28,13 +50,8 @@ public class CollectAndPlaceBidPhase extends Phase {
         broadcastNextRound(gd.getTime().getSeason());
 
         gd.drawEntities();
-        if (!gd.getCurrAvailableAdventurers().isEmpty()) {
-            for (final Adventurer adventurer : gd.getCurrAvailableAdventurers()) {
-                broadcastAdventurerDrawn(adventurer.getAdventurerID());
-            }
-        }
-        broadcastMonsterDrawn(3);
-        broadcastRoomDrawn(2);
+
+        broadcastAdventurersMonstersAndRooms();
 
         broadcastBiddingStarted();
         broadcastActNow();

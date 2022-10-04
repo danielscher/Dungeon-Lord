@@ -153,7 +153,13 @@ public class GameData {
         return currAvailableAdventurers;
     }
 
-    public Monster getCurrAvailableMonster(final int monsterId) {
+    public List<Monster> getCurrAvailableMonsters() {
+        return currAvailableMonsters;
+    }
+
+
+
+    public Monster getAndRemoveMonster(final int monsterId) {
         Monster chosenMonster;
         for (final Monster mon : currAvailableMonsters) {
             if (mon.getMonsterID() == monsterId) {

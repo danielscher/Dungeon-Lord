@@ -76,6 +76,8 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         // TODO try out what Adv ids it gives us and assert them
         // TODO continue writing this
 
+        // assert Adv. drawing
+
         this.assertAdventurerDrawn(0, 15);
         this.assertAdventurerDrawn(1, 15);
         this.assertAdventurerDrawn(2, 15);
@@ -95,6 +97,29 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertAdventurerDrawn(1, 23);
         this.assertAdventurerDrawn(2, 23);
         this.assertAdventurerDrawn(3, 23);
+
+        // assert monster drawing
+
+        this.assertMonsterDrawn(0, 13);
+        this.assertMonsterDrawn(1, 13);
+        this.assertMonsterDrawn(2, 13);
+        this.assertMonsterDrawn(3, 13);
+
+        this.assertMonsterDrawn(0, 19);
+        this.assertMonsterDrawn(1, 19);
+        this.assertMonsterDrawn(2, 19);
+        this.assertMonsterDrawn(3, 19);
+
+        this.assertMonsterDrawn(0, 12);
+        this.assertMonsterDrawn(1, 12);
+        this.assertMonsterDrawn(2, 12);
+        this.assertMonsterDrawn(3, 12);
+
+        this.assertMonsterDrawn(0, 1);
+        this.assertMonsterDrawn(1, 1);
+        this.assertMonsterDrawn(2, 1);
+        this.assertMonsterDrawn(3, 1);
+
 
 
         // assert next year, next round , draw monster, etc..
