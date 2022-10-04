@@ -4,7 +4,7 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.RegAction;
 import de.unisaarland.cs.se.selab.game.action.StartGameAction;
-import java.util.Set;
+import java.util.List;
 
 public class RegPhase extends Phase {
 
@@ -38,11 +38,11 @@ public class RegPhase extends Phase {
             }
         }
         this.broadcastGameStarted();
-        final Set<Integer> commIDs = gd.getCommIDSet();
         //send the registered players for all players
-        for (final Integer commID : commIDs) {
-            this.broadcastPlayer(gd.getPlayerByCommID(commID).getName(),
-                    gd.getPlayerIdByCommID(commID));
+        final List<Integer> sortedPlayerIds = gd.getOrderedPlayerIdList();
+        for (final Integer playerId : sortedPlayerIds) {
+            this.broadcastPlayer(gd.getPlayerByPlayerId(playerId).getName(),
+                    playerId);
         }
         return new CollectAndPlaceBidPhase(gd);
     }

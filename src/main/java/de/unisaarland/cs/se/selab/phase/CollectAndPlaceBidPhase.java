@@ -21,18 +21,10 @@ public class CollectAndPlaceBidPhase extends Phase {
 
     @Override
     public Phase run() {
-
-        if (gd.getTime().getSeason() > 1) {
-            broadcastNextRound(gd.getTime().getSeason());
-        } else if (gd.getTime().getYear() > 1) {
+        if (gd.getTime().getSeason() == 1) {
             broadcastNextYear(gd.getTime().getYear());
-            for (final Player p : gd.getAllPlayerSortedByID()) {
-                for (final BidType b : p.getBlockedBids()) {
-                    broadcastBidRetrieved(b, p.getPlayerID());
-                }
-                p.clearBlockedBids();
-            }
         }
+        broadcastNextRound(gd.getTime().getSeason());
 
         gd.drawEntities();
         if (!gd.getCurrAvailableAdventurers().isEmpty()) {

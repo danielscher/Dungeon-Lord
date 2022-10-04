@@ -131,6 +131,12 @@ public class GameData {
         firstBidder = nextFirstBidder();
     }
 
+    public List<Integer> getOrderedPlayerIdList() {
+        final List<Integer> res = getAllPlayerID();
+        res.sort(Comparator.naturalOrder());
+        return res;
+    }
+
 
     public void drawEntities() {
         discardMonster();   //discard old unsold monsters

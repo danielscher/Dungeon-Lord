@@ -27,7 +27,7 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
     @Override
     protected Set<Integer> createSockets() {
-        return Set.of(1, 2, 3, 4);
+        return Set.of(0, 1, 2, 3);
     }
 
     /*
@@ -47,40 +47,40 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
     @Override
     public void run() throws TimeoutException {
         final String config = createConfig();
+        this.sendRegister(0, "0");
+        this.assertConfig(0, config);
         this.sendRegister(1, "1");
         this.assertConfig(1, config);
         this.sendRegister(2, "2");
         this.assertConfig(2, config);
         this.sendRegister(3, "3");
         this.assertConfig(3, config);
-        this.sendRegister(4, "4");
-        this.assertConfig(4, config);
 
+        this.assertGameStarted(0);
         this.assertGameStarted(1);
         this.assertGameStarted(2);
         this.assertGameStarted(3);
-        this.assertGameStarted(4);
 
-        this.assertPlayerHelper(new int[]{1, 2, 3, 4});
+        this.assertPlayerHelper(new int[]{0, 1, 2, 3});
 
+        this.assertNextYear(0, 1);
         this.assertNextYear(1, 1);
         this.assertNextYear(2, 1);
         this.assertNextYear(3, 1);
-        this.assertNextYear(4, 1);
 
+        this.assertNextRound(0, 1);
         this.assertNextRound(1, 1);
         this.assertNextRound(2, 1);
         this.assertNextRound(3, 1);
-        this.assertNextRound(4, 1);
 
         // TODO try out what Adv ids it gives us and assert them
         // TODO continue writing this
 
         // assert next year, next round , draw monster, etc..
         // can ignore
+        this.sendLeave(0);
         this.sendLeave(1);
         this.sendLeave(2);
         this.sendLeave(3);
-        this.sendLeave(4);
     }
 }
