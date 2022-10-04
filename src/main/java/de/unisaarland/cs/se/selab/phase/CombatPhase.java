@@ -495,7 +495,6 @@ public class CombatPhase extends Phase {
                     return new GameEndPhase(gd);
                 } else {
                     timeStamp.nextyear();
-                    broadcastNextYear(timeStamp.getYear());
                     return new CollectAndPlaceBidPhase(gd);
 
                 }
