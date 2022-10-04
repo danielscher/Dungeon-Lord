@@ -115,10 +115,24 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertMonsterDrawn(2, 12);
         this.assertMonsterDrawn(3, 12);
 
-        this.assertMonsterDrawn(0, 1);
-        this.assertMonsterDrawn(1, 1);
-        this.assertMonsterDrawn(2, 1);
-        this.assertMonsterDrawn(3, 1);
+        // assert room drawing
+
+        this.assertRoomDrawn(0, 1);
+        this.assertRoomDrawn(1, 1);
+        this.assertRoomDrawn(2, 1);
+        this.assertRoomDrawn(3, 1);
+
+        this.assertRoomDrawn(0, 11);
+        this.assertRoomDrawn(1, 11);
+        this.assertRoomDrawn(2, 11);
+        this.assertRoomDrawn(3, 11);
+
+        // asssert bidding started
+
+        this.assertBiddingStarted(0);
+        this.assertBiddingStarted(1);
+        this.assertBiddingStarted(2);
+        this.assertBiddingStarted(3);
 
 
 

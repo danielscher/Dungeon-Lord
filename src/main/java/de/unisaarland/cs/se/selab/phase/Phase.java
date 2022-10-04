@@ -424,7 +424,7 @@ public abstract class Phase {
         // for each playerID, invoke sendRoomDrawn
         final List<Integer> playerIDs = gd.getAllPlayerID();
         playerIDs.stream().sorted().forEach(n ->
-                gd.getServerConnection().sendMonsterDrawn(gd.getCommIDByPlayerId(n), room));
+                gd.getServerConnection().sendRoomDrawn(gd.getCommIDByPlayerId(n), room));
 
     }
 
