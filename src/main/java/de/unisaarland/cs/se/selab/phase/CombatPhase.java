@@ -30,6 +30,7 @@ public class CombatPhase extends Phase {
     //selected Trap
     private Trap placedTrap;
     private boolean endTurn;
+    private boolean playerLeft;
 
 
     public CombatPhase(final GameData gd, final Player player) {
@@ -69,8 +70,8 @@ public class CombatPhase extends Phase {
                 }
             }
         }
+        //if player left skip thr damages and healing
 
-        // TODO maybe add logic to skip this if we received a LeaveAction
         // calculate damage.
         trapDamage();
         monsterDamage();
@@ -81,15 +82,16 @@ public class CombatPhase extends Phase {
         conquerTile();
 
         //healing
-        healAdventurers(); // TODO: 01.10.22 if all adventurers have been defeated during combat
+        healAdventurers();
 
         // checks what should be the next phase.
-        return goToNextPhase(); // TODO check if this method can handle leaving of a player
+        return goToNextPhase();
     }
 
     @Override
     public void exec(final LeaveAction la) {
         endTurn = true;
+        playerLeft = true;
         super.exec(la);
     }
 
@@ -306,7 +308,8 @@ public class CombatPhase extends Phase {
     }
 
     private void healAdventurers() {
-        if (dungeon.getNumAdventurersInQueue() == 0) {
+        //returns if the player left or no adventurers in the queue
+        if (dungeon.getNumAdventurersInQueue() == 0 || playerLeft) {
             return;
         }
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
@@ -333,6 +336,10 @@ public class CombatPhase extends Phase {
     }
 
     private void fatigueDamage() {
+        //returns if the player left
+        if (playerLeft) {
+            return;
+        }
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             if (dungeon.getAdventurer(i).damagehealthby(2) >= 0) {
                 dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
@@ -357,7 +364,8 @@ public class CombatPhase extends Phase {
                 broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
                         monster.getDamage());
             }
-        } // TODO handle when the target adventurer is not there in the queue
+        }
+
     }
 
     private void calcMonsterBasicDamage(final Monster monster) {
@@ -396,6 +404,10 @@ public class CombatPhase extends Phase {
     }
 
     private void monsterDamage() {
+        //returns if the player left
+        if (playerLeft) {
+            return;
+        }
         if (!placedMonsters.isEmpty()) {
             for (final Monster monster : placedMonsters.keySet()) {
                 switch (monster.getAttack()) {
@@ -426,7 +438,7 @@ public class CombatPhase extends Phase {
                                 .getAdventurerID(),
                         placedTrap.getDamage() - totalDefuseVal);
             }
-        } // TODO Handle if the target Adventurer is not present in the queue
+        }
     }
 
     private void calcTrapBasicDamage(final int totalDefuseVal) {
@@ -460,6 +472,10 @@ public class CombatPhase extends Phase {
     }
 
     private void trapDamage() {
+        //returns if the player left
+        if (playerLeft) {
+            return;
+        }
         int totalDefuseVal = 0;
         // get all defuse values from adventurers.
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
@@ -485,7 +501,8 @@ public class CombatPhase extends Phase {
      * CollectAndPlaceBidPhase when all player finished combat phase.
      */
     private Phase goToNextPhase() {
-        if (timeStamp.getSeason() < 8) {
+
+        if (timeStamp.getSeason() < 8 && dungeon.getNumAdventurersInQueue() > 0 && !playerLeft) {
             timeStamp.nextSeason();
             broadcastNextRound(timeStamp.getSeason() - 4);
             return new ChooseBattleGroundPhase(gd, currPlayingPlayer); // same player next round.
@@ -513,6 +530,9 @@ public class CombatPhase extends Phase {
      * checks if the battleground to be conquered and adventurer flees
      */
     private void conquerTile() {
+        if (playerLeft) {
+            return;
+        }
         // if at least 1 adventurer is alive conquer.
         if (dungeon.getAdventurer(0) != null) {
             final Coordinate coordinate = dungeon.getCurrBattleGround();
