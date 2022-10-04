@@ -37,6 +37,7 @@ public class RegPhase extends Phase {
                 return null;
             }
         }
+        this.broadcastGameStarted();
         final Set<Integer> commIDs = gd.getCommIDSet();
         //send the registered players for all players
         for (final Integer commID : commIDs) {
@@ -63,6 +64,5 @@ public class RegPhase extends Phase {
     @Override
     public void exec(final StartGameAction sga) {
         this.isStarted = true;
-        this.broadcastGameStarted();
     }
 }
