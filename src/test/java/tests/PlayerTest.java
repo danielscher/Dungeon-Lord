@@ -32,9 +32,9 @@ class PlayerTest {
 
     @Test
     void blockBids() {
-        testDummy.addBid(BidType.FOOD, 0);
-        testDummy.addBid(BidType.GOLD, 1);
-        testDummy.addBid(BidType.MONSTER, 2);
+        testDummy.addBid(BidType.FOOD, 1);
+        testDummy.addBid(BidType.GOLD, 2);
+        testDummy.addBid(BidType.MONSTER, 3);
         final BidType[] expectedBlockedBids = {BidType.GOLD, BidType.MONSTER};
         testDummy.blockBids();
         assertEquals(2, testDummy.getBlockedBids().length, "Expected 2 blocked bids.");

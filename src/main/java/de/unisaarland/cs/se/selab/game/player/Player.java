@@ -41,9 +41,10 @@ public class Player {
      * @return success?
      */
     public boolean addBid(final BidType type, final int priority) {
+        final int bidIndex = priority - 1;
         // priority == 0 means "bid number 1" within the game rules
-        if (canAddBid(type, priority)) {
-            currBids[priority] = type;
+        if (canAddBid(type, bidIndex)) {
+            currBids[bidIndex] = type;
             return true;
         } else {
             return false;
