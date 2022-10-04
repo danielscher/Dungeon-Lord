@@ -491,6 +491,8 @@ public abstract class Phase {
 
     protected void kickPlayer(final int playerId) {
         // TODO: implement this method for Timeout logic.
+        final LeaveAction la = new LeaveAction(gd.getCommIDByPlayerId(playerId));
+        exec(la);
     }
 
 

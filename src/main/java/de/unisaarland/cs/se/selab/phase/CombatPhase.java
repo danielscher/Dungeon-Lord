@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.TimeStamp;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
+import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.action.MonsterAction;
 import de.unisaarland.cs.se.selab.game.action.MonsterTargetedAction;
 import de.unisaarland.cs.se.selab.game.action.TrapAction;
@@ -69,6 +70,7 @@ public class CombatPhase extends Phase {
             }
         }
 
+        // TODO maybe add logic to skip this if we received a LeaveAction
         // calculate damage.
         trapDamage();
         monsterDamage();
@@ -83,6 +85,12 @@ public class CombatPhase extends Phase {
 
         // checks what should be the next phase.
         return goToNextPhase(); // TODO check if this method can handle leaving of a player
+    }
+
+    @Override
+    public void exec(final LeaveAction la) {
+        endTurn = true;
+        super.exec(la);
     }
 
 
