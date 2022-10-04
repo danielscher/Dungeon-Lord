@@ -43,7 +43,7 @@ public class AltConfig {
     private final Path path;
     private int maxPlayers;
     private int years;
-    private int dungeonSideLength;
+    private int dungeonSideLength = 15;
     private int initialFood = 3;
     private int initialGold = 3;
     private int initialImps = 3;

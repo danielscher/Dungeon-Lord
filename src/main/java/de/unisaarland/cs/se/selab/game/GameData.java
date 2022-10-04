@@ -56,7 +56,13 @@ public class GameData {
         if (commList.contains(commId)) {
             return false;
         } else {
-            final Player player = new Player(name, idCounter, commId, 0, 15);
+            final int initFood = config.getInitialFood();
+            final int initGold = config.getInitialGold();
+            final int initImps = config.getInitialImps();
+            final int initEvilness = config.getInitialEvilness();
+            final int gridSideLength = config.getDungeonSideLength();
+            final Player player = new Player(name, idCounter, commId, initFood, initGold, initImps,
+                    initEvilness, gridSideLength);
             this.addPlayer(player, idCounter);
             this.idCounter = idCounter + 1;
             return true;
@@ -156,7 +162,6 @@ public class GameData {
     public List<Monster> getCurrAvailableMonsters() {
         return currAvailableMonsters;
     }
-
 
 
     public Monster getAndRemoveMonster(final int monsterId) {

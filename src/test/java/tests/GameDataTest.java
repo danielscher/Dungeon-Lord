@@ -2,10 +2,13 @@ package tests;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import de.unisaarland.cs.se.selab.game.AltConfig;
 import de.unisaarland.cs.se.selab.game.GameData;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.file.Path;
 import org.junit.jupiter.api.Test;
 
@@ -15,8 +18,21 @@ class GameDataTest {
 
 
     private void resetGameData() {
-        final Path configPath = Path.of("src\\main\\resources\\configuration.json");
-        gd = new GameData(new AltConfig(configPath, 123),
+        URI fileIdentifier;
+        try {
+            fileIdentifier = getClass().getClassLoader().getResource("configuration.json")
+                    .toURI();
+        } catch (URISyntaxException e) {
+            assertNull(e,
+                    "the exception isn't really supposed to be null,"
+                            + " but it should also not be thrown here");
+            return;
+        }
+
+        final Path configPath = Path.of(fileIdentifier);
+        final AltConfig altConfig = new AltConfig(configPath, 123);
+        assertTrue(altConfig.parse(), "parsing the config failed");
+        gd = new GameData(altConfig,
                 null);
     }
 

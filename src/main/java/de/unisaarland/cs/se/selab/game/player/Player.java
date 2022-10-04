@@ -23,16 +23,17 @@ public class Player {
     private int gold;
     private int food;
 
-    public Player(final String name, final int playerID, final int commID, final int imps,
+    public Player(final String name, final int playerID, final int commID, final int initialFood,
+            final int initialGold, final int imps, final int initialEvilness,
             final int gridSideLength) {
         this.name = name;
         this.playerID = playerID;
         this.commID = commID;
         this.dungeon = new Dungeon(imps, gridSideLength);
         this.points = 0;
-        this.evilLevel = 5;  // 5 is standard level (see specification)
-        this.gold = 0;
-        this.food = 0;
+        this.evilLevel = initialEvilness;
+        this.gold = initialGold;
+        this.food = initialFood;
     }
 
     /**
