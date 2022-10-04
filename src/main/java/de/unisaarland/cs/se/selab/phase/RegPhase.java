@@ -1,9 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.RegAction;
 import de.unisaarland.cs.se.selab.game.action.StartGameAction;
 import java.util.Set;
@@ -31,8 +29,9 @@ public class RegPhase extends Phase {
             if (isStarted) {
                 break;
             }
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.nextAction().invoke(this);
+            try {
+
+                gd.getServerConnection().nextAction().invoke(this);
             } catch (TimeoutException e) {
                 broadcastRegistrationAborted();
                 return null;
@@ -56,10 +55,8 @@ public class RegPhase extends Phase {
             if (!res) {
                 gd.getServerConnection().sendRegistrationAborted(ra.getCommID());
             }
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                final String configString = gd.getConfigString();
-                sc.sendConfig(ra.getCommID(), configString);
-            }
+            final String configString = gd.getConfigString();
+            gd.getServerConnection().sendConfig(ra.getCommID(), configString);
         }
     }
 

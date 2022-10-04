@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
@@ -34,9 +33,8 @@ public abstract class Phase {
     to be used in the default implementation of most exec methods
      */
     public void sendError(final int commId) {
-        try (final ServerConnection<Action> serverConn = gd.getServerConnection()) {
-            serverConn.sendActionFailed(commId, "this action isn't valid within this phase");
-        }
+        gd.getServerConnection()
+                .sendActionFailed(commId, "this action isn't valid within this phase");
     }
 
     public void exec(final RegAction x) {
@@ -107,22 +105,21 @@ public abstract class Phase {
      */
     protected void broadcastActNow() {
         // for each playerID, invoke sendActNow
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n -> sc.sendActNow(gd.getCommIDByPlayerId(n)));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted()
+                .forEach(n -> gd.getServerConnection().sendActNow(gd.getCommIDByPlayerId(n)));
     }
+
 
     /*
     broadcasts "adventurerArrived" to every player
      */
     protected void broadcastAdventurerArrived(final int adventurer, final int player) {
         // for each playerID, invoke sendAdventurerArrived
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerArrived(gd.getCommIDByPlayerId(n), adventurer, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendAdventurerArrived(gd.getCommIDByPlayerId(n), adventurer, player));
     }
 
     /*
@@ -130,12 +127,12 @@ public abstract class Phase {
      */
     protected void broadcastAdventurerDamaged(final int adventurer, final int amount) {
         // for each playerID, invoke sendAdventurerDamaged
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerDamaged(gd.getCommIDByPlayerId(n), adventurer, amount));
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendAdventurerDamaged(gd.getCommIDByPlayerId(n), adventurer, amount));
 
-        }
+
     }
 
     /*
@@ -143,11 +140,11 @@ public abstract class Phase {
      */
     protected void broadcastAdventurerDrawn(final int adventurer) {
         // for each playerID, invoke sendAdventurerDrawn
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerDrawn(gd.getCommIDByPlayerId(n), adventurer));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendAdventurerDrawn(gd.getCommIDByPlayerId(n), adventurer));
+
     }
 
     /*
@@ -155,23 +152,23 @@ public abstract class Phase {
      */
     protected void broadcastAdventurerFled(final int adventurer) {
         // for each playerID, invoke sendAdventurerFled
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerFled(gd.getCommIDByPlayerId(n), adventurer));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted()
+                .forEach(n -> gd.getServerConnection()
+                        .sendAdventurerFled(gd.getCommIDByPlayerId(n), adventurer));
     }
+
 
     /*
     broadcasts "adventurerHealed" to every player
      */
     protected void broadcastAdventurerHealed(final int amount, final int priest, final int target) {
         // for each playerID, invoke sendAdventurerHealed
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerHealed(gd.getCommIDByPlayerId(n), amount, priest, target));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendAdventurerHealed(gd.getCommIDByPlayerId(n), amount, priest, target));
+
     }
 
     /*
@@ -179,11 +176,11 @@ public abstract class Phase {
      */
     protected void broadcastAdventurerImprisoned(final int adventurer) {
         // for each playerID, invoke sendAdventurerImprisoned
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendAdventurerImprisoned(gd.getCommIDByPlayerId(n), adventurer));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendAdventurerImprisoned(gd.getCommIDByPlayerId(n), adventurer));
+
     }
 
     /*
@@ -191,11 +188,11 @@ public abstract class Phase {
      */
     protected void broadcastBattleGroundSet(final int player, final int x, final int y) {
         // for each playerID, invoke sendBattleGroundSet
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendBattleGroundSet(gd.getCommIDByPlayerId(n), player, x, y));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendBattleGroundSet(gd.getCommIDByPlayerId(n), player, x, y));
+
     }
 
     /*
@@ -203,11 +200,10 @@ public abstract class Phase {
      */
     protected void broadcastBiddingStarted() {
         // for each playerID, invoke sendBiddingStarted
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendBiddingStarted(gd.getCommIDByPlayerId(n)));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendBiddingStarted(gd.getCommIDByPlayerId(n)));
+
     }
 
     /*
@@ -215,11 +211,11 @@ public abstract class Phase {
      */
     protected void broadcastEvilnessChanged(final int amount, final int player) {
         // for each playerID, invoke sendEvilnessChanged
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendEvilnessChanged(gd.getCommIDByPlayerId(n), amount, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendEvilnessChanged(gd.getCommIDByPlayerId(n), amount, player));
+
     }
 
     /*
@@ -227,11 +223,11 @@ public abstract class Phase {
      */
     protected void broadcastFoodChanged(final int amount, final int player) {
         // for each playerID, invoke sendFoodChanged
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendFoodChanged(gd.getCommIDByPlayerId(n), amount, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendFoodChanged(gd.getCommIDByPlayerId(n), amount, player));
+
     }
 
     /*
@@ -239,11 +235,11 @@ public abstract class Phase {
      */
     protected void broadcastGoldChanged(final int amount, final int player) {
         // for each playerID, invoke sendGoldChanged
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendGoldChanged(gd.getCommIDByPlayerId(n), amount, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendGoldChanged(gd.getCommIDByPlayerId(n), amount, player));
+
     }
 
     /*
@@ -251,11 +247,10 @@ public abstract class Phase {
      */
     protected void broadcastGameEnd(final int player, final int points) {
         // for each playerID, invoke sendGameEnd
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendGameEnd(gd.getCommIDByPlayerId(n), player, points));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendGameEnd(gd.getCommIDByPlayerId(n), player, points));
+
     }
 
     /*
@@ -263,11 +258,10 @@ public abstract class Phase {
      */
     protected void broadcastGameStarted() {
         // for each playerID, invoke sendGameStarted
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendGameStarted(gd.getCommIDByPlayerId(n)));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendGameStarted(gd.getCommIDByPlayerId(n)));
+
     }
 
     /*
@@ -275,11 +269,11 @@ public abstract class Phase {
      */
     protected void broadcastImpsChanged(final int amount, final int player) {
         // for each playerID, invoke sendImpsChanged
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendImpsChanged(gd.getCommIDByPlayerId(n), amount, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendImpsChanged(gd.getCommIDByPlayerId(n), amount, player));
+
     }
 
     /*
@@ -287,11 +281,10 @@ public abstract class Phase {
      */
     protected void broadcastLeft(final int player) {
         // for each playerID, invoke sendLeft
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendLeft(gd.getCommIDByPlayerId(n), player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendLeft(gd.getCommIDByPlayerId(n), player));
+
     }
 
     /*
@@ -299,11 +292,10 @@ public abstract class Phase {
      */
     protected void broadcastMonsterDrawn(final int monster) {
         // for each playerID, invoke sendMonsterDrawn
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendMonsterDrawn(gd.getCommIDByPlayerId(n), monster));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendMonsterDrawn(gd.getCommIDByPlayerId(n), monster));
+
     }
 
     /*
@@ -311,11 +303,11 @@ public abstract class Phase {
      */
     protected void broadcastMonsterHired(final int monster, final int player) {
         // for each playerID, invoke sendMonsterHired
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendMonsterHired(gd.getCommIDByPlayerId(n), monster, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendMonsterHired(gd.getCommIDByPlayerId(n), monster, player));
+
     }
 
     /*
@@ -323,11 +315,11 @@ public abstract class Phase {
     */
     protected void broadcastMonsterPlaced(final int monster, final int player) {
         // for each playerID, invoke sendMonsterPlaced
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendMonsterPlaced(gd.getCommIDByPlayerId(n), monster, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendMonsterPlaced(gd.getCommIDByPlayerId(n), monster, player));
+
     }
 
     /*
@@ -335,11 +327,10 @@ public abstract class Phase {
      */
     protected void broadcastNextRound(final int round) {
         // for each playerID, invoke sendNextRound
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendNextRound(gd.getCommIDByPlayerId(n), round));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendNextRound(gd.getCommIDByPlayerId(n), round));
+
     }
 
     /*
@@ -347,11 +338,10 @@ public abstract class Phase {
      */
     protected void broadcastNextYear(final int year) {
         // for each playerID, invoke sendNextYear
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendNextYear(gd.getCommIDByPlayerId(n), year));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendNextYear(gd.getCommIDByPlayerId(n), year));
+
     }
 
     /*
@@ -360,11 +350,11 @@ public abstract class Phase {
      */
     protected void broadcastBidPlaced(final BidType bid, final int player, final int slot) {
         // for each playerID, invoke sendBidPlaced
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendBidPlaced(gd.getCommIDByPlayerId(n), bid, player, slot));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendBidPlaced(gd.getCommIDByPlayerId(n), bid, player, slot));
+
     }
 
     /*
@@ -373,11 +363,10 @@ public abstract class Phase {
      */
     protected void broadcastBidRetrieved(final BidType bid, final int player) {
         // for each playerID, invoke sendBidRetrieved
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendBidRetrieved(gd.getCommIDByPlayerId(n), bid, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendBidRetrieved(gd.getCommIDByPlayerId(n), bid, player));
+
     }
 
     /*
@@ -386,11 +375,10 @@ public abstract class Phase {
      */
     protected void broadcastPlayer(final String name, final int player) {
         // for each playerID, invoke sendPlayer
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendPlayer(gd.getCommIDByPlayerId(n), name, player));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendPlayer(gd.getCommIDByPlayerId(n), name, player));
+
     }
 
     /*
@@ -398,11 +386,10 @@ public abstract class Phase {
      */
     protected void broadcastRegistrationAborted() {
         // for each playerID, invoke sendPlayer
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendRegistrationAborted(gd.getCommIDByPlayerId(n)));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendRegistrationAborted(gd.getCommIDByPlayerId(n)));
+
     }
 
     /*
@@ -410,11 +397,11 @@ public abstract class Phase {
     */
     protected void broadcastRoomActivated(final int player, final int room) {
         // for each playerID, invoke sendRoomActivated
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendRoomActivated(gd.getCommIDByPlayerId(n), player, room));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendRoomActivated(gd.getCommIDByPlayerId(n), player, room));
+
     }
 
     /*
@@ -422,11 +409,11 @@ public abstract class Phase {
     */
     protected void broadcastRoomBuilt(final int player, final int room, final int x, final int y) {
         // for each playerID, invoke sendRoomBuilt
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendRoomBuilt(gd.getCommIDByPlayerId(n), player, room, x, y));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendRoomBuilt(gd.getCommIDByPlayerId(n), player, room, x, y));
+
     }
 
     /*
@@ -434,11 +421,10 @@ public abstract class Phase {
     */
     protected void broadcastRoomDrawn(final int room) {
         // for each playerID, invoke sendRoomDrawn
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendMonsterDrawn(gd.getCommIDByPlayerId(n), room));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendMonsterDrawn(gd.getCommIDByPlayerId(n), room));
+
     }
 
     /*
@@ -446,11 +432,10 @@ public abstract class Phase {
     */
     protected void broadcastTrapAcquired(final int player, final int trap) {
         // for each playerID, invoke sendTrapAcquired
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendTrapAcquired(gd.getCommIDByPlayerId(n), player, trap));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendTrapAcquired(gd.getCommIDByPlayerId(n), player, trap));
+
     }
 
     /*
@@ -458,11 +443,10 @@ public abstract class Phase {
     */
     protected void broadcastTrapPlaced(final int player, final int trap) {
         // for each playerID, invoke sendTrapPlaced
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendTrapPlaced(gd.getCommIDByPlayerId(n), player, trap));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendTrapPlaced(gd.getCommIDByPlayerId(n), player, trap));
+
     }
 
     /*
@@ -470,11 +454,11 @@ public abstract class Phase {
     */
     protected void broadcastTunnelConquered(final int adventurer, final int x, final int y) {
         // for each playerID, invoke sendTunnelConquered
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendTunnelConquered(gd.getCommIDByPlayerId(n), adventurer, x, y));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection()
+                        .sendTunnelConquered(gd.getCommIDByPlayerId(n), adventurer, x, y));
+
     }
 
     /*
@@ -482,18 +466,15 @@ public abstract class Phase {
     */
     protected void broadcastTunnelDug(final int player, final int x, final int y) {
         // for each playerID, invoke sendTunnelDug
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final List<Integer> playerIDs = gd.getAllPlayerID();
-            playerIDs.stream().sorted().forEach(n ->
-                    sc.sendTunnelDug(gd.getCommIDByPlayerId(n), player, x, y));
-        }
+        final List<Integer> playerIDs = gd.getAllPlayerID();
+        playerIDs.stream().sorted().forEach(n ->
+                gd.getServerConnection().sendTunnelDug(gd.getCommIDByPlayerId(n), player, x, y));
+
     }
 
     protected void kickPlayer(final int playerId) {
-        // TODO: implement this method for Timeout logic.
         final LeaveAction la = new LeaveAction(gd.getCommIDByPlayerId(playerId));
         exec(la);
     }
-
 
 }

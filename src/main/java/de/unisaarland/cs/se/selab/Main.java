@@ -73,13 +73,13 @@ public class Main {
                     new ActionFactoryImplementation())) {
                 //TODO : Initialize Game wirth the objects above + path.
                 game = new Game(sc, pathToConfig, seed);
+                if (game.runGame()) {
+                    System.exit(0);
+                } else {
+                    System.exit(1);
+                }
             }
 
-            if (game.runGame()) {
-                System.exit(0);
-            } else {
-                System.exit(1);
-            }
         } catch (InvalidPathException e) {
             System.exit(1);
         }

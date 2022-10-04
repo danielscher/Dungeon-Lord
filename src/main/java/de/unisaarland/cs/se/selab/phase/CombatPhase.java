@@ -1,10 +1,8 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.TimeStamp;
-import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.action.MonsterAction;
@@ -44,16 +42,14 @@ public class CombatPhase extends Phase {
     @Override
     public Phase run() {
         //send defend yourself
-        try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-            serverConn.sendDefendYourself(currPlayingPlayer.getCommID());
-        }
+        gd.getServerConnection().sendDefendYourself(currPlayingPlayer.getCommID());
         //coordinate of the current battleground
         final Coordinate battleground = dungeon.getCurrBattleGround();
 
         while (!endTurn) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActNow(currPlayingPlayer.getCommID());
-                sc.nextAction().invoke(this);
+            try {
+                gd.getServerConnection().sendActNow(currPlayingPlayer.getCommID());
+                gd.getServerConnection().nextAction().invoke(this);
             } catch (TimeoutException e) {
                 kickPlayer(currPlayingPlayer.getPlayerID());
                 // TODO add logic to skip to next phase (next players combat or bidding or endgame)
@@ -100,34 +96,31 @@ public class CombatPhase extends Phase {
     public void exec(final TrapAction ta) {
         // check if action is of the expected commID.
         if (ta.getCommID() != currPlayingPlayer.getCommID()) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ta.getCommID(),
-                        "CommId of the current player didn't match");
-            }
+
+            gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                    "CommId of the current player didn't match");
             return;
         }
 
         // check whether trap is already placed
         if (placedTrap != null) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ta.getCommID(), "Trap has been already placed");
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(ta.getCommID(), "Trap has been already placed");
             return;
         }
 
         // check if the trap exists in the Dungeon.
         if (dungeon.getTrapByID(ta.getTrapID()) == null) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ta.getCommID(), "No available trap for the requested id");
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(ta.getCommID(), "No available trap for the requested id");
             return;
         }
 
         // check if the trap is available this year.
         if (!dungeon.getTrapByID(ta.getTrapID()).isAvailableThisYear()) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ta.getCommID(), "Trap is not available this year");
-            }
+
+            gd.getServerConnection()
+                    .sendActionFailed(ta.getCommID(), "Trap is not available this year");
             return;
         }
 
@@ -136,10 +129,8 @@ public class CombatPhase extends Phase {
 
             // check if player can afford placing a trap in a room.
             if (!currPlayingPlayer.changeGoldBy(-1)) {
-                try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                    sc.sendActionFailed(ta.getCommID(),
-                            "player cannot afford one gold to place trap in the room");
-                }
+                gd.getServerConnection().sendActionFailed(ta.getCommID(),
+                        "player cannot afford one gold to place trap in the room");
                 return;
             }
 
@@ -175,10 +166,8 @@ public class CombatPhase extends Phase {
         if (selectedMonster.getAttack() == Attack.TARGETED) {
             // in this case the monster is targeted but no target was specified
             // therefor send ActionFailed and return
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ma.getCommID(),
-                        "the selected is TARGETED, please specify a target");
-            }
+            gd.getServerConnection().sendActionFailed(ma.getCommID(),
+                    "the selected is TARGETED, please specify a target");
             return;
         }
 
@@ -202,10 +191,8 @@ public class CombatPhase extends Phase {
         if (selectedMonster.getAttack() != Attack.TARGETED) {
             // in this case the monster is not targeted but a target was specified
             // therefor send ActionFailed and return
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(mta.getCommID(),
-                        "cannot target an not-targeted monster");
-            }
+            gd.getServerConnection().sendActionFailed(mta.getCommID(),
+                    "cannot target an not-targeted monster");
             return;
         }
 
@@ -214,10 +201,8 @@ public class CombatPhase extends Phase {
         // check if target is valid
         if (target < 1 || target > 3) {
             // in this case the targeted position is invalid, therefor send ActionFailed
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(mta.getCommID(),
-                        "selected position must be between 1 and 3");
-            }
+            gd.getServerConnection().sendActionFailed(mta.getCommID(),
+                    "selected position must be between 1 and 3");
             return;
         }
 
@@ -229,11 +214,8 @@ public class CombatPhase extends Phase {
     @Override
     public void exec(final EndTurnAction eta) {
         if (currPlayingPlayer.getCommID() != eta.getCommID()) {
-            try (ServerConnection<Action> serverConn =
-                    gd.getServerConnection()) {
-                serverConn.sendActionFailed(eta.getCommID(),
-                        "CommID of the player didn't match");
-            }
+            gd.getServerConnection().sendActionFailed(eta.getCommID(),
+                    "CommID of the player didn't match");
         } else {
             endTurn = true;
         }
@@ -248,10 +230,9 @@ public class CombatPhase extends Phase {
         // check if the Action came from the right player
         if (ma.getCommID() != currPlayingPlayer.getCommID()) {
             // in this case the received Action Object wasn't sent from the right player
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ma.getCommID(), "it's not your turn to place monsters");
-                return false;
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(ma.getCommID(), "it's not your turn to place monsters");
+            return false;
         }
 
         final int monsterId = ma.getMonster();
@@ -259,10 +240,9 @@ public class CombatPhase extends Phase {
         // check if player owns monster
         if (dungeon.getMonsterByID(monsterId) == null) {
             // in this case the player doesn't own the monster
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ma.getCommID(), "you don't seem to own this monster");
-                return false;
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(ma.getCommID(), "you don't seem to own this monster");
+            return false;
         }
 
         final Monster selectedMonster = dungeon.getMonsterByID(monsterId);
@@ -270,10 +250,9 @@ public class CombatPhase extends Phase {
         // check if monster is available in this year
         if (!selectedMonster.availableThisYear()) {
             // in this case the monster is not available
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ma.getCommID(), "monster not available in this year");
-                return false;
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(ma.getCommID(), "monster not available in this year");
+            return false;
         }
 
         // calculate the amount of monsters that can be placed on this tile
@@ -286,12 +265,10 @@ public class CombatPhase extends Phase {
 
         if (placedMonsters.size() >= placeableMonsters) {
             // in this case the player doesn't own the monster
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.sendActionFailed(ma.getCommID(),
-                        "you already placed the max. amount (" + placeableMonsters
-                                + ") of monsters");
-                return false;
-            }
+            gd.getServerConnection().sendActionFailed(ma.getCommID(),
+                    "you already placed the max. amount (" + placeableMonsters
+                            + ") of monsters");
+            return false;
         }
 
         // if none of the above checks failed, the player can place the monster

@@ -1,6 +1,5 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
@@ -200,9 +199,8 @@ public class EvalUpToTunnelPhase extends Phase {
      */
     private int getInputs(final int impsToMine, final int commId, final Player player,
             final Dungeon dungeon, final boolean maxImpUsage) {
-        try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-            serverConn.sendDigTunnel(commId); // send DigTunnel once for every possible tile
-        }
+        gd.getServerConnection()
+                .sendDigTunnel(commId); // send DigTunnel once for every possible tile
         // if player activated room it might be the case that he hasn't enough imps anymore
         if (impsToMine > dungeon.getRestingImps()) {
             return impsToMine; // go to next iteration to reduce impsToMine
@@ -260,14 +258,12 @@ public class EvalUpToTunnelPhase extends Phase {
         // add player's commId to a list of expected action-senders
         commIdsToDigTunnel.add(commId);
 
-        try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-            serverConn.sendActNow(commId); // TODO check if sending once is sufficient
-        }
+        gd.getServerConnection().sendActNow(commId); // TODO check if sending once is sufficient
 
         while (!commIdsToDigTunnel.isEmpty()) {
             // loop until the player we evaluate has sent an action
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                final Action action = serverConn.nextAction();
+            try {
+                final Action action = gd.getServerConnection().nextAction();
                 action.invoke(this);
             } catch (TimeoutException e) {
                 // TODO implement behaviour???
@@ -289,9 +285,8 @@ public class EvalUpToTunnelPhase extends Phase {
         final Player player = gd.getPlayerByCommID(commId);
         // if player doesn't exist, return
         if (player == null) {
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "you don't seem to be a registered player");
             return;
         }
 
@@ -299,9 +294,7 @@ public class EvalUpToTunnelPhase extends Phase {
 
         if (!commIdsToDigTunnel.contains(commId)) {
             // wrong player sent the event
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(commId, "it's not your turn to dig tunnels");
-            }
+            gd.getServerConnection().sendActionFailed(commId, "it's not your turn to dig tunnels");
         } else {
             final int[] coordsArr = dta.getCoords();
             final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
@@ -313,9 +306,7 @@ public class EvalUpToTunnelPhase extends Phase {
                 lastDugTile = requestedPos; // tell eval what tile was dug
             } else {
                 // in this case the tunnel couldn't be dug
-                try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                    serverConn.sendActionFailed(commId, "cannot dig here");
-                }
+                gd.getServerConnection().sendActionFailed(commId, "cannot dig here");
             }
         }
 
@@ -332,9 +323,8 @@ public class EvalUpToTunnelPhase extends Phase {
         final Player player = gd.getPlayerByCommID(commId);
         // if player doesn't exist, return
         if (player == null) {
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "you don't seem to be a registered player");
             return;
         }
 
@@ -345,9 +335,7 @@ public class EvalUpToTunnelPhase extends Phase {
             broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(commId, "couldn't activate room");
-            }
+            gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
 
     }
@@ -360,9 +348,8 @@ public class EvalUpToTunnelPhase extends Phase {
             gotEndTurn = true;
             commIdsToDigTunnel.remove(commId);
         } else {
-            try (ServerConnection<Action> serverConn = gd.getServerConnection()) {
-                serverConn.sendActionFailed(commId, "cannot end turn, it's not your turn");
-            }
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "cannot end turn, it's not your turn");
         }
     }
 

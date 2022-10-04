@@ -82,7 +82,7 @@ public class EvalRoomPhase extends Phase {
 
     private void requestNextAction(final Player player) {
         while (!endTurn) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
+            try {
                 sc.nextAction().invoke(this);
             } catch (TimeoutException e) {
                 kickPlayer(player.getPlayerID());

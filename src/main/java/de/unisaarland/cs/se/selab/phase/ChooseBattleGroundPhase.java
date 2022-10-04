@@ -1,9 +1,7 @@
 package de.unisaarland.cs.se.selab.phase;
 
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
-import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.BattleGroundAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
@@ -35,8 +33,8 @@ public class ChooseBattleGroundPhase extends Phase {
 
         if (!battleGroundChosen) {
             //loop ask for the next action until get the bga from the current player
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.nextAction().invoke(this);
+            try {
+                gd.getServerConnection().nextAction().invoke(this);
             } catch (TimeoutException e) {
                 kickPlayer(currPlayer.getPlayerID());
             }

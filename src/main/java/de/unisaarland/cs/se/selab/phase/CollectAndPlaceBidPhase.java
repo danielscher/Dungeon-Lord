@@ -45,8 +45,8 @@ public class CollectAndPlaceBidPhase extends Phase {
         broadcastActNow();
 
         while (!checkIfAllBidsChosen()) {
-            try (ServerConnection<Action> sc = gd.getServerConnection()) {
-                sc.nextAction().invoke(this);
+            try {
+                gd.getServerConnection().nextAction().invoke(this);
             } catch (TimeoutException e) {
                 return null; // aborts the game like stated in the specification
             }

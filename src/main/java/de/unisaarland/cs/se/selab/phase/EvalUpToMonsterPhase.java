@@ -1,7 +1,6 @@
 package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
-import de.unisaarland.cs.se.selab.comm.ServerConnection;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.BiddingSquare;
 import de.unisaarland.cs.se.selab.game.GameData;
@@ -72,50 +71,49 @@ public class EvalUpToMonsterPhase extends Phase {
     }
 
     private void grantMonster(final Player player, final int slot) {
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
 
-            final int commId = player.getCommID();
+        final int commId = player.getCommID();
 
-            switch (slot) {
-                case 1, 2: {
-                    sc.sendSelectMonster(commId); // tells player to select monster.
-                    sc.sendActNow(commId);
+        switch (slot) {
+            case 1, 2: {
+                gd.getServerConnection()
+                        .sendSelectMonster(commId); // tells player to select monster.
+                gd.getServerConnection().sendActNow(commId);
 
-                    // will ask for next action until receives End Turn or Hire Monster action.
-                    while (handleHireMonsterAction) {
+                // will ask for next action until receives End Turn or Hire Monster action.
+                while (handleHireMonsterAction) {
 
-                        currHandledCommId = commId;
+                    currHandledCommId = commId;
 
-                        try { // get action from player.
-                            final Action action = sc.nextAction();
-                            action.invoke(this);
+                    try { // get action from player.
+                        final Action action = gd.getServerConnection().nextAction();
+                        action.invoke(this);
 
-                        } catch (TimeoutException e) {
-                            //TODO: add behaviour
-                            kickPlayer(player.getPlayerID());
+                    } catch (TimeoutException e) {
+                        //TODO: add behaviour
+                        kickPlayer(player.getPlayerID());
 
-                        }
                     }
-                    break;
                 }
-                case 3: {
-                    if (player.getFood() > 0) {
-                        player.changeFoodBy(-1); // pays for the slot 1 food.
-                        broadcastFoodChanged(-1, player.getPlayerID());
-
-                        try { // get action from player.
-                            final Action action = sc.nextAction();
-                            action.invoke(this);
-
-                        } catch (TimeoutException e) {
-                            kickPlayer(player.getPlayerID()); // kicks player (leave).
-                        }
-                    }
-                    break;
-                }
-                default:
-                    break;
+                break;
             }
+            case 3: {
+                if (player.getFood() > 0) {
+                    player.changeFoodBy(-1); // pays for the slot 1 food.
+                    broadcastFoodChanged(-1, player.getPlayerID());
+
+                    try { // get action from player.
+                        final Action action = gd.getServerConnection().nextAction();
+                        action.invoke(this);
+
+                    } catch (TimeoutException e) {
+                        kickPlayer(player.getPlayerID()); // kicks player (leave).
+                    }
+                }
+                break;
+            }
+            default:
+                break;
         }
 
     }
@@ -230,69 +228,65 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void exec(final HireMonsterAction hma) {
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            final Player player = gd.getPlayerByCommID(hma.getCommID());
-            if (hma.getCommID() != currHandledCommId) { // only specific player can hire
-                sc.sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
-            }
-            final Monster chosenMonster = gd.getCurrAvailableMonster(hma.getMonster());
-            final int monsterHunger = chosenMonster.getHunger();
-            final int monsterEvilness = chosenMonster.getEvilness();
+        final Player player = gd.getPlayerByCommID(hma.getCommID());
+        if (hma.getCommID() != currHandledCommId) { // only specific player can hire
+            gd.getServerConnection()
+                    .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
+        }
+        final Monster chosenMonster = gd.getCurrAvailableMonster(hma.getMonster());
+        final int monsterHunger = chosenMonster.getHunger();
+        final int monsterEvilness = chosenMonster.getEvilness();
 
-            // checks if player can afford the monster food and evilness wise.
-            if (player.getFood() >= monsterHunger
-                    && player.getEvilLevel() + monsterEvilness <= 15) {
+        // checks if player can afford the monster food and evilness wise.
+        if (player.getFood() >= monsterHunger
+                && player.getEvilLevel() + monsterEvilness <= 15) {
 
-                player.changeFoodBy(-monsterHunger);
-                broadcastFoodChanged(-monsterHunger, player.getPlayerID());
+            player.changeFoodBy(-monsterHunger);
+            broadcastFoodChanged(-monsterHunger, player.getPlayerID());
 
-                player.changeEvilnessBy(-monsterEvilness);
-                broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
+            player.changeEvilnessBy(-monsterEvilness);
+            broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
 
-                // grand monster to player.
-                player.getDungeon()
-                        .addMonster(chosenMonster); // FIXME : possible null value exception.
-                broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
-                handleHireMonsterAction = false; // finish handling action. terminates loop.
-            }
+            // grand monster to player.
+            player.getDungeon()
+                    .addMonster(chosenMonster); // FIXME : possible null value exception.
+            broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
+            handleHireMonsterAction = false; // finish handling action. terminates loop.
         }
 
     }
 
     @Override
     public void exec(final ActivateRoomAction ara) {
-        try (final ServerConnection<Action> serverConn = gd.getServerConnection()) {
+        final int commId = ara.getCommID();
+        // get the player who requested to activate the room
+        final Player player = gd.getPlayerByCommID(commId);
+        // if player doesn't exist, return
+        if (player == null) {
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "you don't seem to be a registered player");
+            return;
+        }
 
-            final int commId = ara.getCommID();
-            // get the player who requested to activate the room
-            final Player player = gd.getPlayerByCommID(commId);
-            // if player doesn't exist, return
-            if (player == null) {
-                serverConn.sendActionFailed(commId, "you don't seem to be a registered player");
-                return;
-            }
-
-            final int roomId = ara.getRoomID();
-            final Dungeon playersDungeon = player.getDungeon();
-            if (playersDungeon.activateRoom(roomId)) {
-                final Room activatedRoom = playersDungeon.getRoomById(roomId);
-                broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
-                broadcastRoomActivated(player.getPlayerID(), roomId);
-            } else {
-                serverConn.sendActionFailed(commId, "couldn't activate room");
-            }
+        final int roomId = ara.getRoomID();
+        final Dungeon playersDungeon = player.getDungeon();
+        if (playersDungeon.activateRoom(roomId)) {
+            final Room activatedRoom = playersDungeon.getRoomById(roomId);
+            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastRoomActivated(player.getPlayerID(), roomId);
+        } else {
+            gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
     }
 
     @Override
     public void exec(final EndTurnAction eta) {
 
-        try (final ServerConnection<Action> sc = gd.getServerConnection()) {
-            if (eta.getCommID() != currHandledCommId) {
-                sc.sendActionFailed(eta.getCommID(), "Illegal Action: not your turn.");
-            }
-            handleHireMonsterAction = false; // finish handling action. terminates loop.
+        if (eta.getCommID() != currHandledCommId) {
+            gd.getServerConnection()
+                    .sendActionFailed(eta.getCommID(), "Illegal Action: not your turn.");
         }
+        handleHireMonsterAction = false; // finish handling action. terminates loop.
 
     }
 
