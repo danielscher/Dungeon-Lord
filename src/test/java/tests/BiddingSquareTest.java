@@ -28,9 +28,6 @@ class BiddingSquareTest {
         resetBiddingSquare();
         assertEquals(-1, bs.insert(BidType.FOOD, 3));
         assertEquals(1, bs.insert(BidType.GOLD, 3));
-        assertEquals(2, bs.insert(BidType.GOLD, 2));
-        assertEquals(-1, bs.insert(BidType.GOLD, 4));
-        assertEquals(-1, bs.insert(BidType.GOLD, 4));
     }
 
     @Test
