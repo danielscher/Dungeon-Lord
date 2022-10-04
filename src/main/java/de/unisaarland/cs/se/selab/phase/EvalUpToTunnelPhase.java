@@ -29,6 +29,10 @@ public class EvalUpToTunnelPhase extends Phase {
     @Override
     public Phase run() {
         eval();
+
+        if(gd.getAllPlayerID().isEmpty()) {
+            return null;
+        }
         return new EvalUpToMonsterPhase(gd);
     }
 

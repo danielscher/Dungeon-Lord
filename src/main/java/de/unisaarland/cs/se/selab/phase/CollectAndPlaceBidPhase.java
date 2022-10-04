@@ -130,20 +130,16 @@ public class CollectAndPlaceBidPhase extends Phase {
             if (p.getPlayerID() >= gd.getFirstBidder()) {
                 //loop through the bidders right of the curr firstbidder
                 final BidType bid = p.getBid(priority);
-                final int slot = bs.insert(bid, p.getPlayerID());
-                if (slot >= 0) {
-                    broadcastBidPlaced(bid, p.getPlayerID(), slot);
-                }
+                bs.insert(bid, p.getPlayerID());
+                broadcastBidPlaced(bid, p.getPlayerID(), priority + 1);
             }
         }
         for (final Player p : players) {
             if (p.getPlayerID() < gd.getFirstBidder()) {
                 //loop through the bidders left of the curr firstbidder
                 final BidType bid = p.getBid(priority);
-                final int slot = bs.insert(bid, p.getPlayerID());
-                if (slot >= 0) {
-                    broadcastBidPlaced(bid, p.getPlayerID(), slot);
-                }
+                bs.insert(bid, p.getPlayerID());
+                broadcastBidPlaced(bid, p.getPlayerID(), priority + 1);
             }
         }
         gd.setFirstBidder();

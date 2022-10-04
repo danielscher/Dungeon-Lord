@@ -30,7 +30,9 @@ public class EvalRoomPhase extends Phase {
     @Override
     public Phase run() {
         eval();
-        blockAndRetrieveBids();
+        if (!(gd.getTime().getYear() == 1 && gd.getTime().getSeason() == 1)) {
+            blockAndRetrieveBids();
+        }
         returnImps();
         producedGoodsViaRoom();
 

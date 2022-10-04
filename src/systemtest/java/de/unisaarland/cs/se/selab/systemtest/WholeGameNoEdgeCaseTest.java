@@ -62,7 +62,6 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         adventurerAsserter(10);
         adventurerAsserter(23);
 
-
         // assert monster drawing
 
         monsterAsserter(13);
@@ -108,20 +107,11 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
         // assert placing bids
 
-        this.assertBidPlaced(0, BidType.FOOD, 0, 1);
-        this.assertBidPlaced(1, BidType.FOOD, 0, 1);
-        this.assertBidPlaced(2, BidType.FOOD, 0, 1);
-        this.assertBidPlaced(3, BidType.FOOD, 0, 1);
+        bidPlacedAsserter(BidType.FOOD, 0, 1);
+        bidPlacedAsserter(BidType.FOOD, 1, 1);
+        bidPlacedAsserter(BidType.FOOD, 2, 1);
+        bidPlacedAsserter(BidType.FOOD, 3, 1);
 
-        this.assertBidPlaced(0, BidType.FOOD, 1, 2);
-        this.assertBidPlaced(1, BidType.FOOD, 1, 2);
-        this.assertBidPlaced(2, BidType.FOOD, 1, 2);
-        this.assertBidPlaced(3, BidType.FOOD, 1, 2);
-
-        this.assertBidPlaced(0, BidType.FOOD, 2, 3);
-        this.assertBidPlaced(1, BidType.FOOD, 2, 3);
-        this.assertBidPlaced(2, BidType.FOOD, 2, 3);
-        this.assertBidPlaced(3, BidType.FOOD, 2, 3);
 
         // assert next year, next round , draw monster, etc..
         // can ignore
@@ -185,4 +175,11 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertRoomDrawn(3, monsterId);
     }
 
+    private void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
+            throws TimeoutException {
+        this.assertBidPlaced(0, bid, playerId, slot);
+        this.assertBidPlaced(1, bid, playerId, slot);
+        this.assertBidPlaced(2, bid, playerId, slot);
+        this.assertBidPlaced(3, bid, playerId, slot);
+    }
 }

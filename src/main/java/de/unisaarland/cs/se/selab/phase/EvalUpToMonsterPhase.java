@@ -8,6 +8,7 @@ import de.unisaarland.cs.se.selab.game.action.Action;
 import de.unisaarland.cs.se.selab.game.action.ActivateRoomAction;
 import de.unisaarland.cs.se.selab.game.action.EndTurnAction;
 import de.unisaarland.cs.se.selab.game.action.HireMonsterAction;
+import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.entities.Trap;
@@ -41,8 +42,11 @@ public class EvalUpToMonsterPhase extends Phase {
         for (int row = 0; row < 3; row++) {
             for (int col = bs.typeToColumn(BidType.GOLD); col <= bs.typeToColumn(BidType.MONSTER);
                     col++) {
-                final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
-                grant(player, bs.columnToType(col), row + 1); // slot = row + 1.
+                final int playerId = bs.getIDByBidSlot(row, col);
+                if (playerId != -1) {
+                    final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
+                    grant(player, bs.columnToType(col), row + 1); // slot = row + 1.
+                }
             }
         }
     }
@@ -288,6 +292,12 @@ public class EvalUpToMonsterPhase extends Phase {
         }
         handleHireMonsterAction = false; // finish handling action. terminates loop.
 
+    }
+
+    @Override
+    public void exec(final LeaveAction la) {
+        handleHireMonsterAction = false;
+        super.exec(la);
     }
 
 }
