@@ -52,6 +52,10 @@ public class CollectAndPlaceBidPhase extends Phase {
             }
         }
 
+        if (gd.getNumCurrPlayers() == 0) {
+            return null;
+        }
+
         for (int i = 0; i < 3; i++) {   //go through priorities to insert bids into biddingsquare
             goThruPlayers(i);
         }
