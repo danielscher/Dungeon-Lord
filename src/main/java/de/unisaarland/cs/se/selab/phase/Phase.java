@@ -47,8 +47,9 @@ public abstract class Phase {
 
     public void exec(final LeaveAction la) {
         if (gd.checkIfRegistered(la.getCommID())) {
+            final int leavingPlayerId = gd.getPlayerIdByCommID(la.getCommID());
             gd.removePlayer(la.getCommID());
-            broadcastLeft(gd.getPlayerIdByCommID(la.getCommID()));
+            broadcastLeft(leavingPlayerId);
         } else {
             gd.getServerConnection()
                     .sendActionFailed(la.getCommID(), "Player is not registered to leave");
