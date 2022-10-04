@@ -361,7 +361,7 @@ public class EvalUpToTunnelPhase extends Phase {
     public void exec(final LeaveAction la) {
         final int commId = la.getCommID();
         if (commIdsToDigTunnel.contains(commId)) {
-            commIdsToDigTunnel.remove(commId);
+            commIdsToDigTunnel.remove((Object) commId); // casting to Object needed for overloading
         }
         gotEndTurn = true; // to prevent any further tunnel dig asking from this user
         super.exec(la);

@@ -43,10 +43,11 @@ public class EvalUpToMonsterPhase extends Phase {
             for (int col = bs.typeToColumn(BidType.GOLD); col <= bs.typeToColumn(BidType.MONSTER);
                     col++) {
                 final int playerId = bs.getIDByBidSlot(row, col);
-                if (playerId != -1) {
-                    final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
+                final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
+                if (player != null) {
                     grant(player, bs.columnToType(col), row + 1); // slot = row + 1.
                 }
+
             }
         }
     }

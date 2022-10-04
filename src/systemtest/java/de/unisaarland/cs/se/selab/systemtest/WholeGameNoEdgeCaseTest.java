@@ -122,6 +122,8 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         bidPlacedAsserter(BidType.IMPS, 2, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
 
+        goldChangedAsserter(-1, 0);
+
         // assert next year, next round , draw monster, etc..
         // can ignore
         this.sendLeave(0);
@@ -190,5 +192,12 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertBidPlaced(1, bid, playerId, slot);
         this.assertBidPlaced(2, bid, playerId, slot);
         this.assertBidPlaced(3, bid, playerId, slot);
+    }
+
+    private void goldChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+        assertGoldChanged(0, amount, playerId);
+        assertGoldChanged(1, amount, playerId);
+        assertGoldChanged(2, amount, playerId);
+        assertGoldChanged(3, amount, playerId);
     }
 }
