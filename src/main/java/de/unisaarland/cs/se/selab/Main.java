@@ -22,14 +22,14 @@ public class Main {
 
     private static boolean parseCommandLineArgs(final String[] args) throws ParseException {
         final Options options = new Options();
-        options.addOption("config", true, "the path to the config file");
-        options.addOption("port", true, "port for the server connection");
-        options.addOption("seed", true, "seed used for the random object");
-        options.addOption("timeout", true, "time until server timeouts");
+        options.addOption("c", "config", true, "config path");
+        options.addOption("p", "port", true, "port for the server connection");
+        options.addOption("s", "seed", true, "seed used for the random object");
+        options.addOption("t", "timeout", true, "time until server timeouts");
 
         final CommandLineParser clParser = new DefaultParser();
         final CommandLine cmd = clParser.parse(options, args);
-        if (cmd.getArgs().length != 4) {
+        if (args.length != 8) {
             throw new UnsupportedOperationException();
         }
         if (cmd.hasOption("config")) {
