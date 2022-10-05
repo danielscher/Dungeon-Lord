@@ -12,7 +12,7 @@ import java.util.Set;
  */
 public class OurSystemTestFramework extends SystemTest {
 
-    OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
+    protected OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
     }
 
