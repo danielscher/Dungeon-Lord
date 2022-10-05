@@ -44,6 +44,8 @@ public class CollectAndPlaceBidPhase extends Phase {
 
     @Override
     public Phase run() {
+        gd.getBiddingSquare().clearEntries(); // removes previous entries on the square
+
         if (gd.getTime().getSeason() == 1) {
             broadcastNextYear(gd.getTime().getYear());
         }

@@ -1,7 +1,8 @@
-package de.unisaarland.cs.se.selab.systemtest;
+package de.unisaarland.cs.se.selab.systemtest.evaluptotunnel;
 
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.systemtest.OurSystemTestFramework;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 /**
@@ -34,7 +35,7 @@ public class EvalUpToTunnelEvalFood extends OurSystemTestFramework {
         this.sendLeave(2);
         this.sendLeave(3);
     }
-    
+
     @Override
     protected void simulateFirstBiddingSeason() throws TimeoutException {
         nextRoundAsserter(1);
