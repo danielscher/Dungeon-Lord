@@ -170,26 +170,38 @@ public class OurSystemTestFramework extends SystemTest {
         assertAdventurerArrived(3, advId, playerId);
     }
 
+    protected void adventurerDrawingFirstYearFirstSeason() throws TimeoutException {
+        // assert Adv. drawing
+        adventurerAsserter(29);
+        adventurerAsserter(23);
+        adventurerAsserter(2);
+        adventurerAsserter(0);
+    }
+
+    protected void monsterDrawingFirstYearFirstSeason() throws TimeoutException {
+        // assert monster drawing
+        monsterAsserter(23);
+        monsterAsserter(13);
+        monsterAsserter(9);
+    }
+
+    protected void roomDrawingFirstYearFirstSeason() throws TimeoutException {
+        // assert room drawing
+        roomAsserter(5);
+        roomAsserter(4);
+    }
+
+    protected void assertEntityDrawingFirstYearFirstSeason() throws TimeoutException {
+        adventurerDrawingFirstYearFirstSeason();
+        monsterDrawingFirstYearFirstSeason();
+        roomDrawingFirstYearFirstSeason();
+    }
+
+
     protected void simulateFirstBiddingSeason() throws TimeoutException {
         nextRoundAsserter(1);
 
-        // assert Adv. drawing
-
-        adventurerAsserter(5);
-        adventurerAsserter(21);
-        adventurerAsserter(24);
-        adventurerAsserter(14);
-
-        // assert monster drawing
-
-        monsterAsserter(8);
-        monsterAsserter(4);
-        monsterAsserter(2);
-
-        // assert room drawing
-
-        roomAsserter(1);
-        roomAsserter(11);
+        assertEntityDrawingFirstYearFirstSeason();
 
         // assert bidding started
 
@@ -235,10 +247,11 @@ public class OurSystemTestFramework extends SystemTest {
         impsChangedAsserter(2, 2);
 
         // adventurer arrived (at dungeons)
-        adventurerArrivedAsserter(24, 0);
-        adventurerArrivedAsserter(5, 1);
-        adventurerArrivedAsserter(21, 2);
-        adventurerArrivedAsserter(14, 3);
+        // TODO change this to respect order of evilness
+        adventurerArrivedAsserter(0, 0);
+        adventurerArrivedAsserter(2, 1);
+        adventurerArrivedAsserter(29, 2);
+        adventurerArrivedAsserter(23, 3);
     }
 
     protected void bidsOfFirstSeasonFirstYear() throws TimeoutException {

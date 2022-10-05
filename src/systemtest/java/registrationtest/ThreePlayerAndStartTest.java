@@ -40,8 +40,6 @@ public class ThreePlayerAndStartTest extends SystemTest {
         this.assertGameStarted(1);
         this.assertGameStarted(2);
         this.assertGameStarted(3);
-        this.sendStartGame(1);
-        this.assertActionFailed(1);
 
         this.sendRegister(4, "4");
         this.assertActionFailed(4);

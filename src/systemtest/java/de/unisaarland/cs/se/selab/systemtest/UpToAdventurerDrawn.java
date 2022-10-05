@@ -29,12 +29,7 @@ public class UpToAdventurerDrawn extends OurSystemTestFramework {
 
         nextRoundAsserter(1);
 
-        // assert Adv. drawing
-
-        adventurerAsserter(5);
-        adventurerAsserter(21);
-        adventurerAsserter(24);
-        adventurerAsserter(14);
+        adventurerDrawingFirstYearFirstSeason();
 
         // can ignore
         this.sendLeave(0);

@@ -29,23 +29,7 @@ public class UpToActNow extends OurSystemTestFramework {
 
         nextRoundAsserter(1);
 
-        // assert Adv. drawing
-
-        adventurerAsserter(5);
-        adventurerAsserter(21);
-        adventurerAsserter(24);
-        adventurerAsserter(14);
-
-        // assert monster drawing
-
-        monsterAsserter(8);
-        monsterAsserter(4);
-        monsterAsserter(2);
-
-        // assert room drawing
-
-        roomAsserter(1);
-        roomAsserter(11);
+        assertEntityDrawingFirstYearFirstSeason();
 
         this.assertBiddingStarted(0);
         this.assertBiddingStarted(1);
