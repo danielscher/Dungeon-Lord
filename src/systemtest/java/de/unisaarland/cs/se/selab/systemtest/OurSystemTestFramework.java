@@ -117,13 +117,30 @@ public class OurSystemTestFramework extends SystemTest {
         this.sendRegister(3, "3");
         this.assertConfig(3, config);
 
-        this.assertGameStarted(0);
-        this.assertGameStarted(1);
-        this.assertGameStarted(2);
-        this.assertGameStarted(3);
+        gameStartedAsserterAnyoneLeft();
 
         this.assertPlayerHelper(new int[]{0, 1, 2, 3});
     }
+
+    protected void gameStartedAsserterAnyoneLeft() throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertGameStarted(currS);
+        }
+    }
+
+    protected void actNowAsserterAnyoneLeft() throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertActNow(currS);
+        }
+    }
+
+    protected void biddingStartedAsserterAnyoneLeft() throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertBiddingStarted(currS);
+        }
+    }
+
+
 
     protected void nextYearAsserter(final int year) throws TimeoutException {
         this.assertNextYear(0, year);
@@ -300,17 +317,11 @@ public class OurSystemTestFramework extends SystemTest {
 
         // assert bidding started
 
-        this.assertBiddingStarted(0);
-        this.assertBiddingStarted(1);
-        this.assertBiddingStarted(2);
-        this.assertBiddingStarted(3);
+        this.biddingStartedAsserterAnyoneLeft();
 
         // assert act now (for requesting bids)
 
-        this.assertActNow(0);
-        this.assertActNow(1);
-        this.assertActNow(2);
-        this.assertActNow(3);
+        this.actNowAsserterAnyoneLeft();
 
         // place bids
         bidsOfFirstSeasonFirstYear();
