@@ -144,6 +144,13 @@ public class BiddingOnGoldBasic extends OurSystemTestFramework {
         this.assertNextYear(2, year);
     }
 
+    private void bidRetrievedAsserter(final BidType bidType, final int playerId)
+            throws TimeoutException {
+        assertBidRetrieved(0, bidType, playerId);
+        assertBidRetrieved(1, bidType, playerId);
+        assertBidRetrieved(2, bidType, playerId);
+    }
+
     @Override
     protected void simulateFirstBiddingSeason() throws TimeoutException {
         nextRoundAsserter(1);
@@ -204,6 +211,11 @@ public class BiddingOnGoldBasic extends OurSystemTestFramework {
         // slot 3:
         impsChangedAsserter(1, 2);
 
+        //retrive bids for slot 1
+        bidRetrievedAsserter(BidType.FOOD, 0);
+        bidRetrievedAsserter(BidType.FOOD, 1);
+        bidRetrievedAsserter(BidType.FOOD, 2);
+
         // imps return gold received.
         impsChangedAsserter(1, 0);
         goldChangedAsserter(1, 0);
@@ -213,6 +225,7 @@ public class BiddingOnGoldBasic extends OurSystemTestFramework {
 
         impsChangedAsserter(1, 2);
         goldChangedAsserter(1, 2);
+
 
         // adventurer arrived (at dungeons)
         adventurerArrivedAsserter(2, 0);
