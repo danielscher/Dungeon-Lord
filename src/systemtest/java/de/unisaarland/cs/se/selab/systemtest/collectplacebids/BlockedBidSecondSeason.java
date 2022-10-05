@@ -6,6 +6,7 @@ import de.unisaarland.cs.se.selab.systemtest.OurSystemTestFramework;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class BlockedBidSecondSeason extends OurSystemTestFramework {
+
     public BlockedBidSecondSeason() {
         super(BlockedBidSecondSeason.class, false);
     }
@@ -89,6 +90,6 @@ public class BlockedBidSecondSeason extends OurSystemTestFramework {
         assertActNow(0);
 
         this.sendPlaceBid(0, BidType.TRAP, 3);
-        bidPlacedAsserter(BidType.TRAP, 0,3);
+        bidPlacedAsserter(BidType.TRAP, 0, 3);
     }
 }
