@@ -193,29 +193,31 @@ public class EvalUpToMonsterPhase extends Phase {
         return grantGold(player, slot - 1); // recurse to next lower slot when can't afford.
     }
 
-    private boolean grantImps(final Player player, final int slot) { // READ!: first slot := 1.
-        if (slot < 1 || slot > 3) {
-            return false;
-        } // ensures termination of recursion.
+    private void grantImps(final Player player, final int slot) { // READ!: first slot := 1.
         final Dungeon d = player.getDungeon();
         // determines imps to be granted by slot.
         final int numImps = slot == 3 ? slot - 1 : slot;
+        boolean paidGold = false;
+        boolean paidFood = false;
 
         if (slot == 3) { // for last slot check if player can afford 1 food,gold.
-            if ((player.getFood() > 0) && (player.getGold() > 0)) {
+            if (player.getFood() > 0) {
                 //change food/gold and broadcast changes
                 player.changeFoodBy(-1);
                 broadcastFoodChanged(-1, player.getPlayerID());
-
+                paidFood = true;
+            }
+            if (player.getGold() > 0) {
                 player.changeGoldBy(-1);
                 broadcastGoldChanged(-1, player.getPlayerID());
-
+                paidGold = true;
+            }
+            // if player paid in full grant imps otherwise grant nothing.
+            if (paidGold && paidFood) {
                 d.addImps(numImps);
                 broadcastImpsChanged(numImps, player.getPlayerID());
-                return true;
-            } else {
-                return false;
             }
+
         } else { // slots 1,2 rewards
             if (player.getFood() >= numImps) {
 
@@ -224,10 +226,8 @@ public class EvalUpToMonsterPhase extends Phase {
 
                 d.addImps(numImps);
                 broadcastImpsChanged(numImps, player.getPlayerID());
-                return true;
             }
         }
-        return grantImps(player, slot - 1); // recurse to next lower slot when can't afford.
     }
 
     @Override

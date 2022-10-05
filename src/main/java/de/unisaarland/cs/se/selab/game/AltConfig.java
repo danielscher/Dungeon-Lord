@@ -618,9 +618,9 @@ public class AltConfig {
         final int tailIndex = monsters.size();
         // get a list of Monsters
         final List<Monster> drawnMonsters =
-                new ArrayList<>(monsters.subList(tailIndex - amount, tailIndex));
+                new ArrayList<>(monsters.subList(0, amount));
 
-        monsters.subList(tailIndex - amount, tailIndex).clear(); // removes drawn monsters
+        monsters.subList(0, amount).clear(); // removes drawn monsters
         return drawnMonsters;
     }
 
@@ -636,9 +636,9 @@ public class AltConfig {
         final int tailIndex = rooms.size();
         // get a list of Rooms
         final List<Room> drawnRooms =
-                new ArrayList<>(rooms.subList(tailIndex - amount, tailIndex));
+                new ArrayList<>(rooms.subList(0, amount));
 
-        rooms.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
+        rooms.subList(0, amount).clear(); // removes this sublist from list.
         return drawnRooms;
     }
 
@@ -646,21 +646,19 @@ public class AltConfig {
         final int tailIndex = traps.size();
         // get a list of Traps
         final List<Trap> drawnTraps =
-                new ArrayList<>(traps.subList(tailIndex - amount, tailIndex));
+                new ArrayList<>(traps.subList(0, amount));
 
-        traps.subList(tailIndex - amount, tailIndex)
-                .clear(); // removes this sublist from list.
+        traps.subList(0, amount).clear(); // removes this sublist from list.
         return drawnTraps;
     }
 
     public List<Adventurer> drawAdventurers(final int amount) {
         final int tailIndex = adventurers.size();
-        // get a list of Traps
+        // get a list of Adventurers
         final List<Adventurer> drawnAdventurers =
-                new ArrayList<>(adventurers.subList(tailIndex - amount, tailIndex));
+                new ArrayList<>(adventurers.subList(0, amount));
 
-        adventurers.subList(tailIndex - amount, tailIndex)
-                .clear(); // removes this sublist from list.
+        adventurers.subList(0, amount).clear(); // removes this sublist from list.
         return drawnAdventurers;
     }
 
