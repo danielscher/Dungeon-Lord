@@ -125,11 +125,11 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
     }
 
-    private void roomAsserter(final int monsterId) throws TimeoutException {
-        this.assertRoomDrawn(0, monsterId);
-        this.assertRoomDrawn(1, monsterId);
-        this.assertRoomDrawn(2, monsterId);
-        this.assertRoomDrawn(3, monsterId);
+    private void roomAsserter(final int roomId) throws TimeoutException {
+        this.assertRoomDrawn(0, roomId);
+        this.assertRoomDrawn(1, roomId);
+        this.assertRoomDrawn(2, roomId);
+        this.assertRoomDrawn(3, roomId);
     }
 
     private void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
@@ -168,16 +168,16 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
         // assert Adv. drawing
 
-        adventurerAsserter(15);
-        adventurerAsserter(18);
-        adventurerAsserter(10);
-        adventurerAsserter(23);
+        adventurerAsserter(5);
+        adventurerAsserter(21);
+        adventurerAsserter(24);
+        adventurerAsserter(14);
 
         // assert monster drawing
 
-        monsterAsserter(13);
-        monsterAsserter(19);
-        monsterAsserter(12);
+        monsterAsserter(8);
+        monsterAsserter(4);
+        monsterAsserter(2);
 
         // assert room drawing
 
@@ -229,10 +229,10 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         impsChangedAsserter(2, 2);
 
         // adventurer arrived (at dungeons)
-        adventurerArrivedAsserter(10, 0);
-        adventurerArrivedAsserter(18, 1);
-        adventurerArrivedAsserter(15, 2);
-        adventurerArrivedAsserter(23, 3);
+        adventurerArrivedAsserter(24, 0);
+        adventurerArrivedAsserter(5, 1);
+        adventurerArrivedAsserter(21, 2);
+        adventurerArrivedAsserter(14, 3);
     }
 
     private void bidsOfFirstSeasonFirstYear() throws TimeoutException {

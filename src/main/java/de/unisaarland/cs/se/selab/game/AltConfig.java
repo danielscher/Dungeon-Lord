@@ -665,8 +665,8 @@ public class AltConfig {
     }
 
     private void shuffleLists() {
-        Collections.shuffle(adventurers, random);
         Collections.shuffle(monsters, random);
+        Collections.shuffle(adventurers, random);
         Collections.shuffle(traps, random);
         Collections.shuffle(rooms, random);
     }
