@@ -170,26 +170,38 @@ public class OurSystemTestFramework extends SystemTest {
         assertAdventurerArrived(3, advId, playerId);
     }
 
-    protected void simulateFirstBiddingSeason() throws TimeoutException {
-        nextRoundAsserter(1);
-
+    protected void adventurerDrawingFirstYearFirstSeason() throws TimeoutException {
         // assert Adv. drawing
-
         adventurerAsserter(29);
         adventurerAsserter(23);
         adventurerAsserter(2);
         adventurerAsserter(0);
+    }
 
+    protected void monsterDrawingFirstYearFirstSeason() throws TimeoutException {
         // assert monster drawing
-
         monsterAsserter(23);
         monsterAsserter(13);
         monsterAsserter(9);
+    }
 
+    protected void roomDrawingFirstYearFirstSeason() throws TimeoutException {
         // assert room drawing
-
         roomAsserter(5);
         roomAsserter(4);
+    }
+
+    protected void assertEntityDrawingFirstYearFirstSeason() throws TimeoutException {
+        adventurerDrawingFirstYearFirstSeason();
+        monsterDrawingFirstYearFirstSeason();
+        roomDrawingFirstYearFirstSeason();
+    }
+
+
+    protected void simulateFirstBiddingSeason() throws TimeoutException {
+        nextRoundAsserter(1);
+
+        assertEntityDrawingFirstYearFirstSeason();
 
         // assert bidding started
 
