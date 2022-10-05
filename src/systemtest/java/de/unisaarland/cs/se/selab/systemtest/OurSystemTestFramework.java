@@ -259,7 +259,6 @@ public class OurSystemTestFramework extends SystemTest {
         bidRetrievedAsserter(BidType.FOOD,0);
         bidRetrievedAsserter(BidType.FOOD,1);
         bidRetrievedAsserter(BidType.FOOD,2);
-        bidRetrievedAsserter(BidType.FOOD,3);
 
         // adventurer arrived (at dungeons)
         // TODO change this to respect order of evilness
