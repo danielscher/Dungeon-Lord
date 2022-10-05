@@ -615,11 +615,12 @@ public class AltConfig {
     }
 
     public List<Monster> drawMonsters(final int amount) {
+        final int tailIndex = monsters.size();
         // get a list of Monsters
         final List<Monster> drawnMonsters =
-                new ArrayList<>(monsters.subList(0, amount));
+                new ArrayList<>(monsters.subList(tailIndex - amount, tailIndex));
 
-        monsters.subList(0, amount).clear(); // removes drawn monsters
+        monsters.subList(tailIndex - amount, tailIndex).clear(); // removes drawn monsters
         return drawnMonsters;
     }
 
@@ -632,29 +633,34 @@ public class AltConfig {
 
 
     public List<Room> drawRooms(final int amount) {
+        final int tailIndex = rooms.size();
         // get a list of Rooms
         final List<Room> drawnRooms =
-                new ArrayList<>(rooms.subList(0, amount));
+                new ArrayList<>(rooms.subList(tailIndex - amount, tailIndex));
 
-        rooms.subList(0, amount).clear(); // removes this sublist from list.
+        rooms.subList(tailIndex - amount, tailIndex).clear(); // removes this sublist from list.
         return drawnRooms;
     }
 
     public List<Trap> drawTraps(final int amount) {
+        final int tailIndex = traps.size();
         // get a list of Traps
         final List<Trap> drawnTraps =
-                new ArrayList<>(traps.subList(0, amount));
+                new ArrayList<>(traps.subList(tailIndex - amount, tailIndex));
 
-        traps.subList(0, amount).clear(); // removes this sublist from list.
+        traps.subList(tailIndex - amount, tailIndex)
+                .clear(); // removes this sublist from list.
         return drawnTraps;
     }
 
     public List<Adventurer> drawAdventurers(final int amount) {
-        // get a list of Adventurers
+        final int tailIndex = adventurers.size();
+        // get a list of Traps
         final List<Adventurer> drawnAdventurers =
-                new ArrayList<>(adventurers.subList(0, amount));
+                new ArrayList<>(adventurers.subList(tailIndex - amount, tailIndex));
 
-        adventurers.subList(0, amount).clear(); // removes this sublist from list.
+        adventurers.subList(tailIndex - amount, tailIndex)
+                .clear(); // removes this sublist from list.
         return drawnAdventurers;
     }
 
