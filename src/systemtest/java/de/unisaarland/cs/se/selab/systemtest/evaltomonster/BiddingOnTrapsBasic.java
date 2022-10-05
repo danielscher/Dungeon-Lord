@@ -136,6 +136,13 @@ public class BiddingOnTrapsBasic extends OurSystemTestFramework {
         this.assertNextYear(2, year);
     }
 
+    private void bidRetrievedAsserter(final BidType bidType, final int playerId)
+            throws TimeoutException {
+        assertBidRetrieved(0, bidType, playerId);
+        assertBidRetrieved(1, bidType, playerId);
+        assertBidRetrieved(2, bidType, playerId);
+    }
+
     @Override
     protected void simulateFirstBiddingSeason() throws TimeoutException {
         nextRoundAsserter(1);
@@ -198,6 +205,11 @@ public class BiddingOnTrapsBasic extends OurSystemTestFramework {
         goldChangedAsserter(-2, 2);
         trapAcqAssertions(2, 19);
         trapAcqAssertions(2, 5);
+
+        //retrive bids for slot 1
+        bidRetrievedAsserter(BidType.FOOD, 0);
+        bidRetrievedAsserter(BidType.FOOD, 1);
+        bidRetrievedAsserter(BidType.FOOD, 2);
 
         // adventurer arrived (at dungeons)
         adventurerArrivedAsserter(2, 0);
