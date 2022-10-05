@@ -147,12 +147,12 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         assertGoldChanged(3, amount, playerId);
     }
 
-    private void evilnessChangedAsserter(final int amount, final int palyerId)
+    private void evilnessChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
-        assertEvilnessChanged(0, amount, palyerId);
-        assertEvilnessChanged(1, amount, palyerId);
-        assertEvilnessChanged(2, amount, palyerId);
-        assertEvilnessChanged(3, amount, palyerId);
+        assertEvilnessChanged(0, amount, playerId);
+        assertEvilnessChanged(1, amount, playerId);
+        assertEvilnessChanged(2, amount, playerId);
+        assertEvilnessChanged(3, amount, playerId);
     }
 
     private void adventurerArrivedAsserter(final int advId, final int playerId)
@@ -201,37 +201,42 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         // place bids
 
         this.sendPlaceBid(0, BidType.FOOD, 1);
+        bidPlacedAsserter(BidType.FOOD, 0, 1);
+
         this.sendPlaceBid(0, BidType.NICENESS, 2);
+        bidPlacedAsserter(BidType.NICENESS, 0, 2);
+
         this.sendPlaceBid(0, BidType.IMPS, 3);
+        bidPlacedAsserter(BidType.IMPS, 0, 3);
 
         this.sendPlaceBid(1, BidType.FOOD, 1);
+        bidPlacedAsserter(BidType.FOOD, 1, 1);
+
         this.sendPlaceBid(1, BidType.NICENESS, 2);
+        bidPlacedAsserter(BidType.NICENESS, 1, 2);
+
         this.sendPlaceBid(1, BidType.IMPS, 3);
+        bidPlacedAsserter(BidType.IMPS, 1, 3);
 
         this.sendPlaceBid(2, BidType.FOOD, 1);
+        bidPlacedAsserter(BidType.FOOD, 2, 1);
+
         this.sendPlaceBid(2, BidType.NICENESS, 2);
+        bidPlacedAsserter(BidType.NICENESS, 2, 2);
+
         this.sendPlaceBid(2, BidType.IMPS, 3);
+        bidPlacedAsserter(BidType.IMPS, 2, 3);
 
         this.sendPlaceBid(3, BidType.FOOD, 1);
-        this.sendPlaceBid(3, BidType.NICENESS, 2);
-        this.sendPlaceBid(3, BidType.IMPS, 3);
-
-        // assert placing bids
-
-        bidPlacedAsserter(BidType.FOOD, 0, 1);
-        bidPlacedAsserter(BidType.FOOD, 1, 1);
-        bidPlacedAsserter(BidType.FOOD, 2, 1);
         bidPlacedAsserter(BidType.FOOD, 3, 1);
 
-        bidPlacedAsserter(BidType.NICENESS, 0, 2);
-        bidPlacedAsserter(BidType.NICENESS, 1, 2);
-        bidPlacedAsserter(BidType.NICENESS, 2, 2);
+        this.sendPlaceBid(3, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 3, 2);
 
-        bidPlacedAsserter(BidType.IMPS, 0, 3);
-        bidPlacedAsserter(BidType.IMPS, 1, 3);
-        bidPlacedAsserter(BidType.IMPS, 2, 3);
+        this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
+
+        // assert placing bids
 
         // first bid category (food)
         goldChangedAsserter(-1, 0);
