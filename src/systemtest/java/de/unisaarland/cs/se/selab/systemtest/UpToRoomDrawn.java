@@ -31,21 +31,12 @@ public class UpToRoomDrawn extends OurSystemTestFramework {
 
         // assert Adv. drawing
 
-        adventurerAsserter(5);
-        adventurerAsserter(21);
-        adventurerAsserter(24);
-        adventurerAsserter(14);
+        adventurerDrawingFirstYearFirstSeason();
 
-        // assert monster drawing
+        monsterDrawingFirstYearFirstSeason();
 
-        monsterAsserter(8);
-        monsterAsserter(4);
-        monsterAsserter(2);
+        roomDrawingFirstYearFirstSeason();
 
-        // assert room drawing
-
-        roomAsserter(1);
-        roomAsserter(11);
 
 
         // can ignore
