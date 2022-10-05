@@ -169,6 +169,7 @@ public class EvalRoomPhase extends Phase {
                     broadcastBidRetrieved(bid, player.getPlayerID());
                 }
             }
+            broadcastBidRetrieved(player.getBid(0), player.getPlayerID());
             player.blockBids();
             player.clearCurrBids();
         }
