@@ -5,6 +5,7 @@ out/
 gradle/
 docs/
 libs/
+test_tmp/
 
 gradlew
 gradlew.bat
