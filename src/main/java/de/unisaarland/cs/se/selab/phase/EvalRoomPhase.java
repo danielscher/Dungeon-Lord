@@ -30,9 +30,8 @@ public class EvalRoomPhase extends Phase {
     @Override
     public Phase run() {
         eval();
-        if (!(gd.getTime().getYear() == 1 && gd.getTime().getSeason() == 1)) {
-            blockAndRetrieveBids();
-        }
+        blockAndRetrieveBids();
+
         returnImps();
         producedGoodsViaRoom();
 
@@ -166,7 +165,9 @@ public class EvalRoomPhase extends Phase {
     public void blockAndRetrieveBids() {
         for (final Player player : gd.getAllPlayerSortedByID()) {
             for (final BidType bid : player.getBlockedBids()) {
-                broadcastBidRetrieved(bid, player.getPlayerID());
+                if (bid != null) {
+                    broadcastBidRetrieved(bid, player.getPlayerID());
+                }
             }
             player.blockBids();
             player.clearCurrBids();

@@ -53,90 +53,21 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
         nextYearAsserter(1);
 
-        nextRoundAsserter(1);
-
-        // assert Adv. drawing
-
-        adventurerAsserter(15);
-        adventurerAsserter(18);
-        adventurerAsserter(10);
-        adventurerAsserter(23);
-
-        // assert monster drawing
-
-        monsterAsserter(13);
-        monsterAsserter(19);
-        monsterAsserter(12);
-
-        // assert room drawing
-
-        roomAsserter(1);
-        roomAsserter(11);
-
-        // assert bidding started
-
-        this.assertBiddingStarted(0);
-        this.assertBiddingStarted(1);
-        this.assertBiddingStarted(2);
-        this.assertBiddingStarted(3);
-
-        // assert act now (for requesting bids)
-
-        this.assertActNow(0);
-        this.assertActNow(1);
-        this.assertActNow(2);
-        this.assertActNow(3);
-
-        // place bids
-
-        this.sendPlaceBid(0, BidType.FOOD, 1);
-        this.sendPlaceBid(0, BidType.NICENESS, 2);
-        this.sendPlaceBid(0, BidType.IMPS, 3);
-
-        this.sendPlaceBid(1, BidType.FOOD, 1);
-        this.sendPlaceBid(1, BidType.NICENESS, 2);
-        this.sendPlaceBid(1, BidType.IMPS, 3);
-
-        this.sendPlaceBid(2, BidType.FOOD, 1);
-        this.sendPlaceBid(2, BidType.NICENESS, 2);
-        this.sendPlaceBid(2, BidType.IMPS, 3);
-
-        this.sendPlaceBid(3, BidType.FOOD, 1);
-        this.sendPlaceBid(3, BidType.NICENESS, 2);
-        this.sendPlaceBid(3, BidType.IMPS, 3);
-
-        // assert placing bids
-
-        bidPlacedAsserter(BidType.FOOD, 0, 1);
-        bidPlacedAsserter(BidType.FOOD, 1, 1);
-        bidPlacedAsserter(BidType.FOOD, 2, 1);
-        bidPlacedAsserter(BidType.FOOD, 3, 1);
-
-        bidPlacedAsserter(BidType.NICENESS, 0, 2);
-        bidPlacedAsserter(BidType.NICENESS, 1, 2);
-        bidPlacedAsserter(BidType.NICENESS, 2, 2);
-        bidPlacedAsserter(BidType.NICENESS, 3, 2);
-
-        bidPlacedAsserter(BidType.IMPS, 0, 3);
-        bidPlacedAsserter(BidType.IMPS, 1, 3);
-        bidPlacedAsserter(BidType.IMPS, 2, 3);
-        bidPlacedAsserter(BidType.IMPS, 3, 3);
-
-        goldChangedAsserter(-1, 0);
-        foodChangedAsserter(2, 0);
-        evilnessChangedAsserter(1, 1);
-        foodChangedAsserter(3, 1);
-        evilnessChangedAsserter(2, 2);
-        foodChangedAsserter(3, 2);
-        goldChangedAsserter(1, 2);
+        simulateFirstBiddingSeason();
 
         // assert next year, next round , draw monster, etc..
         // can ignore
         this.sendLeave(0);
-        assertLeft(0, 0); // this line makes the debugger stay alive
         this.sendLeave(1);
         this.sendLeave(2);
         this.sendLeave(3);
+    }
+
+    private void impsChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+        assertImpsChanged(0, amount, playerId);
+        assertImpsChanged(1, amount, playerId);
+        assertImpsChanged(2, amount, playerId);
+        assertImpsChanged(3, amount, playerId);
     }
 
     private void foodChangedAsserter(final int amount, final int playerId) throws TimeoutException {
@@ -222,5 +153,114 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         assertEvilnessChanged(1, amount, palyerId);
         assertEvilnessChanged(2, amount, palyerId);
         assertEvilnessChanged(3, amount, palyerId);
+    }
+
+    private void adventurerArrivedAsserter(final int advId, final int playerId)
+            throws TimeoutException {
+        assertAdventurerArrived(0, advId, playerId);
+        assertAdventurerArrived(1, advId, playerId);
+        assertAdventurerArrived(2, advId, playerId);
+        assertAdventurerArrived(3, advId, playerId);
+    }
+
+    private void simulateFirstBiddingSeason() throws TimeoutException {
+        nextRoundAsserter(1);
+
+        // assert Adv. drawing
+
+        adventurerAsserter(15);
+        adventurerAsserter(18);
+        adventurerAsserter(10);
+        adventurerAsserter(23);
+
+        // assert monster drawing
+
+        monsterAsserter(13);
+        monsterAsserter(19);
+        monsterAsserter(12);
+
+        // assert room drawing
+
+        roomAsserter(1);
+        roomAsserter(11);
+
+        // assert bidding started
+
+        this.assertBiddingStarted(0);
+        this.assertBiddingStarted(1);
+        this.assertBiddingStarted(2);
+        this.assertBiddingStarted(3);
+
+        // assert act now (for requesting bids)
+
+        this.assertActNow(0);
+        this.assertActNow(1);
+        this.assertActNow(2);
+        this.assertActNow(3);
+
+        // place bids
+
+        this.sendPlaceBid(0, BidType.FOOD, 1);
+        this.sendPlaceBid(0, BidType.NICENESS, 2);
+        this.sendPlaceBid(0, BidType.IMPS, 3);
+
+        this.sendPlaceBid(1, BidType.FOOD, 1);
+        this.sendPlaceBid(1, BidType.NICENESS, 2);
+        this.sendPlaceBid(1, BidType.IMPS, 3);
+
+        this.sendPlaceBid(2, BidType.FOOD, 1);
+        this.sendPlaceBid(2, BidType.NICENESS, 2);
+        this.sendPlaceBid(2, BidType.IMPS, 3);
+
+        this.sendPlaceBid(3, BidType.FOOD, 1);
+        this.sendPlaceBid(3, BidType.NICENESS, 2);
+        this.sendPlaceBid(3, BidType.IMPS, 3);
+
+        // assert placing bids
+
+        bidPlacedAsserter(BidType.FOOD, 0, 1);
+        bidPlacedAsserter(BidType.FOOD, 1, 1);
+        bidPlacedAsserter(BidType.FOOD, 2, 1);
+        bidPlacedAsserter(BidType.FOOD, 3, 1);
+
+        bidPlacedAsserter(BidType.NICENESS, 0, 2);
+        bidPlacedAsserter(BidType.NICENESS, 1, 2);
+        bidPlacedAsserter(BidType.NICENESS, 2, 2);
+        bidPlacedAsserter(BidType.NICENESS, 3, 2);
+
+        bidPlacedAsserter(BidType.IMPS, 0, 3);
+        bidPlacedAsserter(BidType.IMPS, 1, 3);
+        bidPlacedAsserter(BidType.IMPS, 2, 3);
+        bidPlacedAsserter(BidType.IMPS, 3, 3);
+
+        // first bid category (food)
+        goldChangedAsserter(-1, 0);
+        foodChangedAsserter(2, 0);
+        evilnessChangedAsserter(1, 1);
+        foodChangedAsserter(3, 1);
+        evilnessChangedAsserter(2, 2);
+        foodChangedAsserter(3, 2);
+        goldChangedAsserter(1, 2);
+
+        // second bid category (niceness)
+        evilnessChangedAsserter(-1, 0);
+        evilnessChangedAsserter(-2, 1);
+        goldChangedAsserter(-1, 2);
+        evilnessChangedAsserter(-2, 2);
+
+        // imp category
+        foodChangedAsserter(-1, 0);
+        impsChangedAsserter(1, 0);
+        foodChangedAsserter(-2, 1);
+        impsChangedAsserter(2, 1);
+        foodChangedAsserter(-1, 2);
+        goldChangedAsserter(-1, 2);
+        impsChangedAsserter(2, 2);
+
+        // adventurer arrived (at dungeons)
+        adventurerArrivedAsserter(10, 0);
+        adventurerArrivedAsserter(18, 1);
+        adventurerArrivedAsserter(15, 2);
+        adventurerArrivedAsserter(23, 3);
     }
 }
