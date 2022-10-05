@@ -163,8 +163,14 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertMonsterDrawn(1, monsterId);
         this.assertMonsterDrawn(2, monsterId);
         this.assertMonsterDrawn(3, monsterId);
-
     }
+
+    protected void monsterAsserter2(final int monsterId) throws TimeoutException {
+        for (final int i : socketList) {
+            this.assertMonsterDrawn(i, monsterId);
+        }
+    }
+
 
     protected void roomAsserter(final int roomId) throws TimeoutException {
         this.assertRoomDrawn(0, roomId);
@@ -172,6 +178,13 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertRoomDrawn(2, roomId);
         this.assertRoomDrawn(3, roomId);
     }
+
+    protected void roomAsserter2(final int roomId) throws TimeoutException {
+        for (final int i : socketList) {
+            this.assertRoomDrawn(i, roomId);
+        }
+    }
+
 
     protected void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
             throws TimeoutException {
@@ -181,6 +194,14 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertBidPlaced(3, bid, playerId, slot);
     }
 
+    protected void bidPlacedAsserter2(final BidType bid, final int playerId, final int slot)
+            throws TimeoutException {
+        for (final int i : socketList) {
+            this.assertBidPlaced(i, bid, playerId, slot);
+        }
+    }
+
+
     protected void goldChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
         assertGoldChanged(0, amount, playerId);
@@ -188,6 +209,14 @@ public class OurSystemTestFramework extends SystemTest {
         assertGoldChanged(2, amount, playerId);
         assertGoldChanged(3, amount, playerId);
     }
+
+    protected void goldChangedAsserter2(final int amount, final int playerId)
+            throws TimeoutException {
+        for (final int i : socketList) {
+            assertGoldChanged(i, amount, playerId);
+        }
+    }
+
 
     protected void evilnessChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
@@ -197,6 +226,14 @@ public class OurSystemTestFramework extends SystemTest {
         assertEvilnessChanged(3, amount, playerId);
     }
 
+    protected void evilnessChangedAsserter2(final int amount, final int playerId)
+            throws TimeoutException {
+        for (final int i : socketList) {
+            assertEvilnessChanged(i, amount, playerId);
+        }
+    }
+
+
     protected void bidRetrievedAsserter(final BidType bidType, final int playId)
             throws TimeoutException {
         assertBidRetrieved(0, bidType, playId);
@@ -205,6 +242,14 @@ public class OurSystemTestFramework extends SystemTest {
         assertBidRetrieved(3, bidType, playId);
     }
 
+    protected void bidRetrievedAsserter2(final BidType bidType, final int playId)
+            throws TimeoutException {
+        for (final int i : socketList) {
+            assertBidRetrieved(i, bidType, playId);
+        }
+    }
+
+
     protected void adventurerArrivedAsserter(final int advId, final int playerId)
             throws TimeoutException {
         assertAdventurerArrived(0, advId, playerId);
@@ -212,6 +257,14 @@ public class OurSystemTestFramework extends SystemTest {
         assertAdventurerArrived(2, advId, playerId);
         assertAdventurerArrived(3, advId, playerId);
     }
+
+    protected void adventurerArrivedAsserter2(final int advId, final int playerId)
+            throws TimeoutException {
+        for (final int i : socketList) {
+            assertAdventurerArrived(i, advId, playerId);
+        }
+    }
+
 
     protected void adventurerDrawingFirstYearFirstSeason() throws TimeoutException {
         // assert Adv. drawing
@@ -347,5 +400,9 @@ public class OurSystemTestFramework extends SystemTest {
 
         this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
+    }
+
+    protected void setSocketList(final int[] socketList) {
+        this.socketList = socketList;
     }
 }
