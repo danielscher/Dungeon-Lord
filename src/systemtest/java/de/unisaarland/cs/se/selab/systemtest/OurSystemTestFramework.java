@@ -257,36 +257,44 @@ public class OurSystemTestFramework extends SystemTest {
     protected void bidsOfFirstSeasonFirstYear() throws TimeoutException {
         this.sendPlaceBid(0, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 0, 1);
+        assertActNow(0);
 
         this.sendPlaceBid(0, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 0, 2);
+        assertActNow(0);
 
         this.sendPlaceBid(0, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 0, 3);
 
         this.sendPlaceBid(1, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 1, 1);
+        assertActNow(1);
 
         this.sendPlaceBid(1, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 1, 2);
+        assertActNow(1);
 
         this.sendPlaceBid(1, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 1, 3);
 
         this.sendPlaceBid(2, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 2, 1);
+        assertActNow(2);
 
         this.sendPlaceBid(2, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 2, 2);
+        assertActNow(2);
 
         this.sendPlaceBid(2, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 2, 3);
 
         this.sendPlaceBid(3, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 3, 1);
+        assertActNow(3);
 
         this.sendPlaceBid(3, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 3, 2);
+        assertActNow(3);
 
         this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
