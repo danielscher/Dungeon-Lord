@@ -30,7 +30,18 @@ public class EvalUpToTunnelEvalFood extends OurSystemTestFramework {
         this.sendLeave(1);
         this.sendLeave(2);
         this.sendLeave(3);
+    }
 
+    protected void foodSlotsEvalAsserter() throws TimeoutException {
+        // inform other players that player0 has paid 1 gold for 2 food
+        this.assertGoldChanged(0, 1, 0);
+        this.assertGoldChanged(1, 1, 0);
+        this.assertGoldChanged(2, 1, 0);
+        this.assertGoldChanged(3, 1, 0);
+        this.assertFoodChanged(0, 2, 0);
+        this.assertFoodChanged(1, 2, 0);
+        this.assertFoodChanged(2, 2, 0);
+        this.assertFoodChanged(3, 2, 0);
     }
 
 
