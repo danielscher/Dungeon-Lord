@@ -1,7 +1,6 @@
-package de.unisaarland.cs.se.selab.systemtest.stop00parsing;
+package de.unisaarland.cs.se.selab.systemtest;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.systemtest.RegistrationTest;
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTest;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 import java.util.Set;
