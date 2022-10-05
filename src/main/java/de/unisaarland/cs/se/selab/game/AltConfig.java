@@ -615,7 +615,6 @@ public class AltConfig {
     }
 
     public List<Monster> drawMonsters(final int amount) {
-        final int tailIndex = monsters.size();
         // get a list of Monsters
         final List<Monster> drawnMonsters =
                 new ArrayList<>(monsters.subList(0, amount));
@@ -633,7 +632,6 @@ public class AltConfig {
 
 
     public List<Room> drawRooms(final int amount) {
-        final int tailIndex = rooms.size();
         // get a list of Rooms
         final List<Room> drawnRooms =
                 new ArrayList<>(rooms.subList(0, amount));
@@ -643,7 +641,6 @@ public class AltConfig {
     }
 
     public List<Trap> drawTraps(final int amount) {
-        final int tailIndex = traps.size();
         // get a list of Traps
         final List<Trap> drawnTraps =
                 new ArrayList<>(traps.subList(0, amount));
@@ -653,7 +650,6 @@ public class AltConfig {
     }
 
     public List<Adventurer> drawAdventurers(final int amount) {
-        final int tailIndex = adventurers.size();
         // get a list of Adventurers
         final List<Adventurer> drawnAdventurers =
                 new ArrayList<>(adventurers.subList(0, amount));
