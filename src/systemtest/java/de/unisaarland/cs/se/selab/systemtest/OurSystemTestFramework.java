@@ -5,7 +5,8 @@ import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTest;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -13,7 +14,7 @@ import java.util.Set;
  */
 public class OurSystemTestFramework extends SystemTest {
 
-    private final Set<Integer> currSockets = new HashSet<>();
+    private final List<Integer> currSockets = new ArrayList<>();
 
     protected OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
