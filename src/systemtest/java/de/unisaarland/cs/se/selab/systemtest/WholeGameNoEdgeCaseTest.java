@@ -199,7 +199,43 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertActNow(3);
 
         // place bids
+        bidsOfFirstSeasonFirstYear();
 
+
+        // assert placing bids
+
+        // first bid category (food)
+        goldChangedAsserter(-1, 0);
+        foodChangedAsserter(2, 0);
+        evilnessChangedAsserter(1, 1);
+        foodChangedAsserter(3, 1);
+        evilnessChangedAsserter(2, 2);
+        foodChangedAsserter(3, 2);
+        goldChangedAsserter(1, 2);
+
+        // second bid category (niceness)
+        evilnessChangedAsserter(-1, 0);
+        evilnessChangedAsserter(-2, 1);
+        goldChangedAsserter(-1, 2);
+        evilnessChangedAsserter(-2, 2);
+
+        // imp category
+        foodChangedAsserter(-1, 0);
+        impsChangedAsserter(1, 0);
+        foodChangedAsserter(-2, 1);
+        impsChangedAsserter(2, 1);
+        foodChangedAsserter(-1, 2);
+        goldChangedAsserter(-1, 2);
+        impsChangedAsserter(2, 2);
+
+        // adventurer arrived (at dungeons)
+        adventurerArrivedAsserter(10, 0);
+        adventurerArrivedAsserter(18, 1);
+        adventurerArrivedAsserter(15, 2);
+        adventurerArrivedAsserter(23, 3);
+    }
+
+    private void bidsOfFirstSeasonFirstYear() throws TimeoutException {
         this.sendPlaceBid(0, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 0, 1);
 
@@ -235,37 +271,5 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
         this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
-
-        // assert placing bids
-
-        // first bid category (food)
-        goldChangedAsserter(-1, 0);
-        foodChangedAsserter(2, 0);
-        evilnessChangedAsserter(1, 1);
-        foodChangedAsserter(3, 1);
-        evilnessChangedAsserter(2, 2);
-        foodChangedAsserter(3, 2);
-        goldChangedAsserter(1, 2);
-
-        // second bid category (niceness)
-        evilnessChangedAsserter(-1, 0);
-        evilnessChangedAsserter(-2, 1);
-        goldChangedAsserter(-1, 2);
-        evilnessChangedAsserter(-2, 2);
-
-        // imp category
-        foodChangedAsserter(-1, 0);
-        impsChangedAsserter(1, 0);
-        foodChangedAsserter(-2, 1);
-        impsChangedAsserter(2, 1);
-        foodChangedAsserter(-1, 2);
-        goldChangedAsserter(-1, 2);
-        impsChangedAsserter(2, 2);
-
-        // adventurer arrived (at dungeons)
-        adventurerArrivedAsserter(10, 0);
-        adventurerArrivedAsserter(18, 1);
-        adventurerArrivedAsserter(15, 2);
-        adventurerArrivedAsserter(23, 3);
     }
 }
