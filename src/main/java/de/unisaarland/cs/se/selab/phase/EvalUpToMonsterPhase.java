@@ -83,6 +83,7 @@ public class EvalUpToMonsterPhase extends Phase {
                 gd.getServerConnection()
                         .sendSelectMonster(commId); // tells player to select monster.
                 gd.getServerConnection().sendActNow(commId);
+                handleHireMonsterAction = true;
 
                 // will ask for next action until receives End Turn or Hire Monster action.
                 while (handleHireMonsterAction) {
@@ -102,16 +103,31 @@ public class EvalUpToMonsterPhase extends Phase {
                 break;
             }
             case 3: {
-                if (player.getFood() > 0) {
-                    player.changeFoodBy(-1); // pays for the slot 1 food.
-                    broadcastFoodChanged(-1, player.getPlayerID());
+                // check if player affords slot cost
+                if (player.getFood() <= 0) {
+                    break;
+                }
+                //event order food -> select monster
+                player.changeFoodBy(-1); // pays for the slot 1 food.
+                broadcastFoodChanged(-1, player.getPlayerID());
+                gd.getServerConnection()
+                        .sendSelectMonster(commId); // tells player to select monster.
+                gd.getServerConnection().sendActNow(commId);
+                handleHireMonsterAction = true;
+
+                // will ask for next action until receives End Turn or Hire Monster action.
+                while (handleHireMonsterAction) {
+
+                    currHandledCommId = commId;
 
                     try { // get action from player.
                         final Action action = gd.getServerConnection().nextAction();
                         action.invoke(this);
 
                     } catch (TimeoutException e) {
-                        kickPlayer(player.getPlayerID()); // kicks player (leave).
+                        //TODO: add behaviour
+                        kickPlayer(player.getPlayerID());
+
                     }
                 }
                 break;
@@ -246,10 +262,14 @@ public class EvalUpToMonsterPhase extends Phase {
                 && player.getEvilLevel() + monsterEvilness <= 15) {
 
             player.changeFoodBy(-monsterHunger);
-            broadcastFoodChanged(-monsterHunger, player.getPlayerID());
+            if (monsterHunger != 0) {
+                broadcastFoodChanged(-monsterHunger, player.getPlayerID());
+            }
 
-            player.changeEvilnessBy(-monsterEvilness);
-            broadcastEvilnessChanged(-monsterEvilness, player.getPlayerID());
+            player.changeEvilnessBy(monsterEvilness);
+            if (monsterEvilness != 0) {
+                broadcastEvilnessChanged(monsterEvilness, player.getPlayerID());
+            }
 
             // grand monster to player.
             player.getDungeon()
