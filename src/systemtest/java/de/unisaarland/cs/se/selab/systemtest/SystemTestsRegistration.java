@@ -11,11 +11,13 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
-        manager.registerTest(new RegistrationTest());
-        manager.registerTest(new OurSystemTestFramework());
-        manager.registerTest(new SystemTestTemplate());
+        //manager.registerTest(new RegistrationTest());
+        //manager.registerTest(new OurSystemTestFramework());
+        //manager.registerTest(new SystemTestTemplate());
 
         //this below are Eval up to tunnel edge cases.
-        manager.registerTest(new EvalUpToTunnelAllPlayerLeft());
+        //manager.registerTest(new EvalUpToTunnelAllPlayerLeft());
+        manager.registerTest(new EvalUpToTunnelEvalFood());
+
     }
 }
