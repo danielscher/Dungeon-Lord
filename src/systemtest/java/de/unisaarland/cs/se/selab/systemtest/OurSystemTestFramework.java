@@ -10,15 +10,19 @@ import java.util.Set;
 /**
  * Register 2 Players and Leave
  */
-public class WholeGameNoEdgeCaseTest extends SystemTest {
+public class OurSystemTestFramework extends SystemTest {
 
-    WholeGameNoEdgeCaseTest() {
-        super(WholeGameNoEdgeCaseTest.class, false);
+    OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
+    OurSystemTestFramework() {
+        super(OurSystemTestFramework.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(WholeGameNoEdgeCaseTest.class, "configuration.json");
+        return Utils.loadResource(OurSystemTestFramework.class, "configuration.json");
     }
 
     @Override
@@ -63,14 +67,16 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.sendLeave(3);
     }
 
-    private void impsChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+    protected void impsChangedAsserter(final int amount, final int playerId)
+            throws TimeoutException {
         assertImpsChanged(0, amount, playerId);
         assertImpsChanged(1, amount, playerId);
         assertImpsChanged(2, amount, playerId);
         assertImpsChanged(3, amount, playerId);
     }
 
-    private void foodChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+    protected void foodChangedAsserter(final int amount, final int playerId)
+            throws TimeoutException {
         assertFoodChanged(0, amount, playerId);
         assertFoodChanged(1, amount, playerId);
         assertFoodChanged(2, amount, playerId);
@@ -78,7 +84,7 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
     }
 
-    private void regPhaseAssertions(final String config) throws TimeoutException {
+    protected void regPhaseAssertions(final String config) throws TimeoutException {
         this.sendRegister(0, "0");
         this.assertConfig(0, config);
         this.sendRegister(1, "1");
@@ -96,28 +102,28 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertPlayerHelper(new int[]{0, 1, 2, 3});
     }
 
-    private void nextYearAsserter(final int year) throws TimeoutException {
+    protected void nextYearAsserter(final int year) throws TimeoutException {
         this.assertNextYear(0, year);
         this.assertNextYear(1, year);
         this.assertNextYear(2, year);
         this.assertNextYear(3, year);
     }
 
-    private void nextRoundAsserter(final int round) throws TimeoutException {
+    protected void nextRoundAsserter(final int round) throws TimeoutException {
         this.assertNextRound(0, round);
         this.assertNextRound(1, round);
         this.assertNextRound(2, round);
         this.assertNextRound(3, round);
     }
 
-    private void adventurerAsserter(final int advId) throws TimeoutException {
+    protected void adventurerAsserter(final int advId) throws TimeoutException {
         this.assertAdventurerDrawn(0, advId);
         this.assertAdventurerDrawn(1, advId);
         this.assertAdventurerDrawn(2, advId);
         this.assertAdventurerDrawn(3, advId);
     }
 
-    private void monsterAsserter(final int monsterId) throws TimeoutException {
+    protected void monsterAsserter(final int monsterId) throws TimeoutException {
         this.assertMonsterDrawn(0, monsterId);
         this.assertMonsterDrawn(1, monsterId);
         this.assertMonsterDrawn(2, monsterId);
@@ -125,14 +131,14 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
 
     }
 
-    private void roomAsserter(final int roomId) throws TimeoutException {
+    protected void roomAsserter(final int roomId) throws TimeoutException {
         this.assertRoomDrawn(0, roomId);
         this.assertRoomDrawn(1, roomId);
         this.assertRoomDrawn(2, roomId);
         this.assertRoomDrawn(3, roomId);
     }
 
-    private void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
+    protected void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
             throws TimeoutException {
         this.assertBidPlaced(0, bid, playerId, slot);
         this.assertBidPlaced(1, bid, playerId, slot);
@@ -140,14 +146,15 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         this.assertBidPlaced(3, bid, playerId, slot);
     }
 
-    private void goldChangedAsserter(final int amount, final int playerId) throws TimeoutException {
+    protected void goldChangedAsserter(final int amount, final int playerId)
+            throws TimeoutException {
         assertGoldChanged(0, amount, playerId);
         assertGoldChanged(1, amount, playerId);
         assertGoldChanged(2, amount, playerId);
         assertGoldChanged(3, amount, playerId);
     }
 
-    private void evilnessChangedAsserter(final int amount, final int playerId)
+    protected void evilnessChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
         assertEvilnessChanged(0, amount, playerId);
         assertEvilnessChanged(1, amount, playerId);
@@ -155,7 +162,7 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         assertEvilnessChanged(3, amount, playerId);
     }
 
-    private void adventurerArrivedAsserter(final int advId, final int playerId)
+    protected void adventurerArrivedAsserter(final int advId, final int playerId)
             throws TimeoutException {
         assertAdventurerArrived(0, advId, playerId);
         assertAdventurerArrived(1, advId, playerId);
@@ -163,7 +170,7 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         assertAdventurerArrived(3, advId, playerId);
     }
 
-    private void simulateFirstBiddingSeason() throws TimeoutException {
+    protected void simulateFirstBiddingSeason() throws TimeoutException {
         nextRoundAsserter(1);
 
         // assert Adv. drawing
@@ -201,7 +208,6 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         // place bids
         bidsOfFirstSeasonFirstYear();
 
-
         // assert placing bids
 
         // first bid category (food)
@@ -235,7 +241,7 @@ public class WholeGameNoEdgeCaseTest extends SystemTest {
         adventurerArrivedAsserter(14, 3);
     }
 
-    private void bidsOfFirstSeasonFirstYear() throws TimeoutException {
+    protected void bidsOfFirstSeasonFirstYear() throws TimeoutException {
         this.sendPlaceBid(0, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 0, 1);
 
