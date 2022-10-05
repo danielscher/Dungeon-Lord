@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class RegistrationFourPlayersTest extends SystemTest {
 
-    RegistrationFourPlayersTest() {
+    public RegistrationFourPlayersTest() {
         super(RegistrationFourPlayersTest.class, false);
     }
 
@@ -43,7 +43,8 @@ public class RegistrationFourPlayersTest extends SystemTest {
         this.assertGameStarted(3);
         this.assertGameStarted(4);
         this.sendStartGame(1);
-        this.assertActionFailed(1);
+        this.assertActionFailed(1); // FIXME assertion wrong, first player events will be
+        // FIXME received
 
         // assert next year, next round , draw monster, etc..
         // can ignore

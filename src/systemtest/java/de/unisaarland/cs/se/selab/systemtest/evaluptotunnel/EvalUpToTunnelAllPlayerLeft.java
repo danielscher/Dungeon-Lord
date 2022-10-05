@@ -9,7 +9,7 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
  */
 public class EvalUpToTunnelAllPlayerLeft extends OurSystemTestFramework {
 
-    EvalUpToTunnelAllPlayerLeft() {
+    public EvalUpToTunnelAllPlayerLeft() {
         super(EvalUpToTunnelAllPlayerLeft.class, false);
     }
 

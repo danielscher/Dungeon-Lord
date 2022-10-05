@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class ThreePlayerAndStartTest extends SystemTest {
 
-    ThreePlayerAndStartTest() {
+    public ThreePlayerAndStartTest() {
         super(ThreePlayerAndStartTest.class, false);
     }
 
@@ -44,7 +44,7 @@ public class ThreePlayerAndStartTest extends SystemTest {
         this.sendRegister(4, "4");
         this.assertActionFailed(4);
         this.sendStartGame(2);
-        this.assertActionFailed(2);
+        this.assertActionFailed(2); // FIXME see comment on "RegistrationFourPlayersTest.java"
 
         // assert next year, next round , draw monster, etc..
         // can ignore

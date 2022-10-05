@@ -7,7 +7,7 @@ import java.util.Set;
 
 public class FivePlayerAndStartTest extends SystemTest {
 
-    FivePlayerAndStartTest() {
+    public FivePlayerAndStartTest() {
         super(FivePlayerAndStartTest.class, false);
     }
 

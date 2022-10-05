@@ -2,9 +2,21 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenFood;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenGold;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenImp;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenMonster;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenNice;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenRoom;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTrap;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeft;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFood;
+import registrationtest.FivePlayerAndStartTest;
 
 
 final class SystemTestsRegistration {
@@ -14,8 +26,13 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
-        manager.registerTest(new RegistrationTest());
+        // systemtest package
+        // manager.registerTest(new BrokenConfigTest());
+        // manager.registerTest(new EmptyConfigTest());
+        // manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
+        manager.registerTest(new RegistrationTest());
+
         manager.registerTest(new UpToGameStarted());
         manager.registerTest(new UpToPlayer());
         manager.registerTest(new UpToNextYear());
@@ -25,9 +42,30 @@ final class SystemTestsRegistration {
         manager.registerTest(new UpToRoomDrawn());
         manager.registerTest(new UpToBiddingStarted());
         manager.registerTest(new UpToActNow());
-        manager.registerTest(new BiddingOnTrapsBasic());
+
+        // registrationtest package
+        manager.registerTest(new FivePlayerAndStartTest());
+        // manager.registerTest(new RegistrationFourPlayersTest());
+        // manager.registerTest(new ThreePlayerAndStartTest());
+
+        // evaluptotunnel package
+        manager.registerTest(new EvalUpToTunnelAllPlayerLeft());
+        manager.registerTest(new EvalUpToTunnelEvalFood());
+
+        // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
         manager.registerTest(new BiddingOnMonsterBasic());
+        manager.registerTest(new BiddingOnTrapsBasic());
 
+        // collectandplacebids
+        manager.registerTest(new BidTypeTakenFood());
+        manager.registerTest(new BidTypeTakenGold());
+        manager.registerTest(new BidTypeTakenImp());
+        manager.registerTest(new BidTypeTakenMonster());
+        manager.registerTest(new BidTypeTakenNice());
+        manager.registerTest(new BidTypeTakenRoom());
+        manager.registerTest(new BidTypeTakenTrap());
+        manager.registerTest(new BidTypeTakenTunnel());
+        manager.registerTest(new BlockedBidSecondSeason());
     }
 }

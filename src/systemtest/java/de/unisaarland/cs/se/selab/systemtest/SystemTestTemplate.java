@@ -9,7 +9,7 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
  */
 public class SystemTestTemplate extends OurSystemTestFramework {
 
-    SystemTestTemplate() {
+    public SystemTestTemplate() {
         super(SystemTestTemplate.class, false);
     }
 
