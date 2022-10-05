@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
 
 
@@ -24,5 +25,7 @@ final class SystemTestsRegistration {
         manager.registerTest(new UpToBiddingStarted());
         manager.registerTest(new UpToActNow());
         manager.registerTest(new BiddingOnTrapsBasic());
+        manager.registerTest(new BiddingOnGoldBasic());
+
     }
 }
