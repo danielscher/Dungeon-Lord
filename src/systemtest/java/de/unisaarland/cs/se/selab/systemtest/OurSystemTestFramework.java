@@ -5,6 +5,7 @@ import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTest;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -12,12 +13,11 @@ import java.util.Set;
  */
 public class OurSystemTestFramework extends SystemTest {
 
-    private int[] socketList = new int[4];
+    private final Set<Integer> currSockets = new HashSet<>();
 
     protected OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
     }
-
 
     OurSystemTestFramework() {
         super(OurSystemTestFramework.class, false);
@@ -35,6 +35,11 @@ public class OurSystemTestFramework extends SystemTest {
 
     @Override
     protected Set<Integer> createSockets() {
+        // here i maintain a socketset to store the player who is playing
+        currSockets.add(0);
+        currSockets.add(1);
+        currSockets.add(2);
+        currSockets.add(3);
         return Set.of(0, 1, 2, 3);
     }
 
@@ -78,10 +83,10 @@ public class OurSystemTestFramework extends SystemTest {
         assertImpsChanged(3, amount, playerId);
     }
 
-    protected void impsChangedAsserter2(final int amount, final int playerId)
+    protected void impsChangedAsserterAnyoneLeft(final int amount, final int playerId)
             throws TimeoutException {
-        for (final int socket : socketList) {
-            assertImpsChanged(socket, amount, playerId);
+        for (final int currS : currSockets) {
+            assertImpsChanged(currS, amount, playerId);
         }
     }
 
@@ -91,15 +96,15 @@ public class OurSystemTestFramework extends SystemTest {
         assertFoodChanged(1, amount, playerId);
         assertFoodChanged(2, amount, playerId);
         assertFoodChanged(3, amount, playerId);
-
     }
 
-    protected void foodChangedAsserter2(final int amount, final int playerId)
+    protected void foodChangedAsserterAnyoneLeft(final int amount, final int playerId)
             throws TimeoutException {
-        for (final int socket : socketList) {
-            assertFoodChanged(socket, amount, playerId);
+        for (final int currS : currSockets) {
+            assertFoodChanged(currS, amount, playerId);
         }
     }
+
 
     protected void regPhaseAssertions(final String config) throws TimeoutException {
         this.sendRegister(0, "0");
@@ -126,9 +131,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertNextYear(3, year);
     }
 
-    protected void nextYearAsserter2(final int year) throws TimeoutException {
-        for (final int socket : socketList) {
-            this.assertNextYear(socket, year);
+    protected void nextYearAsserterAnyoneLeft(final int year) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertNextYear(currS, year);
         }
     }
 
@@ -139,9 +144,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertNextRound(3, round);
     }
 
-    protected void nextRoundAsserter2(final int round) throws TimeoutException {
-        for (final int socket : socketList) {
-            this.assertNextRound(socket, round);
+    protected void nextRoundAsserterAnyoneLeft(final int year) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertNextRound(currS, year);
         }
     }
 
@@ -152,9 +157,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertAdventurerDrawn(3, advId);
     }
 
-    protected void adventurerAsserter2(final int advId) throws TimeoutException {
-        for (final int socket : socketList) {
-            this.assertAdventurerDrawn(socket, advId);
+    protected void adventurerAsserterAnyoneLeft(final int year) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertAdventurerDrawn(currS, year);
         }
     }
 
@@ -165,12 +170,11 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertMonsterDrawn(3, monsterId);
     }
 
-    protected void monsterAsserter2(final int monsterId) throws TimeoutException {
-        for (final int i : socketList) {
-            this.assertMonsterDrawn(i, monsterId);
+    protected void monsterAsserterAnyoneLeft(final int monsterId) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertMonsterDrawn(currS, monsterId);
         }
     }
-
 
     protected void roomAsserter(final int roomId) throws TimeoutException {
         this.assertRoomDrawn(0, roomId);
@@ -179,12 +183,11 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertRoomDrawn(3, roomId);
     }
 
-    protected void roomAsserter2(final int roomId) throws TimeoutException {
-        for (final int i : socketList) {
-            this.assertRoomDrawn(i, roomId);
+    protected void roomAsserterAnyoneLeft(final int year) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertRoomDrawn(currS, year);
         }
     }
-
 
     protected void bidPlacedAsserter(final BidType bid, final int playerId, final int slot)
             throws TimeoutException {
@@ -194,13 +197,12 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertBidPlaced(3, bid, playerId, slot);
     }
 
-    protected void bidPlacedAsserter2(final BidType bid, final int playerId, final int slot)
-            throws TimeoutException {
-        for (final int i : socketList) {
-            this.assertBidPlaced(i, bid, playerId, slot);
+    protected void bidPlacedAsserterAnyoneLeft(final BidType bid, final int playerId,
+            final int slot) throws TimeoutException {
+        for (final int currS : currSockets) {
+            this.assertBidPlaced(currS, bid, playerId, slot);
         }
     }
-
 
     protected void goldChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
@@ -210,13 +212,12 @@ public class OurSystemTestFramework extends SystemTest {
         assertGoldChanged(3, amount, playerId);
     }
 
-    protected void goldChangedAsserter2(final int amount, final int playerId)
+    protected void goldChangedAsserterAnyoneLeft(final int amount, final int playerId)
             throws TimeoutException {
-        for (final int i : socketList) {
-            assertGoldChanged(i, amount, playerId);
+        for (final int currS : currSockets) {
+            assertGoldChanged(currS, amount, playerId);
         }
     }
-
 
     protected void evilnessChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
@@ -226,29 +227,27 @@ public class OurSystemTestFramework extends SystemTest {
         assertEvilnessChanged(3, amount, playerId);
     }
 
-    protected void evilnessChangedAsserter2(final int amount, final int playerId)
+    protected void evilnessChangedAsserterAnyoneLeft(final int amount, final int playerId)
             throws TimeoutException {
-        for (final int i : socketList) {
-            assertEvilnessChanged(i, amount, playerId);
+        for (final int currS : currSockets) {
+            assertEvilnessChanged(currS, amount, playerId);
         }
     }
 
-
-    protected void bidRetrievedAsserter(final BidType bidType, final int playId)
+    protected void bidRetrievedAsserter(final BidType bidType, final int playerId)
             throws TimeoutException {
-        assertBidRetrieved(0, bidType, playId);
-        assertBidRetrieved(1, bidType, playId);
-        assertBidRetrieved(2, bidType, playId);
-        assertBidRetrieved(3, bidType, playId);
+        assertBidRetrieved(0, bidType, playerId);
+        assertBidRetrieved(1, bidType, playerId);
+        assertBidRetrieved(2, bidType, playerId);
+        assertBidRetrieved(3, bidType, playerId);
     }
 
-    protected void bidRetrievedAsserter2(final BidType bidType, final int playId)
+    protected void bidRetrievedAsserterAnyoneLeft(final BidType bidType, final int playerId)
             throws TimeoutException {
-        for (final int i : socketList) {
-            assertBidRetrieved(i, bidType, playId);
+        for (final int currS : currSockets) {
+            assertBidRetrieved(currS, bidType, playerId);
         }
     }
-
 
     protected void adventurerArrivedAsserter(final int advId, final int playerId)
             throws TimeoutException {
@@ -258,13 +257,12 @@ public class OurSystemTestFramework extends SystemTest {
         assertAdventurerArrived(3, advId, playerId);
     }
 
-    protected void adventurerArrivedAsserter2(final int advId, final int playerId)
+    protected void adventurerArrivedAsserterAnyoneLeft(final int advId, final int playerId)
             throws TimeoutException {
-        for (final int i : socketList) {
-            assertAdventurerArrived(i, advId, playerId);
+        for (final int currS : currSockets) {
+            assertAdventurerArrived(currS, advId, playerId);
         }
     }
-
 
     protected void adventurerDrawingFirstYearFirstSeason() throws TimeoutException {
         // assert Adv. drawing
@@ -400,9 +398,5 @@ public class OurSystemTestFramework extends SystemTest {
 
         this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
-    }
-
-    protected void setSocketList(final int[] socketList) {
-        this.socketList = socketList;
     }
 }

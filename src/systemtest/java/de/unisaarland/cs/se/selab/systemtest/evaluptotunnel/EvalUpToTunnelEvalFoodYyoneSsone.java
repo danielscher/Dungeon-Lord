@@ -8,15 +8,15 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 /**
  * Register 2 Players and Leave
  */
-public class EvalUpToTunnelEvalFood extends OurSystemTestFramework {
+public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
 
-    EvalUpToTunnelEvalFood() {
-        super(EvalUpToTunnelEvalFood.class, false);
+    EvalUpToTunnelEvalFoodYyoneSsone() {
+        super(EvalUpToTunnelEvalFoodYyoneSsone.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(EvalUpToTunnelEvalFood.class, "configuration.json");
+        return Utils.loadResource(EvalUpToTunnelEvalFoodYyoneSsone.class, "configuration.json");
     }
 
     @Override
@@ -61,46 +61,23 @@ public class EvalUpToTunnelEvalFood extends OurSystemTestFramework {
         // assert placing bids
     }
 
-
     protected void firstFoodSlotsEvalAsserter(final int playerId) throws TimeoutException {
         // inform other players that player0 has paid 1 gold for 2 food
-
-        this.assertGoldChanged(0, -1, playerId);
-        this.assertGoldChanged(1, -1, playerId);
-        this.assertGoldChanged(2, -1, playerId);
-        this.assertGoldChanged(3, -1, playerId);
-        this.assertFoodChanged(0, 2, playerId);
-        this.assertFoodChanged(1, 2, playerId);
-        this.assertFoodChanged(2, 2, playerId);
-        this.assertFoodChanged(3, 2, playerId);
+        this.goldChangedAsserter(-1, playerId);
+        this.foodChangedAsserter(2, playerId);
     }
 
     protected void secondFoodSlotsEvalAsserter(final int playerId) throws TimeoutException {
         // inform other players that player1 has paid 1 niceness for 3 food
-        this.assertEvilnessChanged(0, 1, playerId);
-        this.assertEvilnessChanged(1, 1, playerId);
-        this.assertEvilnessChanged(2, 1, playerId);
-        this.assertEvilnessChanged(3, 1, playerId);
-        this.assertFoodChanged(0, 3, playerId);
-        this.assertFoodChanged(1, 3, playerId);
-        this.assertFoodChanged(2, 3, playerId);
-        this.assertFoodChanged(3, 3, playerId);
+        this.evilnessChangedAsserter(1, playerId);
+        this.foodChangedAsserter(3, playerId);
     }
 
     protected void thirdFoodSlotsEvalAsserter(final int playerId) throws TimeoutException {
-        // inform other players that player1 has paid 1 niceness for 3 food
-        this.assertEvilnessChanged(0, 2, playerId);
-        this.assertEvilnessChanged(1, 2, playerId);
-        this.assertEvilnessChanged(2, 2, playerId);
-        this.assertEvilnessChanged(3, 2, playerId);
-        this.assertFoodChanged(0, 3, playerId);
-        this.assertFoodChanged(1, 3, playerId);
-        this.assertFoodChanged(2, 3, playerId);
-        this.assertFoodChanged(3, 3, playerId);
-        this.assertGoldChanged(0, 1, playerId);
-        this.assertGoldChanged(1, 1, playerId);
-        this.assertGoldChanged(2, 1, playerId);
-        this.assertGoldChanged(3, 1, playerId);
+        // inform other players that player1 has paid 2 niceness for 3 food,1 gold
+        this.evilnessChangedAsserter(2, playerId);
+        this.foodChangedAsserter(3, playerId);
+        this.goldChangedAsserter(1, playerId);
     }
 
 
