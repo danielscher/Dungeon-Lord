@@ -12,9 +12,12 @@ import java.util.Set;
  */
 public class OurSystemTestFramework extends SystemTest {
 
+    private int[] socketList = new int[4];
+
     protected OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
     }
+
 
     OurSystemTestFramework() {
         super(OurSystemTestFramework.class, false);
@@ -75,6 +78,13 @@ public class OurSystemTestFramework extends SystemTest {
         assertImpsChanged(3, amount, playerId);
     }
 
+    protected void impsChangedAsserter2(final int amount, final int playerId)
+            throws TimeoutException {
+        for (final int socket : socketList) {
+            assertImpsChanged(socket, amount, playerId);
+        }
+    }
+
     protected void foodChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
         assertFoodChanged(0, amount, playerId);
@@ -82,6 +92,13 @@ public class OurSystemTestFramework extends SystemTest {
         assertFoodChanged(2, amount, playerId);
         assertFoodChanged(3, amount, playerId);
 
+    }
+
+    protected void foodChangedAsserter2(final int amount, final int playerId)
+            throws TimeoutException {
+        for (final int socket : socketList) {
+            assertFoodChanged(socket, amount, playerId);
+        }
     }
 
     protected void regPhaseAssertions(final String config) throws TimeoutException {
@@ -109,6 +126,12 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertNextYear(3, year);
     }
 
+    protected void nextYearAsserter2(final int year) throws TimeoutException {
+        for (final int socket : socketList) {
+            this.assertNextYear(socket, year);
+        }
+    }
+
     protected void nextRoundAsserter(final int round) throws TimeoutException {
         this.assertNextRound(0, round);
         this.assertNextRound(1, round);
@@ -116,11 +139,23 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertNextRound(3, round);
     }
 
+    protected void nextRoundAsserter2(final int round) throws TimeoutException {
+        for (final int socket : socketList) {
+            this.assertNextRound(socket, round);
+        }
+    }
+
     protected void adventurerAsserter(final int advId) throws TimeoutException {
         this.assertAdventurerDrawn(0, advId);
         this.assertAdventurerDrawn(1, advId);
         this.assertAdventurerDrawn(2, advId);
         this.assertAdventurerDrawn(3, advId);
+    }
+
+    protected void adventurerAsserter2(final int advId) throws TimeoutException {
+        for (final int socket : socketList) {
+            this.assertAdventurerDrawn(socket, advId);
+        }
     }
 
     protected void monsterAsserter(final int monsterId) throws TimeoutException {
@@ -253,7 +288,6 @@ public class OurSystemTestFramework extends SystemTest {
         foodChangedAsserter(-1, 2);
         goldChangedAsserter(-1, 2);
         impsChangedAsserter(2, 2);
-
 
         //retrieve the slot 1
         bidRetrievedAsserter(BidType.FOOD, 0);

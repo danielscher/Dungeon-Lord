@@ -30,6 +30,7 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
 
         regPhaseAssertions(config);
 
+
         nextYearAsserter(1);
 
         simulateFirstBiddingSeason();
@@ -129,6 +130,7 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         this.assertRoomDrawn(2, roomId);
     }
 
+
     @Override
     protected void nextYearAsserter(final int year) throws TimeoutException {
         this.assertNextYear(0, year);
@@ -136,6 +138,7 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         this.assertNextYear(2, year);
     }
 
+    @Override
     protected void bidRetrievedAsserter(final BidType bidType, final int playerId)
             throws TimeoutException {
         assertBidRetrieved(0, bidType, playerId);
