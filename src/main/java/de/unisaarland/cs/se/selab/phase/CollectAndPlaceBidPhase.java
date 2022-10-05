@@ -89,7 +89,9 @@ public class CollectAndPlaceBidPhase extends Phase {
         if (!bidAdded) {
             sc.sendActionFailed(pba.getCommID(),
                     "can't choose bid " + pba.getBid().toString());
+            return;
         }
+        broadcastBidPlaced(pba.getBid(), player.getPlayerID(), pba.getSlot());
     }
 
     @Override
@@ -134,7 +136,6 @@ public class CollectAndPlaceBidPhase extends Phase {
                 //loop through the bidders right of the curr firstbidder
                 final BidType bid = p.getBid(priority);
                 bs.insert(bid, p.getPlayerID());
-                broadcastBidPlaced(bid, p.getPlayerID(), priority + 1);
             }
         }
         for (final Player p : players) {
@@ -142,7 +143,6 @@ public class CollectAndPlaceBidPhase extends Phase {
                 //loop through the bidders left of the curr firstbidder
                 final BidType bid = p.getBid(priority);
                 bs.insert(bid, p.getPlayerID());
-                broadcastBidPlaced(bid, p.getPlayerID(), priority + 1);
             }
         }
         // REMOVED the setFirstBidder method from here. only set when we're in the next season.
