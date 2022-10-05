@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
 
 
 final class SystemTestsRegistration {
@@ -11,13 +12,17 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
-        //manager.registerTest(new RegistrationTest());
-        //manager.registerTest(new OurSystemTestFramework());
-        //manager.registerTest(new SystemTestTemplate());
-
-        //this below are Eval up to tunnel edge cases.
-        //manager.registerTest(new EvalUpToTunnelAllPlayerLeft());
-        manager.registerTest(new EvalUpToTunnelEvalFood());
-
+        manager.registerTest(new RegistrationTest());
+        manager.registerTest(new OurSystemTestFramework());
+        manager.registerTest(new UpToGameStarted());
+        manager.registerTest(new UpToPlayer());
+        manager.registerTest(new UpToNextYear());
+        manager.registerTest(new UpToNextRound());
+        manager.registerTest(new UpToAdventurerDrawn());
+        manager.registerTest(new UpToMonsterDrawn());
+        manager.registerTest(new UpToRoomDrawn());
+        manager.registerTest(new UpToBiddingStarted());
+        manager.registerTest(new UpToActNow());
+        manager.registerTest(new BiddingOnTrapsBasic());
     }
 }
