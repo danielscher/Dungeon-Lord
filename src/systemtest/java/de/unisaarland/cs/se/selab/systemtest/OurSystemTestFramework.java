@@ -162,6 +162,14 @@ public class OurSystemTestFramework extends SystemTest {
         assertEvilnessChanged(3, amount, playerId);
     }
 
+    protected void bidRetrievedAsserter(final BidType bidType, final int playId)
+        throws TimeoutException {
+        assertBidRetrieved(0, bidType, playId);
+        assertBidRetrieved(1, bidType, playId);
+        assertBidRetrieved(2, bidType, playId);
+        assertBidRetrieved(3, bidType, playId);
+    }
+
     protected void adventurerArrivedAsserter(final int advId, final int playerId)
             throws TimeoutException {
         assertAdventurerArrived(0, advId, playerId);
@@ -245,6 +253,13 @@ public class OurSystemTestFramework extends SystemTest {
         foodChangedAsserter(-1, 2);
         goldChangedAsserter(-1, 2);
         impsChangedAsserter(2, 2);
+
+
+        //retrieve the slot 1
+        bidRetrievedAsserter(BidType.FOOD,0);
+        bidRetrievedAsserter(BidType.FOOD,1);
+        bidRetrievedAsserter(BidType.FOOD,2);
+        bidRetrievedAsserter(BidType.FOOD,3);
 
         // adventurer arrived (at dungeons)
         // TODO change this to respect order of evilness
