@@ -89,10 +89,14 @@ public class CollectAndPlaceBidPhase extends Phase {
         if (!bidAdded) {
             sc.sendActionFailed(pba.getCommID(),
                     "can't choose bid " + pba.getBid().toString());
+
+            if (checkNotAllBidsChosenPerPlayer(player)) {
+                sc.sendActNow(pba.getCommID());
+            }
             return;
         }
         broadcastBidPlaced(pba.getBid(), player.getPlayerID(), pba.getSlot());
-        if (!checkIfAllBidsChosenPerPlayer(player)) {
+        if (checkNotAllBidsChosenPerPlayer(player)) {
             sc.sendActNow(pba.getCommID());
         }
     }
@@ -128,8 +132,8 @@ public class CollectAndPlaceBidPhase extends Phase {
         return true;
     }
 
-    private boolean checkIfAllBidsChosenPerPlayer(final Player p) {
-        return p.getNumPlacedBids() == 3;
+    private boolean checkNotAllBidsChosenPerPlayer(final Player p) {
+        return p.getNumPlacedBids() != 3;
     }
 
     //go through players to get their 1st priority, insert
