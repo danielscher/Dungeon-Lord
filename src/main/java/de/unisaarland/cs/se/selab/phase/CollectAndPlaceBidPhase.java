@@ -92,6 +92,9 @@ public class CollectAndPlaceBidPhase extends Phase {
             return;
         }
         broadcastBidPlaced(pba.getBid(), player.getPlayerID(), pba.getSlot());
+        if (!checkIfAllBidsChosenPerPlayer(player)) {
+            sc.sendActNow(pba.getCommID());
+        }
     }
 
     @Override
@@ -123,6 +126,10 @@ public class CollectAndPlaceBidPhase extends Phase {
             }
         }
         return true;
+    }
+
+    private boolean checkIfAllBidsChosenPerPlayer(final Player p) {
+        return p.getNumPlacedBids() == 3;
     }
 
     //go through players to get their 1st priority, insert
