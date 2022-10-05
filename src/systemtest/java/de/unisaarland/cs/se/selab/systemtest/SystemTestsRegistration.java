@@ -14,8 +14,8 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSe
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
-import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeft;
-import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFood;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYyoneSsone;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYyoneSsone;
 import registrationtest.FivePlayerAndStartTest;
 
 
@@ -49,8 +49,8 @@ final class SystemTestsRegistration {
         // manager.registerTest(new ThreePlayerAndStartTest());
 
         // evaluptotunnel package
-        manager.registerTest(new EvalUpToTunnelAllPlayerLeft());
-        manager.registerTest(new EvalUpToTunnelEvalFood());
+        manager.registerTest(new EvalUpToTunnelAllPlayerLeftYyoneSsone());
+        manager.registerTest(new EvalUpToTunnelEvalFoodYyoneSsone());
 
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());

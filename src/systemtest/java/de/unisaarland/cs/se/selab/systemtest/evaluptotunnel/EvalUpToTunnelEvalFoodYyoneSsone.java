@@ -10,8 +10,7 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
  */
 public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
 
-    public EvalUpToTunnelEvalFood() {
-        super(EvalUpToTunnelEvalFood.class, false);
+
     public EvalUpToTunnelEvalFoodYyoneSsone() {
         super(EvalUpToTunnelEvalFoodYyoneSsone.class, false);
     }
