@@ -412,4 +412,23 @@ public class OurSystemTestFramework extends SystemTest {
         this.sendPlaceBid(3, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 3, 3);
     }
+
+    protected void adventurerDrawnAsserterHelper(final int advId) throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertAdventurerDrawn(currS, advId);
+        }
+    }
+
+    protected void monsterDrawnAsserterHelper(final int monsterId) throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertMonsterDrawn(currS, monsterId);
+        }
+    }
+
+    protected void roomDrawnAsserterHelper(final int roomId) throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertRoomDrawn(currS, roomId);
+        }
+    }
+
 }
