@@ -202,7 +202,7 @@ public class EvalUpToMonsterPhase extends Phase {
         //checks if player can afford i.e. enough tiles/imps
         if (d.getNumGoldMineAbleTiles() == tilesNeeded) {
             if (d.sendImpsToMineGold(numMiningImps)) {
-                broadcastImpsChanged(numMiningImps, player.getPlayerID());
+                broadcastImpsChanged(-numMiningImps, player.getPlayerID());
                 return true;
             }
         }
