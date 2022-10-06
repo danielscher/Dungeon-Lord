@@ -39,9 +39,9 @@ public class EvalUpToMonsterPhase extends Phase {
     private void eval() {
         final BiddingSquare bs = gd.getBiddingSquare();
         // iterates over slots
-        for (int row = 0; row < 3; row++) {
-            for (int col = bs.typeToColumn(BidType.GOLD); col <= bs.typeToColumn(BidType.MONSTER);
-                    col++) {
+        for (int col = bs.typeToColumn(BidType.GOLD); col <= bs.typeToColumn(BidType.MONSTER);
+                col++) {
+            for (int row = 0; row < 3; row++) {
                 final Player player = gd.getPlayerByPlayerId(bs.getIDByBidSlot(row, col));
                 if (player != null) {
                     grant(player, bs.columnToType(col), row + 1); // slot = row + 1.
