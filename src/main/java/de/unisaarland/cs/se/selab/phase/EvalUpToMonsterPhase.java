@@ -211,24 +211,27 @@ public class EvalUpToMonsterPhase extends Phase {
     private void grantImps(final Player player, final int slot) { // READ!: first slot := 1.
         final Dungeon d = player.getDungeon();
         // determines imps to be granted by slot.
-        final int numImps = slot == 3 ? slot - 1 : slot;
-        boolean paidGold = false;
-        boolean paidFood = false;
+        int numImps;
+
+        if (slot == 1) {
+            numImps = 1;
+        } else {
+            numImps = 2;
+        }
+
+        boolean canPaidGold;
+        boolean canPaidFood;
 
         if (slot == 3) { // for last slot check if player can afford 1 food,gold.
-            if (player.getFood() > 0) {
-                //change food/gold and broadcast changes
+            canPaidFood = (player.getFood() > 0);
+            canPaidGold = (player.getGold() > 0);
+
+            // if player paid in full grant imps otherwise grant nothing.
+            if (canPaidGold && canPaidFood) {
                 player.changeFoodBy(-1);
                 broadcastFoodChanged(-1, player.getPlayerID());
-                paidFood = true;
-            }
-            if (player.getGold() > 0) {
                 player.changeGoldBy(-1);
                 broadcastGoldChanged(-1, player.getPlayerID());
-                paidGold = true;
-            }
-            // if player paid in full grant imps otherwise grant nothing.
-            if (paidGold && paidFood) {
                 d.addImps(numImps);
                 broadcastImpsChanged(numImps, player.getPlayerID());
             }
