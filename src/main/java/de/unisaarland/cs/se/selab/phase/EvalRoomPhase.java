@@ -84,10 +84,12 @@ public class EvalRoomPhase extends Phase {
     }
 
     private void requestNextAction(final Player player) {
+        endTurn = false;
         while (!endTurn) {
             try {
                 sc.nextAction().invoke(this);
             } catch (TimeoutException e) {
+                endTurn = true;
                 kickPlayer(player.getPlayerID());
             }
         }

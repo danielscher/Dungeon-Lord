@@ -112,6 +112,12 @@ public class OurSystemTestFramework extends SystemTest {
         this.sendRegister(3, "3");
         this.assertConfig(3, config);
 
+        currSockets.clear();
+        currSockets.add(0);
+        currSockets.add(1);
+        currSockets.add(2);
+        currSockets.add(3);
+
         gameStartedAsserterHelper();
 
         this.assertPlayerHelper(new int[]{0, 1, 2, 3});
@@ -246,10 +252,31 @@ public class OurSystemTestFramework extends SystemTest {
         }
     }
 
+    protected void tunnelDugAsserter(final int player, final int x, final int y)
+            throws TimeoutException {
+        for (final int s : currSockets) {
+            assertTunnelDug(s, player, x, y);
+        }
+    }
+
     protected void trapAcquiredAsserter(final int player, final int trap)
             throws TimeoutException {
         for (final int s : currSockets) {
             assertTrapAcquired(s, player, trap);
+        }
+    }
+
+    protected void monsterHiredAsserter(final int monster, final int player)
+            throws TimeoutException {
+        for (final int s : currSockets) {
+            assertMonsterHired(s, monster, player);
+        }
+    }
+
+    protected void roomBuiltAsserter(final int player, final int room, final int x, final int y)
+            throws TimeoutException {
+        for (final int s : currSockets) {
+            assertRoomBuilt(s, player, room, x, y);
         }
     }
 
