@@ -24,7 +24,7 @@ class AdventurerTest {
 
     @Test
     void testDamageHealthByNonLethalDamage() {
-        assertEquals(-1, a1.damagehealthby(1));
+        assertEquals(0, a1.damagehealthby(1));
         assertEquals(1, a1.getHealthPoints());
     }
 

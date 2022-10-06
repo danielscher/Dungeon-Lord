@@ -15,7 +15,9 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CombatPhase extends Phase {
@@ -331,15 +333,9 @@ public class CombatPhase extends Phase {
         if (playerLeft) {
             return;
         }
-        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-            if (dungeon.getAdventurer(i).damagehealthby(2) >= 0) {
-                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
-                broadcastAdventurerImprisoned(dungeon.getAdventurer(i).getAdventurerID());
-
-            } else {
-                broadcastAdventurerDamaged(dungeon.getAdventurer(i).getAdventurerID(), 2);
-
-            }
+        final List<Adventurer> advList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer currAdv : advList) {
+            damageAdv(currAdv, 2);
         }
     }
 
@@ -347,48 +343,24 @@ public class CombatPhase extends Phase {
         final Adventurer adTargeted = dungeon.getAdventurer(placedMonsters
                 .get(monster));
         if (adTargeted != null) {
-            if (adTargeted.damagehealthby(monster.getDamage()) >= 0) {
-                dungeon.imprison(adTargeted.getAdventurerID());
-                broadcastAdventurerImprisoned(adTargeted.getAdventurerID());
-
-            } else {
-                broadcastAdventurerDamaged(adTargeted.getAdventurerID(),
-                        monster.getDamage());
-            }
+            damageAdv(adTargeted, monster.getDamage());
         }
 
     }
 
     private void calcMonsterBasicDamage(final Monster monster) {
-        if (dungeon.getAdventurer(0) != null) {
-            if (dungeon.getAdventurer(0).damagehealthby(monster.getDamage()) >= 0) {
-                dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
-                broadcastAdventurerImprisoned(
-                        dungeon.getAdventurer(0).getAdventurerID());
-            } else {
-                broadcastAdventurerDamaged(
-                        dungeon.getAdventurer(0).getAdventurerID(),
-                        monster.getDamage());
-            }
-
+        final Adventurer advToDamage = dungeon.getAdventurer(0);
+        if (advToDamage != null) {
+            damageAdv(advToDamage, monster.getDamage());
         }
     }
 
     private void calcMonsterMultiDamage(final Monster monster) {
         int res = monster.getDamage();
-
-        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-            final int currentReduction = res;
-            res = dungeon.getAdventurer(i).damagehealthby(res);
-            if (res >= 0) {
-                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
-                broadcastAdventurerImprisoned(
-                        dungeon.getAdventurer(i).getAdventurerID());
-
-            } else {
-                broadcastAdventurerDamaged(
-                        dungeon.getAdventurer(i).getAdventurerID(),
-                        currentReduction);
+        final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer adventurer : adventurerList) {
+            res = damageAdv(adventurer, res);
+            if (res <= 0) {
                 break;
             }
         }
@@ -415,48 +387,29 @@ public class CombatPhase extends Phase {
     }
 
     private void calcTrapTargetedDamage(final int totalDefuseVal) {
-        if (dungeon.getAdventurer(placedTrap.getTarget()) != null) {
-            if (dungeon.getAdventurer(placedTrap.getTarget())
-                    .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
-                dungeon.imprison(dungeon.getAdventurer(placedTrap.getTarget())
-                        .getAdventurerID());
-                broadcastAdventurerImprisoned(
-                        dungeon.getAdventurer(placedTrap.getTarget())
-                                .getAdventurerID());
-            } else {
-                broadcastAdventurerDamaged(
-                        dungeon.getAdventurer(placedTrap.getTarget())
-                                .getAdventurerID(),
-                        placedTrap.getDamage() - totalDefuseVal);
-            }
+        final int damageToApply = placedTrap.getDamage() - totalDefuseVal;
+        final Adventurer adventurerToDamage = dungeon.getAdventurer(placedTrap.getTarget());
+
+        if (adventurerToDamage != null) {
+            damageAdv(adventurerToDamage, damageToApply);
         }
     }
 
     private void calcTrapBasicDamage(final int totalDefuseVal) {
-        if (dungeon.getAdventurer(0)
-                .damagehealthby(placedTrap.getDamage() - totalDefuseVal) >= 0) {
-            dungeon.imprison(dungeon.getAdventurer(0).getAdventurerID());
-            broadcastAdventurerImprisoned(
-                    dungeon.getAdventurer(0).getAdventurerID());
-        } else {
-            broadcastAdventurerDamaged(dungeon.getAdventurer(0).getAdventurerID(),
-                    placedTrap.getDamage() - totalDefuseVal);
+        final int damageToApply = placedTrap.getDamage() - totalDefuseVal;
+        final Adventurer adventurerToDamage = dungeon.getAdventurer(0);
+
+        if (adventurerToDamage != null) {
+            damageAdv(adventurerToDamage, damageToApply);
         }
     }
 
     private void calcTrapMultiDamage(final int totalDefuseVal) {
         int res = placedTrap.getDamage() - totalDefuseVal;
-        for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
-            final int currentReduction = res;
-            res = dungeon.getAdventurer(i).damagehealthby(res);
-            if (res >= 0) {
-                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
-                broadcastAdventurerImprisoned(
-                        dungeon.getAdventurer(i).getAdventurerID());
-            } else {
-                broadcastAdventurerDamaged(
-                        dungeon.getAdventurer(i).getAdventurerID(),
-                        currentReduction);
+        final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer adventurer : adventurerList) {
+            res = damageAdv(adventurer, res);
+            if (res <= 0) {
                 break;
             }
         }
@@ -517,6 +470,31 @@ public class CombatPhase extends Phase {
                 }
             }
         }
+    }
+
+    /**
+     * this method damages an adventurer with the given amount, might imprison him
+     *
+     * @param adventurer the adventurer to damage
+     * @param amount     the amount to damage the adventurer with
+     * @return the amount of damage left (-1 in case of 0) to adapt to old convention
+     */
+    private int damageAdv(final Adventurer adventurer, final int amount) {
+        final int healthBeforeDamage = adventurer.getHealthPoints();
+        final int advId = adventurer.getAdventurerID();
+        final int leftoverDamage = adventurer.damagehealthby(amount);
+
+        if (leftoverDamage > 0) {
+            // in this case the adventurer died/will be imprisoned
+            broadcastAdventurerDamaged(adventurer.getAdventurerID(), healthBeforeDamage);
+            dungeon.imprison(advId);
+            broadcastAdventurerImprisoned(advId);
+        } else {
+            // in this case he survived the attack
+            broadcastAdventurerDamaged(advId, amount);
+        }
+
+        return leftoverDamage;
     }
 
     /**
