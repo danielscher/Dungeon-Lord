@@ -71,6 +71,12 @@ public class OurSystemTestFramework extends SystemTest {
         this.sendLeave(3);
     }
 
+    protected void playerLeftAsserterHelper(final int playerId) throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertLeft(currS,playerId);
+        }
+    }
+
     protected void impsChangedAsserter(final int amount, final int playerId)
             throws TimeoutException {
         assertImpsChanged(0, amount, playerId);
@@ -83,6 +89,13 @@ public class OurSystemTestFramework extends SystemTest {
             throws TimeoutException {
         for (final int currS : currSockets) {
             assertImpsChanged(currS, amount, playerId);
+        }
+    }
+
+    protected void monsterHiredAsserterHelper(final int monId, final int playerId)
+            throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertMonsterHired(currS,monId,playerId);
         }
     }
 
