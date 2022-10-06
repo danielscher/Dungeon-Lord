@@ -8,15 +8,15 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 /**
  * Register 2 Players and Leave
  */
-public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
+public class EvalUpToTunnelEvalNicenessYyoneSsone extends OurSystemTestFramework {
 
-    public EvalUpToTunnelEvalFoodYyoneSsone() {
-        super(EvalUpToTunnelEvalFoodYyoneSsone.class, false);
+    public EvalUpToTunnelEvalNicenessYyoneSsone() {
+        super(EvalUpToTunnelEvalNicenessYyoneSsone.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(EvalUpToTunnelEvalFoodYyoneSsone.class, "configuration.json");
+        return Utils.loadResource(EvalUpToTunnelEvalNicenessYyoneSsone.class, "configuration.json");
     }
 
     @Override
@@ -29,6 +29,11 @@ public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
         firstFoodSlotsEvalAsserter(0);
         secondFoodSlotsEvalAsserter(1);
         thirdFoodSlotsEvalAsserter(2);
+        // start evaluating niceness
+        firstNicenessSlotsEvalAsserter(0);
+        secondNicenessSlotsEvalAsserter(1);
+        thirdNicenessSlotsEvalAsserter(2);
+
         // left after food bids' slots are evaluated
         this.sendLeave(0);
         this.sendLeave(1);
@@ -68,10 +73,27 @@ public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
     }
 
     protected void thirdFoodSlotsEvalAsserter(final int playerId) throws TimeoutException {
-        // inform other players that player2 has paid 2 niceness for 3 food,1 gold
+        // inform other players that player1 has paid 2 niceness for 3 food,1 gold
         this.evilnessChangedAsserter(2, playerId);
         this.foodChangedAsserter(3, playerId);
         this.goldChangedAsserter(1, playerId);
+    }
+
+    protected void firstNicenessSlotsEvalAsserter(final int playerId) throws TimeoutException {
+        // inform other players that player0 gets 1 niceness, (-1 evilness)
+        this.evilnessChangedAsserter(-1, playerId);
+    }
+
+    protected void secondNicenessSlotsEvalAsserter(final int playerId) throws TimeoutException {
+        // inform other players that player1 gets 2 niceness(-2 evilness)
+        this.evilnessChangedAsserter(-2, playerId);
+    }
+
+    protected void thirdNicenessSlotsEvalAsserter(final int playerId) throws TimeoutException {
+        // inform other players that player2 has paid 1 gold for 2 niceness
+        this.goldChangedAsserter(-1, playerId);
+        this.evilnessChangedAsserter(-2, playerId);
+
     }
 
 

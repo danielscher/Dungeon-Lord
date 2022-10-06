@@ -1,4 +1,4 @@
-package registrationtest;
+package de.unisaarland.cs.se.selab.systemtest.registrationtest;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTest;

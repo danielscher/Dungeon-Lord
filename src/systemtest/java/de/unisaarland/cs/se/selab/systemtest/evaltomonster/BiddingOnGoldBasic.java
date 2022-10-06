@@ -204,13 +204,13 @@ public class BiddingOnGoldBasic extends OurSystemTestFramework {
 
         // third bid category (GOLD) all players can use 1 imp as there is only 1 tile.
         // slot 1:
-        impsChangedAsserter(1, 0);
+        impsChangedAsserter(-1, 0);
 
         // slot 2:
-        impsChangedAsserter(1, 1);
+        impsChangedAsserter(-1, 1);
 
         // slot 3:
-        impsChangedAsserter(1, 2);
+        impsChangedAsserter(-1, 2);
 
         //retrive bids for slot 1
         bidRetrievedAsserter(BidType.FOOD, 0);
