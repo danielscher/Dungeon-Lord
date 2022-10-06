@@ -511,7 +511,9 @@ public class CombatPhase extends Phase {
             broadcastTunnelConquered(dungeon.getAdventurer(0).getAdventurerID(),
                     coordinate.getxpos(), coordinate.getypos());
 
-            currPlayingPlayer.changeEvilnessBy(-1);
+            if (currPlayingPlayer.changeEvilnessBy(-1)) {
+                broadcastEvilnessChanged(-1, currPlayingPlayer.getPlayerID());
+            }
 
             // check if adventurer can escape.
             if (dungeon.getNumUnconqueredTiles() == 0) {
