@@ -258,9 +258,17 @@ public class EvalUpToMonsterPhase extends Phase {
             gd.getServerConnection()
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
         }
-        final Player player = gd.getPlayerByCommID(hma.getCommID());
         //TODO: first check if monster's available then impl. behaviour.
+
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
+        if (chosenMonster == null) {
+            gd.getServerConnection().sendActionFailed(currHandledCommId, "monster not"
+                    + "available");
+            return;
+        }
+
+        final Player player = gd.getPlayerByCommID(hma.getCommID());
+
         final int monsterHunger = chosenMonster.getHunger();
         final int monsterEvilness = chosenMonster.getEvilness();
 
@@ -283,6 +291,9 @@ public class EvalUpToMonsterPhase extends Phase {
                     .addMonster(chosenMonster); // FIXME : possible null value exception.
             broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
             handleHireMonsterAction = false; // finish handling action. terminates loop.
+        } else {
+            gd.getServerConnection().sendActionFailed(currHandledCommId, "cannot hire this"
+                    + "monster because of evilness or food");
         }
 
     }
