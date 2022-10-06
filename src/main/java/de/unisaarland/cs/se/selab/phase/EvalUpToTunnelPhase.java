@@ -127,25 +127,27 @@ public class EvalUpToTunnelPhase extends Phase {
     this method grants niceness bids
      */
     private void grantNiceness(final Player player, final int slot) {
-        // TODO change events because maybe the full amount wasnt granted
         switch (slot) {
             case 0:
                 // first niceness slot
-                player.changeEvilnessBy(-1);
-                broadcastEvilnessChanged(-1, player.getPlayerID());
+                if (player.changeEvilnessBy(-1)) {
+                    broadcastEvilnessChanged(-1, player.getPlayerID());
+                }
                 break;
             case 1:
                 // second niceness slot
-                player.changeEvilnessBy(-2);
-                broadcastEvilnessChanged(-2, player.getPlayerID());
+                if (player.changeEvilnessBy(-2)) {
+                    broadcastEvilnessChanged(-2, player.getPlayerID());
+                }
                 break;
             case 2:
                 // third niceness slot
                 if (player.changeGoldBy(-1)) {
                     // player can afford bid
-                    player.changeEvilnessBy(-2);
                     broadcastGoldChanged(-1, player.getPlayerID());
-                    broadcastEvilnessChanged(-2, player.getPlayerID());
+                    if (player.changeEvilnessBy(-2)) {
+                        broadcastEvilnessChanged(-2, player.getPlayerID());
+                    }
                 }
                 break;
             default:
@@ -262,7 +264,7 @@ public class EvalUpToTunnelPhase extends Phase {
 
         gd.getServerConnection().sendActNow(commId); // TODO check if sending once is sufficient
 
-        while (commIdToDigTunnel == -1) {
+        while (commIdToDigTunnel != -1) {
             // loop until the player we evaluate has sent an action
             try {
                 final Action action = gd.getServerConnection().nextAction();
@@ -271,6 +273,7 @@ public class EvalUpToTunnelPhase extends Phase {
                 // TODO implement behaviour???
                 kickPlayer(gd.getPlayerIdByCommID(commIdToDigTunnel));
                 commIdToDigTunnel = -1;
+                gotEndTurn = true;
             }
         }
     }
@@ -294,9 +297,12 @@ public class EvalUpToTunnelPhase extends Phase {
 
         final Dungeon playersDungeon = player.getDungeon();
 
-        if (commIdToDigTunnel == commId) {
+        if (commIdToDigTunnel != commId) {
             // wrong player sent the event
-            gd.getServerConnection().sendActionFailed(commId, "it's not your turn to dig tunnels");
+            gd.getServerConnection().sendActionFailed(commId,
+                    "it's not your turn to dig tunnels");
+            // TODO: check if we might not want to send this in case the player isn't even
+            //  registered
         } else {
             final int[] coordsArr = dta.getCoords();
             final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
@@ -359,9 +365,9 @@ public class EvalUpToTunnelPhase extends Phase {
     public void exec(final LeaveAction la) {
         final int commId = la.getCommID();
         if (commIdToDigTunnel == commId) {
-            commIdToDigTunnel = -1; // casting to Object needed for overloading
+            commIdToDigTunnel = -1;
+            gotEndTurn = true; // to prevent any further tunnel dig asking from this user
         }
-        gotEndTurn = true; // to prevent any further tunnel dig asking from this user
         super.exec(la);
     }
 
