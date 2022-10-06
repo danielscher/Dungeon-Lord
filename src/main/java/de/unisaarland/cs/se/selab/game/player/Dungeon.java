@@ -519,6 +519,10 @@ public class Dungeon {
         return adventurerQueue.size();
     }
 
+    public Deque<Adventurer> getAdventurerQueue() {
+        return adventurerQueue;
+    }
+
     /**
      * gets a room by its ID might return null if room isn't in this dungeon
      */
