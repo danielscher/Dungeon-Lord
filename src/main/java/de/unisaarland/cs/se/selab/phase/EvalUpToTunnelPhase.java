@@ -173,6 +173,9 @@ public class EvalUpToTunnelPhase extends Phase {
             maxImpUsage = true;
         }
 
+        gd.getServerConnection()
+                .sendDigTunnel(commId); // send DigTunnel once for every possible tile
+
         // now ask for tunnel digging actions until all imps are sent out or player ends turn
         while (impsToMine > 0) {
             impsToMine = getInputs(impsToMine, commId, player, dungeon, maxImpUsage);
@@ -205,8 +208,6 @@ public class EvalUpToTunnelPhase extends Phase {
      */
     private int getInputs(final int impsToMine, final int commId, final Player player,
             final Dungeon dungeon, final boolean maxImpUsage) {
-        gd.getServerConnection()
-                .sendDigTunnel(commId); // send DigTunnel once for every possible tile
         // if player activated room it might be the case that he hasn't enough imps anymore
         if (impsToMine > dungeon.getRestingImps()) {
             return impsToMine; // go to next iteration to reduce impsToMine
