@@ -379,9 +379,9 @@ public class CombatPhase extends Phase {
 
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             final int currentReduction = res;
-            res = dungeon.getAdventurerById(i).damagehealthby(res);
+            res = dungeon.getAdventurer(i).damagehealthby(res);
             if (res >= 0) {
-                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
                 broadcastAdventurerImprisoned(
                         dungeon.getAdventurer(i).getAdventurerID());
 
@@ -448,9 +448,9 @@ public class CombatPhase extends Phase {
         int res = placedTrap.getDamage() - totalDefuseVal;
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             final int currentReduction = res;
-            res = dungeon.getAdventurerById(i).damagehealthby(res);
+            res = dungeon.getAdventurer(i).damagehealthby(res);
             if (res >= 0) {
-                dungeon.imprison(dungeon.getAdventurerById(i).getAdventurerID());
+                dungeon.imprison(dungeon.getAdventurer(i).getAdventurerID());
                 broadcastAdventurerImprisoned(
                         dungeon.getAdventurer(i).getAdventurerID());
             } else {
