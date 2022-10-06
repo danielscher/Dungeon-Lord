@@ -52,7 +52,9 @@ public class EvalRoomPhase extends Phase {
             if (bs.getIDByBidSlot(BidType.ROOM, i) != -1) {
                 //if there's a valid player id in the square
                 final Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(BidType.ROOM, i));
-                grantRoom(p, i);
+                if (p != null) {
+                    grantRoom(p, i);
+                }
             }
         }
     }
