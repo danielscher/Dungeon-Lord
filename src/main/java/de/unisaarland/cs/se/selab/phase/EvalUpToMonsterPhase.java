@@ -198,8 +198,10 @@ public class EvalUpToMonsterPhase extends Phase {
         // checks how many tiles will be worked.
         final int tilesNeeded =
                 slot < 3 ? numMiningImps : numMiningImps - 1; // for supervisor -1 tile.
+        //TODO change the condition for slot 3
 
         //checks if player can afford i.e. enough tiles/imps
+        //TODO here also wrong
         if (d.getNumGoldMineAbleTiles() == tilesNeeded) {
             if (d.sendImpsToMineGold(numMiningImps)) {
                 broadcastImpsChanged(-numMiningImps, player.getPlayerID());
