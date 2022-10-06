@@ -14,7 +14,7 @@ import java.util.Set;
  */
 public class OurSystemTestFramework extends SystemTest {
 
-    private final List<Integer> currSockets = new ArrayList<>();
+    protected List<Integer> currSockets = new ArrayList<>();
 
     protected OurSystemTestFramework(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
@@ -36,11 +36,6 @@ public class OurSystemTestFramework extends SystemTest {
 
     @Override
     protected Set<Integer> createSockets() {
-        // here i maintain a socketset to store the player who is playing
-        currSockets.add(0);
-        currSockets.add(1);
-        currSockets.add(2);
-        currSockets.add(3);
         return Set.of(0, 1, 2, 3);
     }
 
@@ -123,7 +118,7 @@ public class OurSystemTestFramework extends SystemTest {
     }
 
     protected void gameStartedAsserterHelper() throws TimeoutException {
-        for (final int currS : currSockets) {
+        for (final int currS : this.currSockets) {
             this.assertGameStarted(currS);
         }
     }
@@ -141,7 +136,6 @@ public class OurSystemTestFramework extends SystemTest {
     }
 
 
-
     protected void nextYearAsserter(final int year) throws TimeoutException {
         this.assertNextYear(0, year);
         this.assertNextYear(1, year);
@@ -150,7 +144,7 @@ public class OurSystemTestFramework extends SystemTest {
     }
 
     protected void nextYearAsserterHelper(final int year) throws TimeoutException {
-        for (final int currS : currSockets) {
+        for (final int currS : this.currSockets) {
             this.assertNextYear(currS, year);
         }
     }
@@ -162,9 +156,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertNextRound(3, round);
     }
 
-    protected void nextRoundAsserterHelper(final int year) throws TimeoutException {
+    protected void nextRoundAsserterHelper(final int round) throws TimeoutException {
         for (final int currS : currSockets) {
-            this.assertNextRound(currS, year);
+            this.assertNextRound(currS, round);
         }
     }
 
@@ -175,9 +169,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertAdventurerDrawn(3, advId);
     }
 
-    protected void adventurerAsserterHelper(final int year) throws TimeoutException {
+    protected void adventurerAsserterHelper(final int advId) throws TimeoutException {
         for (final int currS : currSockets) {
-            this.assertAdventurerDrawn(currS, year);
+            this.assertAdventurerDrawn(currS, advId);
         }
     }
 
@@ -201,9 +195,9 @@ public class OurSystemTestFramework extends SystemTest {
         this.assertRoomDrawn(3, roomId);
     }
 
-    protected void roomAsserterHelper(final int year) throws TimeoutException {
+    protected void roomAsserterHelper(final int monId) throws TimeoutException {
         for (final int currS : currSockets) {
-            this.assertRoomDrawn(currS, year);
+            this.assertRoomDrawn(currS, monId);
         }
     }
 
