@@ -81,7 +81,7 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
         foodChangedAsserter(3, 3);
         goldChangedAsserter(1, 3);
 
-        // second bid category (gold)
+        //second bid category (gold)
         //only 1 because every player has so far only one tile
         impsChangedAsserter(-1, 1);
         impsChangedAsserter(-1, 2);
@@ -89,11 +89,30 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
 
         //trap category
         goldChangedAsserter(-1, 1);
-        assertTrapAcquired(1, 1, 26);
-        assertTrapAcquired(2, 2, 6);
+        trapAcquiredAsserter(1, 26);
+
+        trapAcquiredAsserter(2, 6);
+
         goldChangedAsserter(-2, 3);
-        assertTrapAcquired(3, 3, 19);
-        assertTrapAcquired(3, 3, 5);
+        trapAcquiredAsserter(3, 19);
+        trapAcquiredAsserter(3, 5);
+
+        //BidRetrieved
+        bidRetrievedAsserter(BidType.NICENESS, 0);
+        bidRetrievedAsserter(BidType.IMPS, 0);
+        bidRetrievedAsserter(BidType.FOOD, 0);
+
+        bidRetrievedAsserter(BidType.NICENESS, 1);
+        bidRetrievedAsserter(BidType.IMPS, 1);
+        bidRetrievedAsserter(BidType.FOOD, 1);
+
+        bidRetrievedAsserter(BidType.NICENESS, 2);
+        bidRetrievedAsserter(BidType.IMPS, 2);
+        bidRetrievedAsserter(BidType.FOOD, 2);
+
+        bidRetrievedAsserter(BidType.NICENESS, 3);
+        bidRetrievedAsserter(BidType.IMPS, 3);
+        bidRetrievedAsserter(BidType.FOOD, 3);
 
         // imp return
         impsChangedAsserter(1, 1);
@@ -106,10 +125,10 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
         goldChangedAsserter(1, 3);
 
         // adventurer arrived (at dungeons)
-        adventurerArrivedAsserter(24, 0);
-        adventurerArrivedAsserter(5, 1);
-        adventurerArrivedAsserter(21, 2);
-        adventurerArrivedAsserter(14, 3);
+        adventurerArrivedAsserter(18, 0);
+        adventurerArrivedAsserter(11, 1);
+        adventurerArrivedAsserter(20, 2);
+        adventurerArrivedAsserter(6, 3);
     }
 
     protected void bidsOfSecondSeasonFirstYear() throws TimeoutException {

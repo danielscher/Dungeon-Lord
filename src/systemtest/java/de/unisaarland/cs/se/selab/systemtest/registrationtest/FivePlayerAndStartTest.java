@@ -37,6 +37,7 @@ public class FivePlayerAndStartTest extends SystemTest {
         this.assertConfig(3, config);
         this.sendRegister(4, "4");
         this.assertConfig(4, config);
+        this.sendRegister(5, "5");
 
         this.assertGameStarted(1);
         this.assertGameStarted(2);
