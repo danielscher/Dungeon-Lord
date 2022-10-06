@@ -349,7 +349,7 @@ public class EvalUpToTunnelPhase extends Phase {
         final int roomId = ara.getRoomID();
         if (playersDungeon.activateRoom(roomId)) {
             final Room activatedRoom = playersDungeon.getRoomById(roomId);
-            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastImpsChanged(-activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");

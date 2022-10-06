@@ -318,7 +318,7 @@ public class EvalUpToMonsterPhase extends Phase {
         final Dungeon playersDungeon = player.getDungeon();
         if (playersDungeon.activateRoom(roomId)) {
             final Room activatedRoom = playersDungeon.getRoomById(roomId);
-            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastImpsChanged(-activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");

@@ -308,6 +308,13 @@ public class OurSystemTestFramework extends SystemTest {
         }
     }
 
+    protected void roomActivatedAsserter(final int player, final int room)
+            throws TimeoutException {
+        for (final int currS : currSockets) {
+            assertRoomActivated(currS, player, room);
+        }
+    }
+
     protected void adventurerArrivedAsserter(final int advId, final int playerId)
             throws TimeoutException {
         assertAdventurerArrived(0, advId, playerId);
