@@ -15,7 +15,9 @@ import de.unisaarland.cs.se.selab.game.entities.Trap;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CombatPhase extends Phase {
@@ -331,7 +333,8 @@ public class CombatPhase extends Phase {
         if (playerLeft) {
             return;
         }
-        for (final Adventurer currAdv : dungeon.getAdventurerQueue()) {
+        final List<Adventurer> advList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer currAdv : advList) {
             damageAdv(currAdv, 2);
         }
     }
@@ -354,7 +357,8 @@ public class CombatPhase extends Phase {
 
     private void calcMonsterMultiDamage(final Monster monster) {
         int res = monster.getDamage();
-        for (final Adventurer adventurer : dungeon.getAdventurerQueue()) {
+        final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer adventurer : adventurerList) {
             res = damageAdv(adventurer, res);
             if (res <= 0) {
                 break;
@@ -402,7 +406,8 @@ public class CombatPhase extends Phase {
 
     private void calcTrapMultiDamage(final int totalDefuseVal) {
         int res = placedTrap.getDamage() - totalDefuseVal;
-        for (final Adventurer adventurer : dungeon.getAdventurerQueue()) {
+        final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
+        for (final Adventurer adventurer : adventurerList) {
             res = damageAdv(adventurer, res);
             if (res <= 0) {
                 break;
@@ -479,7 +484,7 @@ public class CombatPhase extends Phase {
         final int advId = adventurer.getAdventurerID();
         final int leftoverDamage = adventurer.damagehealthby(amount);
 
-        if (leftoverDamage >= 0) {
+        if (leftoverDamage > 0) {
             // in this case the adventurer died/will be imprisoned
             broadcastAdventurerDamaged(adventurer.getAdventurerID(), healthBeforeDamage);
             dungeon.imprison(advId);
