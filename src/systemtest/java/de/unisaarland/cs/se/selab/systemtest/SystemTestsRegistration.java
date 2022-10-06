@@ -17,7 +17,7 @@ import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYyoneSsone;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYyoneSsone;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYyoneSsone;
-import registrationtest.FivePlayerAndStartTest;
+import de.unisaarland.cs.se.selab.systemtest.registrationtest.FivePlayerAndStartTest;
 
 
 final class SystemTestsRegistration {

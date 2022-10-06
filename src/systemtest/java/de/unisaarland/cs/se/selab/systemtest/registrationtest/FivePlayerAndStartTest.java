@@ -1,19 +1,19 @@
-package registrationtest;
+package de.unisaarland.cs.se.selab.systemtest.registrationtest;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTest;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 import java.util.Set;
 
-public class ThreePlayerAndStartTest extends SystemTest {
+public class FivePlayerAndStartTest extends SystemTest {
 
-    public ThreePlayerAndStartTest() {
-        super(ThreePlayerAndStartTest.class, false);
+    public FivePlayerAndStartTest() {
+        super(FivePlayerAndStartTest.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(RegistrationFourPlayersTest.class, "configuration.json");
+        return Utils.loadResource(FivePlayerAndStartTest.class, "configuration.json");
     }
 
     @Override
@@ -23,7 +23,7 @@ public class ThreePlayerAndStartTest extends SystemTest {
 
     @Override
     protected Set<Integer> createSockets() {
-        return Set.of(1, 2, 3, 4);
+        return Set.of(1, 2, 3, 4, 5);
     }
 
     @Override
@@ -35,16 +35,15 @@ public class ThreePlayerAndStartTest extends SystemTest {
         this.assertConfig(2, config);
         this.sendRegister(3, "3");
         this.assertConfig(3, config);
+        this.sendRegister(4, "4");
+        this.assertConfig(4, config);
+        this.sendRegister(5, "5");
+        this.assertActionFailed(5);
 
-        this.sendStartGame(1);
         this.assertGameStarted(1);
         this.assertGameStarted(2);
         this.assertGameStarted(3);
-
-        this.sendRegister(4, "4");
-        this.assertActionFailed(4);
-        this.sendStartGame(2);
-        this.assertActionFailed(2); // FIXME see comment on "RegistrationFourPlayersTest.java"
+        this.assertGameStarted(4);
 
         // assert next year, next round , draw monster, etc..
         // can ignore
