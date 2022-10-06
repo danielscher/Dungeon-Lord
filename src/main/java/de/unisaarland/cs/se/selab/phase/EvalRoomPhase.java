@@ -114,7 +114,6 @@ public class EvalRoomPhase extends Phase {
         if (room == null) {
             sc.sendActionFailed(bra.getCommID(), "Chosen room is not available");
             return;
-            //throw new IllegalArgumentException("Chosen room is not available");
 
         }
 
