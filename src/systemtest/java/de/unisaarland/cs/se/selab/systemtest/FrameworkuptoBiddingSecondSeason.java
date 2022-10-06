@@ -87,6 +87,15 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
         impsChangedAsserter(-1, 2);
         impsChangedAsserter(-1, 3);
 
+        //trap category
+        goldChangedAsserter(-1, 1);
+        assertTrapAcquired(1, 1, 26);
+        assertTrapAcquired(2, 2, 6);
+        goldChangedAsserter(-2, 3);
+        assertTrapAcquired(3, 3, 19);
+        assertTrapAcquired(3, 3, 5);
+
+        // imp return
         impsChangedAsserter(1, 1);
         goldChangedAsserter(1, 1);
 
@@ -95,15 +104,6 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
 
         impsChangedAsserter(1, 3);
         goldChangedAsserter(1, 3);
-
-        //trap category
-        goldChangedAsserter(-1, 1);
-        assertTrapAcquired(0, 0, 0);
-        assertTrapAcquired(1, 1, 1);
-        goldChangedAsserter(-2, 3);
-        assertTrapAcquired(2, 2, 2);
-        assertTrapAcquired(2, 2, 3);
-
 
         // adventurer arrived (at dungeons)
         adventurerArrivedAsserter(24, 0);
