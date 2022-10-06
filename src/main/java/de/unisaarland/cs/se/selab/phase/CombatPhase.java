@@ -92,7 +92,9 @@ public class CombatPhase extends Phase {
 
     @Override
     public void exec(final LeaveAction la) {
-        endTurn = true;
+        if (la.getCommID() == currPlayingPlayer.getCommID()) {
+            endTurn = true;
+        }
         playerLeft = true;
         super.exec(la);
     }
