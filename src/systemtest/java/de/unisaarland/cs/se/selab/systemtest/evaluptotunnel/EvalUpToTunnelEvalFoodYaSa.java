@@ -8,15 +8,15 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 /**
  * Register 2 Players and Leave
  */
-public class EvalUpToTunnelEvalFoodYyoneSsone extends OurSystemTestFramework {
+public class EvalUpToTunnelEvalFoodYaSa extends OurSystemTestFramework {
 
-    public EvalUpToTunnelEvalFoodYyoneSsone() {
-        super(EvalUpToTunnelEvalFoodYyoneSsone.class, false);
+    public EvalUpToTunnelEvalFoodYaSa() {
+        super(EvalUpToTunnelEvalFoodYaSa.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(EvalUpToTunnelEvalFoodYyoneSsone.class, "configuration.json");
+        return Utils.loadResource(EvalUpToTunnelEvalFoodYaSa.class, "configuration.json");
     }
 
     @Override

@@ -7,15 +7,15 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 /**
  * Register 4 Players and all of them Leave
  */
-public class EvalUpToTunnelAllPlayerLeftYyoneSsone extends OurSystemTestFramework {
+public class EvalUpToTunnelAllPlayerLeftYaSa extends OurSystemTestFramework {
 
-    public EvalUpToTunnelAllPlayerLeftYyoneSsone() {
-        super(EvalUpToTunnelAllPlayerLeftYyoneSsone.class, false);
+    public EvalUpToTunnelAllPlayerLeftYaSa() {
+        super(EvalUpToTunnelAllPlayerLeftYaSa.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(EvalUpToTunnelAllPlayerLeftYyoneSsone.class,
+        return Utils.loadResource(EvalUpToTunnelAllPlayerLeftYaSa.class,
                 "configuration.json");
     }
 

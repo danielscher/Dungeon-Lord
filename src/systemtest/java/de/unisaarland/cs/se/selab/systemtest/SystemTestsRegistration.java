@@ -13,9 +13,9 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
-import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYyoneSsone;
-import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYyoneSsone;
-import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYyoneSsone;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYaSa;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYaSa;
 
 
 final class SystemTestsRegistration {
@@ -48,9 +48,9 @@ final class SystemTestsRegistration {
         // manager.registerTest(new ThreePlayerAndStartTest());
 
         // evaluptotunnel package
-        manager.registerTest(new EvalUpToTunnelAllPlayerLeftYyoneSsone());
-        manager.registerTest(new EvalUpToTunnelEvalFoodYyoneSsone());
-        manager.registerTest(new EvalUpToTunnelEvalNicenessYyoneSsone());
+        manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalFoodYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
 
         // evaluptomonster package
         // manager.registerTest(new BiddingOnGoldBasic());
