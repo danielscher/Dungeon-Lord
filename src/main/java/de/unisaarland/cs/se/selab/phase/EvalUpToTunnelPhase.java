@@ -303,7 +303,7 @@ public class EvalUpToTunnelPhase extends Phase {
             final int[] coordsArr = dta.getCoords();
             final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
             // the right player has sent the event
-            commIdsToDigTunnel.remove(commId); // remove this player from the list
+            commIdsToDigTunnel.remove((Object) commId); // remove this player from the list
             if (playersDungeon.dig(requestedPos.getxpos(), requestedPos.getypos())) {
                 // in this case the tunnel was successfully dug
                 handledTunnelAction = true; // set flag that tunnel was successfully dug
@@ -350,7 +350,7 @@ public class EvalUpToTunnelPhase extends Phase {
         if (commIdsToDigTunnel.contains(commId)) {
             // in this case the player to dig tunnel ends his turn
             gotEndTurn = true;
-            commIdsToDigTunnel.remove(commId);
+            commIdsToDigTunnel.remove((Object) commId);
         } else {
             gd.getServerConnection()
                     .sendActionFailed(commId, "cannot end turn, it's not your turn");
