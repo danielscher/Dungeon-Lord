@@ -11,9 +11,16 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenRoom;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTrap;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
+import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TooNiceForThis;
+import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TunnelDiggers;
+import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingFoodTunnelRoom;
+import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingOnRoomBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsCantAffordSlot3;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.PlaceBidOnMonsterAndLeave;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.Send4ImpsToMineGold;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodTwoPlayerYaSa;
@@ -36,9 +43,14 @@ final class SystemTestsRegistration {
         // systemtest package
         // manager.registerTest(new BrokenConfigTest());
         // manager.registerTest(new EmptyConfigTest());
-        manager.registerTest(new FrameworkuptoBiddingSecondSeason());
+        // manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
+        manager.registerTest(new FrameworkuptoBiddingFourthSeason());
+        manager.registerTest(new FrameworkuptoBiddingSecondSeason());
+        manager.registerTest(new FrameworkuptoBiddingThirdSeason());
+
+
 
         manager.registerTest(new UpToGameStarted());
         manager.registerTest(new UpToPlayer());
@@ -57,18 +69,20 @@ final class SystemTestsRegistration {
 
         // evaluptotunnel package
         manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
         manager.registerTest(new EvalUpToTunnelEvalFoodYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
-        manager.registerTest(new Send4ImpsToMineGold());
+        manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
 
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
+        manager.registerTest(new BiddingOnImpsBasic());
+        manager.registerTest(new BiddingOnImpsCantAffordSlot3());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
-        manager.registerTest(new BiddingOnImpsBasic());
+        manager.registerTest(new PlaceBidOnMonsterAndLeave());
+        manager.registerTest(new Send4ImpsToMineGold());
 
         // collectandplacebids
         manager.registerTest(new BidTypeTakenFood());
@@ -80,6 +94,19 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTrap());
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
+
+        // combatphasefirstyear package
+        // manager.registerTest(new CombatPhaseFirstRound());
+
+        // edgyedgycase package
+        manager.registerTest(new TooNiceForThis());
+        manager.registerTest(new TunnelDiggers());
+
+        // evalroom package
+        manager.registerTest(new BiddingFoodTunnelRoom());
+        manager.registerTest(new BiddingOnRoomBasic());
+
+
 
     }
 }
