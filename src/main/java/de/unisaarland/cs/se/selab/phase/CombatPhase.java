@@ -484,7 +484,7 @@ public class CombatPhase extends Phase {
         final int advId = adventurer.getAdventurerID();
         final int leftoverDamage = adventurer.damagehealthby(amount);
 
-        if (leftoverDamage > 0) {
+        if (leftoverDamage != -1) {
             // in this case the adventurer died/will be imprisoned
             broadcastAdventurerDamaged(adventurer.getAdventurerID(), healthBeforeDamage);
             dungeon.imprison(advId);
