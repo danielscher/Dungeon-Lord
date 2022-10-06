@@ -93,6 +93,7 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         this.assertActNow(0);
         this.sendMonster(0, 20);
         monsterPlacedAsserter(20, 0);
+        // m20 is MUllI,damage=2
         this.assertActNow(0);
         this.sendEndTurn(0);
 
@@ -102,6 +103,7 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         adventurerDamagedAsserter(16, 2);
         imprisonAsserter(18);
         //second adventurer
+        // 16 and 0 are warrior HP=3
         adventurerDamagedAsserter(0, 2);
         //third adventurer
         adventurerDamagedAsserter(18, 2);

@@ -51,7 +51,7 @@ public class CombatAllPlayerEndTurn extends FrameworkuptoBiddingFourthSeason {
     }
 
     protected void combatPlayerZeroRoundSix() throws TimeoutException {
-        // so
+        // so the weird thing happened,
         assertNextRound(0, 2);
         assertNextRound(0, 6);
         assertSetBattleGround(0);
@@ -63,20 +63,13 @@ public class CombatAllPlayerEndTurn extends FrameworkuptoBiddingFourthSeason {
         sendEndTurn(0);
         assertActNow(0);
         // second round combat,
-        assertAdventurerDamaged(0, 16, 1);
+        assertAdventurerDamaged(0, 16, 2);
         assertAdventurerImprisoned(0, 16);
-        assertAdventurerDamaged(0, 0, 1);
+        assertAdventurerDamaged(0, 0, 2);
         assertAdventurerImprisoned(0, 0);
         assertAdventurerDamaged(0, 18, 2);
         assertAdventurerImprisoned(0, 18);
 
-        assertActionFailed(0);
-        assertAdventurerImprisoned(1, 0);
-        assertAdventurerImprisoned(2, 0);
-        assertAdventurerImprisoned(3, 0);
-
-        assertAdventurerImprisoned(0, 16);
-        assertAdventurerImprisoned(0, 18);
 
 
     }

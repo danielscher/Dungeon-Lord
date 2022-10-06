@@ -6,13 +6,15 @@ import de.unisaarland.cs.se.selab.systemtest.OurSystemTestFramework;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class PlayerLeftWhileDiggingTunnelSecondSeason extends OurSystemTestFramework {
+
     public PlayerLeftWhileDiggingTunnelSecondSeason() {
         super(PlayerLeftWhileDiggingTunnelSecondSeason.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(PlayerLeftWhileDiggingTunnelSecondSeason.class, "configuration.json");
+        return Utils.loadResource(PlayerLeftWhileDiggingTunnelSecondSeason.class,
+                "configuration.json");
     }
 
     @Override
@@ -74,7 +76,6 @@ public class PlayerLeftWhileDiggingTunnelSecondSeason extends OurSystemTestFrame
         // assert placing bids
         evalBidsSecondSeason();
 
-
         //BidRetrieved
         bidRetrievedAsserterHelper(BidType.NICENESS, 0);
         bidRetrievedAsserterHelper(BidType.IMPS, 0);
@@ -118,7 +119,6 @@ public class PlayerLeftWhileDiggingTunnelSecondSeason extends OurSystemTestFrame
         currSockets.remove((Integer) 2);
         playerLeftAsserterHelper(2);
 
-
         this.sendPlaceBid(3, BidType.TUNNEL, 1);
         bidPlacedAsserterHelper(BidType.TUNNEL, 3, 1);
         assertActNow(3);
@@ -155,7 +155,6 @@ public class PlayerLeftWhileDiggingTunnelSecondSeason extends OurSystemTestFrame
         currSockets.remove((Integer) 1);
         playerLeftAsserterHelper(1);
 
-
         assertDigTunnel(3);
         assertActNow(3);
         sendDigTunnel(3, 1, 0);
@@ -183,7 +182,6 @@ public class PlayerLeftWhileDiggingTunnelSecondSeason extends OurSystemTestFrame
         sendDigTunnel(0, 0, 3);
         impsChangedAsserterHelper(-1, 0);
         tunnelDugAsserter(0, 0, 3);
-
 
         //second bid category (gold)
         //player 3 now has 3 tiles 0 imp

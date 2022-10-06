@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
+import de.unisaarland.cs.se.selab.systemtest.cambatphase.CombatAllPlayerEndTurn;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenFood;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenGold;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenImp;
@@ -83,5 +84,7 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
 
+        // combat
+        manager.registerTest(new CombatAllPlayerEndTurn());
     }
 }

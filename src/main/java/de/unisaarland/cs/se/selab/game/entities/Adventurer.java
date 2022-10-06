@@ -61,7 +61,7 @@ public class Adventurer {
             return -1;
         } else {
             // in this case the adventurer doesn't survive
-            final int leftoverDamage = healthPoints - damage;
+            final int leftoverDamage = damage - healthPoints;
             healthPoints = 0;
             return leftoverDamage;
         }
