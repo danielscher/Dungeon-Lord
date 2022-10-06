@@ -33,8 +33,10 @@ public abstract class Phase {
     to be used in the default implementation of most exec methods
      */
     public void sendError(final int commId) {
-        gd.getServerConnection()
-                .sendActionFailed(commId, "this action isn't valid within this phase");
+        if (gd.checkIfRegistered(commId)) {
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "this action isn't valid within this phase");
+        }
     }
 
     public void exec(final RegAction x) {
@@ -50,11 +52,7 @@ public abstract class Phase {
             final int leavingPlayerId = gd.getPlayerIdByCommID(la.getCommID());
             gd.removePlayer(la.getCommID());
             broadcastLeft(leavingPlayerId);
-        } else {
-            gd.getServerConnection()
-                    .sendActionFailed(la.getCommID(), "Player is not registered to leave");
         }
-
     }
 
     public void exec(final EndTurnAction x) {
