@@ -63,14 +63,13 @@ public class CombatPhase extends Phase {
                 return null;
             }
             // check if the battleground is full
-            if (dungeon.hasTileRoom(battleground)) {
-                if (placedTrap != null && placedMonsters.size() > 1) {
-                    break;
-                }
-            } else {
-                if (placedTrap != null && placedMonsters.size() == 1) {
-                    break;
-                }
+            if (dungeon.hasTileRoom(battleground) && (placedTrap != null
+                    && placedMonsters.size() > 1)) {
+                break;
+            }
+            if (!dungeon.hasTileRoom(battleground) && (placedTrap != null
+                    && placedMonsters.size() == 1)) {
+                break;
             }
         }
         //if player left skip thr damages and healing
