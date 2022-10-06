@@ -54,7 +54,7 @@ public abstract class Phase {
     public void exec(final LeaveAction la) {
         if (gd.checkIfRegistered(la.getCommID())) {
             final int leavingPlayerId = gd.getPlayerIdByCommID(la.getCommID());
-            letAdvFlee(gd.getPlayerByCommID(leavingPlayerId)); // frees all his adventurers
+            letAdvFlee(gd.getPlayerByPlayerId(leavingPlayerId)); // frees all his adventurers
             gd.removePlayer(la.getCommID());
             broadcastLeft(leavingPlayerId);
         }
