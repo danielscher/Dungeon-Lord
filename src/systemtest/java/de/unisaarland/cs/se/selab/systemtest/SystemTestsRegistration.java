@@ -35,8 +35,9 @@ final class SystemTestsRegistration {
     static void registerSystemTests(final SystemTestManager manager) {
 
         // systemtest package
-        manager.registerTest(new BrokenConfigTest());
-        manager.registerTest(new EmptyConfigTest());
+        //manager.registerTest(new BrokenConfigTest());
+        //manager.registerTest(new EmptyConfigTest());
+
         manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
