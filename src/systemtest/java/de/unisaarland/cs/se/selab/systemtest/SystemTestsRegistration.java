@@ -11,6 +11,7 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenRoom;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTrap;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
+import de.unisaarland.cs.se.selab.systemtest.combatphasefirstyear.CombatPhaseFirstRound;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
@@ -25,6 +26,7 @@ import de.unisaarland.cs.se.selab.systemtest.registrationtest.FivePlayerAndStart
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.RegistrationFourPlayersTest;
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.ThreePlayerAndStartTest;
 
+
 final class SystemTestsRegistration {
 
     private SystemTestsRegistration() {
@@ -36,6 +38,7 @@ final class SystemTestsRegistration {
         // systemtest package
         //manager.registerTest(new BrokenConfigTest());
         //manager.registerTest(new EmptyConfigTest());
+
         manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
@@ -79,6 +82,8 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTrap());
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
+
+        manager.registerTest(new CombatPhaseFirstRound());
 
     }
 }
