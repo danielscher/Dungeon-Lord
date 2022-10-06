@@ -49,6 +49,7 @@ public class EvalRoomPhase extends Phase {
         final BiddingSquare bs = gd.getBiddingSquare();
 
         for (int i = 0; i < 3; i++) {
+            endTurn = false;
             if (bs.getIDByBidSlot(BidType.ROOM, i) != -1) {
                 //if there's a valid player id in the square
                 final Player p = gd.getPlayerByPlayerId(bs.getIDByBidSlot(BidType.ROOM, i));
@@ -111,7 +112,10 @@ public class EvalRoomPhase extends Phase {
             }
         }
         if (room == null) {
-            throw new IllegalArgumentException("Chosen room is not available");
+            sc.sendActionFailed(bra.getCommID(), "Chosen room is not available");
+            return;
+            //throw new IllegalArgumentException("Chosen room is not available");
+
         }
 
         final Dungeon d = player.getDungeon();
