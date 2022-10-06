@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.systemtest;
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
+import de.unisaarland.cs.se.selab.systemtest.cambatphase.CombatPhaseFirtsSeason;
 
 public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
 

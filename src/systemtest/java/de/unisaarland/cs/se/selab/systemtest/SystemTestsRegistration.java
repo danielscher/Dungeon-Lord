@@ -11,8 +11,6 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenRoom;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTrap;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
-import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
-import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
@@ -20,6 +18,7 @@ import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFo
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYaSa;
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.RegistrationFourPlayersTest;
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.ThreePlayerAndStartTest;
+import de.unisaarland.cs.se.selab.systemtest.registrationtest.FivePlayerAndStartTest;
 
 final class SystemTestsRegistration {
 
@@ -28,7 +27,6 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
-
         // systemtest package
         // manager.registerTest(new BrokenConfigTest());
         // manager.registerTest(new EmptyConfigTest());
@@ -57,11 +55,9 @@ final class SystemTestsRegistration {
         manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
 
         // evaluptomonster package
-        manager.registerTest(new BiddingOnGoldBasic());
+        // manager.registerTest(new BiddingOnGoldBasic());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
-        manager.registerTest(new BiddingOnImpsBasic());
-
 
         // collectandplacebids
         manager.registerTest(new BidTypeTakenFood());

@@ -41,8 +41,6 @@ public class ThreePlayerAndStartTest extends SystemTest {
         this.assertGameStarted(2);
         this.assertGameStarted(3);
 
-        this.sendRegister(4, "4");
-        this.assertActionFailed(4);
 
         // assert next year, next round , draw monster, etc..
         // can ignore
