@@ -15,6 +15,7 @@ import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.Send4ImpsToMineGold;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodTwoPlayerYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYaSa;
@@ -34,8 +35,8 @@ final class SystemTestsRegistration {
     static void registerSystemTests(final SystemTestManager manager) {
 
         // systemtest package
-        //manager.registerTest(new BrokenConfigTest());
-        //manager.registerTest(new EmptyConfigTest());
+        manager.registerTest(new BrokenConfigTest());
+        manager.registerTest(new EmptyConfigTest());
         manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
@@ -62,6 +63,7 @@ final class SystemTestsRegistration {
         manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
         manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
+        manager.registerTest(new Send4ImpsToMineGold());
 
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
