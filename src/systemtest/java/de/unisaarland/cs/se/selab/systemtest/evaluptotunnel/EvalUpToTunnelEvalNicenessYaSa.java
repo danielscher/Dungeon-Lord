@@ -49,11 +49,11 @@ public class EvalUpToTunnelEvalNicenessYaSa extends OurSystemTestFramework {
 
         // assert bidding started
 
-        this.biddingStartedAsserterAnyoneLeft();
+        this.biddingStartedAsserterHelper();
 
         // assert act now (for requesting bids)
 
-        this.actNowAsserterAnyoneLeft();
+        this.actNowAsserterHelper();
 
         // place bids
         bidsOfFirstSeasonFirstYear();
