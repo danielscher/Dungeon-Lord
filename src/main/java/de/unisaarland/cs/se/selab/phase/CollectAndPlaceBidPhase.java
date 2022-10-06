@@ -11,6 +11,7 @@ import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.entities.Adventurer;
 import de.unisaarland.cs.se.selab.game.entities.Monster;
 import de.unisaarland.cs.se.selab.game.entities.Room;
+import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.List;
 
@@ -105,22 +106,29 @@ public class CollectAndPlaceBidPhase extends Phase {
 
     @Override
     public void exec(final ActivateRoomAction ara) {
-        final Player player = gd.getPlayerByCommID((ara.getCommID()));
+        final int commId = ara.getCommID();
 
-        if (player == null) { //if player's left the game
+        if (!gd.checkIfRegistered(commId)) {
             return;
         }
-        if (player.getDungeon().getRooms().isEmpty()) {
+        final Player player = gd.getPlayerByCommID(commId);
+        final Dungeon dungeon = player.getDungeon();
+
+        if (dungeon.getRooms().isEmpty()) {
             sc.sendActionFailed(ara.getCommID(), "You don't have any rooms.");
         } else {
-            if (!player.getDungeon().activateRoom(ara.getRoomID())) {
+            if (!dungeon.activateRoom(ara.getRoomID())) {
                 sc.sendActionFailed(ara.getCommID(),
                         "The chosen room can't be activated.");
             } else {
                 final int cost = player.getDungeon()
                         .getRoomById(ara.getRoomID()).getActivationCost();
-                broadcastImpsChanged(cost, player.getPlayerID());
+                broadcastImpsChanged(-cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
+
+                if (checkNotAllBidsChosenPerPlayer(player)) {
+                    sc.sendActNow(ara.getCommID());
+                }
             }
         }
     }
