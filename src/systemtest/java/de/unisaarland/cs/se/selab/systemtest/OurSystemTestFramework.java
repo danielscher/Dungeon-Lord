@@ -112,6 +112,13 @@ public class OurSystemTestFramework extends SystemTest {
         this.sendRegister(3, "3");
         this.assertConfig(3, config);
 
+        currSockets.clear();
+        currSockets.add(0);
+        currSockets.add(1);
+        currSockets.add(2);
+        currSockets.add(3);
+
+
         gameStartedAsserterHelper();
 
         this.assertPlayerHelper(new int[]{0, 1, 2, 3});
