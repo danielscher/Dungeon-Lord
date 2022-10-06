@@ -104,8 +104,10 @@ public class AltConfig {
             parseAdventurers(jsonObject);
             parseRooms(jsonObject);
             parseTraps(jsonObject);
-        } catch (JSONException e) {
+        } catch (JSONException | IllegalArgumentException e) {
             // if anything fails, return false
+            // JSONException => parser failed
+            // IllegalArgumentException => expected by valueOf methods of enums
             return false;
         }
 
