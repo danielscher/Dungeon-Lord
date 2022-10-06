@@ -47,7 +47,9 @@ public class EvalUpToTunnelPhase extends Phase {
                     // if there is a valid player id in the square
                     final Player player = gd.getPlayerByPlayerId(
                             biddingSquare.getIDByBidSlot(slot, column));
-                    grant(player, column, slot);
+                    if (player != null) {
+                        grant(player, column, slot);
+                    }
                 }
             }
         }
@@ -262,10 +264,9 @@ public class EvalUpToTunnelPhase extends Phase {
         // add player's commId to a list of expected action-senders
         commIdToDigTunnel = commId;
 
-        gd.getServerConnection().sendActNow(commId); // TODO check if sending once is sufficient
-
         while (commIdToDigTunnel != -1) {
             // loop until the player we evaluate has sent an action
+            gd.getServerConnection().sendActNow(commId);
             try {
                 final Action action = gd.getServerConnection().nextAction();
                 action.invoke(this);
