@@ -5,14 +5,14 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.OurSystemTestFramework;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
-public class PlayerLeftFirstSeason extends OurSystemTestFramework {
-    public PlayerLeftFirstSeason() {
-        super(PlayerLeftFirstSeason.class, false);
+public class PlayerLeftWhilePlacingBidFirstSeason extends OurSystemTestFramework {
+    public PlayerLeftWhilePlacingBidFirstSeason() {
+        super(PlayerLeftWhilePlacingBidFirstSeason.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(PlayerLeftFirstSeason.class, "configuration.json");
+        return Utils.loadResource(PlayerLeftWhilePlacingBidFirstSeason.class, "configuration.json");
     }
 
     @Override
