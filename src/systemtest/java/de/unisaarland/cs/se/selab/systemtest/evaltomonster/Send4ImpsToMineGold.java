@@ -7,6 +7,14 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class Send4ImpsToMineGold extends FrameworkuptoBiddingSecondSeason {
 
+    protected Send4ImpsToMineGold(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
+    protected Send4ImpsToMineGold() {
+        super(Send4ImpsToMineGold.class, false);
+    }
+
     @Override
     public String createConfig() {
         return Utils.loadResource(Send4ImpsToMineGold.class, "configuration_5Imps.json");

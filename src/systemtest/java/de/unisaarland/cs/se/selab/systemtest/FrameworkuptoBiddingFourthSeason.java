@@ -5,7 +5,13 @@ import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdSeason {
+    protected FrameworkuptoBiddingFourthSeason(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
 
+    protected FrameworkuptoBiddingFourthSeason() {
+        super(FrameworkuptoBiddingFourthSeason.class, false);
+    }
 
     @Override
     public String createConfig() {
