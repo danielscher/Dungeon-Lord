@@ -41,6 +41,13 @@ public class CombatPhase extends Phase {
 
     @Override
     public Phase run() {
+        final int currPlayerId = currPlayingPlayer.getPlayerID();
+        if (gd.getPlayerByPlayerId(currPlayerId) == null) {
+            // in this case we still have a reference to the player object, but he isnt
+            // registered anymore --> transition to next phase
+            return goToNextPhase();
+        }
+
         //send defend yourself
         gd.getServerConnection().sendDefendYourself(currPlayingPlayer.getCommID());
         //coordinate of the current battleground
