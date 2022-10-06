@@ -43,7 +43,7 @@ public class CombatPhase extends Phase {
     public Phase run() {
         final int currPlayerId = currPlayingPlayer.getPlayerID();
         if (gd.getPlayerByPlayerId(currPlayerId) == null) {
-            // in this case we still have a reference to the player object, but he isnt
+            // in this case we still have a reference to the player object, but he isn't
             // registered anymore --> transition to next phase
             return goToNextPhase();
         }
@@ -60,8 +60,14 @@ public class CombatPhase extends Phase {
             } catch (TimeoutException e) {
                 kickPlayer(currPlayingPlayer.getPlayerID());
                 // TODO add logic to skip to next phase (next players combat or bidding or endgame)
-                return null;
+                return goToNextPhase();
             }
+            if (gd.getPlayerByPlayerId(currPlayerId) == null) {
+                // in this case we still have a reference to the player object, but he isn't
+                // registered anymore --> transition to next phase
+                return goToNextPhase();
+            }
+
             // check if the battleground is full
             if (dungeon.hasTileRoom(battleground) && (placedTrap != null
                     && placedMonsters.size() > 1)) {
@@ -486,6 +492,9 @@ public class CombatPhase extends Phase {
      * CollectAndPlaceBidPhase when all player finished combat phase.
      */
     private Phase goToNextPhase() {
+        if (gd.getAllPlayerID().isEmpty()) {
+            return null;
+        }
 
         if (timeStamp.getSeason() < 8 && dungeon.getNumAdventurersInQueue() > 0 && !playerLeft) {
             timeStamp.nextSeason();
