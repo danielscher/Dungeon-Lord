@@ -12,12 +12,10 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
-import java.util.ArrayList;
-import java.util.List;
 
 public class EvalUpToTunnelPhase extends Phase {
 
-    private final List<Integer> commIdsToDigTunnel = new ArrayList<>();
+    private int commIdToDigTunnel = -1;
     private boolean gotEndTurn;
     private boolean handledTunnelAction;
     private Coordinate lastDugTile;
@@ -260,19 +258,19 @@ public class EvalUpToTunnelPhase extends Phase {
      */
     private void requestActionFrom(final int commId) {
         // add player's commId to a list of expected action-senders
-        commIdsToDigTunnel.add(commId);
+        commIdToDigTunnel = commId;
 
         gd.getServerConnection().sendActNow(commId); // TODO check if sending once is sufficient
 
-        while (!commIdsToDigTunnel.isEmpty()) {
+        while (commIdToDigTunnel == -1) {
             // loop until the player we evaluate has sent an action
             try {
                 final Action action = gd.getServerConnection().nextAction();
                 action.invoke(this);
             } catch (TimeoutException e) {
                 // TODO implement behaviour???
-                kickPlayer(gd.getPlayerIdByCommID(commIdsToDigTunnel.get(0)));
-                commIdsToDigTunnel.clear();
+                kickPlayer(gd.getPlayerIdByCommID(commIdToDigTunnel));
+                commIdToDigTunnel = -1;
             }
         }
     }
@@ -296,14 +294,14 @@ public class EvalUpToTunnelPhase extends Phase {
 
         final Dungeon playersDungeon = player.getDungeon();
 
-        if (!commIdsToDigTunnel.contains(commId)) {
+        if (commIdToDigTunnel == commId) {
             // wrong player sent the event
             gd.getServerConnection().sendActionFailed(commId, "it's not your turn to dig tunnels");
         } else {
             final int[] coordsArr = dta.getCoords();
             final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
             // the right player has sent the event
-            commIdsToDigTunnel.remove((Object) commId); // remove this player from the list
+            commIdToDigTunnel = -1; // remove this player from the list
             if (playersDungeon.dig(requestedPos.getxpos(), requestedPos.getypos())) {
                 // in this case the tunnel was successfully dug
                 handledTunnelAction = true; // set flag that tunnel was successfully dug
@@ -347,10 +345,10 @@ public class EvalUpToTunnelPhase extends Phase {
     @Override
     public void exec(final EndTurnAction eta) {
         final int commId = eta.getCommID();
-        if (commIdsToDigTunnel.contains(commId)) {
+        if (commIdToDigTunnel == commId) {
             // in this case the player to dig tunnel ends his turn
             gotEndTurn = true;
-            commIdsToDigTunnel.remove((Object) commId);
+            commIdToDigTunnel = -1;
         } else {
             gd.getServerConnection()
                     .sendActionFailed(commId, "cannot end turn, it's not your turn");
@@ -360,8 +358,8 @@ public class EvalUpToTunnelPhase extends Phase {
     @Override
     public void exec(final LeaveAction la) {
         final int commId = la.getCommID();
-        if (commIdsToDigTunnel.contains(commId)) {
-            commIdsToDigTunnel.remove((Object) commId); // casting to Object needed for overloading
+        if (commIdToDigTunnel == commId) {
+            commIdToDigTunnel = -1; // casting to Object needed for overloading
         }
         gotEndTurn = true; // to prevent any further tunnel dig asking from this user
         super.exec(la);
