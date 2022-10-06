@@ -73,7 +73,7 @@ public class OurSystemTestFramework extends SystemTest {
 
     protected void playerLeftAsserterHelper(final int playerId) throws TimeoutException {
         for (final int currS : currSockets) {
-            assertLeft(currS,playerId);
+            assertLeft(currS, playerId);
         }
     }
 
@@ -95,7 +95,7 @@ public class OurSystemTestFramework extends SystemTest {
     protected void monsterHiredAsserterHelper(final int monId, final int playerId)
             throws TimeoutException {
         for (final int currS : currSockets) {
-            assertMonsterHired(currS,monId,playerId);
+            assertMonsterHired(currS, monId, playerId);
         }
     }
 

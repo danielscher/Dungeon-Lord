@@ -30,7 +30,6 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
 
         regPhaseAssertions(config);
 
-
         nextYearAsserter(1);
 
         simulateFirstBiddingSeason();
@@ -275,7 +274,9 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
 
     }
 
-    private void monsterHiredAsserter(final int monsterId, final int playerId)
+
+    @Override
+    protected void monsterHiredAsserter(final int monsterId, final int playerId)
             throws TimeoutException {
         assertMonsterHired(0, monsterId, playerId);
         assertMonsterHired(1, monsterId, playerId);
