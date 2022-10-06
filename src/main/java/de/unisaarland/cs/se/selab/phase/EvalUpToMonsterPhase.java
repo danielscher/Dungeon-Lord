@@ -248,11 +248,15 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void exec(final HireMonsterAction hma) {
-        final Player player = gd.getPlayerByCommID(hma.getCommID());
         if (hma.getCommID() != currHandledCommId) { // only specific player can hire
+            // if players isn't registered ignore.
+            if (!gd.checkIfRegistered(hma.getCommID())) {
+                return;
+            }
             gd.getServerConnection()
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
         }
+        final Player player = gd.getPlayerByCommID(hma.getCommID());
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
         final int monsterHunger = chosenMonster.getHunger();
         final int monsterEvilness = chosenMonster.getEvilness();
@@ -283,14 +287,18 @@ public class EvalUpToMonsterPhase extends Phase {
     @Override
     public void exec(final ActivateRoomAction ara) {
         final int commId = ara.getCommID();
-        // get the player who requested to activate the room
-        final Player player = gd.getPlayerByCommID(commId);
-        // if player doesn't exist, return
-        if (player == null) {
-            gd.getServerConnection()
-                    .sendActionFailed(commId, "you don't seem to be a registered player");
+        // if players isn't registered ignore.
+        if (!gd.checkIfRegistered(commId)) {
             return;
         }
+        // id doesn't match
+        if (currHandledCommId != commId) {
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "Illegal Action: not your turn.");
+        }
+
+        // get the player who requested to activate the room
+        final Player player = gd.getPlayerByCommID(commId);
 
         final int roomId = ara.getRoomID();
         final Dungeon playersDungeon = player.getDungeon();
@@ -305,6 +313,10 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void exec(final EndTurnAction eta) {
+        // if players isn't registered ignore.
+        if (!gd.checkIfRegistered(eta.getCommID())) {
+            return;
+        }
 
         if (eta.getCommID() != currHandledCommId) {
             gd.getServerConnection()
@@ -316,6 +328,10 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void exec(final LeaveAction la) {
+        // if players isn't registered ignore.
+        if (!gd.checkIfRegistered(la.getCommID())) {
+            return;
+        }
         handleHireMonsterAction = false;
         super.exec(la);
     }
