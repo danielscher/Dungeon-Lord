@@ -34,9 +34,9 @@ final class SystemTestsRegistration {
     static void registerSystemTests(final SystemTestManager manager) {
 
         // systemtest package
-        // manager.registerTest(new BrokenConfigTest());
-        // manager.registerTest(new EmptyConfigTest());
-        // manager.registerTest(new FrameworkuptoBiddingSecondSeason());
+        //manager.registerTest(new BrokenConfigTest());
+        //manager.registerTest(new EmptyConfigTest());
+        manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
 
@@ -63,13 +63,11 @@ final class SystemTestsRegistration {
         manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
 
-
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
         manager.registerTest(new BiddingOnImpsBasic());
-
 
         // collectandplacebids
         manager.registerTest(new BidTypeTakenFood());

@@ -7,7 +7,7 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(FrameworkuptoBiddingFourthSeason.class, "configuration.json");
+        return Utils.loadResource(CombatPhaseFirstRound.class, "configuration.json");
     }
 
     @Override
