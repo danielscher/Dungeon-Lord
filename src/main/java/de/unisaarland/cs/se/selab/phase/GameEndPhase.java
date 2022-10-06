@@ -29,6 +29,7 @@ public class GameEndPhase extends Phase {
         //TODO
         setAllTitle();
         setAllPoints();
+        broadcastWinner();
         return null;
     }
 
