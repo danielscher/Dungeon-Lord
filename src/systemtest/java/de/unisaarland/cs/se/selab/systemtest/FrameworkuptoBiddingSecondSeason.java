@@ -73,30 +73,34 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
         // assert placing bids
 
         // first bid category (food)
-        goldChangedAsserter(-1, 0);
-        foodChangedAsserter(2, 0);
-        evilnessChangedAsserter(1, 1);
-        foodChangedAsserter(3, 1);
-        evilnessChangedAsserter(2, 2);
+        goldChangedAsserter(-1, 1);
+        foodChangedAsserter(2, 1);
+        evilnessChangedAsserter(1, 2);
         foodChangedAsserter(3, 2);
-        goldChangedAsserter(1, 2);
+        evilnessChangedAsserter(2, 3);
+        foodChangedAsserter(3, 3);
+        goldChangedAsserter(1, 3);
 
         // second bid category (gold)
-        impsChangedAsserter(-2, 0);
-        impsChangedAsserter(-3, 1);
-        impsChangedAsserter(-5, 2);
-        impsChangedAsserter(2, 0);
-        goldChangedAsserter(2, 0);
-        impsChangedAsserter(3, 1);
-        goldChangedAsserter(3, 1);
-        impsChangedAsserter(5, 2);
-        goldChangedAsserter(4, 2);
+        //only 1 because every player has so far only one tile
+        impsChangedAsserter(-1, 1);
+        impsChangedAsserter(-1, 2);
+        impsChangedAsserter(-1, 3);
+
+        impsChangedAsserter(1, 1);
+        goldChangedAsserter(1, 1);
+
+        impsChangedAsserter(1, 2);
+        goldChangedAsserter(1, 2);
+
+        impsChangedAsserter(1, 3);
+        goldChangedAsserter(1, 3);
 
         //trap category
-        goldChangedAsserter(-1, 0);
+        goldChangedAsserter(-1, 1);
         assertTrapAcquired(0, 0, 0);
         assertTrapAcquired(1, 1, 1);
-        goldChangedAsserter(-2, 2);
+        goldChangedAsserter(-2, 3);
         assertTrapAcquired(2, 2, 2);
         assertTrapAcquired(2, 2, 3);
 
@@ -109,16 +113,6 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
     }
 
     protected void bidsOfSecondSeasonFirstYear() throws TimeoutException {
-        this.sendPlaceBid(0, BidType.FOOD, 1);
-        bidPlacedAsserter(BidType.FOOD, 0, 1);
-        assertActNow(0);
-
-        this.sendPlaceBid(0, BidType.GOLD, 2);
-        bidPlacedAsserter(BidType.GOLD, 0, 2);
-        assertActNow(0);
-
-        this.sendPlaceBid(0, BidType.TRAP, 3);
-        bidPlacedAsserter(BidType.TRAP, 0, 3);
 
         this.sendPlaceBid(1, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 1, 1);
@@ -152,5 +146,16 @@ public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
 
         this.sendPlaceBid(3, BidType.TRAP, 3);
         bidPlacedAsserter(BidType.TRAP, 3, 3);
+
+        this.sendPlaceBid(0, BidType.FOOD, 1);
+        bidPlacedAsserter(BidType.FOOD, 0, 1);
+        assertActNow(0);
+
+        this.sendPlaceBid(0, BidType.GOLD, 2);
+        bidPlacedAsserter(BidType.GOLD, 0, 2);
+        assertActNow(0);
+
+        this.sendPlaceBid(0, BidType.TRAP, 3);
+        bidPlacedAsserter(BidType.TRAP, 0, 3);
     }
 }
