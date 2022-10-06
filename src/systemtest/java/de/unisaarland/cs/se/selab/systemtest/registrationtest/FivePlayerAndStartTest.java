@@ -37,12 +37,12 @@ public class FivePlayerAndStartTest extends SystemTest {
         this.assertConfig(3, config);
         this.sendRegister(4, "4");
         this.assertConfig(4, config);
-        this.sendRegister(5, "5");
 
         this.assertGameStarted(1);
         this.assertGameStarted(2);
         this.assertGameStarted(3);
         this.assertGameStarted(4);
+        this.sendRegister(5, "5");
 
         // assert next year, next round , draw monster, etc..
         // can ignore
@@ -50,5 +50,6 @@ public class FivePlayerAndStartTest extends SystemTest {
         this.sendLeave(2);
         this.sendLeave(3);
         this.sendLeave(4);
+        this.sendLeave(5);
     }
 }

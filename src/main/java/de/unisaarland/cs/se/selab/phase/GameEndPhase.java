@@ -29,14 +29,11 @@ public class GameEndPhase extends Phase {
         //TODO
         setAllTitle();
         setAllPoints();
+        broadcastWinner();
         return null;
     }
 
     public void setAllTitle() {
-        // use this to calculate the final points and give titles
-        this.calculateFoodPoint();
-        this.calculateGoldPoint();
-        // the above order is important
         this.setRichesTitles();
         this.setDarkSeedTitles();
         this.setHallsTitles();
@@ -92,7 +89,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : darkSeedPlayerIdList) {
-                final int currPlayerId = darkSeedPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -106,7 +103,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : richesPlayerIdList) {
-                final int currPlayerId = richesPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -120,7 +117,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : impsPlayerIdList) {
-                final int currPlayerId = impsPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -134,7 +131,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : hallsPlayerIdList) {
-                final int currPlayerId = hallsPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -148,7 +145,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : battlePlayerIdList) {
-                final int currPlayerId = battlePlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -162,7 +159,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : tunnelPlayerIdList) {
-                final int currPlayerId = tunnelPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -176,7 +173,7 @@ public class GameEndPhase extends Phase {
             gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 3);
         } else {
             for (final int i : monsterPlayerIdList) {
-                final int currPlayerId = monsterPlayerIdList.get(i);
+                final int currPlayerId = i;
                 final int currPoints = gd.getPlayerByPlayerId(currPlayerId).getPoints();
                 gd.getPlayerByPlayerId(currPlayerId).setPoints(currPoints + 2);
             }
@@ -185,26 +182,27 @@ public class GameEndPhase extends Phase {
 
     public void evaluateWinner() {  // set the winner to the list:
         int maxScores = gd.getPlayerByPlayerId(0).getPoints();
-        for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
+        for (int i = 0; i < gd.getNumCurrPlayers(); i++) {
             final int currScores = gd.getPlayerByPlayerId(i).getPoints();
             if (currScores > maxScores) {
                 maxScores = currScores;
             }
-        } //find the player with most rooms
-        for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
-            final int scores = gd.getPlayerByPlayerId(i).getDungeon().getNumRooms();
+        } //find the player with max points
+        for (int i = 0; i < gd.getNumCurrPlayers(); i++) {
+            final int scores = gd.getPlayerByPlayerId(i).getPoints();
             if (scores == maxScores) {
                 this.winnerPlayerIdList.add(i);
                 // add player to the winner list
             }
         }
+    }
 
+    public void broadcastWinner() {
         for (final int i : winnerPlayerIdList) {
-            final int winnerId = winnerPlayerIdList.get(i);
+            final int winnerId = i;
             final int winnerPoints = gd.getPlayerByPlayerId(winnerId).getPoints();
             broadcastGameEnd(winnerId, winnerPoints);
         }
-
     }
 
     // riches need gold+foods, and i use points field to store the value, which need to be clear
@@ -225,6 +223,8 @@ public class GameEndPhase extends Phase {
     }
 
     public void setRichesTitles() {
+        this.calculateFoodPoint();
+        this.calculateGoldPoint();
         int maxRiches = -1;
         for (int i = 0; i < gd.getAllPlayerID().size(); i++) {
             final int currRiches = gd.getPlayerByPlayerId(i).getPoints();
@@ -239,7 +239,7 @@ public class GameEndPhase extends Phase {
                 richesPlayerIdList.add(i);
                 // add the title to players and add playerID to the list(later to check tie)
             }
-            // gd.getPlayerByPlayerId(i).setPoints(0);
+            gd.getPlayerByPlayerId(i).setPoints(0);
             //clear the food and gold points since they are no longer needed
         }
     }

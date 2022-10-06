@@ -41,6 +41,13 @@ public class CombatPhase extends Phase {
 
     @Override
     public Phase run() {
+        final int currPlayerId = currPlayingPlayer.getPlayerID();
+        if (gd.getPlayerByPlayerId(currPlayerId) == null) {
+            // in this case we still have a reference to the player object, but he isnt
+            // registered anymore --> transition to next phase
+            return goToNextPhase();
+        }
+
         //send defend yourself
         gd.getServerConnection().sendDefendYourself(currPlayingPlayer.getCommID());
         //coordinate of the current battleground
@@ -56,14 +63,13 @@ public class CombatPhase extends Phase {
                 return null;
             }
             // check if the battleground is full
-            if (dungeon.hasTileRoom(battleground)) {
-                if (placedTrap != null && placedMonsters.size() > 1) {
-                    break;
-                }
-            } else {
-                if (placedTrap != null && placedMonsters.size() == 1) {
-                    break;
-                }
+            if (dungeon.hasTileRoom(battleground) && (placedTrap != null
+                    && placedMonsters.size() > 1)) {
+                break;
+            }
+            if (!dungeon.hasTileRoom(battleground) && (placedTrap != null
+                    && placedMonsters.size() == 1)) {
+                break;
             }
         }
         //if player left skip thr damages and healing
@@ -86,7 +92,9 @@ public class CombatPhase extends Phase {
 
     @Override
     public void exec(final LeaveAction la) {
-        endTurn = true;
+        if (la.getCommID() == currPlayingPlayer.getCommID()) {
+            endTurn = true;
+        }
         playerLeft = true;
         super.exec(la);
     }

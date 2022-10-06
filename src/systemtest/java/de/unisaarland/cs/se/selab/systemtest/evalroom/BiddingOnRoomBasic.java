@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.systemtest.evaltomonster;
+package de.unisaarland.cs.se.selab.systemtest.evalroom;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
@@ -7,10 +7,10 @@ import de.unisaarland.cs.se.selab.systemtest.SystemTestTemplate;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 import java.util.Set;
 
-public class BiddingOnMonsterBasic extends OurSystemTestFramework {
+public class BiddingOnRoomBasic extends OurSystemTestFramework {
 
-    public BiddingOnMonsterBasic() {
-        super(SystemTestTemplate.class, false);
+    public BiddingOnRoomBasic() {
+        super(BiddingOnRoomBasic.class, false);
     }
 
     @Override
@@ -116,6 +116,14 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
     }
 
     @Override
+    protected void impsChangedAsserter(final int amount, final int playerId)
+            throws TimeoutException {
+        assertImpsChanged(0, amount, playerId);
+        assertImpsChanged(1, amount, playerId);
+        assertImpsChanged(2, amount, playerId);
+    }
+
+    @Override
     protected void adventurerAsserter(final int advId) throws TimeoutException {
         this.assertAdventurerDrawn(0, advId);
         this.assertAdventurerDrawn(1, advId);
@@ -128,7 +136,6 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         this.assertRoomDrawn(1, roomId);
         this.assertRoomDrawn(2, roomId);
     }
-
 
     @Override
     protected void nextYearAsserter(final int year) throws TimeoutException {
@@ -176,7 +183,7 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         this.assertActNow(2);
 
         // place bids
-        bidOnFoodNiceMonster();
+        bidOnFoodNiceROOM();
 
         // assert placing bids
 
@@ -195,28 +202,36 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         goldChangedAsserter(-1, 2);
         evilnessChangedAsserter(-2, 2);
 
-        // third bid category (Monster)
-        // slot 1:
-        assertSelectMonster(0);
+        //third bid category (ROOM) evaluating and placing the room
+        //First player
+        goldChangedAsserter(-1, 0);
+        assertPlaceRoom(0);
         assertActNow(0);
-        sendHireMonster(0, 9); // evilness : 9 hunger : 0.
-        evilnessChangedAsserter(3, 0);
-        monsterHiredAsserter(9, 0);
+        // since the player has only one tile at (0,0) but the room restriction is LOWER_HALF
+        // player cannot place the room
+        this.sendBuildRoom(0, 0, 0, 5);
+        assertActionFailed(0);
+        this.sendEndTurn(0);
 
-        // slot 2:
-        assertSelectMonster(1);
+        //second player
+        goldChangedAsserter(-1, 1);
+        assertPlaceRoom(1);
         assertActNow(1);
-        sendHireMonster(1, 23); // evilness : 0 hunger : 0.
-        monsterHiredAsserter(23, 1);
+        // since the player has only one tile at (0,0) but the room restriction is INNER RING
+        // player cannot place the room
+        this.sendBuildRoom(1, 0, 0, 4);
+        assertActionFailed(1);
+        this.sendEndTurn(1);
 
-        // slot 3:
-        foodChangedAsserter(-1, 2); //slot cost
-        assertSelectMonster(2);
+        assertPlaceRoom(2);
         assertActNow(2);
-        sendHireMonster(2, 13); // evilness : 1 hunger : 1.
-        foodChangedAsserter(-1, 2);
-        evilnessChangedAsserter(1, 2);
-        monsterHiredAsserter(13, 2);
+        //player chooses a room that is not available
+        this.sendBuildRoom(2, 0, 0, 7);
+        assertActionFailed(2);
+        // send the next sendBuildRoom Action
+        this.sendBuildRoom(2, 0, 0, 4);
+        assertActionFailed(2);
+        this.sendEndTurn(2);
 
         //retrive bids for slot 1
         bidRetrievedAsserter(BidType.FOOD, 0);
@@ -224,15 +239,13 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         bidRetrievedAsserter(BidType.FOOD, 2);
 
         // adventurer arrived (at dungeons)
-        // evilness : p0 > p2 > p1
-        // adventurer difficulty : 23 > 29 > 2
-        adventurerArrivedAsserter(2, 1);
-        adventurerArrivedAsserter(29, 2);
-        adventurerArrivedAsserter(23, 0);
+        adventurerArrivedAsserter(2, 0);
+        adventurerArrivedAsserter(29, 1);
+        adventurerArrivedAsserter(23, 2);
     }
 
 
-    private void bidOnFoodNiceMonster() throws TimeoutException {
+    private void bidOnFoodNiceROOM() throws TimeoutException {
 
         // first player places all their bids.
         this.sendPlaceBid(0, BidType.FOOD, 1);
@@ -243,8 +256,8 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         bidPlacedAsserter(BidType.NICENESS, 0, 2);
         assertActNow(0);
 
-        this.sendPlaceBid(0, BidType.MONSTER, 3);
-        bidPlacedAsserter(BidType.MONSTER, 0, 3);
+        this.sendPlaceBid(0, BidType.ROOM, 3);
+        bidPlacedAsserter(BidType.ROOM, 0, 3);
 
         // second player places their bids.
         this.sendPlaceBid(1, BidType.FOOD, 1);
@@ -255,8 +268,8 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         bidPlacedAsserter(BidType.NICENESS, 1, 2);
         assertActNow(1);
 
-        this.sendPlaceBid(1, BidType.MONSTER, 3);
-        bidPlacedAsserter(BidType.MONSTER, 1, 3);
+        this.sendPlaceBid(1, BidType.ROOM, 3);
+        bidPlacedAsserter(BidType.ROOM, 1, 3);
 
         //third player places their bids
         this.sendPlaceBid(2, BidType.FOOD, 1);
@@ -267,21 +280,11 @@ public class BiddingOnMonsterBasic extends OurSystemTestFramework {
         bidPlacedAsserter(BidType.NICENESS, 2, 2);
         assertActNow(2);
 
-        // paying for slot and then feeding monster
-        this.sendPlaceBid(2, BidType.MONSTER, 3);
-        bidPlacedAsserter(BidType.MONSTER, 2, 3);
+        this.sendPlaceBid(2, BidType.ROOM, 3);
+        bidPlacedAsserter(BidType.ROOM, 2, 3);
 
-
-    }
-
-
-    @Override
-    protected void monsterHiredAsserter(final int monsterId, final int playerId)
-            throws TimeoutException {
-        assertMonsterHired(0, monsterId, playerId);
-        assertMonsterHired(1, monsterId, playerId);
-        assertMonsterHired(2, monsterId, playerId);
     }
 
 }
+
 

@@ -16,7 +16,11 @@ import de.unisaarland.cs.se.selab.game.action.PlaceBidAction;
 import de.unisaarland.cs.se.selab.game.action.RegAction;
 import de.unisaarland.cs.se.selab.game.action.StartGameAction;
 import de.unisaarland.cs.se.selab.game.action.TrapAction;
+import de.unisaarland.cs.se.selab.game.entities.Adventurer;
+import de.unisaarland.cs.se.selab.game.player.Dungeon;
+import de.unisaarland.cs.se.selab.game.player.Player;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public abstract class Phase {
 
@@ -33,8 +37,10 @@ public abstract class Phase {
     to be used in the default implementation of most exec methods
      */
     public void sendError(final int commId) {
-        gd.getServerConnection()
-                .sendActionFailed(commId, "this action isn't valid within this phase");
+        if (gd.checkIfRegistered(commId)) {
+            gd.getServerConnection()
+                    .sendActionFailed(commId, "this action isn't valid within this phase");
+        }
     }
 
     public void exec(final RegAction x) {
@@ -48,13 +54,10 @@ public abstract class Phase {
     public void exec(final LeaveAction la) {
         if (gd.checkIfRegistered(la.getCommID())) {
             final int leavingPlayerId = gd.getPlayerIdByCommID(la.getCommID());
+            letAdvFlee(gd.getPlayerByPlayerId(leavingPlayerId)); // frees all his adventurers
             gd.removePlayer(la.getCommID());
             broadcastLeft(leavingPlayerId);
-        } else {
-            gd.getServerConnection()
-                    .sendActionFailed(la.getCommID(), "Player is not registered to leave");
         }
-
     }
 
     public void exec(final EndTurnAction x) {
@@ -476,6 +479,19 @@ public abstract class Phase {
     protected void kickPlayer(final int playerId) {
         final LeaveAction la = new LeaveAction(gd.getCommIDByPlayerId(playerId));
         exec(la);
+    }
+
+    private void letAdvFlee(final Player player) {
+        final Dungeon dungeon = player.getDungeon();
+        Adventurer fledAdventurer;
+        do {
+            try {
+                fledAdventurer = dungeon.fleeadventureinQueue();
+                broadcastAdventurerFled(fledAdventurer.getAdventurerID());
+            } catch (NoSuchElementException e) {
+                fledAdventurer = null;
+            }
+        } while (fledAdventurer != null);
     }
 
 }

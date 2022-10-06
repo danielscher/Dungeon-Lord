@@ -19,6 +19,10 @@ public class ChooseBattleGroundPhase extends Phase {
 
     @Override
     public Phase run() {
+        if (gd.getAllPlayerID().isEmpty()) {
+            return null; // abort game if no players left
+        }
+
         broadcastNextRound(gd.getTime().getSeason());
 
         if (currPlayer.getDungeon().getNumUnconqueredTiles() == 0) {
@@ -37,8 +41,14 @@ public class ChooseBattleGroundPhase extends Phase {
                 gd.getServerConnection().nextAction().invoke(this);
             } catch (TimeoutException e) {
                 kickPlayer(currPlayer.getPlayerID());
+                battleGroundChosen = true;
             }
         }
+
+        if (gd.getAllPlayerID().isEmpty()) {
+            return null; // abort game if no players left
+        }
+
         return new CombatPhase(gd, currPlayer);
     }
 

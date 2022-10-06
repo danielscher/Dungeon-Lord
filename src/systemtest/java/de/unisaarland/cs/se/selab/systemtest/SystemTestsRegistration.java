@@ -14,9 +14,14 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSe
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
+import de.unisaarland.cs.se.selab.systemtest.evaltomonster.Send4ImpsToMineGold;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodTwoPlayerYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYaSa;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNoTunnelYaSa;
+import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalOnlyTunnelYaSa;
+import de.unisaarland.cs.se.selab.systemtest.registrationtest.FivePlayerAndStartTest;
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.RegistrationFourPlayersTest;
 import de.unisaarland.cs.se.selab.systemtest.registrationtest.ThreePlayerAndStartTest;
 
@@ -46,7 +51,7 @@ final class SystemTestsRegistration {
         manager.registerTest(new UpToActNow());
 
         // registrationtest package
-        // manager.registerTest(new FivePlayerAndStartTest());
+        manager.registerTest(new FivePlayerAndStartTest());
         manager.registerTest(new RegistrationFourPlayersTest());
         manager.registerTest(new ThreePlayerAndStartTest());
 
@@ -54,13 +59,16 @@ final class SystemTestsRegistration {
         manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
         manager.registerTest(new EvalUpToTunnelEvalFoodYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
+        manager.registerTest(new Send4ImpsToMineGold());
 
         // evaluptomonster package
-        // manager.registerTest(new BiddingOnGoldBasic());
+        manager.registerTest(new BiddingOnGoldBasic());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
         manager.registerTest(new BiddingOnImpsBasic());
-
 
         // collectandplacebids
         manager.registerTest(new BidTypeTakenFood());
@@ -72,5 +80,6 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTrap());
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
+
     }
 }
