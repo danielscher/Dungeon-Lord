@@ -1,4 +1,4 @@
-package de.unisaarland.cs.se.selab.systemtest.EdgyEdgeCases;
+package de.unisaarland.cs.se.selab.systemtest.edgyedgecases;
 
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
