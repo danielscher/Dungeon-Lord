@@ -16,7 +16,8 @@ import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalNicenessYaSa;
-
+import de.unisaarland.cs.se.selab.systemtest.registrationtest.RegistrationFourPlayersTest;
+import de.unisaarland.cs.se.selab.systemtest.registrationtest.ThreePlayerAndStartTest;
 
 final class SystemTestsRegistration {
 
@@ -43,9 +44,9 @@ final class SystemTestsRegistration {
         manager.registerTest(new UpToActNow());
 
         // registrationtest package
-        // manager.registerTest(new FivePlayerAndStartTest());
-        // manager.registerTest(new RegistrationFourPlayersTest());
-        // manager.registerTest(new ThreePlayerAndStartTest());
+        //manager.registerTest(new FivePlayerAndStartTest());
+        manager.registerTest(new RegistrationFourPlayersTest());
+        manager.registerTest(new ThreePlayerAndStartTest());
 
         // evaluptotunnel package
         manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
