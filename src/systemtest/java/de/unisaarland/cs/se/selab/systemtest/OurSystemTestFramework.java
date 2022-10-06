@@ -252,6 +252,13 @@ public class OurSystemTestFramework extends SystemTest {
         }
     }
 
+    protected void trapAcquiredAsserter(final int player, final int trap)
+            throws TimeoutException {
+        for (final int s : currSockets) {
+            assertTrapAcquired(s, player, trap);
+        }
+    }
+
     protected void bidRetrievedAsserter(final BidType bidType, final int playerId)
             throws TimeoutException {
         assertBidRetrieved(0, bidType, playerId);
