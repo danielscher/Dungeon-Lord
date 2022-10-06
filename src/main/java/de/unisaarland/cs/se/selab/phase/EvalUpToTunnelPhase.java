@@ -20,6 +20,9 @@ public class EvalUpToTunnelPhase extends Phase {
     private boolean handledTunnelAction;
     private Coordinate lastDugTile;
 
+    private boolean skipActNow;
+    private int sentImps;
+
     public EvalUpToTunnelPhase(final GameData gd) {
         super(gd);
     }
@@ -162,6 +165,7 @@ public class EvalUpToTunnelPhase extends Phase {
     this method grants tunnel bids
      */
     private void grantTunnel(final Player player, final int slot) {
+        sentImps = 0;
         final Dungeon dungeon = player.getDungeon();
         final int commId = player.getCommID();
         boolean maxImpUsage = false;
@@ -233,13 +237,14 @@ public class EvalUpToTunnelPhase extends Phase {
         if (handledTunnelAction) {
             handledTunnelAction = false; // reset flag for next iteration
 
-            if (maxImpUsage && impsToMine == 2) {
+            if (maxImpUsage && sentImps == 3) {
                 // this is the case of the last tile to mine on the 3rd bid slot
                 dungeon.sendImpsToDigTunnel(2); // deduct imps
                 broadcastImpsChanged(-2, player.getPlayerID()); // broadcast imp change
                 final int xpos = lastDugTile.getxpos();
                 final int ypos = lastDugTile.getypos();
                 broadcastTunnelDug(player.getPlayerID(), xpos, ypos); // broadcast tunnel dug
+                sentImps += 2;
                 lastDugTile = null;
                 return -1;  // don't continue with impsToMine == 1
             } else {
@@ -249,6 +254,7 @@ public class EvalUpToTunnelPhase extends Phase {
                 final int xpos = lastDugTile.getxpos();
                 final int ypos = lastDugTile.getypos();
                 broadcastTunnelDug(player.getPlayerID(), xpos, ypos);
+                sentImps++;
                 lastDugTile = null;
             }
         } else {
@@ -267,7 +273,10 @@ public class EvalUpToTunnelPhase extends Phase {
 
         while (commIdToDigTunnel != -1) {
             // loop until the player we evaluate has sent an action
-            gd.getServerConnection().sendActNow(commId);
+            if (!skipActNow) {
+                gd.getServerConnection().sendActNow(commId);
+            }
+            skipActNow = false;
             try {
                 final Action action = gd.getServerConnection().nextAction();
                 action.invoke(this);
@@ -292,8 +301,7 @@ public class EvalUpToTunnelPhase extends Phase {
         final Player player = gd.getPlayerByCommID(commId);
         // if player doesn't exist, return
         if (player == null) {
-            gd.getServerConnection()
-                    .sendActionFailed(commId, "you don't seem to be a registered player");
+            skipActNow = true;
             return;
         }
 
@@ -303,8 +311,7 @@ public class EvalUpToTunnelPhase extends Phase {
             // wrong player sent the event
             gd.getServerConnection().sendActionFailed(commId,
                     "it's not your turn to dig tunnels");
-            // TODO: check if we might not want to send this in case the player isn't even
-            //  registered
+            skipActNow = true;
         } else {
             final int[] coordsArr = dta.getCoords();
             final Coordinate requestedPos = new Coordinate(coordsArr[0], coordsArr[1]);
@@ -346,6 +353,10 @@ public class EvalUpToTunnelPhase extends Phase {
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
+        }
+
+        if (commId != commIdToDigTunnel) {
+            skipActNow = true;
         }
 
     }
