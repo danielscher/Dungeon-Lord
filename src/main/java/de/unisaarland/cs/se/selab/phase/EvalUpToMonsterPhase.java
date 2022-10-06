@@ -195,15 +195,12 @@ public class EvalUpToMonsterPhase extends Phase {
         final Dungeon d = player.getDungeon();
         final int numMiningImps = slot + 1; // #imps to be sent mining
 
-        // checks how many tiles will be worked.
-        final int tilesNeeded =
-                slot < 3 ? numMiningImps : numMiningImps - 1; // for supervisor -1 tile.
-        //TODO change the condition for slot 3
-
-        //checks if player can afford i.e. enough tiles/imps
-        //TODO here also wrong
-        if (d.getNumGoldMineAbleTiles() == tilesNeeded) {
+        if (d.getNumGoldMineAbleTiles() >= numMiningImps) {
             if (d.sendImpsToMineGold(numMiningImps)) {
+                if (numMiningImps == 4) { // broadcasts change of 5 imps for slot 3
+                    broadcastImpsChanged(-numMiningImps - 1, player.getPlayerID());
+                    return true;
+                }
                 broadcastImpsChanged(-numMiningImps, player.getPlayerID());
                 return true;
             }
@@ -259,6 +256,7 @@ public class EvalUpToMonsterPhase extends Phase {
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
         }
         final Player player = gd.getPlayerByCommID(hma.getCommID());
+        //TODO: first check if monster's available then impl. behaviour.
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
         final int monsterHunger = chosenMonster.getHunger();
         final int monsterEvilness = chosenMonster.getEvilness();
