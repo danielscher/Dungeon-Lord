@@ -43,10 +43,6 @@ class EndPhaseTestTie {
         gdd = new GameData(altConfig,
                 null);
         gepp = new GameEndPhase(gdd);
-        p00 = new Player("player00", 0, 0, 3, 4);
-        p01 = new Player("player01", 1, 1, 3, 4);
-        p02 = new Player("player02", 2, 2, 3, 4);
-        p03 = new Player("player03", 3, 3, 3, 4);
         gdd.registerPlayer("player00", 0);
         gdd.registerPlayer("player01", 1);
         gdd.registerPlayer("player02", 2);

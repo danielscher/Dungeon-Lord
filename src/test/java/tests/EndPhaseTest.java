@@ -35,8 +35,6 @@ class EndPhaseTest {
     Player p2;
     Player p3;
 
-    Player p4;
-    //drawn Adventurer
 
 
     private void resetData() {
@@ -138,11 +136,9 @@ class EndPhaseTest {
         resetData();
         gep.setRichesTitles();
         assertEquals(Title.THE_LORD_OF_RICHES, p3.getTitles().get(0));
-        assertEquals(Title.THE_LORD_OF_RICHES, p4.getTitles().get(0));
         // assertEquals(Title.THE_LORD_OF_RICHES, p1.getTitles().get(0)); //WRONG!!!!!
-        assertEquals(8, p3.getGold());
-        assertEquals(8, p4.getGold());
-        assertEquals(3, p1.getGold());
+        assertEquals(11, p3.getGold());
+        assertEquals(6, p1.getGold());
     }
 
     @Test
