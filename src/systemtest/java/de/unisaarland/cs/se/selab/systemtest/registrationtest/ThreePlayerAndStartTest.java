@@ -43,14 +43,11 @@ public class ThreePlayerAndStartTest extends SystemTest {
 
         this.sendRegister(4, "4");
         this.assertActionFailed(4);
-        this.sendStartGame(2);
-        this.assertActionFailed(2); // FIXME see comment on "RegistrationFourPlayersTest.java"
 
         // assert next year, next round , draw monster, etc..
         // can ignore
         this.sendLeave(1);
         this.sendLeave(2);
         this.sendLeave(3);
-        this.sendLeave(4);
     }
 }
