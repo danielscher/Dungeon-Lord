@@ -83,7 +83,10 @@ public class CollectAndPlaceBidPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        final Player player = gd.getPlayerByCommID(commID);
+        if (checkNotAllBidsChosenPerPlayer(player)) {
+            sc.sendActNow(commID);
+        }
     }
 
     @Override
