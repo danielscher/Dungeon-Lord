@@ -212,6 +212,6 @@ public class AllKindsofBidsFourthSeason extends FrameworkuptoBiddingThirdSeason 
 
         //TRAP
         goldChangedAsserter(-1, 0);
-        trapAcquiredAsserter(0, 26);
+        trapAcquiredAsserter(0, 18);
     }
 }

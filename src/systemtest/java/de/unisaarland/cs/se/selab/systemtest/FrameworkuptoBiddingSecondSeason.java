@@ -6,7 +6,11 @@ import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class FrameworkuptoBiddingSecondSeason extends OurSystemTestFramework {
 
-    public FrameworkuptoBiddingSecondSeason() {
+    protected FrameworkuptoBiddingSecondSeason(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
+    FrameworkuptoBiddingSecondSeason() {
         super(FrameworkuptoBiddingSecondSeason.class, false);
     }
 

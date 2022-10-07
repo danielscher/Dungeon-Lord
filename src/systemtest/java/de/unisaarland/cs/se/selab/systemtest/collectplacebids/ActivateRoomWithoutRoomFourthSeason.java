@@ -1,21 +1,23 @@
-package de.unisaarland.cs.se.selab.systemtest;
+package de.unisaarland.cs.se.selab.systemtest.collectplacebids;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingThirdSeason;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
-public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdSeason {
-    protected FrameworkuptoBiddingFourthSeason(final Class<?> subclass, final boolean fail) {
+public class ActivateRoomWithoutRoomFourthSeason extends FrameworkuptoBiddingThirdSeason {
+
+    protected  ActivateRoomWithoutRoomFourthSeason(final Class<?> subclass, final boolean fail) {
         super(subclass, fail);
     }
 
-    protected FrameworkuptoBiddingFourthSeason() {
-        super(FrameworkuptoBiddingFourthSeason.class, false);
+    public ActivateRoomWithoutRoomFourthSeason() {
+        super(ActivateRoomWithoutRoomFourthSeason.class, false);
     }
 
     @Override
     public String createConfig() {
-        return Utils.loadResource(FrameworkuptoBiddingFourthSeason.class, "configuration.json");
+        return Utils.loadResource(ActivateRoomWithoutRoomFourthSeason.class, "configuration.json");
     }
 
     @Override
@@ -70,6 +72,7 @@ public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdS
         //Eval bids
         evalBidsFourthSeason();
 
+
         //BidRetrieved
         bidRetrievedAsserter(BidType.MONSTER, 0);
         bidRetrievedAsserter(BidType.ROOM, 0);
@@ -86,6 +89,12 @@ public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdS
         bidRetrievedAsserter(BidType.MONSTER, 3);
         bidRetrievedAsserter(BidType.ROOM, 3);
         bidRetrievedAsserter(BidType.FOOD, 3);
+
+        //Room production
+        impsChangedAsserter(3, 0);
+        goldChangedAsserter(1, 0);
+        impsChangedAsserter(3, 2);
+        goldChangedAsserter(1, 2);
     }
 
     protected void bidsOfFourthSeasonFirstYear() throws TimeoutException {
@@ -103,7 +112,13 @@ public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdS
         this.sendPlaceBid(0, BidType.FOOD, 1);
         bidPlacedAsserter(BidType.FOOD, 0, 1);
         assertActNow(0);
+        //player 0 activates room
+        //has currently 4 imps
+        sendActivateRoom(0, 10);
+        impsChangedAsserter(-3, 0);
+        roomActivatedAsserter(0, 10);
 
+        assertActNow(0);
         this.sendPlaceBid(0, BidType.NICENESS, 2);
         bidPlacedAsserter(BidType.NICENESS, 0, 2);
         assertActNow(0);
@@ -119,6 +134,10 @@ public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdS
         bidPlacedAsserter(BidType.NICENESS, 1, 2);
         assertActNow(1);
 
+        sendActivateRoom(1, 5);
+        assertActionFailed(1);
+        assertActNow(1);
+
         this.sendPlaceBid(1, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 1, 3);
 
@@ -130,6 +149,13 @@ public class FrameworkuptoBiddingFourthSeason extends FrameworkuptoBiddingThirdS
         bidPlacedAsserter(BidType.NICENESS, 2, 2);
         assertActNow(2);
 
+        //player 2 activates room
+        //has currently 5 imps
+        sendActivateRoom(2, 0);
+        impsChangedAsserter(-3, 2);
+        roomActivatedAsserter(2, 0);
+
+        assertActNow(2);
         this.sendPlaceBid(2, BidType.IMPS, 3);
         bidPlacedAsserter(BidType.IMPS, 2, 3);
     }

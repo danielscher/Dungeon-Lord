@@ -211,24 +211,27 @@ public class EvalUpToMonsterPhase extends Phase {
     private void grantImps(final Player player, final int slot) { // READ!: first slot := 1.
         final Dungeon d = player.getDungeon();
         // determines imps to be granted by slot.
-        final int numImps = slot == 3 ? slot - 1 : slot;
-        boolean paidGold = false;
-        boolean paidFood = false;
+        int numImps;
+
+        if (slot == 1) {
+            numImps = 1;
+        } else {
+            numImps = 2;
+        }
+
+        boolean canPaidGold;
+        boolean canPaidFood;
 
         if (slot == 3) { // for last slot check if player can afford 1 food,gold.
-            if (player.getFood() > 0) {
-                //change food/gold and broadcast changes
+            canPaidFood = (player.getFood() > 0);
+            canPaidGold = (player.getGold() > 0);
+
+            // if player paid in full grant imps otherwise grant nothing.
+            if (canPaidGold && canPaidFood) {
                 player.changeFoodBy(-1);
                 broadcastFoodChanged(-1, player.getPlayerID());
-                paidFood = true;
-            }
-            if (player.getGold() > 0) {
                 player.changeGoldBy(-1);
                 broadcastGoldChanged(-1, player.getPlayerID());
-                paidGold = true;
-            }
-            // if player paid in full grant imps otherwise grant nothing.
-            if (paidGold && paidFood) {
                 d.addImps(numImps);
                 broadcastImpsChanged(numImps, player.getPlayerID());
             }
@@ -255,9 +258,18 @@ public class EvalUpToMonsterPhase extends Phase {
             gd.getServerConnection()
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
         }
-        final Player player = gd.getPlayerByCommID(hma.getCommID());
         //TODO: first check if monster's available then impl. behaviour.
+
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
+        if (chosenMonster == null) {
+            gd.getServerConnection().sendActionFailed(currHandledCommId, "monster not"
+                    + " available");
+            gd.getServerConnection().sendActNow(currHandledCommId);
+            return;
+        }
+
+        final Player player = gd.getPlayerByCommID(hma.getCommID());
+
         final int monsterHunger = chosenMonster.getHunger();
         final int monsterEvilness = chosenMonster.getEvilness();
 
@@ -280,6 +292,9 @@ public class EvalUpToMonsterPhase extends Phase {
                     .addMonster(chosenMonster); // FIXME : possible null value exception.
             broadcastMonsterHired(chosenMonster.getMonsterID(), player.getPlayerID());
             handleHireMonsterAction = false; // finish handling action. terminates loop.
+        } else {
+            gd.getServerConnection().sendActionFailed(currHandledCommId, "cannot hire this"
+                    + "monster because of evilness or food");
         }
 
     }
@@ -304,11 +319,12 @@ public class EvalUpToMonsterPhase extends Phase {
         final Dungeon playersDungeon = player.getDungeon();
         if (playersDungeon.activateRoom(roomId)) {
             final Room activatedRoom = playersDungeon.getRoomById(roomId);
-            broadcastImpsChanged(activatedRoom.getActivationCost(), player.getPlayerID());
+            broadcastImpsChanged(-activatedRoom.getActivationCost(), player.getPlayerID());
             broadcastRoomActivated(player.getPlayerID(), roomId);
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
+        //TODO  sc.sendActNow(ara.getCommID());?
     }
 
     @Override

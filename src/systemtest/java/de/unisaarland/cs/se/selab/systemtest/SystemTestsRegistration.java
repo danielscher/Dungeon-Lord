@@ -41,9 +41,10 @@ final class SystemTestsRegistration {
     static void registerSystemTests(final SystemTestManager manager) {
 
         // systemtest package
-        // manager.registerTest(new BrokenConfigTest());
-        // manager.registerTest(new EmptyConfigTest());
-        // manager.registerTest(new FrameworkuptoBiddingSecondSeason());
+        //manager.registerTest(new BrokenConfigTest());
+        //manager.registerTest(new EmptyConfigTest());
+
+        manager.registerTest(new FrameworkuptoBiddingSecondSeason());
         manager.registerTest(new OurSystemTestFramework());
         manager.registerTest(new RegistrationTest());
         manager.registerTest(new FrameworkuptoBiddingFourthSeason());
@@ -69,20 +70,18 @@ final class SystemTestsRegistration {
 
         // evaluptotunnel package
         manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
         manager.registerTest(new EvalUpToTunnelEvalFoodYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
         manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
+        manager.registerTest(new Send4ImpsToMineGold());
 
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
-        manager.registerTest(new BiddingOnImpsBasic());
-        manager.registerTest(new BiddingOnImpsCantAffordSlot3());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
-        manager.registerTest(new PlaceBidOnMonsterAndLeave());
-        manager.registerTest(new Send4ImpsToMineGold());
+        manager.registerTest(new BiddingOnImpsBasic());
 
         // collectandplacebids
         manager.registerTest(new BidTypeTakenFood());
@@ -95,6 +94,8 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
 
+        // combat
+        manager.registerTest(new CombatAllPlayerEndTurn());
         // combatphasefirstyear package
         // manager.registerTest(new CombatPhaseFirstRound());
 
