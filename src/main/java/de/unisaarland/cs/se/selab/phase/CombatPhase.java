@@ -460,7 +460,6 @@ public class CombatPhase extends Phase {
 
         if (timeStamp.getSeason() < 8 && dungeon.getNumAdventurersInQueue() > 0 && !playerLeft) {
             timeStamp.nextSeason();
-            broadcastNextRound(timeStamp.getSeason() - 4);
             return new ChooseBattleGroundPhase(gd, currPlayingPlayer); // same player next round.
         } else {
             //if we have players left to combat
