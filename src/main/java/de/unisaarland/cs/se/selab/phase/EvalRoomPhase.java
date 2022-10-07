@@ -49,7 +49,9 @@ public class EvalRoomPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        if (expectedRespondingCommId != -1 && expectedRespondingCommId == commID) {
+            sc.sendActNow(commID);
+        }
     }
 
     private void eval() {
@@ -271,8 +273,9 @@ public class EvalRoomPhase extends Phase {
             broadcastFoodChanged(r.getFoodProduction(), p);
         }
         if (r.getNiceness() > 0) {
-            player.changeEvilnessBy(-r.getNiceness());
-            broadcastEvilnessChanged(-r.getNiceness(), p);
+            if (player.changeEvilnessBy(-r.getNiceness())) {
+                broadcastEvilnessChanged(-r.getNiceness(), p);
+            }
         }
         if (r.getGoldProduction() > 0) {
             player.changeGoldBy(r.getGoldProduction());
