@@ -209,10 +209,10 @@ public class ThisMonsterIsTakenAndThisIsNonExistent extends OurSystemTestFramewo
         sendHireMonster(1, 9); // monster was previously taken.
         assertActionFailed(1);
         assertActNow(1);
-        sendHireMonster(1,99); // this monster doesn't exist.
+        sendHireMonster(1, 99); // this monster doesn't exist.
         assertActionFailed(1);
         assertActNow(1);
-        sendHireMonster(1,23);
+        sendHireMonster(1, 23);
         monsterHiredAsserter(23, 1);
 
         // slot 3:
