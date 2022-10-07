@@ -15,6 +15,7 @@ public class Send4ImpsToMineGold extends FrameworkuptoBiddingSecondSeason {
         super(Send4ImpsToMineGold.class, false);
     }
 
+
     @Override
     public String createConfig() {
         return Utils.loadResource(Send4ImpsToMineGold.class, "configuration_5Imps.json");
