@@ -105,15 +105,26 @@ public class GameData {
     public int nextFirstBidder() {
         final List<Integer> playerList = new ArrayList<>(playerIdToCommIDMap.keySet());
         playerList.sort(Comparator.naturalOrder());
-        final int pos = playerList.indexOf(firstBidder);
-        if (pos == playerList.size() - 1) {
-            this.firstBidder = playerList.get(0);
-        } else {
-            this.firstBidder = playerList.get(pos + 1);
+
+        int nextBidder = -1;
+        for (final Integer i : playerList) {
+            if (i > firstBidder) {
+                nextBidder = i;
+                break;
+            }
         }
 
-        return firstBidder;
-
+        if (nextBidder == -1) {
+            // in this case there is no higher player Id --> take lowest
+            try {
+                nextBidder = playerList.get(0);
+            } catch (IndexOutOfBoundsException e) {
+                // do not change nextBidder
+                nextBidder = -1;
+            }
+        }
+        firstBidder = nextBidder;
+        return nextBidder;
     }
 
 

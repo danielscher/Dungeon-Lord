@@ -55,6 +55,10 @@ public class CollectAndPlaceBidPhase extends Phase {
             gd.setFirstBidder();
         }
 
+        if (gd.getFirstBidder() == -1) {
+            return null;
+        }
+
         gd.drawEntities();
 
         broadcastAdventurersMonstersAndRooms();
