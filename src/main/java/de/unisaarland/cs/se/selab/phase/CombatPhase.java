@@ -365,10 +365,13 @@ public class CombatPhase extends Phase {
     }
 
     private void calcMonsterMultiDamage(final Monster monster) {
-        final int res = monster.getDamage();
+        int res = monster.getDamage();
         final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
         for (final Adventurer adventurer : adventurerList) {
-            damageAdv(adventurer, res);
+            res = damageAdv(adventurer, res);
+            if (res <= 0) {
+                break;
+            }
         }
     }
 
