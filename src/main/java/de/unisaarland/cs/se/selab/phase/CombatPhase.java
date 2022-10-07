@@ -100,7 +100,9 @@ public class CombatPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        if (commID == currPlayingPlayer.getCommID()) {
+            gd.getServerConnection().sendActNow(commID);
+        }
     }
 
     @Override
