@@ -11,12 +11,14 @@ public class ActivateRoomWhilePlacingBidFourthSeason extends FrameworkuptoBiddin
         super(subclass, fail);
     }
 
-    protected ActivateRoomWhilePlacingBidFourthSeason() {
+    public ActivateRoomWhilePlacingBidFourthSeason() {
         super(ActivateRoomWhilePlacingBidFourthSeason.class, false);
     }
+
     @Override
     public String createConfig() {
-        return Utils.loadResource(ActivateRoomWhilePlacingBidFourthSeason.class, "configuration.json");
+        return Utils.loadResource(ActivateRoomWhilePlacingBidFourthSeason.class,
+                "configuration.json");
     }
 
     @Override
@@ -70,7 +72,6 @@ public class ActivateRoomWhilePlacingBidFourthSeason extends FrameworkuptoBiddin
 
         //Eval bids
         evalBidsFourthSeason();
-
 
         //BidRetrieved
         bidRetrievedAsserter(BidType.MONSTER, 0);

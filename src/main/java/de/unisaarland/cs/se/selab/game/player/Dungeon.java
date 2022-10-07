@@ -325,22 +325,6 @@ public class Dungeon {
         }
     }
 
-    /**
-     * copies entries to the list of rooms
-     */
-    public void addRooms(List<Room> roomsToAdd) {
-        rooms.addAll(roomsToAdd);
-    }
-
-    public List<Room> getActiveRooms() {
-        final List<Room> activeRooms = new ArrayList<>();
-        for (final Room room : rooms) {
-            if (room.isActivated()) {
-                activeRooms.add(room);
-            }
-        }
-        return activeRooms;
-    }
 
     /**
      * tries to send imps to dig the tunnel NOTE: should never be used without activating a room,

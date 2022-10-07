@@ -15,6 +15,7 @@ import de.unisaarland.cs.se.selab.game.entities.Room;
 import de.unisaarland.cs.se.selab.game.player.Dungeon;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Location;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
@@ -228,7 +229,8 @@ public class EvalRoomPhase extends Phase {
     public void producedGoodsViaRoom() {
         for (final Player player : gd.getAllPlayerSortedByID()) {
             final Dungeon dungeon = player.getDungeon();
-            if (!dungeon.getActiveRooms().isEmpty()) {
+            final List<Room> totalRooms = dungeon.getRooms();
+            if (!getActiveRooms(totalRooms).isEmpty()) {
                 final int p = player.getPlayerID();
                 final int numReturn = dungeon.returnImpsFromRoom();
 
@@ -236,12 +238,22 @@ public class EvalRoomPhase extends Phase {
                     broadcastImpsChanged(numReturn, p);
                 }
 
-                for (final Room r : dungeon.getActiveRooms()) {
+                for (final Room r : getActiveRooms(totalRooms)) {
                     evalRoomProduction(r, player);
                 }
 
             }
         }
+    }
+
+    private static List<Room> getActiveRooms(final Iterable<Room> rooms) {
+        final List<Room> activeRooms = new ArrayList<>();
+        for (final Room room : rooms) {
+            if (room.isActivated()) {
+                activeRooms.add(room);
+            }
+        }
+        return activeRooms;
     }
 
 

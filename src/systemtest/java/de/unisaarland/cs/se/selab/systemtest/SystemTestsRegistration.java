@@ -2,6 +2,10 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
+import de.unisaarland.cs.se.selab.systemtest.cambatphase.CombatAllPlayerEndTurn;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.ActivateRoomWhilePlacingBidFourthSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.ActivateRoomWithoutRoomFourthSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.AllKindsofBidsFourthSeason;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenFood;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenGold;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenImp;
@@ -11,6 +15,11 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenRoom;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTrap;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BidTypeTakenTunnel;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.BlockedBidSecondSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhileChoosingMonsterThirdSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhileDiggingTunnelSecondSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhilePlacingBidFirstSeason;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhilePlacingRoomThirdSeason;
+import de.unisaarland.cs.se.selab.systemtest.combatphasefirstyear.CombatPhaseFirstRound;
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TooNiceForThis;
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TunnelDiggers;
 import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingFoodTunnelRoom;
@@ -39,6 +48,10 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
+
+        // cambatphase package
+        manager.registerTest(new CombatAllPlayerEndTurn());
+
 
         // systemtest package
         //manager.registerTest(new BrokenConfigTest());
@@ -70,20 +83,25 @@ final class SystemTestsRegistration {
 
         // evaluptotunnel package
         manager.registerTest(new EvalUpToTunnelAllPlayerLeftYaSa());
+        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
         manager.registerTest(new EvalUpToTunnelEvalFoodYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNicenessYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalFoodTwoPlayerYaSa());
-        manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
         manager.registerTest(new EvalUpToTunnelEvalNoTunnelYaSa());
-        manager.registerTest(new Send4ImpsToMineGold());
+        manager.registerTest(new EvalUpToTunnelEvalOnlyTunnelYaSa());
 
         // evaluptomonster package
         manager.registerTest(new BiddingOnGoldBasic());
+        manager.registerTest(new BiddingOnImpsBasic());
+        manager.registerTest(new BiddingOnImpsCantAffordSlot3());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
-        manager.registerTest(new BiddingOnImpsBasic());
+        manager.registerTest(new PlaceBidOnMonsterAndLeave());
+        manager.registerTest(new Send4ImpsToMineGold());
 
         // collectandplacebids
+        manager.registerTest(new ActivateRoomWhilePlacingBidFourthSeason());
+        manager.registerTest(new ActivateRoomWithoutRoomFourthSeason());
+        manager.registerTest(new AllKindsofBidsFourthSeason());
         manager.registerTest(new BidTypeTakenFood());
         manager.registerTest(new BidTypeTakenGold());
         manager.registerTest(new BidTypeTakenImp());
@@ -93,11 +111,15 @@ final class SystemTestsRegistration {
         manager.registerTest(new BidTypeTakenTrap());
         manager.registerTest(new BidTypeTakenTunnel());
         manager.registerTest(new BlockedBidSecondSeason());
+        manager.registerTest(new PlayerLeftWhileChoosingMonsterThirdSeason());
+        manager.registerTest(new PlayerLeftWhileDiggingTunnelSecondSeason());
+        manager.registerTest(new PlayerLeftWhilePlacingBidFirstSeason());
+        manager.registerTest(new PlayerLeftWhilePlacingRoomThirdSeason());
+
 
         // combat
-        manager.registerTest(new CombatAllPlayerEndTurn());
         // combatphasefirstyear package
-        // manager.registerTest(new CombatPhaseFirstRound());
+        manager.registerTest(new CombatPhaseFirstRound());
 
         // edgyedgycase package
         manager.registerTest(new TooNiceForThis());

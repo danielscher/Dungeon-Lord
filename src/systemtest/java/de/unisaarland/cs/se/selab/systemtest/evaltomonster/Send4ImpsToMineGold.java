@@ -11,7 +11,7 @@ public class Send4ImpsToMineGold extends FrameworkuptoBiddingSecondSeason {
         super(subclass, fail);
     }
 
-    protected Send4ImpsToMineGold() {
+    public Send4ImpsToMineGold() {
         super(Send4ImpsToMineGold.class, false);
     }
 
