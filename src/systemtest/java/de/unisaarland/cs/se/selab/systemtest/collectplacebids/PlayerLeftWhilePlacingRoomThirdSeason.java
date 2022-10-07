@@ -2,7 +2,6 @@ package de.unisaarland.cs.se.selab.systemtest.collectplacebids;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingFourthSeason;
 import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingSecondSeason;
 import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingThirdSeason;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
