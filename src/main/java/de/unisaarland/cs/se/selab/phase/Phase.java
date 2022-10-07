@@ -40,8 +40,11 @@ public abstract class Phase {
         if (gd.checkIfRegistered(commId)) {
             gd.getServerConnection()
                     .sendActionFailed(commId, "this action isn't valid within this phase");
+            gotInvalidActionFrom(commId);
         }
     }
+
+    public abstract void gotInvalidActionFrom(final int commID);
 
     public void exec(final RegAction x) {
         sendError(x.getCommID());
