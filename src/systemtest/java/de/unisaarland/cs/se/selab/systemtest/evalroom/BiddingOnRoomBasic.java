@@ -14,7 +14,7 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
         super(subclass, fail);
     }
 
-    BiddingOnRoomBasic() {
+    public BiddingOnRoomBasic() {
         super(FrameworkuptoBiddingSecondSeason.class, false);
     }
 

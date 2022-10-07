@@ -145,7 +145,7 @@ public class BiddingOnImpsCantAffordSlot3 extends OurSystemTestFramework {
         impsChangedAsserterHelper(2, 2);
 
         // slot 3:
-        foodChangedAsserterHelper(-1, 0);
+        // foodChangedAsserterHelper(-1, 0);
         // goldChangedAsserterHelper(-1, 2);
         // impsChangedAsserterHelper(2, 2);
 

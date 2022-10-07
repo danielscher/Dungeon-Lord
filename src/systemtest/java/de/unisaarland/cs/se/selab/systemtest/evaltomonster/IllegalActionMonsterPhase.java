@@ -7,10 +7,10 @@ import de.unisaarland.cs.se.selab.systemtest.SystemTestTemplate;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 import java.util.Set;
 
-public class illegalActionMonsterPhase extends OurSystemTestFramework {
+public class IllegalActionMonsterPhase extends OurSystemTestFramework {
 
-    public illegalActionMonsterPhase() {
-        super(illegalActionMonsterPhase.class, false);
+    public IllegalActionMonsterPhase() {
+        super(IllegalActionMonsterPhase.class, false);
     }
 
     @Override
@@ -199,7 +199,7 @@ public class illegalActionMonsterPhase extends OurSystemTestFramework {
         // slot 1:
         assertSelectMonster(0);
         assertActNow(0);
-        sendPlaceBid(0,BidType.FOOD,2);
+        sendPlaceBid(0, BidType.FOOD, 2);
         assertActionFailed(0);
         assertActNow(0);
         sendHireMonster(0, 9); // evilness : 9 hunger : 0.
@@ -209,7 +209,7 @@ public class illegalActionMonsterPhase extends OurSystemTestFramework {
         // slot 2:
         assertSelectMonster(1);
         assertActNow(1);
-        sendPlaceBid(0,BidType.FOOD,2); // action out of turn.
+        sendPlaceBid(0, BidType.FOOD, 2); // action out of turn.
         assertActionFailed(0);
         sendHireMonster(1, 23); // evilness : 0 hunger : 0.
         monsterHiredAsserter(23, 1);
