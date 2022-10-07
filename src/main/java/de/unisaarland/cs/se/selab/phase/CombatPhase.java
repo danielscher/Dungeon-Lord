@@ -313,23 +313,26 @@ public class CombatPhase extends Phase {
         }
         for (int i = 0; i < dungeon.getNumAdventurersInQueue(); i++) {
             if (dungeon.getAdventurer(i).getHealValue() > 0) {
-                int res = dungeon.getAdventurer(i).getHealValue();
-                for (int j = 0; j < dungeon.getNumAdventurersInQueue(); j++) {
-                    final int currentRes = res;
-                    res = dungeon.getAdventurer(j).healBy(res);
-                    if (res > 0) {
-                        broadcastAdventurerHealed(currentRes - res,
-                                dungeon.getAdventurer(i).getAdventurerID(),
-                                dungeon.getAdventurer(j).getAdventurerID());
-                    } else {
-                        broadcastAdventurerHealed(currentRes,
-                                dungeon.getAdventurer(i).getAdventurerID(),
-                                dungeon.getAdventurer(j).getAdventurerID());
-                        break;
-                    }
+                //adventurer i will heal others
+                heal(i);
+            }
+        }
+    }
 
-                }
-
+    private void heal(final int i) {
+        int reshealval = dungeon.getAdventurer(i).getHealValue();
+        for (int j = 0; j < dungeon.getNumAdventurersInQueue(); j++) {
+            if (dungeon.getAdventurer(j).getHealthPoints()
+                    == dungeon.getAdventurer(j).getMaxHealthPoints()) {
+                continue;
+            }
+            final int oldhp = dungeon.getAdventurer(j).getHealthPoints();
+            reshealval = dungeon.getAdventurer(j).healBy(reshealval);
+            broadcastAdventurerHealed(dungeon.getAdventurer(j).getHealthPoints() - oldhp,
+                    dungeon.getAdventurer(i).getAdventurerID(),
+                    dungeon.getAdventurer(j).getAdventurerID());
+            if (reshealval == 0) {
+                break;
             }
         }
     }
@@ -362,13 +365,10 @@ public class CombatPhase extends Phase {
     }
 
     private void calcMonsterMultiDamage(final Monster monster) {
-        int res = monster.getDamage();
+        final int res = monster.getDamage();
         final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
         for (final Adventurer adventurer : adventurerList) {
-            res = damageAdv(adventurer, res);
-            if (res <= 0) {
-                break;
-            }
+            damageAdv(adventurer, res);
         }
     }
 
