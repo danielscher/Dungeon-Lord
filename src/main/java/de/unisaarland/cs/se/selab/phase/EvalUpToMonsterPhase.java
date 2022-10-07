@@ -258,7 +258,6 @@ public class EvalUpToMonsterPhase extends Phase {
             gd.getServerConnection()
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
         }
-        //TODO: first check if monster's available then impl. behaviour.
 
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
         if (chosenMonster == null) {
@@ -295,6 +294,7 @@ public class EvalUpToMonsterPhase extends Phase {
         } else {
             gd.getServerConnection().sendActionFailed(currHandledCommId, "cannot hire this"
                     + "monster because of evilness or food");
+            gd.getServerConnection().sendActNow(currHandledCommId);
         }
 
     }
