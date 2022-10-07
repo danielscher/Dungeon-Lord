@@ -313,6 +313,7 @@ public class EvalUpToMonsterPhase extends Phase {
         if (!gd.checkIfRegistered(commId)) {
             return;
         }
+        // id doesn't match
 
         // get the player who requested to activate the room
         final Player player = gd.getPlayerByCommID(commId);
@@ -326,10 +327,10 @@ public class EvalUpToMonsterPhase extends Phase {
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
-
-        if (currHandledCommId != commId) {
-            // in this case we want another action of the player
-            gd.getServerConnection().sendActNow(ara.getCommID());
+        // still needs to hire monster
+        if (currHandledCommId == commId) {
+            gd.getServerConnection()
+                    .sendActNow(commId);
         }
     }
 
