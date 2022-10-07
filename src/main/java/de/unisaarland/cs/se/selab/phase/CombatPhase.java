@@ -50,10 +50,19 @@ public class CombatPhase extends Phase {
             return goToNextPhase();
         }
 
+        final Coordinate battleground = dungeon.getCurrBattleGround();
+
+        if (battleground == null && dungeon.getNumUnconqueredTiles() == 0) {
+            letOneAdvFlee();
+            if (currPlayingPlayer.changeEvilnessBy(-1)) {
+                broadcastEvilnessChanged(-1, currPlayerId);
+            }
+            return goToNextPhase();
+        }
+
         //send defend yourself
         gd.getServerConnection().sendDefendYourself(currPlayingPlayer.getCommID());
         //coordinate of the current battleground
-        final Coordinate battleground = dungeon.getCurrBattleGround();
 
         while (!endTurn) {
             try {
@@ -68,16 +77,6 @@ public class CombatPhase extends Phase {
                 // in this case we still have a reference to the player object, but he isn't
                 // registered anymore --> transition to next phase
                 return goToNextPhase();
-            }
-
-            // check if the battleground is full
-            if (dungeon.hasTileRoom(battleground) && (placedTrap != null
-                    && placedMonsters.size() > 1)) {
-                break;
-            }
-            if (!dungeon.hasTileRoom(battleground) && (placedTrap != null
-                    && placedMonsters.size() == 1)) {
-                break;
             }
         }
         //if player left skip thr damages and healing
@@ -524,15 +523,18 @@ public class CombatPhase extends Phase {
 
             // check if adventurer can escape.
             if (dungeon.getNumUnconqueredTiles() == 0) {
-                if (dungeon.getNumImprisonedAdventurers() != 0) {
+                letOneAdvFlee();
+            }
+        }
+    }
 
-                    // free an imprisoned adventurer.
-                    broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
-                    if (currPlayingPlayer.changeEvilnessBy(-1)) {
-                        broadcastEvilnessChanged(-1, currPlayingPlayer.getPlayerID());
-                    }
-                }
+    private void letOneAdvFlee() {
+        if (dungeon.getNumImprisonedAdventurers() != 0) {
 
+            // free an imprisoned adventurer.
+            broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
+            if (currPlayingPlayer.changeEvilnessBy(-1)) {
+                broadcastEvilnessChanged(-1, currPlayingPlayer.getPlayerID());
             }
         }
     }
