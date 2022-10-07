@@ -110,6 +110,7 @@ public class EvalRoomPhase extends Phase {
         if (bra.getCommID() != expectedRespondingCommId) {
             gd.getServerConnection().sendActionFailed(bra.getCommID(), "it's not your"
                     + "turn to place a room");
+            return;
         }
 
         Room room = null;
