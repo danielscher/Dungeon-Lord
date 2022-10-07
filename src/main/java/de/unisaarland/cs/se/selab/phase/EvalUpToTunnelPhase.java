@@ -39,7 +39,9 @@ public class EvalUpToTunnelPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        if (commID == commIdToDigTunnel) {
+            skipActNow = false;
+        }
     }
 
     /*
@@ -96,7 +98,6 @@ public class EvalUpToTunnelPhase extends Phase {
     this method grants food bids
      */
     private void grantFood(final Player player, final int slot) {
-        // TODO change
         switch (slot) {
             case 0:
                 // first food slot
