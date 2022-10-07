@@ -22,7 +22,6 @@ public class Dungeon {
     private final Queue<Adventurer> prison = new ArrayDeque<>();
     private Coordinate currBattleGround;
     private final List<Room> rooms = new ArrayList<>();
-    private final List<Room> activeRooms = new ArrayList<>();
     private int restingImps;
     private int supervisingImps;
     private int tunnelDiggingImps;
@@ -319,7 +318,6 @@ public class Dungeon {
         if (sendImpsToProduce(neededImps)) {
             // if player has enough resting imps, they are transferred to work
             roomToActivate.activate();
-            activeRooms.add(roomToActivate);
             return true;
         } else {
             // not enough imps
@@ -327,7 +325,20 @@ public class Dungeon {
         }
     }
 
+    /**
+     * copies entries to the list of rooms
+     */
+    public void addRooms(List<Room> roomsToAdd) {
+        rooms.addAll(roomsToAdd);
+    }
+
     public List<Room> getActiveRooms() {
+        final List<Room> activeRooms = new ArrayList<>();
+        for (final Room room : rooms) {
+            if (room.isActivated()) {
+                activeRooms.add(room);
+            }
+        }
         return activeRooms;
     }
 
@@ -355,17 +366,7 @@ public class Dungeon {
         producingImps = 0;
         restingImps += numReturn;
 
-        deactivateRooms();
         return numReturn;
-    }
-
-    /**
-     * helper method to deactivate all rooms of this dungeon
-     */
-    private void deactivateRooms() {
-        for (final Room room : rooms) {
-            room.deactivate();
-        }
     }
 
     /**

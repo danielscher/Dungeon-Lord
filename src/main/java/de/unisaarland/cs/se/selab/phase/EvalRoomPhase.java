@@ -76,7 +76,6 @@ public class EvalRoomPhase extends Phase {
                 break;
             case 2:
                 if (!gd.getCurrAvailableRooms().isEmpty()) {
-                    // TODO check if this should be changed to size == 2
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
                     expectedRespondingCommId = player.getCommID();
@@ -240,6 +239,7 @@ public class EvalRoomPhase extends Phase {
                 for (final Room r : dungeon.getActiveRooms()) {
                     evalRoomProduction(r, player);
                 }
+
             }
         }
     }
@@ -265,6 +265,7 @@ public class EvalRoomPhase extends Phase {
             dungeon.addImps(r.getImpProduction());
             broadcastImpsChanged(r.getImpProduction(), p);
         }
+        r.deactivate();
     }
 
     public void spreadAdv() {

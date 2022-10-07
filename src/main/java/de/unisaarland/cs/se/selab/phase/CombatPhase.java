@@ -521,7 +521,9 @@ public class CombatPhase extends Phase {
 
                     // free an imprisoned adventurer.
                     broadcastAdventurerFled(dungeon.fleeadventureinQueue().getAdventurerID());
-                    currPlayingPlayer.changeEvilnessBy(-1);
+                    if (currPlayingPlayer.changeEvilnessBy(-1)) {
+                        broadcastEvilnessChanged(-1, currPlayingPlayer.getPlayerID());
+                    }
                 }
 
             }
