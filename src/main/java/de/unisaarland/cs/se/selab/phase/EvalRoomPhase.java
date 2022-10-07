@@ -22,6 +22,7 @@ public class EvalRoomPhase extends Phase {
 
     ServerConnection<Action> sc = gd.getServerConnection();
     private boolean endTurn;
+    private int expectedRespondingCommId = -1;
 
     public EvalRoomPhase(final GameData gd) {
         super(gd);
@@ -69,13 +70,16 @@ public class EvalRoomPhase extends Phase {
                     broadcastGoldChanged(-1, player.getPlayerID());
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
+                    expectedRespondingCommId = player.getCommID();
                     requestNextAction(player);
                 }
                 break;
             case 2:
                 if (!gd.getCurrAvailableRooms().isEmpty()) {
+                    // TODO check if this should be changed to size == 2
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
+                    expectedRespondingCommId = player.getCommID();
                     requestNextAction(player);
                 }
                 break;
@@ -103,6 +107,11 @@ public class EvalRoomPhase extends Phase {
             return;
         }
 
+        if (bra.getCommID() != expectedRespondingCommId) {
+            gd.getServerConnection().sendActionFailed(bra.getCommID(), "it's not your"
+                    + "turn to place a room");
+        }
+
         Room room = null;
         for (final Room r : gd.getCurrAvailableRooms()) {
             //To find the chosen room in the list of available rooms
@@ -111,6 +120,7 @@ public class EvalRoomPhase extends Phase {
                 break;
             }
         }
+
         if (room == null) {
             sc.sendActionFailed(bra.getCommID(), "Chosen room is not available");
             return;
@@ -122,12 +132,15 @@ public class EvalRoomPhase extends Phase {
         if (!d.checkForFreeTilesIn(loc)) {
             sc.sendActionFailed(bra.getCommID(),
                     "You don't have any free tile to place this room on.");
+            sc.sendActNow(expectedRespondingCommId);
         } else if (!d.placeRoom(bra.getRow(), bra.getCol(), room)) {
             sc.sendActionFailed(bra.getCommID(), "Invalid coordinates to place this room.");
+            sc.sendActNow(expectedRespondingCommId);
         } else {
             broadcastRoomBuilt(player.getPlayerID(), bra.getRoomID(), bra.getRow(),
                     bra.getCol()); //broadcast room built
             gd.getCurrAvailableRooms().remove(room);    //remove room from options list
+            expectedRespondingCommId = -1;
             endTurn = true;
         }
     }
@@ -152,6 +165,10 @@ public class EvalRoomPhase extends Phase {
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
             }
         }
+
+        if (ara.getCommID() == expectedRespondingCommId) {
+            sc.sendActNow(expectedRespondingCommId);
+        }
     }
 
     @Override
@@ -160,12 +177,22 @@ public class EvalRoomPhase extends Phase {
         if (player == null) { //if player's left the game
             return;
         }
-        endTurn = true;
+
+        if (eta.getCommID() == expectedRespondingCommId) {
+            expectedRespondingCommId = -1;
+            endTurn = true;
+        } else {
+            sc.sendActionFailed(eta.getCommID(), "it's not even your turn");
+        }
     }
 
     @Override
     public void exec(final LeaveAction la) {
-        endTurn = true; // to prevent any further placing room request from this user
+        if (la.getCommID() == expectedRespondingCommId) {
+            expectedRespondingCommId = -1;
+            endTurn = true; // to prevent any further placing room request from this user
+        }
+
         super.exec(la);
     }
 
