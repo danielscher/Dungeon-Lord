@@ -38,7 +38,9 @@ public class EvalUpToMonsterPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        if (commID == currHandledCommId) {
+            gd.getServerConnection().sendActNow(commID);
+        }
     }
 
     private void eval() {
@@ -311,11 +313,6 @@ public class EvalUpToMonsterPhase extends Phase {
         if (!gd.checkIfRegistered(commId)) {
             return;
         }
-        // id doesn't match
-        if (currHandledCommId != commId) {
-            gd.getServerConnection()
-                    .sendActionFailed(commId, "Illegal Action: not your turn.");
-        }
 
         // get the player who requested to activate the room
         final Player player = gd.getPlayerByCommID(commId);
@@ -329,7 +326,11 @@ public class EvalUpToMonsterPhase extends Phase {
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
-        //TODO  sc.sendActNow(ara.getCommID());?
+
+        if (currHandledCommId != commId) {
+            // in this case we want another action of the player
+            gd.getServerConnection().sendActNow(ara.getCommID());
+        }
     }
 
     @Override
