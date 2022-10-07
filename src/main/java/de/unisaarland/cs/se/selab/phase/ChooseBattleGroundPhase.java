@@ -37,7 +37,7 @@ public class ChooseBattleGroundPhase extends Phase {
         gd.getServerConnection().sendActNow(
                 currPlayer.getCommID()); //send individual event "ActNow"
 
-        if (!battleGroundChosen) {
+        while (!battleGroundChosen) {
             //loop ask for the next action until get the bga from the current player
             try {
                 gd.getServerConnection().nextAction().invoke(this);
@@ -75,16 +75,19 @@ public class ChooseBattleGroundPhase extends Phase {
                 chosenCoords)) { //invalid coordinates
             gd.getServerConnection().sendActionFailed(currPlayer.getCommID(),
                     "Chosen coordinates are not available.");
+            gd.getServerConnection().sendActNow(currPlayer.getCommID());
         } else {
             currPlayer.getDungeon().setBattleGround(chosenCoords);
             broadcastBattleGroundSet(currPlayer.getPlayerID(), bga.getRow(), bga.getCol());
+            battleGroundChosen = true;
         }
-        battleGroundChosen = true;
     }
 
     @Override
     public void exec(final LeaveAction la) {
-        battleGroundChosen = true;
+        if (la.getCommID() == currPlayer.getCommID()) {
+            battleGroundChosen = true;
+        }
         super.exec(la);
     }
 }
