@@ -185,10 +185,12 @@ public class FrameworkuptoBiddingThirdSeason extends FrameworkuptoBiddingSecondS
         assertActNow(0);
         sendDigTunnel(0, 0, 1);
         impsChangedAsserter(-1, 0);
+
         tunnelDugAsserter(0, 0, 1);
         assertActNow(0);
         sendDigTunnel(0, 0, 2);
         impsChangedAsserter(-1, 0);
+
         tunnelDugAsserter(0, 0, 2);
         assertActNow(0);
         sendDigTunnel(0, 0, 3);
