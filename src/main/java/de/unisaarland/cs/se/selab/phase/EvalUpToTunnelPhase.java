@@ -348,6 +348,7 @@ public class EvalUpToTunnelPhase extends Phase {
         if (player == null) {
             gd.getServerConnection()
                     .sendActionFailed(commId, "you don't seem to be a registered player");
+            skipActNow = true;
             return;
         }
 
