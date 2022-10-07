@@ -44,7 +44,7 @@ public abstract class Phase {
         }
     }
 
-    public abstract void gotInvalidActionFrom(final int commID);
+    public abstract void gotInvalidActionFrom(int commID);
 
     public void exec(final RegAction x) {
         sendError(x.getCommID());

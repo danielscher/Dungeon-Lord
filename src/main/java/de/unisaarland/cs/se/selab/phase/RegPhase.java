@@ -49,7 +49,7 @@ public class RegPhase extends Phase {
 
     @Override
     public void gotInvalidActionFrom(final int commID) {
-        // TODO
+        // nobody is supposed to get an actNow here
     }
 
     @Override
