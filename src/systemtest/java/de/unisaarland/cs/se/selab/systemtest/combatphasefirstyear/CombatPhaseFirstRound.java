@@ -35,7 +35,7 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         player0Defend();
         player1Defend();
         player2Defend();
-        //player3Defend();
+        player3Defend();
 
     }
 
@@ -135,6 +135,7 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         imprisonAsserter(0);
         adventurerDamagedAsserter(18, 2);  //fatig
         imprisonAsserter(18);
+        //already end combat phase for player0
     }
 
     protected void player1Defend() throws TimeoutException {
@@ -172,7 +173,21 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         //heal
         healedAdventurerAsserter(2, 11, 11);
         healedAdventurerAsserter(1, 9, 9);
+        nextRoundAsserter(2);
 
+        //next round (second round) (no unconquered tile left)
+        nextRoundAsserter(2);
+        evilnessChangedAsserter(-1, 1);
+        nextRoundAsserter(3);
+
+        //next round (third round)
+        nextRoundAsserter(3);
+        evilnessChangedAsserter(-1, 1);
+        nextRoundAsserter(4);
+
+        //next round (fourth round)
+        nextRoundAsserter(4);
+        evilnessChangedAsserter(-1, 1);
     }
 
     protected void player2Defend() throws TimeoutException {
@@ -182,7 +197,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         this.assertActNow(2);
         this.sendBattleGround(2, 0, 0);
         battelGroundChoosedAsserter(0, 0, 2);
-
         //defend begin and set trap and monster
         this.assertDefendYourself(2);
         this.assertActNow(2);
@@ -195,20 +209,70 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         monsterPlacedAsserter(14, 2);
         this.assertActNow(2);
         this.sendEndTurn(2);
-
         //end turn 20 29 26
         //first adventurer, charge=true, defuse value=2, HP=5
-        adventurerDamagedAsserter(20, 3);
-        adventurerDamagedAsserter(20, 2);
+        adventurerDamagedAsserter(20, 3); //monster
+        adventurerDamagedAsserter(20, 2); //fatig
         imprisonAsserter(20);
         //second adventurer, heal value=2, defuse value=1, HP=5
-        adventurerDamagedAsserter(29, 2);
+        adventurerDamagedAsserter(29, 2); //fatig
         //third adventurer, defuse value=1, HP=4
-        adventurerDamagedAsserter(26, 2);
+        adventurerDamagedAsserter(26, 2); //fatig
         //conquer
-        conqueredAsserter(20, 0, 0);
+        conqueredAsserter(29, 0, 0);
         evilnessChangedAsserter(-1, 2);
+        //heal
+        healedAdventurerAsserter(2, 29, 29);
+        nextRoundAsserter(2);
 
+        //next round (second round)
+        nextRoundAsserter(2);
+        this.assertSetBattleGround(2);
+        this.assertActNow(2);
+        this.sendBattleGround(2, 0, 1);
+        battelGroundChoosedAsserter(0, 1, 2);
+        //defend begin and set trap and monster
+        this.assertDefendYourself(2);
+        this.assertActNow(2);
+        this.sendEndTurn(2);
+        //end turn 29 26
+        adventurerDamagedAsserter(29, 2); //fatig
+        adventurerDamagedAsserter(26, 2); //fatig
+        imprisonAsserter(26);
+        //conquer
+        conqueredAsserter(29, 0, 1);
+        evilnessChangedAsserter(-1, 2);
+        //heal
+        healedAdventurerAsserter(2, 29, 29);
+        nextRoundAsserter(3);
+
+        //next round (third round)
+        nextRoundAsserter(3);
+        this.assertSetBattleGround(2);
+        this.assertActNow(2);
+        this.sendBattleGround(2, 0, 2);
+        battelGroundChoosedAsserter(0, 2, 2);
+        //defend begin and set trap and monster
+        this.assertDefendYourself(2);
+        this.assertActNow(2);
+        this.sendEndTurn(2);
+        //end turn 29
+        adventurerDamagedAsserter(29, 2); //fatig
+        //conquer
+        conqueredAsserter(29, 0, 2);
+        evilnessChangedAsserter(-1, 2);
+        //fled
+        fledAdventurerAsserter(20);
+        evilnessChangedAsserter(-1, 2);
+        //heal
+        healedAdventurerAsserter(2, 29, 29);
+        nextRoundAsserter(4);
+
+        //next round (fourth round)
+        nextRoundAsserter(4);
+        fledAdventurerAsserter(26);
+        evilnessChangedAsserter(-1, 2); //because of fled
+        evilnessChangedAsserter(-1, 2); //because of all tiles conquered
     }
 
     protected void player3Defend() throws TimeoutException {
@@ -218,7 +282,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         this.assertActNow(3);
         this.sendBattleGround(3, 0, 0);
         battelGroundChoosedAsserter(0, 0, 3);
-
         //defend begin and set trap
         this.assertDefendYourself(3);
         this.assertActNow(3);
@@ -231,7 +294,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         monsterPlacedAsserter(3, 3);
         this.assertActNow(3);
         this.sendEndTurn(3);
-
         //end turn 6 23 15
         //first adventurer HP=6, heal val=2, defuse val=2
         //second adventurer HP=6, heal val=3
@@ -249,6 +311,8 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         healedAdventurerAsserter(1, 23, 6);
         healedAdventurerAsserter(2, 23, 23);
         healedAdventurerAsserter(3, 15, 15);
+
+
 
     }
 }
