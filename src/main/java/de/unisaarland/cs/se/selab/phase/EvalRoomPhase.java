@@ -239,6 +239,7 @@ public class EvalRoomPhase extends Phase {
                 for (final Room r : dungeon.getActiveRooms()) {
                     evalRoomProduction(r, player);
                 }
+
             }
         }
     }
