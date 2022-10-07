@@ -82,6 +82,11 @@ public class CollectAndPlaceBidPhase extends Phase {
     }
 
     @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
+    @Override
     public void exec(final PlaceBidAction pba) {
         final Player player = gd.getPlayerByCommID(pba.getCommID());
 

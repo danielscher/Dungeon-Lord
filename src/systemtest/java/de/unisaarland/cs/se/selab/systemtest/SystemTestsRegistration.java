@@ -20,6 +20,7 @@ import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhileDig
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhilePlacingBidFirstSeason;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.PlayerLeftWhilePlacingRoomThirdSeason;
 import de.unisaarland.cs.se.selab.systemtest.combatphasefirstyear.CombatPhaseFirstRound;
+import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.InvalidActionInRegPhase;
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TooNiceForThis;
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TunnelDiggers;
 import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingFoodTunnelRoom;
@@ -48,6 +49,8 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
+        manager.registerTest(new InvalidActionInRegPhase());
+        /*
 
         // cambatphase package
         manager.registerTest(new CombatAllPlayerEndTurn());
@@ -128,6 +131,8 @@ final class SystemTestsRegistration {
         // evalroom package
         manager.registerTest(new BiddingFoodTunnelRoom());
         manager.registerTest(new BiddingOnRoomBasic());
+
+         */
 
 
 

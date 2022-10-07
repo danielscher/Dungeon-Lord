@@ -47,6 +47,11 @@ public class EvalRoomPhase extends Phase {
         return new CollectAndPlaceBidPhase(gd);
     }
 
+    @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
     private void eval() {
         final BiddingSquare bs = gd.getBiddingSquare();
 

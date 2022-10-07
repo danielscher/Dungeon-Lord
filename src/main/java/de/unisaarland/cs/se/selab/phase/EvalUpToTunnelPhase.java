@@ -37,6 +37,11 @@ public class EvalUpToTunnelPhase extends Phase {
         return new EvalUpToMonsterPhase(gd);
     }
 
+    @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
     /*
     iterates over bidding square and grants the bids
      */

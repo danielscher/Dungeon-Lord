@@ -48,6 +48,11 @@ public class RegPhase extends Phase {
     }
 
     @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
+    @Override
     public void exec(final RegAction ra) {
         if (gd.checkIfRegistered(ra.getCommID())) {
             gd.getServerConnection().sendRegistrationAborted(ra.getCommID()); // FIXME action failed

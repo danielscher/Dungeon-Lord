@@ -33,6 +33,11 @@ public class GameEndPhase extends Phase {
         return null;
     }
 
+    @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
     public void setAllTitle() {
         this.setRichesTitles();
         this.setDarkSeedTitles();

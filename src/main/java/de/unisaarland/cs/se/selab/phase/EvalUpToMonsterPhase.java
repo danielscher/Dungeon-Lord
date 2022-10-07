@@ -36,6 +36,11 @@ public class EvalUpToMonsterPhase extends Phase {
         return new EvalRoomPhase(super.gd);
     }
 
+    @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
     private void eval() {
         final BiddingSquare bs = gd.getBiddingSquare();
         // iterates over slots

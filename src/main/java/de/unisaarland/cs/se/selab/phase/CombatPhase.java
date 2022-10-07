@@ -99,6 +99,11 @@ public class CombatPhase extends Phase {
     }
 
     @Override
+    public void gotInvalidActionFrom(final int commID) {
+        // TODO
+    }
+
+    @Override
     public void exec(final LeaveAction la) {
         if (la.getCommID() == currPlayingPlayer.getCommID()) {
             endTurn = true;
