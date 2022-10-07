@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.systemtest;
 
 import de.unisaarland.cs.se.selab.systemtest.api.SystemTestManager;
 import de.unisaarland.cs.se.selab.systemtest.cambatphase.CombatAllPlayerEndTurn;
+import de.unisaarland.cs.se.selab.systemtest.collectplacebids.ActivateRoomWhileChoosingMonsterSecondSeason;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.ActivateRoomWhilePlacingBidFourthSeason;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.ActivateRoomWithoutRoomFourthSeason;
 import de.unisaarland.cs.se.selab.systemtest.collectplacebids.AllKindsofBidsFourthSeason;
@@ -101,6 +102,7 @@ final class SystemTestsRegistration {
         manager.registerTest(new Send4ImpsToMineGold());
 
         // collectandplacebids
+        manager.registerTest(new ActivateRoomWhileChoosingMonsterSecondSeason());
         manager.registerTest(new ActivateRoomWhilePlacingBidFourthSeason());
         manager.registerTest(new ActivateRoomWithoutRoomFourthSeason());
         manager.registerTest(new AllKindsofBidsFourthSeason());
