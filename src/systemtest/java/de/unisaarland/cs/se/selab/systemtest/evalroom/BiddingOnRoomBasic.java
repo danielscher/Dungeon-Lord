@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.systemtest.evalroom;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
+import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingSecondSeason;
 import de.unisaarland.cs.se.selab.systemtest.OurSystemTestFramework;
 import de.unisaarland.cs.se.selab.systemtest.SystemTestTemplate;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
@@ -9,8 +10,12 @@ import java.util.Set;
 
 public class BiddingOnRoomBasic extends OurSystemTestFramework {
 
-    public BiddingOnRoomBasic() {
-        super(BiddingOnRoomBasic.class, false);
+    protected BiddingOnRoomBasic(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
+    BiddingOnRoomBasic() {
+        super(FrameworkuptoBiddingSecondSeason.class, false);
     }
 
     @Override
@@ -215,6 +220,7 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
 
         //second player
         goldChangedAsserter(-1, 1);
+        //TODO expected 'GOLD_CHANGED(-1, 1)' but was 'ACT_NOW()'
         assertPlaceRoom(1);
         assertActNow(1);
         // since the player has only one tile at (0,0) but the room restriction is INNER RING
