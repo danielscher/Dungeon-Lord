@@ -276,6 +276,7 @@ public class EvalUpToTunnelPhase extends Phase {
     private void requestActionFrom(final int commId) {
         // add player's commId to a list of expected action-senders
         commIdToDigTunnel = commId;
+        skipActNow = false;
 
         while (commIdToDigTunnel != -1) {
             // loop until the player we evaluate has sent an action
