@@ -264,6 +264,7 @@ public class EvalUpToMonsterPhase extends Phase {
             }
             gd.getServerConnection()
                     .sendActionFailed(hma.getCommID(), "Illegal Action: not your turn.");
+            return;
         }
 
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
