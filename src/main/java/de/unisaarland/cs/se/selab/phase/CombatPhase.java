@@ -365,13 +365,10 @@ public class CombatPhase extends Phase {
     }
 
     private void calcMonsterMultiDamage(final Monster monster) {
-        int res = monster.getDamage();
+        int monsterDamage = monster.getDamage();
         final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
         for (final Adventurer adventurer : adventurerList) {
-            res = damageAdv(adventurer, res);
-            if (res <= 0) {
-                break;
-            }
+            damageAdv(adventurer, monsterDamage);
         }
     }
 
@@ -414,13 +411,24 @@ public class CombatPhase extends Phase {
     }
 
     private void calcTrapMultiDamage(final int totalDefuseVal) {
-        int res = placedTrap.getDamage() - totalDefuseVal;
+        int defuseBudget = totalDefuseVal;
+        final int trapDamage = placedTrap.getDamage();
         final List<Adventurer> adventurerList = new ArrayList<>(dungeon.getAdventurerQueue());
         for (final Adventurer adventurer : adventurerList) {
-            res = damageAdv(adventurer, res);
-            if (res <= 0) {
-                break;
+            int appliedDmg = trapDamage;
+            if (defuseBudget > 0) {
+                // in this case we have a defuse-value-budget
+                if (defuseBudget >= appliedDmg) {
+                    // here the damage can be reduced to 0
+                    defuseBudget -= appliedDmg;
+                    appliedDmg = 0;
+                } else {
+                    // here the defuse-value only partially defuses the trap
+                    appliedDmg -= defuseBudget;
+                    defuseBudget = 0;
+                }
             }
+            damageAdv(adventurer, appliedDmg);
         }
     }
 
