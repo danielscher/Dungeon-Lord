@@ -2,6 +2,7 @@ package de.unisaarland.cs.se.selab.phase;
 
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
+import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.action.RegAction;
 import de.unisaarland.cs.se.selab.game.action.StartGameAction;
 import java.util.List;
@@ -63,6 +64,13 @@ public class RegPhase extends Phase {
             }
             final String configString = gd.getConfigString();
             gd.getServerConnection().sendConfig(ra.getCommID(), configString);
+        }
+    }
+
+    @Override
+    public void exec(final LeaveAction la) {
+        if (gd.checkIfRegistered(la.getCommID())) {
+            gd.removePlayer(la.getCommID());
         }
     }
 
