@@ -263,7 +263,8 @@ public class EvalUpToMonsterPhase extends Phase {
         final Monster chosenMonster = gd.getAndRemoveMonster(hma.getMonster());
         if (chosenMonster == null) {
             gd.getServerConnection().sendActionFailed(currHandledCommId, "monster not"
-                    + "available");
+                    + " available");
+            gd.getServerConnection().sendActNow(currHandledCommId);
             return;
         }
 
