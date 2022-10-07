@@ -173,17 +173,14 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         //heal
         healedAdventurerAsserter(2, 11, 11);
         healedAdventurerAsserter(1, 9, 9);
-        nextRoundAsserter(2);
 
         //next round (second round) (no unconquered tile left)
         nextRoundAsserter(2);
         evilnessChangedAsserter(-1, 1);
-        nextRoundAsserter(3);
 
         //next round (third round)
         nextRoundAsserter(3);
         evilnessChangedAsserter(-1, 1);
-        nextRoundAsserter(4);
 
         //next round (fourth round)
         nextRoundAsserter(4);
@@ -223,7 +220,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         evilnessChangedAsserter(-1, 2);
         //heal
         healedAdventurerAsserter(2, 29, 29);
-        nextRoundAsserter(2);
 
         //next round (second round)
         nextRoundAsserter(2);
@@ -244,7 +240,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         evilnessChangedAsserter(-1, 2);
         //heal
         healedAdventurerAsserter(2, 29, 29);
-        nextRoundAsserter(3);
 
         //next round (third round)
         nextRoundAsserter(3);
@@ -266,7 +261,6 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         evilnessChangedAsserter(-1, 2);
         //heal
         healedAdventurerAsserter(2, 29, 29);
-        nextRoundAsserter(4);
 
         //next round (fourth round)
         nextRoundAsserter(4);
@@ -310,7 +304,27 @@ public class CombatPhaseFirstRound extends FrameworkuptoBiddingFourthSeason {
         healedAdventurerAsserter(2, 6, 6);
         healedAdventurerAsserter(1, 23, 6);
         healedAdventurerAsserter(2, 23, 23);
-        healedAdventurerAsserter(3, 15, 15);
+        healedAdventurerAsserter(2, 15, 15);
+
+        //next round (second round)
+        nextRoundAsserter(2);
+        this.assertSetBattleGround(3);
+        this.assertActNow(3);
+        this.sendBattleGround(3, 2, 0);
+        battelGroundChoosedAsserter(2, 0, 3);
+        //defend begin and set trap and monster
+        this.assertDefendYourself(2);
+        this.assertActNow(2);
+        //trap MULTI damage=1
+        this.sendTrap(3, 5);
+        trapPlacedAsserter(5, 3);
+        this.assertActNow(3);
+        //end turn 6, 23, 15
+        //adventurerDamagedAsserter(15, 1); //trapdamage
+        adventurerDamagedAsserter(6, 2); //fatigdamage
+        adventurerDamagedAsserter(23, 2); //fatigdamage
+        adventurerDamagedAsserter(15, 2); //fatigdamage
+
 
 
 
