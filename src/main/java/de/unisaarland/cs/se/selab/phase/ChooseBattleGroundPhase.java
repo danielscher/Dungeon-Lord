@@ -3,6 +3,7 @@ package de.unisaarland.cs.se.selab.phase;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.game.GameData;
 import de.unisaarland.cs.se.selab.game.action.BattleGroundAction;
+import de.unisaarland.cs.se.selab.game.action.LeaveAction;
 import de.unisaarland.cs.se.selab.game.player.Player;
 import de.unisaarland.cs.se.selab.game.util.Coordinate;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ChooseBattleGroundPhase extends Phase {
             return null; // abort game if no players left
         }
 
-        broadcastNextRound(gd.getTime().getSeason());
+        broadcastNextRound(gd.getTime().getSeason() - 4);
 
         if (currPlayer.getDungeon().getNumUnconqueredTiles() == 0) {
             //if all tiles are conquered
@@ -71,5 +72,11 @@ public class ChooseBattleGroundPhase extends Phase {
             broadcastBattleGroundSet(currPlayer.getPlayerID(), bga.getRow(), bga.getCol());
         }
         battleGroundChosen = true;
+    }
+
+    @Override
+    public void exec(final LeaveAction la) {
+        battleGroundChosen = true;
+        super.exec(la);
     }
 }
