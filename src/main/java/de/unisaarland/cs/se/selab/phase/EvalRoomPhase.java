@@ -131,6 +131,7 @@ public class EvalRoomPhase extends Phase {
 
         if (room == null) {
             sc.sendActionFailed(bra.getCommID(), "Chosen room is not available");
+            sc.sendActNow(expectedRespondingCommId);
             return;
 
         }

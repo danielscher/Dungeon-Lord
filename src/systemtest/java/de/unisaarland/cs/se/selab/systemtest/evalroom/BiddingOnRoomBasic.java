@@ -14,7 +14,7 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
         super(subclass, fail);
     }
 
-    BiddingOnRoomBasic() {
+    public BiddingOnRoomBasic() {
         super(FrameworkuptoBiddingSecondSeason.class, false);
     }
 
@@ -216,6 +216,7 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
         // player cannot place the room
         this.sendBuildRoom(0, 0, 0, 5);
         assertActionFailed(0);
+        assertActNow(0);
         this.sendEndTurn(0);
 
         //second player
@@ -227,6 +228,7 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
         // player cannot place the room
         this.sendBuildRoom(1, 0, 0, 4);
         assertActionFailed(1);
+        assertActNow(1);
         this.sendEndTurn(1);
 
         assertPlaceRoom(2);
@@ -234,9 +236,12 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
         //player chooses a room that is not available
         this.sendBuildRoom(2, 0, 0, 7);
         assertActionFailed(2);
+        assertActNow(2);
         // send the next sendBuildRoom Action
         this.sendBuildRoom(2, 0, 0, 4);
         assertActionFailed(2);
+        assertActNow(2);
+
         this.sendEndTurn(2);
 
         //retrive bids for slot 1

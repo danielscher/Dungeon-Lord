@@ -231,6 +231,11 @@ public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
         adventurerArrivedAsserter(2, 0);
         adventurerArrivedAsserter(29, 1);
         adventurerArrivedAsserter(23, 2);
+
+
+        nextRoundAsserter(2);
+
+
     }
 
     private void placingrooms() throws TimeoutException {
@@ -251,6 +256,7 @@ public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
         // player cannot place the room
         this.sendBuildRoom(1, 0, 0, 4);
         assertActionFailed(1);
+        assertActNow(1);
         this.sendEndTurn(1);
 
         assertPlaceRoom(2);
@@ -258,9 +264,11 @@ public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
         //player chooses a room that is not available
         this.sendBuildRoom(2, 0, 0, 7);
         assertActionFailed(2);
+        assertActNow(2);
         // send the next sendBuildRoom Action
         this.sendBuildRoom(2, 0, 0, 4);
         assertActionFailed(2);
+        assertActNow(2);
         this.sendEndTurn(2);
 
     }
