@@ -54,6 +54,13 @@ public class ChooseBattleGroundPhase extends Phase {
     }
 
     @Override
+    public void gotInvalidActionFrom(final int commID) {
+        if (commID == currPlayer.getCommID()) {
+            gd.getServerConnection().sendActNow(commID);
+        }
+    }
+
+    @Override
     public void exec(final BattleGroundAction bga) {
 
         if (bga.getCommID() != currPlayer.getCommID()) {
