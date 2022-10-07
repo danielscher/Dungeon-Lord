@@ -324,6 +324,7 @@ public class EvalUpToMonsterPhase extends Phase {
         } else {
             gd.getServerConnection().sendActionFailed(commId, "couldn't activate room");
         }
+        //TODO  sc.sendActNow(ara.getCommID());?
     }
 
     @Override

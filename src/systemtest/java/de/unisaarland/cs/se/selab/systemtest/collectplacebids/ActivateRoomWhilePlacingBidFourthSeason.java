@@ -2,14 +2,21 @@ package de.unisaarland.cs.se.selab.systemtest.collectplacebids;
 
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
-import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingFourthSeason;
 import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingThirdSeason;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
-public class ActivateRoomFourthSeason extends FrameworkuptoBiddingThirdSeason {
+public class ActivateRoomWhilePlacingBidFourthSeason extends FrameworkuptoBiddingThirdSeason {
+
+    protected ActivateRoomWhilePlacingBidFourthSeason(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
+    protected ActivateRoomWhilePlacingBidFourthSeason() {
+        super(ActivateRoomWhilePlacingBidFourthSeason.class, false);
+    }
     @Override
     public String createConfig() {
-        return Utils.loadResource(FrameworkuptoBiddingFourthSeason.class, "configuration.json");
+        return Utils.loadResource(ActivateRoomWhilePlacingBidFourthSeason.class, "configuration.json");
     }
 
     @Override
@@ -172,5 +179,4 @@ public class ActivateRoomFourthSeason extends FrameworkuptoBiddingThirdSeason {
         goldChangedAsserter(-1, 1);
         impsChangedAsserter(2, 1);
     }
-
 }

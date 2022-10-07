@@ -125,11 +125,10 @@ public class CollectAndPlaceBidPhase extends Phase {
                         .getRoomById(ara.getRoomID()).getActivationCost();
                 broadcastImpsChanged(-cost, player.getPlayerID());
                 broadcastRoomActivated(player.getPlayerID(), ara.getRoomID());
-
-                if (checkNotAllBidsChosenPerPlayer(player)) {
-                    sc.sendActNow(ara.getCommID());
                 }
             }
+        if (checkNotAllBidsChosenPerPlayer(player)) {
+            sc.sendActNow(ara.getCommID());
         }
     }
 
