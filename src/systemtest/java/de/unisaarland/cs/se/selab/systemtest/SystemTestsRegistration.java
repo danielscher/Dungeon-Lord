@@ -23,16 +23,14 @@ import de.unisaarland.cs.se.selab.systemtest.combatphasefirstyear.CombatPhaseFir
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TooNiceForThis;
 import de.unisaarland.cs.se.selab.systemtest.edgyedgecase.TunnelDiggers;
 import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingFoodTunnelRoom;
+import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingOnRoomBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnGoldBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnImpsCantAffordSlot3;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnMonsterBasic;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.BiddingOnTrapsBasic;
-import de.unisaarland.cs.se.selab.systemtest.evaltomonster.CantAffordTooEvilMonster;
-import de.unisaarland.cs.se.selab.systemtest.evaltomonster.IllegalActionMonsterPhase;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.PlaceBidOnMonsterAndLeave;
 import de.unisaarland.cs.se.selab.systemtest.evaltomonster.Send4ImpsToMineGold;
-import de.unisaarland.cs.se.selab.systemtest.evaltomonster.ThisMonsterIsTakenAndThisIsNonExistent;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelAllPlayerLeftYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodTwoPlayerYaSa;
 import de.unisaarland.cs.se.selab.systemtest.evaluptotunnel.EvalUpToTunnelEvalFoodYaSa;
@@ -50,6 +48,8 @@ final class SystemTestsRegistration {
     }
 
     static void registerSystemTests(final SystemTestManager manager) {
+        //manager.registerTest(new InvalidActionInRegPhase());
+
 
         // cambatphase package
         manager.registerTest(new CombatAllPlayerEndTurn());
@@ -97,12 +97,8 @@ final class SystemTestsRegistration {
         manager.registerTest(new BiddingOnImpsCantAffordSlot3());
         manager.registerTest(new BiddingOnMonsterBasic());
         manager.registerTest(new BiddingOnTrapsBasic());
-        manager.registerTest(new CantAffordTooEvilMonster());
-        manager.registerTest(new IllegalActionMonsterPhase());
         manager.registerTest(new PlaceBidOnMonsterAndLeave());
         manager.registerTest(new Send4ImpsToMineGold());
-        manager.registerTest(new ThisMonsterIsTakenAndThisIsNonExistent());
-
 
         // collectandplacebids
         manager.registerTest(new ActivateRoomWhilePlacingBidFourthSeason());
@@ -124,6 +120,7 @@ final class SystemTestsRegistration {
 
 
         // combat
+        manager.registerTest(new CombatAllPlayerEndTurn());
         // combatphasefirstyear package
         manager.registerTest(new CombatPhaseFirstRound());
 
@@ -133,7 +130,8 @@ final class SystemTestsRegistration {
 
         // evalroom package
         manager.registerTest(new BiddingFoodTunnelRoom());
-        // manager.registerTest(new BiddingOnRoomBasic());
+        manager.registerTest(new BiddingOnRoomBasic());
+
 
 
     }

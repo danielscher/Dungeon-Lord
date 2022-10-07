@@ -26,8 +26,13 @@ public class CombatAllPlayerEndTurn extends FrameworkuptoBiddingFourthSeason {
         simulateFourthBiddingSeason();
         // start combat phase from player0 to player3
 
-        combatPlayerZeroRoundFive();
-        combatPlayerZeroRoundSix();
+        //player0 after 2 years of combat  imprisoned 3 adv successful
+        combatPlayerZeroRoundFive(0);
+        combatPlayerZeroRoundSix(0);
+
+        //player1 after 2 years of combat  imprisoned 3 adv successful??
+        //combatPlayerOneRoundFive(1);
+        //combatPlayerOneRoundSix(1);
 
         this.sendLeave(0);
         this.sendLeave(1);
@@ -35,44 +40,87 @@ public class CombatAllPlayerEndTurn extends FrameworkuptoBiddingFourthSeason {
         this.sendLeave(3);
     }
 
-    protected void combatPlayerZeroRoundFive() throws TimeoutException {
-        nextRoundAsserter(5);
-        assertSetBattleGround(0);
-        assertActNow(0);
-        sendBattleGround(0, 0, 0);
-        assertBattleGroundSet(0, 0, 0, 0);
-        assertDefendYourself(0);
-        sendEndTurn(0);
-        assertActNow(0);
-        assertAdventurerDamaged(0, 16, 2);
-        assertAdventurerDamaged(0, 0, 2);
-        assertAdventurerDamaged(0, 18, 2);
-        assertTunnelConquered(0, 16, 0, 0);
+    protected void combatPlayerZeroRoundFive(final int playerId) throws TimeoutException {
+        nextRoundAsserter(1);
+        assertSetBattleGround(playerId);
+        assertActNow(playerId);
+        sendBattleGround(playerId, 0, 0);
+        assertBattleGroundSet(playerId, playerId, 0, 0);
+        assertDefendYourself(playerId);
+        sendEndTurn(playerId);
+        assertActNow(playerId);
+        assertAdventurerDamaged(playerId, 16, 2);
+        assertAdventurerDamaged(playerId, 0, 2);
+        assertAdventurerDamaged(playerId, 18, 2);
+        assertTunnelConquered(playerId, 16, 0, 0);
+        assertEvilnessChanged(playerId, -1, 0);
     }
 
-    protected void combatPlayerZeroRoundSix() throws TimeoutException {
+    protected void combatPlayerZeroRoundSix(final int playerId) throws TimeoutException {
         // so the weird thing happened,
-        assertNextRound(0, 2);
-        assertNextRound(0, 6);
-        assertSetBattleGround(0);
-        assertActNow(0);
+        assertNextRound(playerId, 2);
+        assertNextRound(playerId, 2);
+        assertSetBattleGround(playerId);
+        assertActNow(playerId);
 
-        sendBattleGround(0, 0, 1);
-        assertBattleGroundSet(0, 0, 0, 1);
-        assertDefendYourself(0);
-        sendEndTurn(0);
-        assertActNow(0);
+        sendBattleGround(playerId, 0, 1);
+        assertBattleGroundSet(playerId, playerId, 0, 1);
+        assertDefendYourself(playerId);
+        sendEndTurn(playerId);
+        assertActNow(playerId);
         // second round combat,
-        assertAdventurerDamaged(0, 16, 2);
-        assertAdventurerImprisoned(0, 16);
-        assertAdventurerDamaged(0, 0, 2);
-        assertAdventurerImprisoned(0, 0);
-        assertAdventurerDamaged(0, 18, 2);
-        assertAdventurerImprisoned(0, 18);
-
-
-
+        assertAdventurerDamaged(playerId, 16, 1);
+        assertAdventurerImprisoned(playerId, 16);
+        assertAdventurerDamaged(playerId, 0, 1);
+        assertAdventurerImprisoned(playerId, 0);
+        assertAdventurerDamaged(playerId, 18, 2);
+        assertAdventurerImprisoned(playerId, 18);
+        // try player0 still
+        //assertNextRound(playerId, 1);
+        // assertActionFailed(0);
+        // assertBattleGroundSet(playerId, playerId, 0, 0);
+        assertNextRound(0, 1);
     }
+
+    protected void combatPlayerOneRoundFive(final int playerId) throws TimeoutException {
+        // the problem appears here
+        // nextRoundAsserter(1);
+        // assertSetBattleGround(playerId);
+        // assertActNow(playerId);
+        sendBattleGround(playerId, 0, 0);
+        assertBattleGroundSet(playerId, playerId, 0, 0);
+        assertDefendYourself(playerId);
+        sendEndTurn(playerId);
+        assertActNow(playerId);
+        assertAdventurerDamaged(playerId, 16, 2);
+        assertAdventurerDamaged(playerId, 0, 2);
+        assertAdventurerDamaged(playerId, 18, 2);
+        assertTunnelConquered(playerId, 16, 0, 0);
+        assertEvilnessChanged(playerId, -1, 0);
+    }
+
+    protected void combatPlayerOneRoundSix(final int playerId) throws TimeoutException {
+        // so the weird thing happened,
+        assertNextRound(playerId, 2);
+        assertNextRound(playerId, 6);
+        assertSetBattleGround(playerId);
+        assertActNow(playerId);
+
+        sendBattleGround(playerId, 0, 1);
+        assertBattleGroundSet(playerId, playerId, 0, 1);
+        assertDefendYourself(playerId);
+        sendEndTurn(playerId);
+        assertActNow(playerId);
+        // second round combat,
+        assertAdventurerDamaged(playerId, 16, 1);
+        assertAdventurerImprisoned(playerId, 16);
+        assertAdventurerDamaged(playerId, 0, 1);
+        assertAdventurerImprisoned(playerId, 0);
+        assertAdventurerDamaged(playerId, 18, 2);
+        assertAdventurerImprisoned(playerId, 18);
+    }
+
+
 
 
 }
