@@ -76,7 +76,6 @@ public class EvalRoomPhase extends Phase {
                 break;
             case 2:
                 if (!gd.getCurrAvailableRooms().isEmpty()) {
-                    // TODO check if this should be changed to size == 2
                     sc.sendPlaceRoom(player.getCommID());
                     sc.sendActNow(player.getCommID());
                     expectedRespondingCommId = player.getCommID();
