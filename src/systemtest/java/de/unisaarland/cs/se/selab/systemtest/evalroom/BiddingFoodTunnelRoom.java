@@ -56,6 +56,11 @@ public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
         this.sendRegister(2, "2");
         this.assertConfig(2, config);
 
+        currSockets.clear();
+        currSockets.add(0);
+        currSockets.add(1);
+        currSockets.add(2);
+
         this.sendStartGame(0);
 
         this.assertGameStarted(0);
@@ -367,7 +372,6 @@ public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
         bidPlacedAsserter(BidType.ROOM, 2, 3);
 
     }
-
 }
 
 

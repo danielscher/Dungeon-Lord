@@ -3,11 +3,17 @@ package de.unisaarland.cs.se.selab.systemtest.collectplacebids;
 import de.unisaarland.cs.se.selab.comm.BidType;
 import de.unisaarland.cs.se.selab.comm.TimeoutException;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
-import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingOnRoomBasic;
+import de.unisaarland.cs.se.selab.systemtest.evalroom.BiddingFoodTunnelRoom;
+import java.util.Set;
 
-public class ActivateRoomWhileChoosingMonsterSecondSeason extends BiddingOnRoomBasic {
+public class ActivateRoomWhileChoosingMonsterSecondSeason extends BiddingFoodTunnelRoom {
     public ActivateRoomWhileChoosingMonsterSecondSeason() {
         super(ActivateRoomWhileChoosingMonsterSecondSeason.class, false);
+    }
+
+    @Override
+    protected Set<Integer> createSockets() {
+        return Set.of(0, 1, 2);
     }
 
     @Override
@@ -33,24 +39,22 @@ public class ActivateRoomWhileChoosingMonsterSecondSeason extends BiddingOnRoomB
     }
 
     protected void simulateSecondBiddingSeason() throws TimeoutException {
-        nextRoundAsserterHelper(2);
-
         // assert Adv. drawing
 
-        adventurerAsserterHelper(9);
-        adventurerAsserterHelper(15);
-        adventurerAsserterHelper(26);
+        adventurerAsserter(0);
+        adventurerAsserter(18);
+        adventurerAsserter(11);
 
         // assert monster drawing
 
-        monsterAsserterHelper(14);
-        monsterAsserterHelper(3);
-        monsterAsserterHelper(20);
+        monsterAsserter(7);
+        monsterAsserter(22);
+        monsterAsserter(1);
 
         // assert room drawing
 
-        roomAsserterHelper(0);
-        roomAsserterHelper(10);
+        roomAsserter(8);
+        roomAsserter(15);
 
         // assert bidding started
 
@@ -71,114 +75,80 @@ public class ActivateRoomWhileChoosingMonsterSecondSeason extends BiddingOnRoomB
         evalBidsSecondSeason();
 
         //BidRetrieved
-        bidRetrievedAsserterHelper(BidType.NICENESS, 0);
-        bidRetrievedAsserterHelper(BidType.ROOM, 0);
         bidRetrievedAsserterHelper(BidType.TUNNEL, 0);
+        bidRetrievedAsserterHelper(BidType.ROOM, 0);
+        bidRetrievedAsserterHelper(BidType.GOLD, 0);
 
-        bidRetrievedAsserterHelper(BidType.NICENESS, 2);
-        bidRetrievedAsserterHelper(BidType.ROOM, 2);
         bidRetrievedAsserterHelper(BidType.TUNNEL, 2);
+        bidRetrievedAsserterHelper(BidType.ROOM, 2);
+        bidRetrievedAsserterHelper(BidType.GOLD, 2);
 
         // imp return
-        impsChangedAsserterHelper(3, 0);
+        impsChangedAsserterHelper(2, 0);
+        goldChangedAsserterHelper(2, 0);
         impsChangedAsserterHelper(3, 2);
+        goldChangedAsserterHelper(3, 2);
 
         // adventurer arrived (at dungeons)
-        adventurerArrivedAsserterHelper(16, 0);
-        adventurerArrivedAsserterHelper(9, 2);
+        adventurerArrivedAsserterHelper(0, 2);
+        adventurerArrivedAsserterHelper(18, 0);
     }
 
     protected void bidsOfSecondSeasonFirstYear() throws TimeoutException {
-        this.sendPlaceBid(1, BidType.TUNNEL, 1);
-        bidPlacedAsserterHelper(BidType.TUNNEL, 1, 1);
+        this.sendPlaceBid(1, BidType.GOLD, 1);
+        bidPlacedAsserter(BidType.GOLD, 1, 1);
         assertActNow(1);
 
         this.sendPlaceBid(1, BidType.MONSTER, 2);
-        bidPlacedAsserterHelper(BidType.MONSTER, 1, 2);
+        bidPlacedAsserter(BidType.MONSTER, 1, 2);
         assertActNow(1);
 
         this.sendPlaceBid(1, BidType.FOOD, 3);
-        bidPlacedAsserterHelper(BidType.FOOD, 1, 3);
+        bidPlacedAsserter(BidType.FOOD, 1, 3);
 
-        this.sendPlaceBid(2, BidType.TUNNEL, 1);
-        bidPlacedAsserterHelper(BidType.TUNNEL, 2, 1);
+        this.sendPlaceBid(2, BidType.GOLD, 1);
+        bidPlacedAsserter(BidType.GOLD, 2, 1);
         assertActNow(2);
 
         this.sendPlaceBid(2, BidType.MONSTER, 2);
-        bidPlacedAsserterHelper(BidType.MONSTER, 2, 2);
+        bidPlacedAsserter(BidType.MONSTER, 2, 2);
         assertActNow(2);
 
         this.sendPlaceBid(2, BidType.FOOD, 3);
-        bidPlacedAsserterHelper(BidType.FOOD, 2, 3);
+        bidPlacedAsserter(BidType.FOOD, 2, 3);
 
-        this.sendPlaceBid(0, BidType.TUNNEL, 1);
-        bidPlacedAsserterHelper(BidType.TUNNEL, 0, 1);
+        this.sendPlaceBid(0, BidType.GOLD, 1);
+        bidPlacedAsserter(BidType.GOLD, 0, 1);
         assertActNow(0);
 
         this.sendPlaceBid(0, BidType.MONSTER, 2);
-        bidPlacedAsserterHelper(BidType.MONSTER, 0, 2);
+        bidPlacedAsserter(BidType.MONSTER, 0, 2);
         assertActNow(0);
 
         this.sendPlaceBid(0, BidType.FOOD, 3);
-        bidPlacedAsserterHelper(BidType.FOOD, 0, 3);
-
-
+        bidPlacedAsserter(BidType.FOOD, 0, 3);
     }
 
     protected void evalBidsSecondSeason() throws TimeoutException {
 
-        //player 1 has 6 food, 2 gold, 3 imps
-        //player 2 has 6 food 3 gold, 3 imps
-        //player 0 has 5 food 1 gold, 3 imps
+        //player 1 has 6 food, 2 tile(1, 0) (2, 0), 1 gold, 3 imps
+        //player 2 has 6 food 3 tile, 4 gold, 3 imps
+        //player 0 has 5 food 2 tile, 1 gold, 3 imps
         //FOOD
         goldChangedAsserter(-1, 1);
         foodChangedAsserter(2, 1);
+
         evilnessChangedAsserter(1, 2);
         foodChangedAsserter(3, 2);
+
         evilnessChangedAsserter(2, 0);
         foodChangedAsserter(3, 0);
         goldChangedAsserter(1, 0);
 
-
-        //BidType Tunnel
-        assertDigTunnel(1);
-        assertActNow(1);
-        sendDigTunnel(1, 0, 1);
-        impsChangedAsserterHelper(-1, 1); //2 imps left
-        tunnelDugAsserter(1, 0, 1);
-        assertActNow(1);
-        sendDigTunnel(1, 0, 2);
-        impsChangedAsserterHelper(-1, 1); //1 imp left
-        tunnelDugAsserter(1, 0, 2);
-
-        assertDigTunnel(2);
-        assertActNow(2);
-        sendDigTunnel(2, 1, 0);
-        impsChangedAsserterHelper(-1, 2);
-        tunnelDugAsserter(2, 1, 0);
-        assertActNow(2);
-        sendDigTunnel(2, 2, 0);
-        impsChangedAsserterHelper(-1, 2);
-        tunnelDugAsserter(2, 2, 0);
-        assertActNow(2);
-        sendDigTunnel(2, 3, 0);
-        impsChangedAsserterHelper(-1, 2);
-        tunnelDugAsserter(2, 3, 0);
-
-        assertDigTunnel(0);
-        assertActNow(0);
-        sendDigTunnel(0, 0, 1);
-        impsChangedAsserterHelper(-1, 0);
-        tunnelDugAsserter(0, 0, 1);
-        assertActNow(0);
-        sendDigTunnel(0, 0, 2);
-        impsChangedAsserterHelper(-1, 0);
-        tunnelDugAsserter(0, 0, 2);
-        assertActNow(0);
-        sendDigTunnel(0, 0, 3);
-        impsChangedAsserterHelper(-1, 0);
-        tunnelDugAsserter(0, 0, 3); //0 imp left
-
+        //GOLD
+        impsChangedAsserter(-2, 1);
+        impsChangedAsserter(-3, 2);
+        impsChangedAsserter(-2, 0);
 
         //BidType Monster
         assertSelectMonster(1);
@@ -193,17 +163,19 @@ public class ActivateRoomWhileChoosingMonsterSecondSeason extends BiddingOnRoomB
         assertActionFailed(2);
         assertActNow(2);
 
-        sendHireMonster(2, 14);
-        foodChangedAsserterHelper(-1, 2);
-        evilnessChangedAsserterHelper(1, 2);
-        monsterHiredAsserterHelper(14, 2);
-
+        sendHireMonster(2, 7);
+        monsterHiredAsserterHelper(7, 2);
 
         foodChangedAsserterHelper(-1, 0);
         assertSelectMonster(0);
         assertActNow(0);
-        sendHireMonster(0, 20);
-        foodChangedAsserterHelper(-3, 0);
-        monsterHiredAsserterHelper(20, 0);
+
+        sendActivateRoom(0, 4);
+        assertActionFailed(0);
+        assertActNow(0);
+
+        sendHireMonster(0, 1);
+        evilnessChangedAsserterHelper(3, 0);
+        monsterHiredAsserterHelper(1, 0);
     }
 }
