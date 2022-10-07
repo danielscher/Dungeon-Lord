@@ -264,6 +264,7 @@ public class EvalRoomPhase extends Phase {
             dungeon.addImps(r.getImpProduction());
             broadcastImpsChanged(r.getImpProduction(), p);
         }
+        r.deactivate();
     }
 
     public void spreadAdv() {

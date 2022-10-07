@@ -355,17 +355,7 @@ public class Dungeon {
         producingImps = 0;
         restingImps += numReturn;
 
-        deactivateRooms();
         return numReturn;
-    }
-
-    /**
-     * helper method to deactivate all rooms of this dungeon
-     */
-    private void deactivateRooms() {
-        for (final Room room : rooms) {
-            room.deactivate();
-        }
     }
 
     /**
