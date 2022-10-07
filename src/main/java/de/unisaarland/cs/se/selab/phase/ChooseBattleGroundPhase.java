@@ -28,6 +28,7 @@ public class ChooseBattleGroundPhase extends Phase {
 
         if (currPlayer.getDungeon().getNumUnconqueredTiles() == 0) {
             //if all tiles are conquered
+            currPlayer.getDungeon().setBattleGround(null);
             return new CombatPhase(gd, currPlayer);
         }
 
