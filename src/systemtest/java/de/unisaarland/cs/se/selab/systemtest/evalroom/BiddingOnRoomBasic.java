@@ -221,7 +221,6 @@ public class BiddingOnRoomBasic extends OurSystemTestFramework {
 
         //second player
         goldChangedAsserter(-1, 1);
-        //TODO expected 'GOLD_CHANGED(-1, 1)' but was 'ACT_NOW()'
         assertPlaceRoom(1);
         assertActNow(1);
         // since the player has only one tile at (0,0) but the room restriction is INNER RING

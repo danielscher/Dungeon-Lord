@@ -9,6 +9,10 @@ import java.util.Set;
 
 public class BiddingFoodTunnelRoom extends OurSystemTestFramework {
 
+    protected BiddingFoodTunnelRoom(final Class<?> subclass, final boolean fail) {
+        super(subclass, fail);
+    }
+
     public BiddingFoodTunnelRoom() {
         super(BiddingOnRoomBasic.class, false);
     }

@@ -88,18 +88,12 @@ public class PlayerLeftWhilePlacingRoomThirdSeason extends FrameworkuptoBiddingS
         bidRetrievedAsserterHelper(BidType.TRAP, 1);
         bidRetrievedAsserterHelper(BidType.TUNNEL, 1);
 
-        bidRetrievedAsserterHelper(BidType.GOLD, 3);
-        bidRetrievedAsserterHelper(BidType.TRAP, 3);
-        bidRetrievedAsserterHelper(BidType.TUNNEL, 3);
-
         // imp return
         impsChangedAsserterHelper(3, 0);
-        impsChangedAsserterHelper(3, 3);
 
         // adventurer arrived (at dungeons)
         adventurerArrivedAsserterHelper(16, 0);
         adventurerArrivedAsserterHelper(9, 1);
-        adventurerArrivedAsserterHelper(26, 3);
     }
 
     protected void bidsOfThirdSeasonFirstYear() throws TimeoutException {
@@ -214,11 +208,12 @@ public class PlayerLeftWhilePlacingRoomThirdSeason extends FrameworkuptoBiddingS
 
 
         //BidType Room
-
         goldChangedAsserterHelper(-1, 3);
         assertPlaceRoom(3);
         assertActNow(3);
-        sendEndTurn(3);
+        sendLeave(3);
+        currSockets.remove((Integer) 3);
+        playerLeftAsserterHelper(3);
 
         assertPlaceRoom(0);
         assertActNow(0);

@@ -6,6 +6,11 @@ import de.unisaarland.cs.se.selab.systemtest.FrameworkuptoBiddingThirdSeason;
 import de.unisaarland.cs.se.selab.systemtest.api.Utils;
 
 public class AllKindsofBidsFourthSeason extends FrameworkuptoBiddingThirdSeason {
+
+    public AllKindsofBidsFourthSeason() {
+        super(AllKindsofBidsFourthSeason.class, false);
+    }
+
     @Override
     public String createConfig() {
         return Utils.loadResource(AllKindsofBidsFourthSeason.class, "configuration.json");
